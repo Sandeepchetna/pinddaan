@@ -1,0 +1,259 @@
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  SUPER_ADMIN
+  ADMIN
+  BOOKING_EXECUTIVE
+  CONTENT_MANAGER
+  SEO_MANAGER
+  ACCOUNTS
+}
+
+model UserAdmin {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  password  String
+  role      Role     @default(ADMIN)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Lead {
+  id           String   @id @default(cuid())
+  leadNumber   String?  
+  devoteeName  String
+  phone        String
+  email        String?
+  city         String?
+  state        String?
+  purpose      String?
+  assignedTo   String?  
+  source       String   @default("Website")
+  status       String   @default("NEW_LEAD")
+  notes        String?  @db.Text
+  followUpDate String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Customer {
+  id            String   @id @default(cuid())
+  customerCode  String?  
+  name          String
+  phone         String   @unique
+  email         String?
+  city          String?
+  state         String?
+  country       String?  @default("India")
+  pincode       String?
+  address       String?  @db.Text
+  familyMembers String?  @db.Text 
+  notes         String?  @db.Text
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model Article {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  title       String
+  category    String
+  summary     String   @db.Text
+  content     String   @db.LongText
+  image       String?  @db.Text
+  metaTitle   String?
+  metaDesc    String?
+  readTime    String   @default("5 min read")
+  published   Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Testimonial {
+  id          String   @id @default(cuid())
+  author      String
+  city        String
+  country     String?  @default("India")
+  ritual      String
+  content     String   @db.Text
+  rating      Int      @default(5)
+  status      String   @default("APPROVED")
+  createdAt   DateTime @default(now())
+}
+
+model MediaLibraryItem {
+  id          String   @id @default(cuid())
+  title       String
+  folder      String   @default("Images")
+  url         String   @db.Text
+  altText     String?
+  tags        String?
+  createdAt   DateTime @default(now())
+}
+
+model SacredPlace {
+  id            String   @id @default(cuid())
+  slug          String   @unique
+  name          String
+  hindiName     String?
+  tagline       String?
+  description   String   @db.Text
+  history       String   @db.Text
+  timings       String?  
+  visitorInfo   String?  @db.Text
+  heroImage     String   @db.Text
+  createdAt     DateTime @default(now())
+}
+
+model RitualPackage {
+  id                     String   @id @default(cuid())
+  slug                   String   @unique
+  title                  String
+  hindiTitle             String?
+  duration               String
+  tier                   String   @default("GOLD")
+  priceINR               Int
+  priceUSD               Int?     @default(65)
+  goldPriceINR           Int?     
+  goldPriceUSD           Int?     @default(105)
+  badge                  String?
+  shortDesc              String   @db.Text
+  scripturalSignificance String?  @db.Text
+  inclusions             String   @db.Text
+  goldInclusions         String?  @db.Text
+  exclusions             String?  @db.Text
+  vedisCovered           String?  @db.Text
+  panditType             String?  @default("Verified Gaya Panda")
+  foodIncluded           String?  @default("Brahman Bhoj Included")
+  image                  String?  @db.Text
+  createdAt              DateTime @default(now())
+}
+
+model Hotel {
+  id            String   @id @default(cuid())
+  name          String
+  slug          String?  @unique
+  distance      String
+  pricePerNight Int
+  isAc          Boolean  @default(true)
+  meals         String   
+  heroImage     String   @db.Text
+  gallery       String?  @db.Text 
+  facilities    String   @db.Text 
+  mapUrl        String?  @db.Text
+  createdAt     DateTime @default(now())
+}
+
+model PreBooking {
+  id                String   @id @default(cuid())
+  bookingRef        String?  
+  devoteeName       String
+  phone             String
+  whatsappPhone     String?
+  email             String?
+  city              String?
+  state             String?
+  country           String?  @default("India")
+  pincode           String?
+  address           String?  @db.Text
+  
+  preferredDate     String?
+  purpose           String   
+  gotra             String?
+  ancestors         String?  @db.Text
+  ritualMode        String?  @default("IN_PERSON")
+  devoteeCount      String?  @default("2 Devotees")
+  
+  packageSlug       String?
+  packageName       String?
+  planTier          String   @default("GOLD")
+  
+  needHotel         Boolean  @default(false)
+  selectedHotelId   String?
+  selectedHotelName String?
+  
+  needPickup        Boolean  @default(false)
+  pickupFrom        String?  
+  arrivalTime       String?
+  flightTrainNo     String?
+  
+  specialNotes      String?  @db.Text
+  estimatedCost     Int?
+  internalNotes     String?  @db.Text
+  timelineEvents    String?  @db.Text
+  assignedExecutive String?
+  
+  status            String   @default("NEW_REQUEST")
+  workflowStatus    String   @default("NEW_REQUEST")
+  createdAt         DateTime @default(now())
+}
+
+model HeroSlide {
+  id                String   @id @default(cuid())
+  title             String
+  subtitle          String   @db.Text
+  mediaType         String   @default("IMAGE")
+  mediaUrl          String   @db.Text
+  ctaLabel          String?
+  ctaLink           String?
+  secondaryCtaLabel String?
+  secondaryCtaLink  String?
+  order             Int      @default(0)
+  isActive          Boolean  @default(true)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @default(now()) @updatedAt
+}
+
+model SiteSettings {
+  id            String   @id @default("default")
+  companyName   String   @default("PindDaanWale 2.0")
+  logoUrl       String?  @default("/images/pinddaanwale_logo.png") @db.Text
+  footerBgImage String   @db.Text
+  helpdeskPhone String   @default("+91 7463055338")
+  email         String   @default("support@pinddaanwale.com")
+  address       String   @default("Vishnupad Temple Compound, Gaya Ji, Bihar - 823001")
+  bankName      String   @default("State Bank of India")
+  accountName   String   @default("PindDaanWale Pilgrimage Services")
+  accountNumber String   @default("40982317822")
+  ifscCode      String   @default("SBIN0000078")
+  upiId                  String   @default("7463055338@sbi")
+  upiQrImage             String   @default("/images/gaya_vishnupad.jpg")
+
+  // SMTP Email Server Settings
+  smtpHost               String?  @default("smtp.hostinger.com")
+  smtpPort               Int?     @default(465)
+  smtpUser               String?  @default("support@pinddaanwale.com")
+  smtpPassword           String?  @default("")
+  smtpFromEmail          String?  @default("support@pinddaanwale.com")
+  adminNotificationEmail String?  @default("support@pinddaanwale.com")
+
+  // SEO & GEO Local Settings
+  metaTitle              String?  @default("PindDaanWale | The Official Gaya Ji Digital Destination")
+  metaDescription        String?  @default("The definitive digital platform for sacred rites, Pind Daan, and Pitru Paksha at Vishnupad Temple, Gaya Ji.")
+  canonicalUrl           String?  @default("https://www.pinddaanwale.com")
+  latitude               String?  @default("24.7788")
+  longitude              String?  @default("85.0084")
+  googlePlaceId          String?  @default("ChIJ4Q2k_3S88jkRPf3_x6z1")
+  googleMapsUrl          String?  @default("https://maps.google.com/?q=Vishnupad+Temple+Gaya")
+
+  // Analytics & Tracking Tags
+  googleAnalyticsId      String?  @default("")
+  searchConsoleTag       String?  @default("")
+  gtmContainerId         String?  @default("")
+  clarityId              String?  @default("")
+  metaPixelId            String?  @default("")
+
+  // AIWCRM WhatsApp CRM & Lead Ads Webhook Settings
+  aiwcrmWebhookUrl       String?  @default("https://www.aiwcrm.com/api/v1/webhooks/lead")
+  aiwcrmApiKey           String?  @default("")
+
+  updatedAt              DateTime @updatedAt
+}

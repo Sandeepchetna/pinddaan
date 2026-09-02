@@ -1,0 +1,63 @@
+'use client';
+
+import React, { useState } from 'react';
+import Link from 'next/link';
+import { Crown, Scale } from 'lucide-react';
+import PackageCard from '@/components/packages/PackageCard';
+
+export default function PackageTierToggle({ initialPackages }: { initialPackages: any[] }) {
+  const [globalTier, setGlobalTier] = useState<'GOLD' | 'PLATINUM'>('GOLD');
+
+  return (
+    <div className="space-y-10 max-w-7xl mx-auto">
+      
+      {/* Top Global Tier & Comparison Ribbon */}
+      <div className="flex flex-col sm:flex-row justify-between items-center gap-4 bg-white p-4 rounded-3xl border border-amber-900/10 shadow-sm">
+        
+        {/* Global Tier Switcher */}
+        <div className="bg-amber-50/80 p-1.5 rounded-full border border-amber-900/10 inline-flex items-center gap-2">
+          <button
+            onClick={() => setGlobalTier('GOLD')}
+            className={`px-5 py-2 rounded-full font-bold text-xs transition-all ${
+              globalTier === 'GOLD'
+                ? 'bg-[#F48D08] text-white shadow-sm'
+                : 'text-text-secondary hover:text-text-primary'
+            }`}
+          >
+            SHOW ALL GOLD PLANS
+          </button>
+
+          <button
+            onClick={() => setGlobalTier('PLATINUM')}
+            className={`px-5 py-2 rounded-full font-bold text-xs transition-all flex items-center gap-1.5 ${
+              globalTier === 'PLATINUM'
+                ? 'bg-gradient-to-r from-[#6f1d14] via-[#F48D08] to-[#C6922E] text-white shadow-sm'
+                : 'text-text-secondary hover:text-text-primary'
+            }`}
+          >
+            <Crown className="w-3.5 h-3.5 text-amber-300" />
+            <span>SHOW ALL PLATINUM VIP PLANS</span>
+          </button>
+        </div>
+
+        {/* Dedicated Comparison Page Link */}
+        <Link
+          href="/packages/compare"
+          className="bg-amber-100 hover:bg-amber-200 text-[#F48D08] font-bold text-xs px-6 py-2.5 rounded-full transition-all flex items-center gap-2 border border-amber-300/60 shadow-sm"
+        >
+          <Scale className="w-4 h-4" />
+          <span>Full Side-by-Side Comparison Table →</span>
+        </Link>
+
+      </div>
+
+      {/* Package Cards Grid - Each card has its own inline Gold vs Platinum switcher! */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        {initialPackages.map((pkg) => (
+          <PackageCard key={pkg.id || pkg.slug} pkg={pkg} />
+        ))}
+      </div>
+
+    </div>
+  );
+}

@@ -1,0 +1,275 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+@import "tailwindcss";
+
+/* ===================================================================
+   PindDaanWale 2.0 — Master Luxury Design System
+   Apple × Airbnb × Stripe × Indian Spiritual Heritage
+   =================================================================== */
+
+:root {
+  /* Warm Sacred Palette (Aligned with #F48D08 Logo) */
+  --color-ivory: #FAF8F5;          /* Clean Sacred Paper Page Canvas */
+  --color-sand: #F4EFE6;           /* Subtle Section Accent */
+  --color-sand-light: #FBF9F4;
+  --color-charcoal: #1E1B18;       /* Deep Sacred Dark Text & Headers */
+  --color-charcoal-soft: #44403C;  /* Body Text */
+  --color-charcoal-muted: #78716C; /* Secondary & Labels */
+  
+  --color-saffron: #F48D08;        /* Logo Saffron Primary CTA */
+  --color-saffron-hover: #D97706;
+  --color-saffron-light: #FFFBEB;
+  
+  --color-gold: #B45309;           /* Temple Gold Highlights */
+  --color-gold-light: #FEF3C7;
+  --color-maroon: #7C2D12;         /* Sacred Ochre Accent */
+  
+  --color-white: #FFFFFF;
+  --color-emerald: #047857;
+
+  /* Elevation & Shadows */
+  --shadow-subtle: 0 2px 8px -2px rgba(244, 141, 8, 0.04);
+  --shadow-card: 0 4px 20px -2px rgba(244, 141, 8, 0.06), 0 2px 6px -1px rgba(0, 0, 0, 0.02);
+  --shadow-float: 0 16px 32px -8px rgba(244, 141, 8, 0.12), 0 6px 16px -4px rgba(0, 0, 0, 0.04);
+  --shadow-glow: 0 0 25px rgba(244, 141, 8, 0.25);
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background-color: var(--color-ivory);
+  color: var(--color-charcoal-soft);
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ===================================================================
+   TYPOGRAPHY
+   =================================================================== */
+
+.font-cinzel {
+  font-family: 'Cinzel', Georgia, serif;
+  letter-spacing: -0.015em;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  line-height: 1.25;
+}
+
+/* ===================================================================
+   CONTAINER & SECTION SYSTEM (Apple-style rhythm & spacing)
+   =================================================================== */
+
+.veda-container {
+  width: 100%;
+  max-width: 1240px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+@media (min-width: 640px) {
+  .veda-container {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .veda-container {
+    padding-left: 2.5rem;
+    padding-right: 2.5rem;
+  }
+}
+
+/* Alternating Section Backgrounds */
+.section-ivory {
+  background-color: var(--color-ivory);
+}
+
+.section-sand {
+  background-color: var(--color-sand-light);
+}
+
+.section-white {
+  background-color: var(--color-white);
+}
+
+.section-dark {
+  background-color: var(--color-charcoal);
+  color: #F5F5F4;
+}
+
+/* ===================================================================
+   LUXURY CARDS & GLASSMORPHISM
+   =================================================================== */
+
+.luxury-card {
+  background: var(--color-white);
+  border: 1px solid #EFEAE1;
+  border-radius: 1.25rem;
+  padding: 1.75rem;
+  box-shadow: var(--shadow-card);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.luxury-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-float);
+  border-color: rgba(244, 141, 8, 0.35);
+}
+
+.glass-card-light {
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.95);
+  border-radius: 1.25rem;
+  padding: 1.75rem;
+  box-shadow: var(--shadow-float);
+}
+
+.glass-card-dark {
+  background: rgba(20, 18, 16, 0.82);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 1.25rem;
+  padding: 2rem;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+}
+
+/* ===================================================================
+   BUTTON SYSTEM
+   =================================================================== */
+
+.btn-primary-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: linear-gradient(135deg, #F48D08 0%, #D97706 100%);
+  color: #FFFFFF !important;
+  font-weight: 700;
+  font-size: 0.9375rem;
+  padding: 0.875rem 1.75rem;
+  border-radius: 0.75rem;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(244, 141, 8, 0.3);
+  transition: all 0.2s ease;
+  text-decoration: none;
+}
+
+.btn-primary-action:hover {
+  background: linear-gradient(135deg, #D97706 0%, #B45309 100%);
+  box-shadow: 0 6px 20px rgba(244, 141, 8, 0.45);
+  transform: translateY(-2px);
+}
+
+.btn-secondary-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: var(--color-white);
+  color: var(--color-charcoal);
+  font-weight: 600;
+  font-size: 0.9375rem;
+  padding: 0.875rem 1.5rem;
+  border-radius: 0.75rem;
+  border: 1px solid #E2D9CC;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+}
+
+.btn-secondary-action:hover {
+  background: #FFFBEB;
+  border-color: #F48D08;
+  color: #B45309;
+}
+
+.btn-outline-white {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(8px);
+  color: #FFFFFF !important;
+  font-weight: 600;
+  font-size: 0.9375rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+}
+
+.btn-outline-white:hover {
+  background: rgba(255, 255, 255, 0.22);
+  border-color: rgba(255, 255, 255, 0.6);
+  transform: translateY(-1px);
+}
+
+/* ===================================================================
+   MICRO-ANIMATIONS
+   =================================================================== */
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulseGlow {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.65; transform: scale(1.15); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-pulse-glow {
+  animation: pulseGlow 2.5s infinite ease-in-out;
+}
+
+/* ===================================================================
+   ACCESSIBILITY & SELECTION
+   =================================================================== */
+
+::selection {
+  background: rgba(180, 83, 9, 0.2);
+  color: var(--color-charcoal);
+}
+
+/* Smooth Webkit Scrollbar */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-ivory);
+}
+
+::-webkit-scrollbar-thumb {
+  background: #D6CEC2;
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #B5AB9D;
+}
