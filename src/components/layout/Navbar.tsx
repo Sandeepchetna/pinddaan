@@ -70,28 +70,28 @@ export default function Navbar({ packages = [], sacredPlaces = [] }: NavbarProps
     >
       
       {/* Top Announcement Ribbon */}
-      <div className="bg-[#1a1410] text-gray-200 text-xs py-2 px-4 border-b border-white/10">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-2">
+      <div className="bg-[#1a1410] text-gray-200 text-xs py-1.5 sm:py-2 px-3 sm:px-4 border-b border-white/10">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-1.5 sm:gap-2">
           
-          <div className="flex items-center gap-2 text-[11px] font-medium">
+          <div className="flex items-center gap-1.5 sm:gap-2 text-[10px] sm:text-[11px] font-medium text-center sm:text-left">
             <span className="w-2 h-2 rounded-full bg-[#F48D08] animate-pulse shrink-0" />
-            <span>Pitripaksha Mela 2026: <strong>26 Sept 2026 – 10 Oct 2026</strong> • Gaya Ji, Bihar</span>
+            <span>Pitripaksha Mela 2026: <strong>26 Sept – 10 Oct</strong> • Gaya Ji, Bihar</span>
           </div>
 
-          <div className="flex items-center gap-4 text-[11px]">
+          <div className="flex items-center justify-center gap-3 sm:gap-4 text-[10px] sm:text-[11px]">
             <div className="hidden lg:flex items-center gap-1.5 text-gray-300 border-r border-white/20 pr-4">
               <CloudSun className="w-3.5 h-3.5 text-[#F48D08]" />
               <span>Gaya Ji · 30°C Clear</span>
             </div>
 
-            <a href="tel:+917463055338" className="flex items-center gap-1.5 hover:text-[#F48D08] transition-colors font-medium">
-              <Phone className="w-3.5 h-3.5 text-[#F48D08]" />
+            <a href="tel:+917463055338" className="flex items-center gap-1 hover:text-[#F48D08] transition-colors font-medium">
+              <Phone className="w-3 h-3 text-[#F48D08]" />
               <span>Pooja Helpline: <strong>+91 7463055338</strong></span>
             </a>
 
             <Link 
               href="/pre-booking" 
-              className="bg-[#F48D08] hover:bg-[#D97706] text-white px-4 py-1 rounded-full font-bold transition-all shadow-sm flex items-center gap-1.5 text-[11px]"
+              className="hidden sm:inline-flex bg-[#F48D08] hover:bg-[#D97706] text-white px-3.5 py-1 rounded-full font-bold transition-all shadow-sm items-center gap-1 text-[10px] sm:text-[11px]"
             >
               <Sparkles className="w-3 h-3 fill-current" />
               <span>Pre-Book Pind Daan</span>
@@ -106,8 +106,8 @@ export default function Navbar({ packages = [], sacredPlaces = [] }: NavbarProps
       </div>
 
       {/* Main Navigation Bar */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6">
-        <div className="flex justify-between items-center h-20">
+      <div className="max-w-7xl mx-auto px-3 sm:px-6">
+        <div className="flex justify-between items-center h-16 sm:h-20">
           
           <Logo />
 
@@ -184,19 +184,21 @@ export default function Navbar({ packages = [], sacredPlaces = [] }: NavbarProps
 
           </nav>
 
-          <div className="flex items-center gap-2 lg:hidden">
+          <div className="flex items-center gap-1 sm:gap-2 lg:hidden shrink-0">
             <button
               onClick={() => setIsSearchOpen(true)}
-              className="p-2 text-text-primary hover:text-[#F48D08]"
+              className="p-2 text-text-primary hover:text-[#F48D08] active:scale-95 transition-transform"
               title="Search"
+              aria-label="Search"
             >
               <Search className="w-5 h-5 text-[#F48D08]" />
             </button>
             <button 
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 text-text-primary hover:text-[#F48D08]"
+              className="p-2 text-text-primary hover:text-[#F48D08] active:scale-95 transition-transform rounded-xl hover:bg-amber-50"
+              aria-label="Toggle Menu"
             >
-              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              {mobileMenuOpen ? <X className="w-6 h-6 text-[#F48D08]" /> : <Menu className="w-6 h-6" />}
             </button>
           </div>
 
@@ -409,18 +411,90 @@ export default function Navbar({ packages = [], sacredPlaces = [] }: NavbarProps
 
       {/* Mobile Drawer Navigation */}
       {mobileMenuOpen && (
-        <div className="lg:hidden bg-white border-b border-gray-200 px-6 py-6 space-y-4 text-sm font-medium">
-          <Link href="/" onClick={() => setMobileMenuOpen(false)} className="block py-2 text-text-primary hover:text-[#F48D08]">Home</Link>
-          <Link href="/gaya-ji" onClick={() => setMobileMenuOpen(false)} className="block py-2 text-text-primary hover:text-[#F48D08]">About Gaya Ji</Link>
-          <Link href="/sacred-places/vishnupad-temple" onClick={() => setMobileMenuOpen(false)} className="block py-2 text-text-primary hover:text-[#F48D08]">About Vishnupad</Link>
-          <Link href="/packages" onClick={() => setMobileMenuOpen(false)} className="block py-2 text-text-primary hover:text-[#F48D08]">Ritual Packages ({displayPackages.length})</Link>
-          <Link href="/blog" onClick={() => setMobileMenuOpen(false)} className="block py-2 text-text-primary hover:text-[#F48D08]">Videos & Knowledge</Link>
-          <div className="pt-2 border-t border-gray-100 flex items-center justify-between">
-            <span className="text-xs text-gray-500 font-bold">Select Language:</span>
+        <div className="lg:hidden bg-white border-b border-gray-200 px-5 py-5 space-y-4 text-xs font-semibold shadow-2xl animate-in fade-in slide-in-from-top-2 duration-200">
+          <div className="space-y-1">
+            <Link 
+              href="/" 
+              onClick={() => setMobileMenuOpen(false)} 
+              className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-amber-50 text-text-primary hover:text-[#F48D08] transition-colors"
+            >
+              <span>🏠</span>
+              <span>Home (मुख्य पृष्ठ)</span>
+            </Link>
+
+            <Link 
+              href="/gaya-ji" 
+              onClick={() => setMobileMenuOpen(false)} 
+              className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-amber-50 text-text-primary hover:text-[#F48D08] transition-colors"
+            >
+              <span>🌸</span>
+              <span>About Gaya Ji Heritage</span>
+            </Link>
+
+            <Link 
+              href="/sacred-places/vishnupad-temple" 
+              onClick={() => setMobileMenuOpen(false)} 
+              className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-amber-50 text-text-primary hover:text-[#F48D08] transition-colors"
+            >
+              <span>🛕</span>
+              <span>Vishnupad Temple & Falgu Ghat</span>
+            </Link>
+
+            <Link 
+              href="/packages" 
+              onClick={() => setMobileMenuOpen(false)} 
+              className="flex items-center justify-between p-2.5 rounded-xl hover:bg-amber-50 text-text-primary hover:text-[#F48D08] transition-colors"
+            >
+              <div className="flex items-center gap-3">
+                <span>📜</span>
+                <span>Ritual Packages (पूजा पैकेज)</span>
+              </div>
+              <span className="bg-amber-100 text-[#F48D08] text-[10px] font-extrabold px-2 py-0.5 rounded-full">
+                {displayPackages.length} Packages
+              </span>
+            </Link>
+
+            <Link 
+              href="/blog" 
+              onClick={() => setMobileMenuOpen(false)} 
+              className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-amber-50 text-text-primary hover:text-[#F48D08] transition-colors"
+            >
+              <span>📖</span>
+              <span>Videos & Vedic Knowledge</span>
+            </Link>
+
+            <Link 
+              href="/contact" 
+              onClick={() => setMobileMenuOpen(false)} 
+              className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-amber-50 text-text-primary hover:text-[#F48D08] transition-colors"
+            >
+              <span>📞</span>
+              <span>Contact & Gaya Address</span>
+            </Link>
+          </div>
+
+          <div className="pt-3 border-t border-gray-100 flex items-center justify-between">
+            <span className="text-[11px] text-gray-500 font-bold">Select Language / भाषा:</span>
             <LanguageConverter />
           </div>
-          <Link href="/pre-booking" onClick={() => setMobileMenuOpen(false)} className="block text-center bg-[#F48D08] text-white py-3 rounded-full font-bold">
-            Pre-Book Pind Daan Ritual
+
+          {/* Quick Call Helpline Button */}
+          <a
+            href="tel:+917463055338"
+            className="w-full flex items-center justify-center gap-2 py-3 rounded-2xl bg-amber-50 border border-amber-200 text-[#6f1d14] font-bold text-xs"
+          >
+            <Phone className="w-4 h-4 text-[#F48D08]" />
+            <span>Pooja Helpline: +91 7463055338</span>
+          </a>
+
+          {/* Pre-Book CTA */}
+          <Link 
+            href="/pre-booking" 
+            onClick={() => setMobileMenuOpen(false)} 
+            className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-[#6f1d14] via-[#F48D08] to-[#C6922E] text-white py-3.5 rounded-2xl font-bold text-xs shadow-lg active:scale-95 transition-transform"
+          >
+            <Sparkles className="w-4 h-4" />
+            <span>Pre-Book Pind Daan Ritual</span>
           </Link>
         </div>
       )}

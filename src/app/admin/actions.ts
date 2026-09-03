@@ -5,8 +5,23 @@ import { revalidatePath } from 'next/cache';
 import { GAYA_SACRED_STHALIS, RITUAL_PACKAGES, INITIAL_HOTELS, INITIAL_BOOKINGS, INITIAL_LEADS, INITIAL_HERO_SLIDES } from '@/data/mockData';
 import { sendBookingConfirmationEmail } from '@/lib/email';
 import { syncLeadToAIWCRM } from '@/lib/aiwcrm';
+import { 
+  verifyAdminCredentials, 
+  signSessionToken, 
+  setAdminSessionCookie, 
+  clearAdminSessionCookie, 
+  getAdminSession 
+} from '@/lib/auth';
 
 const db = prisma as any;
+
+async function assertAdminAuth() {
+  const session = await getAdminSession();
+  if (!session) {
+    throw new Error('Unauthorized: Admin login session required.');
+  }
+  return session;
+}
 
 const DEFAULT_ARTICLES = [
   {
@@ -224,7 +239,106 @@ export async function createPreBookingAction(data: {
   }
 }
 
+export async function loginAdminAction(data: { email: string; password: string }) {
+  try {
+    const result = await verifyAdminCredentials(data.email, data.password);
+    if (!result.success || !result.user) {
+      return { success: false, error: result.error || 'Invalid credentials' };
+    }
+
+    const token = await signSessionToken({
+      id: result.user.id,
+      email: result.user.email,
+      name: result.user.name,
+      role: result.user.role || 'ADMIN'
+    });
+
+    await setAdminSessionCookie(token);
+
+    return { 
+      success: true, 
+      user: {
+        id: result.user.id,
+        email: result.user.email,
+        name: result.user.name,
+        role: result.user.role
+      } 
+    };
+  } catch (error: any) {
+    console.error('Login action error:', error);
+    return { success: false, error: error.message || 'Login failed' };
+  }
+}
+
+export async function logoutAdminAction() {
+  try {
+    await clearAdminSessionCookie();
+    return { success: true };
+  } catch (e: any) {
+    return { success: false, error: e.message };
+  }
+}
+
+export async function getPublicBookingData() {
+  try {
+    let packages: any[] = [];
+    let siteSettings: any = null;
+
+    try {
+      if (db.ritualPackage) {
+        packages = await db.ritualPackage.findMany({ orderBy: { createdAt: 'desc' } });
+      }
+      if (db.siteSettings) {
+        siteSettings = await db.siteSettings.findUnique({ where: { id: 'default' } });
+      }
+    } catch (e) {
+      console.warn('DB error fetching public booking data:', e);
+    }
+
+    if (!packages || packages.length === 0) {
+      packages = RITUAL_PACKAGES.map(pkg => ({
+        id: pkg.id,
+        slug: pkg.slug,
+        title: pkg.title,
+        duration: pkg.duration,
+        tier: 'GOLD',
+        priceINR: pkg.priceINR,
+        priceUSD: (pkg as any).priceUSD || 65,
+        goldPriceINR: (pkg as any).goldPriceINR || Math.round(pkg.priceINR * 1.45),
+        badge: pkg.badge,
+        shortDesc: pkg.shortDesc,
+        inclusions: pkg.inclusions?.join('\n') || 'Vedic Rites Included',
+        goldInclusions: (pkg as any).goldInclusions || 'VIP Senior Teerth Panda Assignment\nPrivate AC Cab Station Pickup & Drop\nComplete Vedic Samagri & Special Bhog\nPriority Darshan Access',
+        image: pkg.image || '/images/gaya_vishnupad.jpg',
+        vedisCovered: pkg.vedisCovered?.join(', ') || 'Vishnupad, Falgu River, Akshayavat',
+        panditType: pkg.panditType || 'Verified 4th-Gen Gaya Teerth Purohit',
+        foodIncluded: pkg.foodIncluded || 'Brahman Bhoj for Vedic Pandits'
+      }));
+    }
+
+    return {
+      success: true,
+      packages,
+      siteSettings: siteSettings ? {
+        companyName: 'PindDaanWale',
+        logoUrl: '/Pind-Daan-Wale.svg',
+        bankName: siteSettings.bankName,
+        accountName: siteSettings.accountName,
+        accountNumber: siteSettings.accountNumber,
+        ifscCode: siteSettings.ifscCode,
+        upiId: siteSettings.upiId,
+        address: siteSettings.address,
+        helpdeskPhone: siteSettings.helpdeskPhone,
+        email: siteSettings.email
+      } : null
+    };
+  } catch (error: any) {
+    return { success: false, packages: [], siteSettings: null };
+  }
+}
+
 export async function getAdminERPData() {
+  await assertAdminAuth();
   try {
     let preBookings: any[] = [];
     let leads: any[] = [];

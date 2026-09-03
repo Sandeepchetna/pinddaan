@@ -27,13 +27,15 @@ export default function ConditionalLayoutWrapper({
     );
   }
 
+  const isPreBooking = pathname?.startsWith('/pre-booking');
+
   return (
     <div className="min-h-full flex flex-col bg-temple-ivory relative">
       {navbar}
       <main className="flex-1">{children}</main>
       {footer}
-      {stickyMobileBar}
-      {aiAgentWidget}
+      {!isPreBooking && stickyMobileBar}
+      {!isPreBooking && aiAgentWidget}
     </div>
   );
 }

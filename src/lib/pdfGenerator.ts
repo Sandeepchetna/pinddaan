@@ -12,7 +12,7 @@ export interface BookingPDFData {
   preferredDate?: string;
   purpose?: string;
   gotra?: string;
-  ancestors?: any[]; // [{ name, relation, gotra }]
+  ancestors?: any[];
   devoteeCount?: string;
   packageName?: string;
   planTier?: string;
@@ -39,13 +39,7 @@ export interface BookingPDFData {
   officialEmail?: string;
 }
 
-export function generateBookingPDF(data: BookingPDFData) {
-  const printWindow = window.open('', '_blank');
-  if (!printWindow) {
-    alert('Please allow popups to download your official PDF receipt.');
-    return;
-  }
-
+export function getBookingReceiptHTML(data: BookingPDFData): string {
   const currentDate = new Date().toLocaleDateString('en-IN', {
     day: 'numeric',
     month: 'long',
@@ -59,14 +53,17 @@ export function generateBookingPDF(data: BookingPDFData) {
     ancestorsRows = data.ancestors.map((anc: any, idx: number) => `
       <tr style="border-bottom: 1px solid #eee;">
         <td style="padding: 6px; font-weight: bold;">${idx + 1}. ${anc.name || 'N/A'}</td>
-        <td style="padding: 6px;">${anc.relation || 'Ancestor'}</td>
-        <td style="padding: 6px;">${anc.gotra || data.gotra || 'Self'}</td>
+        <td style="padding: 6px;">${anc.relation || 'Ancestor / Pitru'}</td>
+        <td style="padding: 6px;">${anc.gotra || data.gotra || 'Self / Kashyap'}</td>
       </tr>
     `).join('');
   }
 
-  const companyName = data.companyName || 'PindDaanWale';
-  const logoUrl = data.logoUrl || '/Pind-Daan-Wale.svg';
+  // Exact company information matching the authentic Gaya Ji branding
+  const companyName = 'PindDaanWale';
+  const logoUrl = typeof window !== 'undefined' 
+    ? `${window.location.origin}/Pind-Daan-Wale.svg` 
+    : '/Pind-Daan-Wale.svg';
   const bankName = data.bankName || 'State Bank of India';
   const accountNumber = data.accountNumber || '40982317822';
   const ifscCode = data.ifscCode || 'SBIN0000078';
@@ -74,15 +71,19 @@ export function generateBookingPDF(data: BookingPDFData) {
   const officialAddress = data.officialAddress || 'Vishnupad Temple Compound, Gaya Ji, Bihar - 823001';
   const officialPhone = data.officialPhone || '+91 7463055338';
   const officialEmail = data.officialEmail || 'support@pinddaanwale.com';
+  const baseUrl = typeof window !== 'undefined' ? window.location.origin : 'https://www.pinddaanwale.com';
 
-  const htmlContent = `
+  return `
     <!DOCTYPE html>
     <html>
       <head>
+        <meta charset="utf-8" />
+        <base href="${baseUrl}/" />
         <title>${companyName} Receipt - ${data.bookingId}</title>
         <style>
           @page { size: A4; margin: 12mm; }
           * {
+            box-sizing: border-box;
             font-variant-numeric: lining-nums tabular-nums;
           }
           body {
@@ -105,6 +106,9 @@ export function generateBookingPDF(data: BookingPDFData) {
             padding: 24px;
             border-radius: 16px;
             position: relative;
+            background: #ffffff;
+            max-width: 800px;
+            margin: 0 auto;
           }
           .header {
             display: flex;
@@ -120,7 +124,7 @@ export function generateBookingPDF(data: BookingPDFData) {
             gap: 12px;
           }
           .brand-logo {
-            height: 52px;
+            height: 54px;
             width: auto;
             max-width: 140px;
             object-fit: contain;
@@ -149,11 +153,6 @@ export function generateBookingPDF(data: BookingPDFData) {
             font-weight: bold;
             font-size: 13px;
             padding: 4px 10px;
-            border-radius: 6px;
-            border: 1px solid #fce3b8;
-            display: inline-block;
-            margin-top: 4px;
-          }
             border-radius: 6px;
             border: 1px solid #fce3b8;
             display: inline-block;
@@ -201,7 +200,7 @@ export function generateBookingPDF(data: BookingPDFData) {
             font-size: 11px;
           }
           .label { color: #666; font-weight: 500; }
-          .value { color: #1a1410; font-weight: bold; }
+          .value { color: #1a1410; font-weight: bold; text-align: right; }
           
           table { width: 100%; border-collapse: collapse; margin-top: 6px; font-size: 11px; }
           th { background: #eee5d8; color: #6f1d14; text-align: left; padding: 6px; font-size: 10px; text-transform: uppercase; }
@@ -229,6 +228,7 @@ export function generateBookingPDF(data: BookingPDFData) {
           }
           @media print {
             body { padding: 0; }
+            .receipt-box { border: 1.5px solid #F48D08; }
           }
         </style>
       </head>
@@ -236,10 +236,10 @@ export function generateBookingPDF(data: BookingPDFData) {
         <div class="receipt-box">
           <div class="header">
             <div class="brand-container">
-              <img src="${logoUrl}" alt="Logo" class="brand-logo" />
+              <img src="${logoUrl}" alt="PindDaanWale Official Emblem" class="brand-logo" />
               <div>
                 <div class="brand-title">${companyName}</div>
-                <div class="brand-tagline">The Official Gaya Ji Pilgrimage Destination</div>
+                <div class="brand-tagline">THE OFFICIAL GAYA JI PILGRIMAGE DESTINATION</div>
                 <div style="font-size: 10px; color: #666; margin-top: 3px;">${officialAddress}</div>
               </div>
             </div>
@@ -258,33 +258,31 @@ export function generateBookingPDF(data: BookingPDFData) {
 
           <div class="grid">
             <div class="section">
-              <div class="section-title">Devotee Profile & Contact</div>
-              <div class="field"><span class="label">Devotee Name:</span><span class="value">${data.devoteeName}</span></div>
-              <div class="field"><span class="label">Mobile Phone:</span><span class="value">${data.phone}</span></div>
-              ${data.whatsappPhone ? `<div class="field"><span class="label">WhatsApp Number:</span><span class="value">${data.whatsappPhone}</span></div>` : ''}
-              ${data.email ? `<div class="field"><span class="label">Email Address:</span><span class="value">${data.email}</span></div>` : ''}
-              <div class="field"><span class="label">Hometown City:</span><span class="value">${data.city || 'Gaya'} ${data.state ? `, ${data.state}` : ''}</span></div>
-              ${data.pincode ? `<div class="field"><span class="label">PIN Code:</span><span class="value">${data.pincode}</span></div>` : ''}
-              ${data.gotra ? `<div class="field"><span class="label">Main Gotra (गोत्र):</span><span class="value">${data.gotra}</span></div>` : ''}
+              <div class="section-title">DEVOTEE PROFILE & CONTACT</div>
+              <div class="field"><span class="label">Devotee Name:</span><span class="value">${data.devoteeName || 'Devotee'}</span></div>
+              <div class="field"><span class="label">Mobile Phone:</span><span class="value">${data.phone || 'N/A'}</span></div>
+              <div class="field"><span class="label">WhatsApp Number:</span><span class="value">${data.whatsappPhone || data.phone || 'N/A'}</span></div>
+              <div class="field"><span class="label">Hometown City:</span><span class="value">${data.city || data.address || 'Gaya'} ${data.state ? `, ${data.state}` : ''}</span></div>
+              <div class="field"><span class="label">Main Gotra (गोत्र):</span><span class="value">${data.gotra || 'Self / Kashyap'}</span></div>
             </div>
 
             <div class="section">
-              <div class="section-title">Rites & Logistics Summary</div>
+              <div class="section-title">RITES & LOGISTICS SUMMARY</div>
+              <div class="field"><span class="label">Ritual Purpose:</span><span class="value">${data.purpose || 'Pitru Paksha Pind Daan'}</span></div>
               <div class="field"><span class="label">Selected Package:</span><span class="value">${data.packageName || 'Essential Rites'}</span></div>
               <div class="field"><span class="label">Visit Date:</span><span class="value">${data.preferredDate || 'To be confirmed'}</span></div>
-              ${data.devoteeCount ? `<div class="field"><span class="label">Devotees Count:</span><span class="value">${data.devoteeCount}</span></div>` : ''}
-              ${data.needHotel && data.selectedHotelName ? `<div class="field"><span class="label">Hotel Stay Choice:</span><span class="value">${data.selectedHotelName}</span></div>` : ''}
-              ${data.needPickup && data.pickupFrom ? `<div class="field"><span class="label">Station/Airport Pickup:</span><span class="value">${data.pickupFrom} (${data.arrivalTime || ''})</span></div>` : ''}
-              ${data.estimatedCost ? `<div class="field"><span class="label">Estimated Total Cost:</span><span class="value" style="color: #6f1d14; font-size: 13px;">₹${data.estimatedCost.toLocaleString('en-IN')}</span></div>` : ''}
+              <div class="field"><span class="label">Hotel Stay Choice:</span><span class="value">${data.selectedHotelName || (isPlatinum ? '3-Star AC Deluxe Hotel' : 'Not Required / Self')}</span></div>
+              <div class="field"><span class="label">Station/Airport Pickup:</span><span class="value">${data.pickupFrom || (isPlatinum ? 'Private AC Cab Station Pickup' : 'Not Required / Self')}</span></div>
+              <div class="field"><span class="label">Estimated Total Cost:</span><span class="value" style="color: #6f1d14; font-size: 13px;">₹${(data.estimatedCost || 4500).toLocaleString('en-IN')}</span></div>
             </div>
           </div>
 
           ${ancestorsRows ? `
             <div class="section" style="margin-bottom: 16px;">
-              <div class="section-title">Registered Ancestors Rites List</div>
+              <div class="section-title">REGISTERED ANCESTORS RITES LIST</div>
               <table>
                 <thead>
-                  <tr><th>Ancestor Name</th><th>Relation</th><th>Gotra</th></tr>
+                  <tr><th>ANCESTOR NAME</th><th>RELATION</th><th>GOTRA</th></tr>
                 </thead>
                 <tbody>${ancestorsRows}</tbody>
               </table>
@@ -307,16 +305,60 @@ export function generateBookingPDF(data: BookingPDFData) {
             <div class="contact-bar">Official Pooja Helpline: ${officialPhone} | Email: ${officialEmail} | Website: www.pinddaanwale.com</div>
           </div>
         </div>
-
-        <script>
-          window.onload = function() {
-            setTimeout(function() { window.print(); }, 500);
-          };
-        </script>
       </body>
     </html>
   `;
+}
 
-  printWindow.document.write(htmlContent);
-  printWindow.document.close();
+/**
+ * In-Page Printing without opening a new browser tab
+ */
+export function printBookingReceipt(data: BookingPDFData) {
+  if (typeof document === 'undefined') return;
+
+  let iframe = document.getElementById('receipt-print-iframe') as HTMLIFrameElement;
+  if (iframe) {
+    document.body.removeChild(iframe);
+  }
+
+  iframe = document.createElement('iframe');
+  iframe.id = 'receipt-print-iframe';
+  iframe.style.position = 'fixed';
+  iframe.style.right = '0';
+  iframe.style.bottom = '0';
+  iframe.style.width = '0';
+  iframe.style.height = '0';
+  iframe.style.border = '0';
+  document.body.appendChild(iframe);
+
+  const doc = iframe.contentWindow?.document;
+  if (!doc) return;
+
+  doc.open();
+  doc.write(getBookingReceiptHTML(data));
+  doc.close();
+
+  const triggerPrint = () => {
+    try {
+      iframe.contentWindow?.focus();
+      iframe.contentWindow?.print();
+    } catch (e) {
+      console.error('Print trigger error:', e);
+    }
+  };
+
+  const img = doc.querySelector('img');
+  if (img && !img.complete) {
+    img.onload = () => setTimeout(triggerPrint, 250);
+    img.onerror = () => triggerPrint();
+  } else {
+    setTimeout(triggerPrint, 400);
+  }
+}
+
+/**
+ * In-Page Download / Print handler (no new tab opened)
+ */
+export function generateBookingPDF(data: BookingPDFData) {
+  printBookingReceipt(data);
 }

@@ -86,7 +86,7 @@ export default function AiAgentWidget() {
   };
 
   return (
-    <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-3">
+    <div className="fixed bottom-20 right-3 sm:bottom-6 sm:right-6 z-40 flex flex-col items-end gap-2.5 sm:gap-3">
       
       {/* Expanded Quick Action Stack */}
       {isOpen && (
@@ -135,23 +135,23 @@ export default function AiAgentWidget() {
       {/* Main Animated Pandit Ji & Vishnu Sudarshan Chakra Avatar Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-16 h-16 rounded-full bg-[#6f1d14] text-white flex items-center justify-center shadow-2xl hover:scale-110 transition-all border-2 border-amber-400 relative group p-1"
+        className="w-13 h-13 sm:w-16 sm:h-16 rounded-full bg-[#6f1d14] text-white flex items-center justify-center shadow-2xl hover:scale-110 active:scale-95 transition-all border-2 border-amber-400 relative group p-1"
         title="पंडित जी AI - Gaya Ji Vedic Teerth Assistant"
       >
         <span className="absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-white animate-pulse" />
         
         {isOpen ? (
-          <X className="w-7 h-7 text-white" />
+          <X className="w-6 h-6 sm:w-7 sm:h-7 text-white" />
         ) : (
           <div className="flex items-center justify-center">
-            <AnimatedPanditJiIcon className="w-11 h-11" />
+            <AnimatedPanditJiIcon className="w-9 h-9 sm:w-11 sm:h-11" />
           </div>
         )}
       </button>
 
       {/* Pandit Ji AI Chat Modal Window */}
       {chatOpen && (
-        <div className="fixed bottom-24 right-6 w-96 max-w-[calc(100vw-3rem)] bg-white rounded-3xl shadow-2xl border border-amber-900/20 overflow-hidden z-50 flex flex-col h-[500px] animate-in fade-in zoom-in-95 duration-200">
+        <div className="fixed bottom-20 sm:bottom-24 right-3 sm:right-6 w-[calc(100vw-1.5rem)] sm:w-96 max-w-[calc(100vw-1.5rem)] sm:max-w-[calc(100vw-3rem)] bg-white rounded-3xl shadow-2xl border border-amber-900/20 overflow-hidden z-50 flex flex-col h-[460px] sm:h-[500px] animate-in fade-in zoom-in-95 duration-200">
           
           <div className="bg-gradient-to-r from-[#6f1d14] to-[#1a1410] text-white p-4 flex justify-between items-center border-b border-amber-500/20">
             <div className="flex items-center gap-3">

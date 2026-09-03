@@ -1,10 +1,14 @@
 import React from 'react';
 import { getAdminERPData } from './actions';
+import { requireAdminSession } from '@/lib/auth';
 import AdminERPClient from './AdminERPClient';
 
 export const dynamic = 'force-dynamic';
 
 export default async function AdminPage() {
+  // Server-side guard: Redirects to /admin/login if not authenticated
+  const session = await requireAdminSession();
+
   const erpData = await getAdminERPData();
 
   const initialData = {
@@ -21,5 +25,5 @@ export default async function AdminPage() {
     siteSettings: erpData.siteSettings || {}
   };
 
-  return <AdminERPClient initialData={initialData} />;
+  return <AdminERPClient initialData={initialData} session={session} />;
 }
