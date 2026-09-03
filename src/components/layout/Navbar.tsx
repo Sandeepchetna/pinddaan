@@ -33,6 +33,11 @@ export default function Navbar({ packages = [], sacredPlaces = [] }: NavbarProps
   const [activeMegaMenu, setActiveMegaMenu] = useState<string | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [expandedMobileSection, setExpandedMobileSection] = useState<string | null>(null);
+
+  const toggleMobileSection = (section: string) => {
+    setExpandedMobileSection(prev => prev === section ? null : section);
+  };
 
   // Fallback packages if none provided
   const displayPackages = packages.length > 0 ? packages : [
@@ -418,95 +423,197 @@ export default function Navbar({ packages = [], sacredPlaces = [] }: NavbarProps
         </div>
       )}
 
-      {/* Mobile Drawer Navigation */}
+      {/* Mobile Drawer Navigation (Exactly mirrors Desktop / Laptop structure) */}
       {mobileMenuOpen && (
         <div className="lg:hidden bg-white border-b border-gray-200 px-5 py-5 space-y-4 text-xs font-semibold shadow-2xl animate-in fade-in slide-in-from-top-2 duration-200">
-          <div className="space-y-1">
-            <Link 
-              href="/" 
-              onClick={() => setMobileMenuOpen(false)} 
-              className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-amber-50 text-text-primary hover:text-[#F48D08] transition-colors"
-            >
-              <span>🏠</span>
-              <span>Home (मुख्य पृष्ठ)</span>
-            </Link>
+          <div className="space-y-1 divide-y divide-gray-100">
+            
+            {/* 1. Home */}
+            <div className="py-1">
+              <Link 
+                href="/" 
+                onClick={() => setMobileMenuOpen(false)} 
+                className="flex items-center justify-between p-2.5 rounded-xl hover:bg-amber-50 text-text-primary hover:text-[#F48D08] transition-colors"
+              >
+                <span className="font-bold text-sm">Home</span>
+              </Link>
+            </div>
 
-            <Link 
-              href="/about" 
-              onClick={() => setMobileMenuOpen(false)} 
-              className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-amber-50 text-text-primary hover:text-[#F48D08] transition-colors"
-            >
-              <span>📖</span>
-              <span>Our Story & Mission (हमारे बारे में)</span>
-            </Link>
+            {/* 2. Pinddaan Gaya Ji (Accordion) */}
+            <div className="py-1">
+              <button 
+                type="button"
+                onClick={() => toggleMobileSection('pinddaan')}
+                className="w-full flex items-center justify-between p-2.5 rounded-xl hover:bg-amber-50 text-text-primary hover:text-[#F48D08] transition-colors text-left"
+              >
+                <span className="font-bold text-sm">Pinddaan Gaya Ji</span>
+                <ChevronDown className={`w-4 h-4 text-[#F48D08] transition-transform duration-200 ${expandedMobileSection === 'pinddaan' ? 'rotate-180' : ''}`} />
+              </button>
 
-            <Link 
-              href="/gaya-ji" 
-              onClick={() => setMobileMenuOpen(false)} 
-              className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-amber-50 text-text-primary hover:text-[#F48D08] transition-colors"
-            >
-              <span>🌸</span>
-              <span>About Gaya Ji Heritage</span>
-            </Link>
+              {expandedMobileSection === 'pinddaan' && (
+                <div className="pl-3 pr-2 py-2 space-y-2 bg-amber-50/40 rounded-xl mt-1 border border-amber-900/5">
+                  <Link 
+                    href="/blog/why-pind-daan-is-performed-only-at-gaya-ji"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="block p-2 text-xs text-text-secondary hover:text-[#F48D08] font-medium"
+                  >
+                    Why Pind Daan at Gaya Ji? (शास्त्र प्रमाण)
+                  </Link>
+                  <Link 
+                    href="/gaya-ji"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="block p-2 text-xs text-text-secondary hover:text-[#F48D08] font-medium"
+                  >
+                    45-Vedi Sacred Circuit Parikrama
+                  </Link>
+                  <Link 
+                    href="/sacred-places/falgu-river"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="block p-2 text-xs text-text-secondary hover:text-[#F48D08] font-medium"
+                  >
+                    Falgu River & Sita Kund (बालू पिंडदान)
+                  </Link>
+                  <Link 
+                    href="/sacred-places/akshayavat"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="block p-2 text-xs text-text-secondary hover:text-[#F48D08] font-medium"
+                  >
+                    Akshayavat Banyan Tree (अक्षय तृप्ति)
+                  </Link>
+                  <Link 
+                    href="/pind-daan"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="block p-2 text-xs text-[#F48D08] font-bold"
+                  >
+                    Complete Ritual Vidhi & Rules →
+                  </Link>
+                </div>
+              )}
+            </div>
 
-            <Link 
-              href="/sacred-places/vishnupad-temple" 
-              onClick={() => setMobileMenuOpen(false)} 
-              className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-amber-50 text-text-primary hover:text-[#F48D08] transition-colors"
-            >
-              <span>🛕</span>
-              <span>Vishnupad Temple & Falgu Ghat</span>
-            </Link>
+            {/* 3. About Vishnupad (Accordion) */}
+            <div className="py-1">
+              <button 
+                type="button"
+                onClick={() => toggleMobileSection('vishnupad')}
+                className="w-full flex items-center justify-between p-2.5 rounded-xl hover:bg-amber-50 text-text-primary hover:text-[#F48D08] transition-colors text-left"
+              >
+                <span className="font-bold text-sm">About Vishnupad</span>
+                <ChevronDown className={`w-4 h-4 text-[#F48D08] transition-transform duration-200 ${expandedMobileSection === 'vishnupad' ? 'rotate-180' : ''}`} />
+              </button>
 
-            <Link 
-              href="/packages" 
-              onClick={() => setMobileMenuOpen(false)} 
-              className="flex items-center justify-between p-2.5 rounded-xl hover:bg-amber-50 text-text-primary hover:text-[#F48D08] transition-colors"
-            >
-              <div className="flex items-center gap-3">
-                <span>📜</span>
-                <span>Ritual Packages (पूजा पैकेज)</span>
-              </div>
-              <span className="bg-amber-100 text-[#F48D08] text-[10px] font-extrabold px-2 py-0.5 rounded-full">
-                {displayPackages.length} Packages
-              </span>
-            </Link>
+              {expandedMobileSection === 'vishnupad' && (
+                <div className="pl-3 pr-2 py-2 space-y-2 bg-amber-50/40 rounded-xl mt-1 border border-amber-900/5">
+                  <Link 
+                    href="/sacred-places/vishnupad-temple"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="block p-2 text-xs text-text-secondary hover:text-[#F48D08] font-medium"
+                  >
+                    Vishnupad Temple Sanctuary & Footprint
+                  </Link>
+                  <Link 
+                    href="/gaya-ji"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="block p-2 text-xs text-text-secondary hover:text-[#F48D08] font-medium"
+                  >
+                    History, Architecture & Ahilyabai Holkar
+                  </Link>
+                  <Link 
+                    href="/sacred-places"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="block p-2 text-xs text-[#F48D08] font-bold"
+                  >
+                    Explore All 49 Sacred Vedis & Altars →
+                  </Link>
+                </div>
+              )}
+            </div>
 
-            <Link 
-              href="/pind-daan" 
-              onClick={() => setMobileMenuOpen(false)} 
-              className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-amber-50 text-text-primary hover:text-[#F48D08] transition-colors"
-            >
-              <span>🧭</span>
-              <span>Departure City Guides (शहर अनुसार यात्रा)</span>
-            </Link>
+            {/* 4. Ritual Packages (Accordion with count badge) */}
+            <div className="py-1">
+              <button 
+                type="button"
+                onClick={() => toggleMobileSection('packages')}
+                className="w-full flex items-center justify-between p-2.5 rounded-xl hover:bg-amber-50 text-text-primary hover:text-[#F48D08] transition-colors text-left"
+              >
+                <div className="flex items-center gap-2">
+                  <span className="font-bold text-sm">Ritual Packages</span>
+                  <span className="bg-amber-100 text-[#F48D08] text-[9px] font-extrabold px-2 py-0.5 rounded-full">
+                    {displayPackages.length}
+                  </span>
+                </div>
+                <ChevronDown className={`w-4 h-4 text-[#F48D08] transition-transform duration-200 ${expandedMobileSection === 'packages' ? 'rotate-180' : ''}`} />
+              </button>
 
-            <Link 
-              href="/travel-guide" 
-              onClick={() => setMobileMenuOpen(false)} 
-              className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-amber-50 text-text-primary hover:text-[#F48D08] transition-colors"
-            >
-              <span>🚆</span>
-              <span>Gaya Travel & Train Guide</span>
-            </Link>
+              {expandedMobileSection === 'packages' && (
+                <div className="pl-3 pr-2 py-2 space-y-2 bg-amber-50/40 rounded-xl mt-1 border border-amber-900/5">
+                  {displayPackages.map((pkg: any) => (
+                    <Link
+                      key={pkg.slug}
+                      href={`/packages/${pkg.slug}/compare`}
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="block p-2 rounded-lg hover:bg-white text-xs text-text-primary"
+                    >
+                      <div className="font-bold flex items-center justify-between">
+                        <span>{pkg.title}</span>
+                        <span className="text-[#6f1d14] font-mono font-bold">₹{pkg.priceINR?.toLocaleString('en-IN') || '4,500'}</span>
+                      </div>
+                      <div className="text-[11px] text-text-secondary font-normal line-clamp-1">{pkg.shortDesc}</div>
+                    </Link>
+                  ))}
+                  <div className="pt-2 border-t border-amber-900/10 flex items-center justify-between">
+                    <Link 
+                      href="/packages/compare"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="text-xs text-[#6f1d14] font-bold hover:underline"
+                    >
+                      Compare Plans
+                    </Link>
+                    <Link 
+                      href="/packages"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="text-xs text-[#F48D08] font-bold hover:underline"
+                    >
+                      All Packages ({displayPackages.length}) →
+                    </Link>
+                  </div>
+                </div>
+              )}
+            </div>
 
-            <Link 
-              href="/blog" 
-              onClick={() => setMobileMenuOpen(false)} 
-              className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-amber-50 text-text-primary hover:text-[#F48D08] transition-colors"
-            >
-              <span>📖</span>
-              <span>Videos & Vedic Knowledge</span>
-            </Link>
+            {/* 5. Videos & Articles */}
+            <div className="py-1">
+              <Link 
+                href="/blog" 
+                onClick={() => setMobileMenuOpen(false)} 
+                className="flex items-center justify-between p-2.5 rounded-xl hover:bg-amber-50 text-text-primary hover:text-[#F48D08] transition-colors"
+              >
+                <span className="font-bold text-sm">Videos & Articles</span>
+              </Link>
+            </div>
 
-            <Link 
-              href="/contact" 
-              onClick={() => setMobileMenuOpen(false)} 
-              className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-amber-50 text-text-primary hover:text-[#F48D08] transition-colors"
-            >
-              <span>📞</span>
-              <span>Contact & Gaya Address</span>
-            </Link>
+            {/* 6. Our Story */}
+            <div className="py-1">
+              <Link 
+                href="/about" 
+                onClick={() => setMobileMenuOpen(false)} 
+                className="flex items-center justify-between p-2.5 rounded-xl hover:bg-amber-50 text-text-primary hover:text-[#F48D08] transition-colors"
+              >
+                <span className="font-bold text-sm">Our Story</span>
+              </Link>
+            </div>
+
+            {/* 7. Contact Us */}
+            <div className="py-1">
+              <Link 
+                href="/contact" 
+                onClick={() => setMobileMenuOpen(false)} 
+                className="flex items-center justify-between p-2.5 rounded-xl hover:bg-amber-50 text-text-primary hover:text-[#F48D08] transition-colors"
+              >
+                <span className="font-bold text-sm">Contact Us</span>
+              </Link>
+            </div>
+
           </div>
 
           <div className="pt-3 border-t border-gray-100 flex items-center justify-between">
