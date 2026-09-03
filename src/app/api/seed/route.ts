@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { GAYA_SACRED_STHALIS, RITUAL_PACKAGES, INITIAL_HOTELS, INITIAL_LEADS } from '@/data/mockData';
+import { SACRED_VEDIS_MASTER } from '@/data/sacredVedisData';
 
 const db = prisma as any;
 
@@ -22,31 +23,31 @@ export async function GET() {
       });
     }
 
-    // 2. Seed Sacred Places
+    // 2. Seed All 49 Authentic Sacred Places & Vedis of Gaya Ji
     if (db.sacredPlace) {
-      for (const place of GAYA_SACRED_STHALIS) {
+      for (const place of SACRED_VEDIS_MASTER) {
         await db.sacredPlace.upsert({
-          where: { slug: place.id },
+          where: { slug: place.slug },
           update: {
             name: place.name,
             hindiName: place.hindiName,
             tagline: place.tagline,
             description: place.description,
-            history: place.scripturalSignificance || place.description,
-            timings: '05:00 AM - 09:00 PM',
-            visitorInfo: place.keySpots?.join(', ') || '',
-            heroImage: place.image || '/images/gaya_vishnupad.jpg'
+            history: place.history,
+            timings: place.timings,
+            visitorInfo: `${place.category} • ${place.location} • ${place.visitorInfo}`,
+            heroImage: place.heroImage
           },
           create: {
-            slug: place.id,
+            slug: place.slug,
             name: place.name,
             hindiName: place.hindiName,
             tagline: place.tagline,
             description: place.description,
-            history: place.scripturalSignificance || place.description,
-            timings: '05:00 AM - 09:00 PM',
-            visitorInfo: place.keySpots?.join(', ') || '',
-            heroImage: place.image || '/images/gaya_vishnupad.jpg'
+            history: place.history,
+            timings: place.timings,
+            visitorInfo: `${place.category} • ${place.location} • ${place.visitorInfo}`,
+            heroImage: place.heroImage
           }
         });
       }

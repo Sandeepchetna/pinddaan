@@ -14,31 +14,34 @@ import {
 } from 'lucide-react';
 
 export const metadata = {
-  title: 'Gaya Ji Official Destination Guide | Bihar Govt Pilgrimage Info & 45-Vedi Trail',
-  description: 'Official District Administration Pind Daan guide. Complete 45-Vedi Teerth Sthali sequence, Vishnupad Temple history, Mela Tent Cities, and Emergency Helplines.',
+  title: 'Gaya Ji Sacred Destination Guide | Pilgrimage Info & 45-Vedi Trail',
+  description: 'Comprehensive Gaya Ji Pind Daan pilgrimage guide based on authentic district records. Complete 45-Vedi Teerth Sthali sequence, Vishnupad Temple history, Mela Tent Cities, and Emergency Helplines.',
 };
 
 export default function GayaJiDestinationPage() {
   return (
-    <div className="min-h-screen bg-temple-ivory text-text-primary py-16 px-4 sm:px-6">
-      <div className="max-w-7xl mx-auto space-y-16">
+    <div className="min-h-screen bg-temple-ivory text-text-primary py-8 sm:py-16 px-4 sm:px-6">
+      <div className="max-w-7xl mx-auto space-y-10 sm:space-y-16">
         
         {/* Header */}
-        <div className="text-center max-w-4xl mx-auto space-y-4">
-          <div className="inline-flex items-center gap-2 py-1.5 px-4 rounded-full bg-amber-100 text-[#F48D08] text-xs font-bold uppercase tracking-widest">
-            <Award className="w-4 h-4 text-[#F48D08]" />
-            <span>Official Gaya Ji Destination & District Guide</span>
+        <div className="text-center max-w-4xl mx-auto space-y-3 sm:space-y-4">
+          <div className="inline-flex items-center gap-2 py-1.5 px-3.5 sm:px-4 rounded-full bg-amber-100 text-[#F48D08] text-[11px] sm:text-xs font-bold uppercase tracking-widest">
+            <Award className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#F48D08]" />
+            <span>Comprehensive Gaya Ji Destination & Pilgrimage Guide</span>
           </div>
-          <h1 className="text-4xl sm:text-6xl font-serif font-bold tracking-tight">
-            Gaya Ji — The Holy Seat of Ancestral Liberation
+          <h1 className="text-3xl sm:text-5xl md:text-6xl font-display font-bold tracking-tight leading-[1.15]">
+            <span className="block text-[#2B2118]">Gaya Ji — The Holy Seat of</span>
+            <span className="block text-transparent bg-clip-text bg-gradient-to-r from-[#6f1d14] via-[#C6922E] to-[#F48D08]">
+              Ancestral Liberation & Moksha
+            </span>
           </h1>
-          <p className="text-text-secondary text-base sm:text-lg leading-relaxed max-w-3xl mx-auto">
+          <p className="text-text-secondary text-sm sm:text-lg leading-relaxed max-w-3xl mx-auto">
             Gaya Ji is the divine land where Lord Vishnu, Lord Rama, and Mata Sita performed ancestral rites. Recognized by the District Administration of Gaya and Bihar Tourism.
           </p>
         </div>
 
         {/* District Administration Emergency Control Room & Helplines (From Bihar Gov Portal) */}
-        <section className="bg-white p-8 sm:p-10 rounded-3xl border border-amber-900/10 shadow-sm space-y-6">
+        <section className="bg-white p-5 sm:p-10 rounded-2xl sm:rounded-3xl border border-amber-900/10 shadow-sm space-y-6">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-gray-100 pb-4 gap-2">
             <div>
               <span className="text-xs uppercase tracking-widest font-bold text-[#F48D08]">Government & District Desk</span>
@@ -88,7 +91,7 @@ export default function GayaJiDestinationPage() {
         <section className="space-y-8">
           <div className="text-center max-w-2xl mx-auto space-y-2">
             <span className="text-xs uppercase tracking-widest font-semibold text-[#F48D08]">Scriptural Sequence</span>
-            <h2 className="text-3xl font-serif font-bold text-text-primary">Official 45-Vedi Sacred Trail (गया तीर्थ स्थल)</h2>
+            <h2 className="text-3xl font-serif font-bold text-text-primary">Canonical 45-Vedi Sacred Trail (गया तीर्थ स्थल)</h2>
             <p className="text-text-secondary text-sm">
               According to Vayu Purana and Bihar Tourism, performing Pind Daan across the 45-Vedi shrines guarantees absolute Moksha.
             </p>
@@ -122,7 +125,7 @@ export default function GayaJiDestinationPage() {
         </section>
 
         {/* Govt Tent Cities & Transport Facilities */}
-        <section className="bg-temple-alt/60 p-10 rounded-3xl border border-amber-900/10 space-y-6">
+        <section className="bg-temple-alt/60 p-5 sm:p-10 rounded-2xl sm:rounded-3xl border border-amber-900/10 space-y-6">
           <div className="max-w-2xl space-y-2">
             <span className="text-xs uppercase tracking-widest font-semibold text-[#D97706]">Mela Infrastructure</span>
             <h2 className="text-3xl font-serif font-bold text-text-primary">Pitru Paksha Mela Tent Cities & Logistics</h2>

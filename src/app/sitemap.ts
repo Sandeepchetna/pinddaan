@@ -12,17 +12,24 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${baseUrl}/packages`, lastModified: new Date(), changeFrequency: 'daily', priority: 0.9 },
     { url: `${baseUrl}/packages/compare`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.8 },
     { url: `${baseUrl}/pre-booking`, lastModified: new Date(), changeFrequency: 'daily', priority: 0.9 },
+    { url: `${baseUrl}/pind-daan`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.9 },
     { url: `${baseUrl}/gaya-ji`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.9 },
     { url: `${baseUrl}/sacred-places`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.8 },
     { url: `${baseUrl}/blog`, lastModified: new Date(), changeFrequency: 'daily', priority: 0.8 },
     { url: `${baseUrl}/knowledge-centre`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.8 },
     { url: `${baseUrl}/travel-guide`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.8 },
     { url: `${baseUrl}/faqs`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.7 },
+    { url: `${baseUrl}/about`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${baseUrl}/our-story`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
     { url: `${baseUrl}/contact`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.6 }
   ];
 
-  // Dynamic city routes
-  const cities = ['bengaluru', 'mumbai', 'delhi', 'kolkata', 'hyderabad', 'chennai', 'pune', 'ahmedabad'];
+  // Dynamic city routes (Programmatic Local & Global SEO)
+  const cities = [
+    'bengaluru', 'mumbai', 'delhi', 'kolkata', 'hyderabad', 'chennai', 'pune',
+    'ahmedabad', 'surat', 'jaipur', 'lucknow', 'patna', 'ranchi', 'bhubaneswar',
+    'usa-nri', 'uk-london', 'canada-nri', 'australia-nri', 'dubai-uae-nri', 'singapore-nri'
+  ];
   const cityRoutes: MetadataRoute.Sitemap = cities.map(city => ({
     url: `${baseUrl}/pind-daan/from-${city}`,
     lastModified: new Date(),
@@ -44,19 +51,31 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }
   } catch (e) {}
 
-  // Dynamic Sacred Places routes
+  // Dynamic Sacred Places routes (All 49 Sacred Vedis)
   let placeRoutes: MetadataRoute.Sitemap = [];
   try {
     if (db.sacredPlace) {
       const places = await db.sacredPlace.findMany({ select: { slug: true, createdAt: true } });
-      placeRoutes = places.map((pl: any) => ({
-        url: `${baseUrl}/sacred-places/${pl.slug}`,
-        lastModified: pl.createdAt || new Date(),
-        changeFrequency: 'monthly',
-        priority: 0.8
-      }));
+      if (places && places.length > 0) {
+        placeRoutes = places.map((pl: any) => ({
+          url: `${baseUrl}/sacred-places/${pl.slug}`,
+          lastModified: pl.createdAt || new Date(),
+          changeFrequency: 'monthly',
+          priority: 0.8
+        }));
+      }
     }
   } catch (e) {}
+
+  if (placeRoutes.length === 0) {
+    const { SACRED_VEDIS_MASTER } = await import('@/data/sacredVedisData');
+    placeRoutes = SACRED_VEDIS_MASTER.map((pl) => ({
+      url: `${baseUrl}/sacred-places/${pl.slug}`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.8
+    }));
+  }
 
   // Dynamic Blog routes
   let blogRoutes: MetadataRoute.Sitemap = [];

@@ -2,7 +2,7 @@ import { Phone, Mail, MapPin, Clock, ShieldCheck, Send } from 'lucide-react';
 
 export const metadata = {
   title: 'Contact Us | Gaya Ji Pilgrimage Desk | PindDaanWale',
-  description: 'Connect with the official Gaya Ji digital pilgrimage desk. Direct phone support, Vishnupad temple panda coordination, and travel assistance.',
+  description: 'Connect with our dedicated Gaya Ji pilgrimage facilitation desk. Direct phone support, hereditary Vishnupad panda coordination, and travel assistance.',
 };
 
 export default function ContactPage() {
@@ -12,8 +12,13 @@ export default function ContactPage() {
         
         {/* Header */}
         <div className="text-center max-w-2xl mx-auto mb-16 space-y-3">
-          <span className="text-xs font-bold uppercase tracking-widest text-accent-gold">Official Pilgrim Desk</span>
-          <h1 className="text-4xl sm:text-5xl font-serif font-bold">Contact Gaya Ji Desk</h1>
+          <span className="text-xs font-bold uppercase tracking-widest text-accent-gold">Direct Pilgrim Facilitation Desk</span>
+          <h1 className="text-3xl sm:text-5xl font-display font-bold tracking-tight leading-[1.15]">
+            <span className="block text-[#2B2118]">Connect With Our</span>
+            <span className="block text-transparent bg-clip-text bg-gradient-to-r from-[#6f1d14] via-[#C6922E] to-[#F48D08]">
+              Gaya Ji Pilgrimage Desk
+            </span>
+          </h1>
           <p className="text-text-secondary text-sm sm:text-base leading-relaxed">
             Have questions about Tithi calculations, gotra lineage, or travel logistics? Speak directly with our dedicated Vedic coordinators.
           </p>

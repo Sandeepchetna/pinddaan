@@ -54,8 +54,8 @@ export default function SchemaMarkup({ siteSettings }: SchemaMarkupProps) {
     },
     'sameAs': [
       'https://www.facebook.com/pinddaanwale',
-      'https://www.instagram.com/pinddaanwale',
-      'https://www.youtube.com/@pinddaanwale'
+      'https://www.instagram.com/pinddaan_wale',
+      'https://www.youtube.com/@PindDaanWale'
     ]
   };
 

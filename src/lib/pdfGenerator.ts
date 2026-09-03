@@ -199,8 +199,8 @@ export function getBookingReceiptHTML(data: BookingPDFData): string {
             margin-bottom: 5px;
             font-size: 11px;
           }
-          .label { color: #666; font-weight: 500; }
-          .value { color: #1a1410; font-weight: bold; text-align: right; }
+          .label { color: #666; font-weight: 500; shrink-0; }
+          .value { color: #1a1410; font-weight: bold; text-align: right; word-break: break-all; max-width: 65%; }
           
           table { width: 100%; border-collapse: collapse; margin-top: 6px; font-size: 11px; }
           th { background: #eee5d8; color: #6f1d14; text-align: left; padding: 6px; font-size: 10px; text-transform: uppercase; }
@@ -239,12 +239,12 @@ export function getBookingReceiptHTML(data: BookingPDFData): string {
               <img src="${logoUrl}" alt="PindDaanWale Official Emblem" class="brand-logo" />
               <div>
                 <div class="brand-title">${companyName}</div>
-                <div class="brand-tagline">THE OFFICIAL GAYA JI PILGRIMAGE DESTINATION</div>
+                <div class="brand-tagline">Sacred. Trusted. Complete.</div>
                 <div style="font-size: 10px; color: #666; margin-top: 3px;">${officialAddress}</div>
               </div>
             </div>
             <div class="receipt-title">
-              <div style="font-size: 14px; font-weight: bold; color: #1a1410;">OFFICIAL PILGRIMAGE PRE-BOOKING</div>
+              <div style="font-size: 14px; font-weight: bold; color: #1a1410;">PILGRIMAGE PRE-BOOKING SUMMARY</div>
               <div class="ref-id">Ref ID: ${data.bookingId}</div>
               <div style="font-size: 10px; color: #888; margin-top: 3px;">Issued: ${currentDate}</div>
             </div>
@@ -301,8 +301,8 @@ export function getBookingReceiptHTML(data: BookingPDFData): string {
           </div>
 
           <div class="footer">
-            <div>This is a computer-generated official pilgrimage pre-booking summary receipt.</div>
-            <div class="contact-bar">Official Pooja Helpline: ${officialPhone} | Email: ${officialEmail} | Website: www.pinddaanwale.com</div>
+            <div>This is a computer-generated pilgrimage pre-booking summary receipt.</div>
+            <div class="contact-bar">Pooja Helpline: ${officialPhone} | Email: ${officialEmail} | Website: www.pinddaanwale.com</div>
           </div>
         </div>
       </body>

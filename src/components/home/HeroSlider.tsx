@@ -65,52 +65,94 @@ export default function HeroSlider({ slides }: { slides: any[] }) {
               loop 
               muted 
               playsInline 
-              className="w-full h-full object-cover opacity-50 sm:opacity-60" 
+              className="w-full h-full object-cover opacity-90 sm:opacity-95" 
             />
           ) : (
             <div 
-              className="w-full h-full bg-cover bg-center transition-transform duration-10000 scale-105 opacity-50 sm:opacity-60"
+              className="w-full h-full bg-cover bg-center sm:bg-[center_top] transition-transform duration-10000 scale-105 opacity-90 sm:opacity-95"
               style={{ backgroundImage: `url("${slide.mediaUrl}")` }}
             />
           )}
-          {/* Subtle responsive gradient overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t sm:bg-gradient-to-r from-black/95 via-black/75 sm:via-black/60 to-black/40 sm:to-transparent" />
+          
+          {/* Smart directional gradient: strong contrast on left for white text, crystal clear sunlight on right */}
+          <div className="hidden sm:block absolute inset-0 bg-gradient-to-r from-black/90 via-black/55 via-45% to-transparent pointer-events-none" />
+          
+          {/* Mobile gradient from bottom to top */}
+          <div className="sm:hidden absolute inset-0 bg-gradient-to-t from-black/95 via-black/60 to-black/20 pointer-events-none" />
+          
+          {/* Subtle bottom fade into next section */}
+          <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/60 to-transparent pointer-events-none" />
         </div>
       ))}
 
       {/* Content Container */}
-      <div className="relative z-20 max-w-7xl mx-auto h-full px-4 sm:px-6 lg:px-8 flex flex-col justify-center pb-12 sm:pb-0">
-        <div className="max-w-2xl space-y-3 sm:space-y-4">
+      <div className="relative z-20 max-w-[1400px] mx-auto h-full px-6 sm:px-10 lg:px-12 flex flex-col justify-center pb-12 sm:pb-0">
+        <div className="max-w-[760px] space-y-4 sm:space-y-6">
           
           {/* Badge */}
-          <div className="inline-flex items-center gap-2 py-1 px-3 sm:py-1.5 sm:px-4 rounded-full bg-amber-500/20 border border-amber-500/30 text-[#F48D08] text-[10px] sm:text-xs font-bold uppercase tracking-widest backdrop-blur-sm">
-            <span>{currentSlide.badge || 'Official Gaya Ji Destination'}</span>
+          <div className="inline-flex items-center gap-2 py-1.5 px-4 rounded-full bg-black/50 border border-amber-400/30 text-amber-300 text-[11px] sm:text-xs font-body font-semibold tracking-wider backdrop-blur-md shadow-md">
+            <span>{currentSlide.badge || 'GAYA JI SACRED PILGRIMAGE • VISHNUPAD TEERTH'}</span>
           </div>
 
-          {/* Title - responsive font sizing so it never overflows or dominates */}
-          <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-serif font-bold tracking-tight text-white leading-[1.18] sm:leading-[1.12]">
-            {currentSlide.title}
+          {/* Hero H1 - Cormorant Garamond with Signature White + Gold Gradient Accent */}
+          <h1 className="text-[38px] sm:text-[52px] md:text-[64px] lg:text-[72px] font-display font-bold tracking-[-0.02em] leading-[1.08] drop-shadow-[0_2px_14px_rgba(0,0,0,0.85)]">
+            {(() => {
+              const title = currentSlide.title || '';
+              const splitKeywords = [' At ', ' at ', ' In ', ' in ', ' & ', ' For ', ' for '];
+              for (const kw of splitKeywords) {
+                if (title.includes(kw)) {
+                  const idx = title.indexOf(kw);
+                  const firstPart = title.substring(0, idx + kw.length).trim();
+                  const secondPart = title.substring(idx + kw.length).trim();
+                  return (
+                    <>
+                      <span className="block text-white">{firstPart}</span>
+                      <span className="block text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-[#F48D08] to-amber-300">
+                        {secondPart}
+                      </span>
+                    </>
+                  );
+                }
+              }
+              const words = title.split(' ');
+              if (words.length > 3) {
+                const mid = Math.ceil(words.length / 2);
+                return (
+                  <>
+                    <span className="block text-white">{words.slice(0, mid).join(' ')}</span>
+                    <span className="block text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-[#F48D08] to-amber-300">
+                      {words.slice(mid).join(' ')}
+                    </span>
+                  </>
+                );
+              }
+              return (
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-[#F48D08] to-amber-300">
+                  {title}
+                </span>
+              );
+            })()}
           </h1>
 
-          {/* Subtitle */}
-          <p className="text-gray-200 text-xs sm:text-sm md:text-base leading-relaxed max-w-xl font-normal opacity-90">
+          {/* Hero Subtitle - Plus Jakarta Sans 22px Desktop, 1.75 Line Height, Max Width 680px */}
+          <p className="text-gray-100 text-base sm:text-lg md:text-[22px] font-body font-normal leading-[1.65] max-w-[680px] drop-shadow-[0_1px_8px_rgba(0,0,0,0.8)]">
             {currentSlide.subtitle}
           </p>
 
-          {/* Call-to-Action Buttons */}
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 sm:gap-4 pt-3 sm:pt-4 w-full sm:w-auto">
+          {/* Call-to-Action Buttons - Flat Luxury, 16px Radius, Plus Jakarta Sans 600 */}
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 pt-2 sm:pt-4 w-full sm:w-auto">
             <Link 
               href={currentSlide.ctaLink || '/pre-booking'} 
-              className="bg-[#F48D08] hover:bg-[#D97706] text-white px-6 sm:px-8 py-3.5 sm:py-4 rounded-full font-bold text-xs sm:text-sm transition-all shadow-lg flex items-center justify-center gap-2 active:scale-95"
+              className="bg-[#C6922E] hover:bg-[#A97718] text-white px-7 sm:px-9 py-4 rounded-[16px] font-body font-semibold text-base transition-all shadow-md flex items-center justify-center gap-2 active:scale-95"
             >
-              <span>{currentSlide.ctaLabel || 'Begin Your Sacred Journey'}</span>
+              <span>{currentSlide.ctaLabel || 'Begin Sacred Journey'}</span>
               <ArrowRight className="w-4 h-4 shrink-0" />
             </Link>
 
             {currentSlide.secondaryCtaLabel && (
               <Link 
                 href={currentSlide.secondaryCtaLink || '/gaya-ji'} 
-                className="bg-white/10 hover:bg-white/20 text-white border border-white/30 px-6 sm:px-8 py-3.5 sm:py-4 rounded-full font-bold text-xs sm:text-sm transition-all backdrop-blur-sm text-center active:scale-95"
+                className="bg-black/35 hover:bg-black/55 text-white border border-white/30 hover:border-white/50 px-7 sm:px-9 py-4 rounded-[16px] font-body font-semibold text-base transition-all backdrop-blur-md text-center active:scale-95"
               >
                 {currentSlide.secondaryCtaLabel}
               </Link>

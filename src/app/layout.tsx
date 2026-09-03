@@ -1,5 +1,5 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono, Cinzel } from "next/font/google";
+import type { Metadata } from 'next';
+import { Cormorant_Garamond, Plus_Jakarta_Sans, Noto_Sans_Devanagari } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
@@ -13,34 +13,42 @@ import Script from 'next/script';
 
 const db = prisma as any;
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+// Display Font: Cormorant Garamond (500, 600, 700 only)
+const cormorant = Cormorant_Garamond({
+  variable: "--font-display",
   subsets: ["latin"],
+  weight: ["500", "600", "700"],
+  display: "swap",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+// UI & Body Font: Plus Jakarta Sans (400, 500, 600, 700)
+const plusJakarta = Plus_Jakarta_Sans({
+  variable: "--font-body",
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  display: "swap",
 });
 
-const cinzel = Cinzel({
-  variable: "--font-cinzel",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800", "900"],
+// Hindi & Sanskrit Font: Noto Sans Devanagari
+const notoSansDevanagari = Noto_Sans_Devanagari({
+  variable: "--font-hindi",
+  subsets: ["devanagari", "latin"],
+  weight: ["400", "500", "600", "700"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
   title: {
-    default: "PindDaanWale | The Official Gaya Ji Digital Destination",
+    default: "PindDaanWale | Sacred & Authentic Gaya Ji Pind Daan",
     template: "%s | PindDaanWale Gaya Ji"
   },
-  description: "The definitive digital platform for sacred rites, Pind Daan, Shradh, and Pitru Paksha at Vishnupad Temple & Falgu River, Gaya Ji.",
+  description: "The premier digital pilgrimage platform for authentic Vedic rites, Pind Daan, Shradh, and Pitru Paksha at Vishnupad Temple & Falgu River in Gaya Ji with transparent dakshina.",
   metadataBase: new URL("https://www.pinddaanwale.com"),
   alternates: {
     canonical: "/"
   },
   openGraph: {
-    title: "PindDaanWale | The Official Gaya Ji Digital Destination",
+    title: "PindDaanWale | Sacred & Authentic Gaya Ji Pind Daan",
     description: "Plan authentic Shradh, Tarpan, and Pind Daan rites under hereditary Gaya Purohits at Vishnupad Temple.",
     url: "https://www.pinddaanwale.com",
     siteName: "PindDaanWale",
@@ -57,7 +65,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "PindDaanWale | Official Gaya Ji Pilgrimage",
+    title: "PindDaanWale | Trusted Gaya Ji Pilgrimage",
     description: "Sacred Pind Daan and Shradh rites at Vishnupad Gaya Ji with hereditary Purohits.",
     images: ["/images/gaya_vishnupad.jpg"]
   },
@@ -95,7 +103,7 @@ export default async function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${geistSans.variable} ${geistMono.variable} ${cinzel.variable} h-full antialiased`}
+      className={`${plusJakarta.variable} ${cormorant.variable} ${notoSansDevanagari.variable} h-full antialiased`}
     >
       <head>
         <SchemaMarkup siteSettings={siteSettings} />
@@ -103,7 +111,7 @@ export default async function RootLayout({
           <meta name="google-site-verification" content={siteSettings.searchConsoleTag.replace(/<meta.*content="|["\/>]/g, '').trim()} />
         )}
       </head>
-      <body suppressHydrationWarning className="min-h-full bg-temple-ivory relative">
+      <body suppressHydrationWarning className="min-h-full font-body bg-[#FAF7F2] text-[#5A5148] relative selection:bg-[#C6922E]/20 selection:text-[#2B2118]">
         {(siteSettings?.googleAnalyticsId || 'G-S3CGS7N0MW') && (
           <>
             <Script

@@ -732,7 +732,7 @@ export const INITIAL_HERO_SLIDES: HeroSlide[] = [
     secondaryCtaText: 'View Remote Vidhi Guide',
     secondaryCtaLink: 'rituals',
     mediaType: 'IMAGE',
-    mediaUrl: 'https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=1920&q=80',
+    mediaUrl: '/images/gaya_vishnupad.jpg',
     cards: [
       { title: '4K Live WebRTC', subtitle: 'Interactive 2-Way HD Video' },
       { title: 'Doorstep Prasad', subtitle: 'Sanctified Falgu Sand Delivered' },

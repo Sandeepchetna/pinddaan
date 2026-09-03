@@ -108,22 +108,22 @@ export default async function DynamicPackageComparePage({ params }: { params: Pr
         </p>
 
         {/* Quick Contact Buttons */}
-        <div className="flex justify-center gap-4 pt-2">
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-2.5 sm:gap-4 pt-2">
           <a
             href={`https://wa.me/917463055338?text=Pranam%20Pandit%20Ji,%20I%20want%20to%20know%20more%20about%20${encodeURIComponent(pkg.title)}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2.5 rounded-full font-bold text-xs flex items-center gap-2 shadow"
+            className="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2.5 rounded-full font-bold text-xs flex items-center justify-center gap-2 shadow select-none"
           >
-            <MessageCircle className="w-4 h-4" />
+            <MessageCircle className="w-4 h-4 shrink-0" />
             <span>Ask Pandit Ji on WhatsApp</span>
           </a>
 
           <a
             href="tel:+917463055338"
-            className="bg-white border border-amber-900/20 hover:border-[#F48D08] text-text-primary px-5 py-2.5 rounded-full font-bold text-xs flex items-center gap-2 shadow-sm"
+            className="w-full sm:w-auto bg-white border border-amber-900/20 hover:border-[#F48D08] text-text-primary px-5 py-2.5 rounded-full font-bold text-xs flex items-center justify-center gap-2 shadow-sm select-none"
           >
-            <Phone className="w-4 h-4 text-[#F48D08]" />
+            <Phone className="w-4 h-4 text-[#F48D08] shrink-0" />
             <span>Helpline: +91 7463055338</span>
           </a>
         </div>
@@ -132,35 +132,42 @@ export default async function DynamicPackageComparePage({ params }: { params: Pr
       {/* Dynamic Comparison Matrix Table for THIS Specific Package */}
       <div className="max-w-5xl mx-auto bg-white rounded-3xl border border-amber-900/10 shadow-xl overflow-hidden">
         
-        {/* Table Header */}
-        <div className="grid grid-cols-12 bg-amber-50/80 p-6 border-b border-amber-900/10 items-center">
-          <div className="col-span-4 font-serif font-bold text-base text-text-primary">
-            Ritual Services & Features
-          </div>
-
-          <div className="col-span-4 text-center space-y-1">
-            <span className="text-[10px] uppercase font-extrabold px-3 py-1 rounded-full bg-amber-100 text-[#F48D08]">
-              🌟 GOLD PLAN TIER
-            </span>
-            <div className="text-3xl font-serif font-bold text-[#F48D08]">
-              ₹{pkg.priceINR.toLocaleString('en-IN')}
+        {/* Table Header - Clean 2-Column Mobile Card Layout with Zero Overlap */}
+        <div className="bg-amber-50/80 p-4 sm:p-6 border-b border-amber-900/10">
+          <div className="grid grid-cols-2 sm:grid-cols-12 gap-3 sm:gap-4 items-center">
+            
+            {/* Desktop-only Title Column */}
+            <div className="hidden sm:block sm:col-span-4 font-serif font-bold text-base text-text-primary">
+              Ritual Services & Features
             </div>
-            <span className="block text-[11px] text-text-secondary">Essential Rites</span>
-          </div>
 
-          <div className="col-span-4 text-center space-y-1">
-            <span className="text-[10px] uppercase font-extrabold px-3 py-1 rounded-full bg-gradient-to-r from-[#4A154B] via-[#6f1d14] to-[#C6922E] text-white">
-              💎 PLATINUM VIP TIER
-            </span>
-            <div className="text-3xl font-serif font-bold text-[#6f1d14]">
-              ₹{goldPrice.toLocaleString('en-IN')}
+            {/* Gold Tier Header Card */}
+            <div className="col-span-1 sm:col-span-4 text-center p-3 sm:p-4 rounded-2xl bg-white/90 border border-amber-200/80 shadow-sm space-y-1.5 min-w-0">
+              <span className="text-[9px] sm:text-[10px] uppercase font-extrabold px-2.5 py-0.5 rounded-full bg-amber-100 text-[#F48D08] inline-block whitespace-nowrap">
+                🌟 GOLD PLAN
+              </span>
+              <div className="text-xl sm:text-3xl font-serif font-bold text-[#F48D08] leading-tight truncate">
+                ₹{pkg.priceINR.toLocaleString('en-IN')}
+              </div>
+              <span className="block text-[10px] sm:text-[11px] text-text-secondary leading-tight">Essential Rites</span>
             </div>
-            <span className="block text-[11px] text-text-secondary">VIP Chauffeur & Hotel</span>
+
+            {/* Platinum Tier Header Card */}
+            <div className="col-span-1 sm:col-span-4 text-center p-3 sm:p-4 rounded-2xl bg-white/90 border border-amber-200/80 shadow-sm space-y-1.5 min-w-0">
+              <span className="text-[9px] sm:text-[10px] uppercase font-extrabold px-2.5 py-0.5 rounded-full bg-gradient-to-r from-[#4A154B] via-[#6f1d14] to-[#C6922E] text-white inline-block whitespace-nowrap">
+                💎 PLATINUM VIP
+              </span>
+              <div className="text-xl sm:text-3xl font-serif font-bold text-[#6f1d14] leading-tight truncate">
+                ₹{goldPrice.toLocaleString('en-IN')}
+              </div>
+              <span className="block text-[10px] sm:text-[11px] text-text-secondary leading-tight">VIP Cab & Stay</span>
+            </div>
+
           </div>
         </div>
 
         {/* Feature Comparison Section: Gold Inclusions List */}
-        <div className="p-6 space-y-4 border-b border-gray-100">
+        <div className="p-4 sm:p-6 space-y-4 border-b border-gray-100">
           <h3 className="font-serif font-bold text-sm text-text-primary flex items-center gap-2">
             <Check className="w-4 h-4 text-emerald-600" />
             <span>Gold Tier Included Rites:</span>
@@ -177,7 +184,7 @@ export default async function DynamicPackageComparePage({ params }: { params: Pr
         </div>
 
         {/* Feature Comparison Section: Platinum VIP Inclusions List */}
-        <div className="p-6 space-y-4 bg-amber-50/40">
+        <div className="p-4 sm:p-6 space-y-4 bg-amber-50/40">
           <h3 className="font-serif font-bold text-sm text-[#6f1d14] flex items-center gap-2">
             <Crown className="w-4 h-4 text-[#C6922E]" />
             <span>Platinum VIP Tier Additional Exclusive Rites:</span>
@@ -193,28 +200,30 @@ export default async function DynamicPackageComparePage({ params }: { params: Pr
           </div>
         </div>
 
-        {/* Action Row */}
-        <div className="grid grid-cols-12 bg-gray-50 p-6 border-t border-amber-900/10 items-center gap-4">
-          <div className="col-span-12 sm:col-span-4 text-xs font-bold text-text-secondary text-center sm:text-left">
-            Select your preferred plan for {pkg.title}:
-          </div>
+        {/* Action Row - Mobile Full-Width Stack with Balanced Min-Height */}
+        <div className="bg-gray-50 p-4 sm:p-6 border-t border-amber-900/10">
+          <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 sm:gap-4 items-center">
+            <div className="col-span-1 sm:col-span-4 text-xs font-bold text-text-secondary text-center sm:text-left">
+              Select your preferred plan for {pkg.title}:
+            </div>
 
-          <div className="col-span-6 sm:col-span-4 text-center">
-            <Link
-              href={`/pre-booking?package=${pkg.slug}&tier=GOLD`}
-              className="w-full inline-block bg-[#F48D08] hover:bg-[#D97706] text-white py-3.5 px-4 rounded-full font-bold text-xs shadow transition-all"
-            >
-              Book Gold Plan (₹{pkg.priceINR.toLocaleString('en-IN')})
-            </Link>
-          </div>
+            <div className="col-span-1 sm:col-span-4">
+              <Link
+                href={`/pre-booking?package=${pkg.slug}&tier=GOLD`}
+                className="w-full min-h-[48px] flex items-center justify-center text-center bg-[#F48D08] hover:bg-[#D97706] text-white py-3 px-4 rounded-full font-bold text-xs shadow transition-all select-none"
+              >
+                <span>Book Gold Plan (₹{pkg.priceINR.toLocaleString('en-IN')})</span>
+              </Link>
+            </div>
 
-          <div className="col-span-6 sm:col-span-4 text-center">
-            <Link
-              href={`/pre-booking?package=${pkg.slug}&tier=PLATINUM`}
-              className="w-full inline-block bg-gradient-to-r from-[#6f1d14] via-[#F48D08] to-[#C6922E] hover:opacity-95 text-white py-3.5 px-4 rounded-full font-bold text-xs shadow transition-all"
-            >
-              Book Platinum VIP Plan (₹{goldPrice.toLocaleString('en-IN')})
-            </Link>
+            <div className="col-span-1 sm:col-span-4">
+              <Link
+                href={`/pre-booking?package=${pkg.slug}&tier=PLATINUM`}
+                className="w-full min-h-[48px] flex items-center justify-center text-center bg-gradient-to-r from-[#6f1d14] via-[#F48D08] to-[#C6922E] hover:opacity-95 text-white py-3 px-4 rounded-full font-bold text-xs shadow transition-all select-none"
+              >
+                <span>Book Platinum VIP Plan (₹{goldPrice.toLocaleString('en-IN')})</span>
+              </Link>
+            </div>
           </div>
         </div>
 

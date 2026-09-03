@@ -131,7 +131,7 @@ export default async function ArticleDetailPage({ params }: { params: Promise<{ 
             <div className="bg-[#2A1208] text-amber-100 p-8 rounded-3xl space-y-4 border border-[#F48D08]/30 shadow-lg">
               <div className="flex items-center gap-2 text-[#F48D08]">
                 <Sparkles className="w-5 h-5 fill-current" />
-                <span className="text-xs uppercase font-extrabold tracking-wider text-amber-300">Official Gaya Ji Teerth Desk</span>
+                <span className="text-xs uppercase font-extrabold tracking-wider text-amber-300">Sacred Gaya Ji Devotee Desk</span>
               </div>
               <h3 className="font-serif font-bold text-xl sm:text-2xl text-white">
                 Planning Ancestral Rites at Gaya Ji?

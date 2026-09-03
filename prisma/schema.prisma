@@ -85,6 +85,9 @@ model Testimonial {
   ritual      String
   content     String   @db.Text
   rating      Int      @default(5)
+  avatarUrl   String?  @db.Text
+  videoUrl    String?  @db.Text
+  poojaImage  String?  @db.Text
   status      String   @default("APPROVED")
   createdAt   DateTime @default(now())
 }

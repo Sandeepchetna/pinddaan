@@ -237,19 +237,30 @@ function PreBookingFormContent() {
   };
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2] text-text-primary py-8 sm:py-12 px-4 sm:px-6 lg:px-8 antialiased">
-      <div className="max-w-7xl mx-auto space-y-6 sm:space-y-8">
+    <div className="min-h-screen bg-[#FAF7F2] text-[#2B2118] py-12 sm:py-16 px-4 sm:px-6 lg:px-8 antialiased">
+      <div className="max-w-[1280px] mx-auto space-y-8 sm:space-y-10">
         
         {/* Header Ribbon */}
-        <div className="text-center space-y-2 max-w-2xl mx-auto">
-          <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-amber-100/80 border border-amber-300/60 text-[#6f1d14] text-[11px] font-bold uppercase tracking-wider shadow-sm">
-            <Sparkles className="w-3.5 h-3.5 text-[#F48D08]" />
+        <div className="text-center space-y-3 max-w-[680px] mx-auto">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#FAF7F2] border border-[#EFE6D9] text-[#C6922E] text-xs font-body font-semibold tracking-wider shadow-sm">
+            <Sparkles className="w-3.5 h-3.5 text-[#C6922E]" />
             <span>Gaya Ji Teerth Pre-Booking • सरल पूर्व-पंजीयन</span>
           </div>
-          <h1 className="text-2xl sm:text-4xl font-serif font-bold text-text-primary">
-            {isSubmitted ? 'Booking Confirmed / पंजीयन सफल' : 'Pre-Book Pind Daan Ritual'}
+          <h1 className="text-3xl sm:text-4xl md:text-[44px] font-display font-bold tracking-[-0.02em] leading-[1.15]">
+            {isSubmitted ? (
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-800 via-emerald-600 to-teal-700">
+                Booking Confirmed / पंजीयन सफल
+              </span>
+            ) : (
+              <>
+                <span className="block text-[#2B2118]">Sacred Gotra Registration &</span>
+                <span className="block text-transparent bg-clip-text bg-gradient-to-r from-[#6f1d14] via-[#C6922E] to-[#F48D08]">
+                  Pre-Book Pind Daan Ritual
+                </span>
+              </>
+            )}
           </h1>
-          <p className="text-xs sm:text-sm text-text-secondary">
+          <p className="text-base font-body text-[#5A5148] leading-relaxed">
             {isSubmitted 
               ? 'आपकी आधिकारिक बुकिंग रसीद नीचे तैयार है। इसे प्रिंट या डाउनलोड करें।' 
               : 'केवल 4 आसान विवरण भरें और अपनी पिंडदान यात्रा सुनिश्चित करें।'}
@@ -301,11 +312,11 @@ function PreBookingFormContent() {
                     className="w-14 h-14 object-contain shrink-0"
                   />
                   <div>
-                    <span className="font-serif font-bold text-2xl text-[#6f1d14] block leading-tight">
+                    <span className="font-display font-bold text-2xl text-[#2B2118] block leading-tight notranslate" translate="no">
                       PindDaanWale
                     </span>
-                    <span className="text-[10px] uppercase font-bold text-[#F48D08] tracking-widest block">
-                      THE OFFICIAL GAYA JI PILGRIMAGE DESTINATION
+                    <span className="text-[10.5px] uppercase font-semibold text-[#C6922E] tracking-[0.16em] block mt-0.5">
+                      Sacred. Trusted. Complete.
                     </span>
                     <span className="text-[10px] text-gray-500 block mt-0.5">
                       Vishnupad Temple Compound, Gaya Ji, Bihar - 823001
@@ -315,7 +326,7 @@ function PreBookingFormContent() {
 
                 <div className="sm:text-right">
                   <span className="text-[12px] font-bold text-text-primary uppercase block">
-                    OFFICIAL PILGRIMAGE PRE-BOOKING
+                    PILGRIMAGE PRE-BOOKING SUMMARY
                   </span>
                   <div className="font-mono font-bold text-xs bg-[#fff8eb] text-[#6f1d14] px-3 py-1 rounded-md border border-[#fce3b8] inline-block mt-1">
                     Ref ID: {bookingRefId}
@@ -345,25 +356,25 @@ function PreBookingFormContent() {
                   <h4 className="text-[11px] font-bold uppercase tracking-wider text-[#6f1d14] border-b border-dashed border-[#d8c2ab] pb-1">
                     DEVOTEE PROFILE & CONTACT
                   </h4>
-                  <div className="flex justify-between py-0.5">
-                    <span className="text-gray-500">Devotee Name:</span>
-                    <strong className="text-text-primary">{devoteeName}</strong>
+                  <div className="flex justify-between items-start py-1 gap-2">
+                    <span className="text-gray-500 shrink-0">Devotee Name:</span>
+                    <strong className="text-text-primary text-right break-words min-w-0">{devoteeName}</strong>
                   </div>
-                  <div className="flex justify-between py-0.5">
-                    <span className="text-gray-500">Mobile Phone:</span>
-                    <strong className="text-text-primary font-mono">{phone}</strong>
+                  <div className="flex justify-between items-start py-1 gap-2">
+                    <span className="text-gray-500 shrink-0">Mobile Phone:</span>
+                    <strong className="text-text-primary font-mono text-right break-all min-w-0">{phone}</strong>
                   </div>
-                  <div className="flex justify-between py-0.5">
-                    <span className="text-gray-500">WhatsApp Number:</span>
-                    <strong className="text-text-primary font-mono">{phone}</strong>
+                  <div className="flex justify-between items-start py-1 gap-2">
+                    <span className="text-gray-500 shrink-0">WhatsApp Number:</span>
+                    <strong className="text-text-primary font-mono text-right break-all min-w-0">{phone}</strong>
                   </div>
-                  <div className="flex justify-between py-0.5">
-                    <span className="text-gray-500">Hometown City:</span>
-                    <strong className="text-text-primary text-right">{address}</strong>
+                  <div className="flex justify-between items-start py-1 gap-2">
+                    <span className="text-gray-500 shrink-0">Hometown City:</span>
+                    <strong className="text-text-primary text-right break-words min-w-0">{address}</strong>
                   </div>
-                  <div className="flex justify-between py-0.5">
-                    <span className="text-gray-500">Main Gotra (गोत्र):</span>
-                    <strong className="text-text-primary">Self / Kashyap</strong>
+                  <div className="flex justify-between items-start py-1 gap-2">
+                    <span className="text-gray-500 shrink-0">Main Gotra (गोत्र):</span>
+                    <strong className="text-text-primary text-right break-words min-w-0">Self / Kashyap</strong>
                   </div>
                 </div>
 
@@ -372,25 +383,25 @@ function PreBookingFormContent() {
                   <h4 className="text-[11px] font-bold uppercase tracking-wider text-[#6f1d14] border-b border-dashed border-[#d8c2ab] pb-1">
                     RITES & LOGISTICS SUMMARY
                   </h4>
-                  <div className="flex justify-between py-0.5">
-                    <span className="text-gray-500">Ritual Purpose:</span>
-                    <strong className="text-text-primary">Pitru Paksha Pind Daan</strong>
+                  <div className="flex justify-between items-start py-1 gap-2">
+                    <span className="text-gray-500 shrink-0">Ritual Purpose:</span>
+                    <strong className="text-text-primary text-right break-words min-w-0">Pitru Paksha Pind Daan</strong>
                   </div>
-                  <div className="flex justify-between py-0.5">
-                    <span className="text-gray-500">Selected Package:</span>
-                    <strong className="text-text-primary text-right">{activePackage?.title}</strong>
+                  <div className="flex justify-between items-start py-1 gap-2">
+                    <span className="text-gray-500 shrink-0">Selected Package:</span>
+                    <strong className="text-text-primary text-right break-words min-w-0">{activePackage?.title}</strong>
                   </div>
-                  <div className="flex justify-between py-0.5">
-                    <span className="text-gray-500">Visit Date:</span>
-                    <strong className="text-text-primary">{preferredDate}</strong>
+                  <div className="flex justify-between items-start py-1 gap-2">
+                    <span className="text-gray-500 shrink-0">Visit Date:</span>
+                    <strong className="text-text-primary text-right break-words min-w-0">{preferredDate}</strong>
                   </div>
-                  <div className="flex justify-between py-0.5">
-                    <span className="text-gray-500">Hotel Stay Choice:</span>
-                    <strong className="text-text-primary">{isPlatinum ? '3-Star AC Deluxe Hotel' : 'Not Required / Self'}</strong>
+                  <div className="flex justify-between items-start py-1 gap-2">
+                    <span className="text-gray-500 shrink-0">Hotel Stay Choice:</span>
+                    <strong className="text-text-primary text-right break-words min-w-0">{isPlatinum ? '3-Star AC Deluxe Hotel' : 'Not Required / Self'}</strong>
                   </div>
-                  <div className="flex justify-between py-0.5">
-                    <span className="text-gray-500">Station/Airport Pickup:</span>
-                    <strong className="text-text-primary">{isPlatinum ? 'Private AC Cab Pickup' : 'Not Required / Self'}</strong>
+                  <div className="flex justify-between items-start py-1 gap-2">
+                    <span className="text-gray-500 shrink-0">Station/Airport Pickup:</span>
+                    <strong className="text-text-primary text-right break-words min-w-0">{isPlatinum ? 'Private AC Cab Pickup' : 'Not Required / Self'}</strong>
                   </div>
                   <div className="flex justify-between py-1 border-t border-[#eee5d8] pt-2 items-baseline">
                     <span className="text-xs font-bold text-gray-700">Estimated Total Cost:</span>
@@ -411,15 +422,15 @@ function PreBookingFormContent() {
                   <div>• <strong>Call Before Sending Money:</strong> Please call our official helpline (<strong>+91 7463055338</strong>) before transferring any advance payment to confirm ritual schedule & Panda assignment.</div>
                   <div>• <strong>Send Payment Screenshot on WhatsApp:</strong> After completing the transfer, please <strong>send a screenshot of your payment receipt on WhatsApp (+91 7463055338)</strong> along with your Ref ID (<strong>{bookingRefId}</strong>) for instant booking confirmation.</div>
                 </div>
-                <div className="bg-white p-2.5 rounded-xl border border-[#f3d4a0] font-mono text-[11px] text-text-primary text-center font-bold">
+                <div className="bg-white p-2.5 rounded-xl border border-[#f3d4a0] font-mono text-[11px] text-text-primary text-center font-bold break-all">
                   Bank Account: State Bank of India | A/c No: 40982317822 | IFSC: SBIN0000078 | UPI ID: 7463055338@sbi
                 </div>
               </div>
 
               {/* Computer Generated Footer */}
               <div className="text-center text-[10px] text-gray-500 border-t border-[#f3e9dc] pt-3 space-y-0.5">
-                <div>This is a computer-generated official pilgrimage pre-booking summary receipt.</div>
-                <div className="font-bold text-[#6f1d14]">Official Pooja Helpline: +91 7463055338 | Email: support@pinddaanwale.com | Website: www.pinddaanwale.com</div>
+                <div>This is a computer-generated pilgrimage pre-booking summary receipt.</div>
+                <div className="font-bold text-[#6f1d14]">Pooja Helpline: +91 7463055338 | Email: support@pinddaanwale.com | Website: www.pinddaanwale.com</div>
               </div>
 
               {/* Action Buttons: Print, Download, WhatsApp (All in the same tab!) */}
@@ -428,19 +439,19 @@ function PreBookingFormContent() {
                   <button
                     type="button"
                     onClick={handlePrint}
-                    className="w-full bg-[#1E293B] hover:bg-black text-white py-3.5 px-4 rounded-2xl font-bold text-xs flex items-center justify-center gap-2 shadow-md active:scale-95 transition-all"
+                    className="w-full bg-[#1E293B] hover:bg-black text-white py-3.5 px-3 sm:px-4 rounded-2xl font-bold text-xs flex items-center justify-center gap-2 shadow-md active:scale-95 transition-all select-none"
                   >
-                    <Printer className="w-4 h-4 text-[#F48D08]" />
-                    <span>Print Receipt / प्रिंट करें</span>
+                    <Printer className="w-4 h-4 text-[#F48D08] shrink-0" />
+                    <span className="whitespace-nowrap">Print Receipt</span>
                   </button>
 
                   <button
                     type="button"
                     onClick={handlePrint}
-                    className="w-full bg-[#F48D08] hover:bg-[#D97706] text-white py-3.5 px-4 rounded-2xl font-bold text-xs flex items-center justify-center gap-2 shadow-md active:scale-95 transition-all"
+                    className="w-full bg-[#F48D08] hover:bg-[#D97706] text-white py-3.5 px-3 sm:px-4 rounded-2xl font-bold text-xs flex items-center justify-center gap-2 shadow-md active:scale-95 transition-all select-none"
                   >
-                    <Download className="w-4 h-4" />
-                    <span>Download PDF</span>
+                    <Download className="w-4 h-4 shrink-0" />
+                    <span className="whitespace-nowrap">Download PDF</span>
                   </button>
                 </div>
 
@@ -660,28 +671,29 @@ Dhanyawad! 🙏`;
                     <button
                       type="button"
                       onClick={() => setSelectedTier('GOLD')}
-                      className={`flex-1 py-2.5 px-2 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 ${
+                      className={`flex-1 min-h-[44px] py-2 px-3 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 select-none ${
                         !isPlatinum 
                           ? 'bg-[#F48D08] text-white shadow-md' 
                           : 'text-gray-600 hover:text-black hover:bg-amber-100/50'
                       }`}
                     >
-                      <span>🌟 GOLD PLAN</span>
-                      {!isPlatinum && <Check className="w-3.5 h-3.5" />}
+                      <Award className="w-3.5 h-3.5 shrink-0" />
+                      <span>GOLD PLAN</span>
+                      {!isPlatinum && <Check className="w-3.5 h-3.5 shrink-0" />}
                     </button>
 
                     <button
                       type="button"
                       onClick={() => setSelectedTier('PLATINUM')}
-                      className={`flex-1 py-2.5 px-2 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 ${
+                      className={`flex-1 min-h-[44px] py-2 px-3 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 select-none ${
                         isPlatinum 
                           ? 'bg-gradient-to-r from-[#6f1d14] via-[#F48D08] to-[#C6922E] text-white shadow-md' 
                           : 'text-gray-600 hover:text-black hover:bg-amber-100/50'
                       }`}
                     >
-                      <Crown className="w-3.5 h-3.5 text-amber-300" />
-                      <span>💎 PLATINUM VIP</span>
-                      {isPlatinum && <Check className="w-3.5 h-3.5" />}
+                      <Crown className="w-3.5 h-3.5 text-amber-300 shrink-0" />
+                      <span>PLATINUM VIP</span>
+                      {isPlatinum && <Check className="w-3.5 h-3.5 shrink-0" />}
                     </button>
                   </div>
                 </div>
@@ -696,7 +708,7 @@ Dhanyawad! 🙏`;
                   <select
                     value={selectedPackageSlug}
                     onChange={(e) => setSelectedPackageSlug(e.target.value)}
-                    className="w-full bg-gray-50 border border-gray-300 rounded-2xl p-3 text-xs sm:text-sm font-semibold text-text-primary focus:outline-none focus:border-[#F48D08] focus:bg-white transition-all shadow-sm"
+                    className="w-full bg-gray-50 border border-gray-300 rounded-2xl p-3 text-base sm:text-sm font-semibold text-text-primary focus:outline-none focus:border-[#F48D08] focus:bg-white transition-all shadow-sm min-h-[48px]"
                   >
                     {packagesList.map((pkg) => {
                       const pkgPrice = isPlatinum 
@@ -723,7 +735,7 @@ Dhanyawad! 🙏`;
                     value={devoteeName}
                     onChange={(e) => setDevoteeName(e.target.value)}
                     placeholder="जैसे: रमेश चंद्र शर्मा / Devotee Full Name"
-                    className="w-full bg-gray-50 border border-gray-300 rounded-2xl p-3 text-xs sm:text-sm text-text-primary focus:outline-none focus:border-[#F48D08] focus:bg-white transition-all"
+                    className="w-full bg-gray-50 border border-gray-300 rounded-2xl p-3 text-base sm:text-sm text-text-primary focus:outline-none focus:border-[#F48D08] focus:bg-white transition-all min-h-[48px]"
                   />
                 </div>
 
@@ -736,10 +748,12 @@ Dhanyawad! 🙏`;
                   <input
                     type="tel"
                     required
+                    maxLength={10}
+                    pattern="[0-9]{10}"
                     value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
+                    onChange={(e) => setPhone(e.target.value.replace(/\D/g, '').slice(0, 10))}
                     placeholder="+91 98765 43210 (10 अंकों का नंबर)"
-                    className="w-full bg-gray-50 border border-gray-300 rounded-2xl p-3 text-xs sm:text-sm text-text-primary focus:outline-none focus:border-[#F48D08] focus:bg-white transition-all font-mono"
+                    className="w-full bg-gray-50 border border-gray-300 rounded-2xl p-3 text-base sm:text-sm text-text-primary focus:outline-none focus:border-[#F48D08] focus:bg-white transition-all font-mono min-h-[48px]"
                   />
                 </div>
 
@@ -798,7 +812,7 @@ Dhanyawad! 🙏`;
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full bg-gradient-to-r from-[#6f1d14] via-[#F48D08] to-[#C6922E] hover:opacity-95 text-white py-3.5 rounded-2xl font-bold text-xs sm:text-sm shadow-xl flex items-center justify-center gap-2 active:scale-95 transition-all disabled:opacity-60"
+                    className="w-full bg-[#C6922E] hover:bg-[#A97718] text-white py-4 rounded-[16px] font-body font-semibold text-base shadow-sm flex items-center justify-center gap-2 active:scale-95 transition-all disabled:opacity-60"
                   >
                     {isSubmitting ? (
                       <>
@@ -807,7 +821,7 @@ Dhanyawad! 🙏`;
                       </>
                     ) : (
                       <>
-                        <span>Book {selectedTier} Plan (₹{price.toLocaleString('en-IN')}) →</span>
+                        <span>Book {selectedTier === 'PLATINUM' ? 'Platinum' : 'Gold'} Plan (₹{price.toLocaleString('en-IN')}) →</span>
                       </>
                     )}
                   </button>

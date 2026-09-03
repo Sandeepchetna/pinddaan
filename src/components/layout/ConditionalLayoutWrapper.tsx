@@ -32,7 +32,7 @@ export default function ConditionalLayoutWrapper({
   return (
     <div className="min-h-full flex flex-col bg-temple-ivory relative">
       {navbar}
-      <main className="flex-1">{children}</main>
+      <main className={`flex-1 ${!isPreBooking ? 'pb-20 md:pb-0' : ''}`}>{children}</main>
       {footer}
       {!isPreBooking && stickyMobileBar}
       {!isPreBooking && aiAgentWidget}

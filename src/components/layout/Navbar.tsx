@@ -17,7 +17,8 @@ import {
   Landmark,
   FileText,
   Video,
-  Search
+  Search,
+  Compass
 } from 'lucide-react';
 import Logo from '@/components/common/Logo';
 import GlobalSearchModal from '@/components/common/GlobalSearchModal';
@@ -106,8 +107,8 @@ export default function Navbar({ packages = [], sacredPlaces = [] }: NavbarProps
       </div>
 
       {/* Main Navigation Bar */}
-      <div className="max-w-7xl mx-auto px-3 sm:px-6">
-        <div className="flex justify-between items-center h-16 sm:h-20">
+      <div className="max-w-[1400px] mx-auto px-4 sm:px-8">
+        <div className="flex justify-between items-center h-20 sm:h-24 md:h-[96px]">
           
           <Logo />
 
@@ -163,6 +164,14 @@ export default function Navbar({ packages = [], sacredPlaces = [] }: NavbarProps
               onMouseEnter={() => setActiveMegaMenu(null)}
             >
               Videos & Articles
+            </Link>
+
+            <Link 
+              href="/about" 
+              className="hover:text-[#F48D08] text-text-primary font-bold py-7 transition-colors"
+              onMouseEnter={() => setActiveMegaMenu(null)}
+            >
+              Our Story
             </Link>
 
             <Link 
@@ -231,28 +240,28 @@ export default function Navbar({ packages = [], sacredPlaces = [] }: NavbarProps
                   <FileText className="w-6 h-6" />
                 </div>
                 <div className="space-y-1">
-                  <h4 className="font-serif font-bold text-sm text-text-primary group-hover:text-[#F48D08] transition-colors">Legend of Gayasur</h4>
+                  <h4 className="font-serif font-bold text-sm text-text-primary group-hover:text-[#F48D08] transition-colors">Legend of Gayasur & Sanctity</h4>
                   <p className="text-xs text-text-secondary leading-relaxed">The scriptural story from Vayu Purana granting eternal salvation to 101 generations.</p>
                 </div>
               </Link>
 
-              <Link href="/gaya-ji" onClick={() => setActiveMegaMenu(null)} className="group flex gap-4 p-4 rounded-2xl hover:bg-amber-50/70 border border-transparent hover:border-amber-900/10 transition-all">
+              <Link href="/blog/tri-sthali-pind-daan-gaya-kashi-prayag" onClick={() => setActiveMegaMenu(null)} className="group flex gap-4 p-4 rounded-2xl hover:bg-amber-50/70 border border-transparent hover:border-amber-900/10 transition-all">
+                <div className="w-12 h-12 rounded-xl bg-amber-100 text-[#F48D08] flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
+                  <Compass className="w-6 h-6" />
+                </div>
+                <div className="space-y-1">
+                  <h4 className="font-serif font-bold text-sm text-text-primary group-hover:text-[#F48D08] transition-colors">Tri-Sthali Pilgrimage Sequence</h4>
+                  <p className="text-xs text-text-secondary leading-relaxed">Complete scriptural sequence covering Gaya Ji, Kashi, and Prayagraj.</p>
+                </div>
+              </Link>
+
+              <Link href="/pind-daan" onClick={() => setActiveMegaMenu(null)} className="group flex gap-4 p-4 rounded-2xl hover:bg-amber-50/70 border border-transparent hover:border-amber-900/10 transition-all">
                 <div className="w-12 h-12 rounded-xl bg-amber-100 text-[#F48D08] flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
                   <MapPin className="w-6 h-6" />
                 </div>
                 <div className="space-y-1">
-                  <h4 className="font-serif font-bold text-sm text-text-primary group-hover:text-[#F48D08] transition-colors">45-Vedi Sacred Circuit</h4>
-                  <p className="text-xs text-text-secondary leading-relaxed">Explore the complete 45 sacred shrines sequence across Gaya Ji.</p>
-                </div>
-              </Link>
-
-              <Link href="/blog/why-pind-daan-is-performed-only-at-gaya-ji" onClick={() => setActiveMegaMenu(null)} className="group flex gap-4 p-4 rounded-2xl hover:bg-amber-50/70 border border-transparent hover:border-amber-900/10 transition-all">
-                <div className="w-12 h-12 rounded-xl bg-amber-100 text-[#F48D08] flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
-                  <Calendar className="w-6 h-6" />
-                </div>
-                <div className="space-y-1">
-                  <h4 className="font-serif font-bold text-sm text-text-primary group-hover:text-[#F48D08] transition-colors">Importance of Pitripaksha</h4>
-                  <p className="text-xs text-text-secondary leading-relaxed">The 16-day sacred fortnight rules, tithi dates, and pitru blessings.</p>
+                  <h4 className="font-serif font-bold text-sm text-text-primary group-hover:text-[#F48D08] transition-colors">City Departure & Vidhi Hub</h4>
+                  <p className="text-xs text-text-secondary leading-relaxed">Pind Daan travel guidance from Delhi, Mumbai, Bengaluru, and global NRIs.</p>
                 </div>
               </Link>
             </div>
@@ -275,7 +284,7 @@ export default function Navbar({ packages = [], sacredPlaces = [] }: NavbarProps
         </div>
       )}
 
-      {/* 2. About Vishnupad Mega Panel (FULL 4-ITEM 2x2 GRID) */}
+      {/* 2. About Vishnupad Mega Panel (FULL 4-ITEM 2x2 GRID - ZERO DUPLICATES) */}
       {activeMegaMenu === 'vishnupad' && (
         <div 
           className="absolute top-full left-0 w-full bg-white border-b border-amber-900/10 shadow-2xl z-50 animate-in fade-in slide-in-from-top-2 duration-200"
@@ -289,18 +298,8 @@ export default function Navbar({ packages = [], sacredPlaces = [] }: NavbarProps
                   <Landmark className="w-6 h-6" />
                 </div>
                 <div className="space-y-1">
-                  <h4 className="font-serif font-bold text-sm text-text-primary group-hover:text-[#F48D08] transition-colors">Vishnupad Temple History</h4>
-                  <p className="text-xs text-text-secondary leading-relaxed">Rebuilt in 1787 by Maharani Ahilyabai Holkar of Indore.</p>
-                </div>
-              </Link>
-
-              <Link href="/sacred-places/vishnupad-temple" onClick={() => setActiveMegaMenu(null)} className="group flex gap-4 p-4 rounded-2xl hover:bg-amber-50/70 border border-transparent hover:border-amber-900/10 transition-all">
-                <div className="w-12 h-12 rounded-xl bg-amber-100 text-[#F48D08] flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
-                  <Sparkles className="w-6 h-6" />
-                </div>
-                <div className="space-y-1">
-                  <h4 className="font-serif font-bold text-sm text-text-primary group-hover:text-[#F48D08] transition-colors">Lord Vishnu Footprint</h4>
-                  <p className="text-xs text-text-secondary leading-relaxed">The 40 cm sacred footprint embedded in solid basalt rock.</p>
+                  <h4 className="font-serif font-bold text-sm text-text-primary group-hover:text-[#F48D08] transition-colors">Vishnupad Temple & Footprint</h4>
+                  <p className="text-xs text-text-secondary leading-relaxed">The 40 cm sacred basalt footprint of Lord Vishnu rebuilt by Ahilyabai Holkar.</p>
                 </div>
               </Link>
 
@@ -309,18 +308,28 @@ export default function Navbar({ packages = [], sacredPlaces = [] }: NavbarProps
                   <Flower2 className="w-6 h-6" />
                 </div>
                 <div className="space-y-1">
-                  <h4 className="font-serif font-bold text-sm text-text-primary group-hover:text-[#F48D08] transition-colors">Falgu & Sita Kund Rites</h4>
-                  <p className="text-xs text-text-secondary leading-relaxed">Sacred river bank adjacent to temple for initial Pind offering.</p>
+                  <h4 className="font-serif font-bold text-sm text-text-primary group-hover:text-[#F48D08] transition-colors">Falgu River & Sita Kund Rites</h4>
+                  <p className="text-xs text-text-secondary leading-relaxed">Sacred riverbank where Mata Sita offered sand pind to King Dasharatha.</p>
                 </div>
               </Link>
 
-              <Link href="/sacred-places" onClick={() => setActiveMegaMenu(null)} className="group flex gap-4 p-4 rounded-2xl hover:bg-amber-50/70 border border-transparent hover:border-amber-900/10 transition-all">
+              <Link href="/sacred-places/akshayavat" onClick={() => setActiveMegaMenu(null)} className="group flex gap-4 p-4 rounded-2xl hover:bg-amber-50/70 border border-transparent hover:border-amber-900/10 transition-all">
+                <div className="w-12 h-12 rounded-xl bg-amber-100 text-[#F48D08] flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
+                  <Sparkles className="w-6 h-6" />
+                </div>
+                <div className="space-y-1">
+                  <h4 className="font-serif font-bold text-sm text-text-primary group-hover:text-[#F48D08] transition-colors">Akshayavat Eternal Banyan</h4>
+                  <p className="text-xs text-text-secondary leading-relaxed">The undying sacred banyan tree for concluding ancestral oblations.</p>
+                </div>
+              </Link>
+
+              <Link href="/sacred-places/pretshila" onClick={() => setActiveMegaMenu(null)} className="group flex gap-4 p-4 rounded-2xl hover:bg-amber-50/70 border border-transparent hover:border-amber-900/10 transition-all">
                 <div className="w-12 h-12 rounded-xl bg-amber-100 text-[#F48D08] flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
                   <MapPin className="w-6 h-6" />
                 </div>
                 <div className="space-y-1">
-                  <h4 className="font-serif font-bold text-sm text-text-primary group-hover:text-[#F48D08] transition-colors">45 Vedis Temple Circuit</h4>
-                  <p className="text-xs text-text-secondary leading-relaxed">Complete sequence of 45 sacred Vedis surrounding Vishnupad shrine.</p>
+                  <h4 className="font-serif font-bold text-sm text-text-primary group-hover:text-[#F48D08] transition-colors">Pretshila Hill Shrine</h4>
+                  <p className="text-xs text-text-secondary leading-relaxed">Sacred hill for granting eternal peace to premature and unfulfilled souls.</p>
                 </div>
               </Link>
             </div>
@@ -423,6 +432,15 @@ export default function Navbar({ packages = [], sacredPlaces = [] }: NavbarProps
             </Link>
 
             <Link 
+              href="/about" 
+              onClick={() => setMobileMenuOpen(false)} 
+              className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-amber-50 text-text-primary hover:text-[#F48D08] transition-colors"
+            >
+              <span>📖</span>
+              <span>Our Story & Mission (हमारे बारे में)</span>
+            </Link>
+
+            <Link 
               href="/gaya-ji" 
               onClick={() => setMobileMenuOpen(false)} 
               className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-amber-50 text-text-primary hover:text-[#F48D08] transition-colors"
@@ -452,6 +470,24 @@ export default function Navbar({ packages = [], sacredPlaces = [] }: NavbarProps
               <span className="bg-amber-100 text-[#F48D08] text-[10px] font-extrabold px-2 py-0.5 rounded-full">
                 {displayPackages.length} Packages
               </span>
+            </Link>
+
+            <Link 
+              href="/pind-daan" 
+              onClick={() => setMobileMenuOpen(false)} 
+              className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-amber-50 text-text-primary hover:text-[#F48D08] transition-colors"
+            >
+              <span>🧭</span>
+              <span>Departure City Guides (शहर अनुसार यात्रा)</span>
+            </Link>
+
+            <Link 
+              href="/travel-guide" 
+              onClick={() => setMobileMenuOpen(false)} 
+              className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-amber-50 text-text-primary hover:text-[#F48D08] transition-colors"
+            >
+              <span>🚆</span>
+              <span>Gaya Travel & Train Guide</span>
             </Link>
 
             <Link 

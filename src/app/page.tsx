@@ -26,6 +26,7 @@ import prisma from '@/lib/prisma';
 import HeroSlider from '@/components/home/HeroSlider';
 import VishnupadShowcase from '@/components/home/VishnupadShowcase';
 import PackageCard from '@/components/packages/PackageCard';
+import DevoteeVideoShowcase from '@/components/home/DevoteeVideoShowcase';
 
 const db = prisma as any;
 
@@ -56,15 +57,28 @@ export default async function HomePage() {
     // fallback
   }
 
-  // Default fallback if no slides created yet
-  if (heroSlides.length === 0) {
+  // Ensure both authentic holy temple hero slides are always present
+  if (heroSlides.length < 2) {
     heroSlides = [
       {
-        id: 'default-1',
-        title: 'Fulfill Your Eternal Duty to Your Ancestors',
-        subtitle: 'Experience complete peace of mind at holy Gaya Ji. Guided by authentic, verified Teerth Pandas with transparent Vedic rites at Vishnupad Temple & Falgu River.',
+        id: 'slide-1',
+        badge: 'GAYA JI SACRED PILGRIMAGE • VISHNUPAD TEERTH',
+        title: 'Sacred Pind Daan At Vishnupad Temple & Falgu River',
+        subtitle: 'Authentic gotra recitation, verified lineage pandas, and transparent fixed dakshina. Dedicated care for senior citizens and NRI families.',
         mediaType: 'IMAGE',
         mediaUrl: '/images/hero_cinematic.jpg',
+        ctaLabel: 'View Ritual Packages',
+        ctaLink: '/packages',
+        secondaryCtaLabel: 'Learn 45-Vedi Trail',
+        secondaryCtaLink: '/gaya-ji'
+      },
+      {
+        id: 'slide-2',
+        badge: 'PITRUPAKSHA MELA 2026 • HOLY GAYA JI',
+        title: 'Fulfill Your Eternal Duty To Your Ancestors',
+        subtitle: 'Experience complete peace of mind at holy Gaya Ji. Guided by authentic, verified Teerth Pandas with transparent Vedic rites at Vishnupad Temple & Falgu River.',
+        mediaType: 'IMAGE',
+        mediaUrl: '/images/gaya_vishnupad.jpg',
         ctaLabel: 'Begin Your Sacred Journey',
         ctaLink: '/pre-booking',
         secondaryCtaLabel: 'Explore Gaya Ji Heritage',
@@ -155,72 +169,164 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* 5-Step Devotee Journey (Exact Pilgrimage Flow) */}
-      <section className="bg-white py-20 px-4 border-y border-amber-900/10">
-        <div className="max-w-7xl mx-auto space-y-16">
-          <div className="text-center max-w-3xl mx-auto space-y-3">
-            <span className="text-xs uppercase tracking-widest font-bold text-[#F48D08]">Complete Doorstep Assistance</span>
-            <h2 className="text-3xl sm:text-5xl font-serif font-bold tracking-tight text-text-primary">
+      {/* 5-Step Devotee Journey (Exact Pilgrimage Flow - Luxury Redesign) */}
+      <section className="bg-white py-24 px-4 sm:px-6 lg:px-8 border-y border-[#EFE6D9] relative overflow-hidden">
+        <div className="max-w-[1400px] mx-auto space-y-16 sm:space-y-20">
+          
+          {/* Section Header */}
+          <div className="text-center max-w-[720px] mx-auto space-y-4">
+            <span className="text-xs uppercase tracking-[0.2em] font-body font-semibold text-[#C6922E] inline-flex items-center gap-2">
+              <Compass className="w-3.5 h-3.5" />
+              <span>Doorstep Sacred Assistance • चरणबद्ध यात्रा व्यवस्था</span>
+            </span>
+            <h2 className="text-3xl sm:text-4xl md:text-[46px] font-display font-bold tracking-[-0.02em] text-[#2B2118] leading-[1.15]">
               How Your Sacred Journey Works
             </h2>
-            <p className="text-text-secondary text-sm sm:text-base leading-relaxed">
-              From station/airport pickup to hotel transfer, ritual sites, and safe departure.
+            <p className="text-[#5A5148] text-base sm:text-lg font-body leading-relaxed max-w-[680px] mx-auto">
+              From station/airport reception to hotel transfer, sacred shrines escort, and safe departure drop.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-5 gap-6 relative">
-            
-            <div className="space-y-4 text-center p-6 bg-temple-ivory/60 rounded-3xl border border-amber-900/10 relative">
-              <div className="w-12 h-12 rounded-2xl bg-[#F48D08] text-white font-serif font-bold text-xl flex items-center justify-center mx-auto shadow-md">
-                1
-              </div>
-              <h3 className="font-serif font-bold text-base text-text-primary">Online Pre-Booking</h3>
-              <p className="text-xs text-text-secondary leading-relaxed">
-                Select your pilgrimage date, gotra, and travel details via our online booking engine.
-              </p>
-            </div>
+          {/* Stepper Grid with Desktop Connector Line */}
+          <div className="relative">
+            {/* Desktop Golden Milestone Track Line */}
+            <div className="hidden lg:block absolute top-12 left-[8%] right-[8%] h-[1px] bg-gradient-to-r from-transparent via-[#C6922E]/30 to-transparent z-0 pointer-events-none" />
 
-            <div className="space-y-4 text-center p-6 bg-temple-ivory/60 rounded-3xl border border-amber-900/10 relative">
-              <div className="w-12 h-12 rounded-2xl bg-[#F48D08] text-white font-serif font-bold text-xl flex items-center justify-center mx-auto shadow-md">
-                2
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 relative z-10">
+              
+              {/* Step 01 */}
+              <div className="group bg-white hover:bg-[#FAF7F2]/60 rounded-[20px] p-6 sm:p-7 border border-[#EFE6D9] hover:border-[#C6922E]/60 transition-all duration-300 hover:-translate-y-1.5 shadow-sm hover:shadow-xl flex flex-col justify-between space-y-5">
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-[16px] bg-[#FAF7F2] border border-[#EFE6D9] text-[#C6922E] group-hover:bg-[#C6922E] group-hover:text-white transition-all duration-300 flex items-center justify-center shadow-sm">
+                      <Calendar className="w-5 h-5 sm:w-6 sm:h-6" />
+                    </div>
+                    <span className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-[#FAF7F2] border-2 border-[#EFE6D9] group-hover:border-[#C6922E] group-hover:bg-[#C6922E] group-hover:text-white text-[#C6922E] font-display font-bold text-xl sm:text-2xl flex items-center justify-center shadow-sm transition-all duration-300 select-none">
+                      01
+                    </span>
+                  </div>
+                  <div className="space-y-1.5">
+                    <h3 className="font-display font-semibold text-xl text-[#2B2118] group-hover:text-[#C6922E] transition-colors leading-snug">
+                      Online Pre-Booking
+                    </h3>
+                    <p className="text-xs sm:text-[13px] font-body text-[#5A5148] leading-relaxed">
+                      Select your pilgrimage date, gotra, family members, and package tier with transparent dakshina.
+                    </p>
+                  </div>
+                </div>
+                <div className="pt-3 border-t border-[#EFE6D9]/80 text-[11px] font-body font-semibold text-[#7A736A] flex items-center gap-1.5">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                  <span>Instant Confirmation Slip</span>
+                </div>
               </div>
-              <h3 className="font-serif font-bold text-base text-text-primary">Station / Airport Pickup</h3>
-              <p className="text-xs text-text-secondary leading-relaxed">
-                Private AC cab receives you at Gaya Junction (GAYA) Railway Station or Gaya/Patna Airport.
-              </p>
-            </div>
 
-            <div className="space-y-4 text-center p-6 bg-temple-ivory/60 rounded-3xl border border-amber-900/10 relative">
-              <div className="w-12 h-12 rounded-2xl bg-[#F48D08] text-white font-serif font-bold text-xl flex items-center justify-center mx-auto shadow-md">
-                3
+              {/* Step 02 */}
+              <div className="group bg-white hover:bg-[#FAF7F2]/60 rounded-[20px] p-6 sm:p-7 border border-[#EFE6D9] hover:border-[#C6922E]/60 transition-all duration-300 hover:-translate-y-1.5 shadow-sm hover:shadow-xl flex flex-col justify-between space-y-5">
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-[16px] bg-[#FAF7F2] border border-[#EFE6D9] text-[#C6922E] group-hover:bg-[#C6922E] group-hover:text-white transition-all duration-300 flex items-center justify-center shadow-sm">
+                      <Car className="w-5 h-5 sm:w-6 sm:h-6" />
+                    </div>
+                    <span className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-[#FAF7F2] border-2 border-[#EFE6D9] group-hover:border-[#C6922E] group-hover:bg-[#C6922E] group-hover:text-white text-[#C6922E] font-display font-bold text-xl sm:text-2xl flex items-center justify-center shadow-sm transition-all duration-300 select-none">
+                      02
+                    </span>
+                  </div>
+                  <div className="space-y-1.5">
+                    <h3 className="font-display font-semibold text-xl text-[#2B2118] group-hover:text-[#C6922E] transition-colors leading-snug">
+                      Station / Airport Pickup
+                    </h3>
+                    <p className="text-xs sm:text-[13px] font-body text-[#5A5148] leading-relaxed">
+                      Dedicated AC cab receives your family at Gaya Junction (GAYA) Railway Station or Patna Airport.
+                    </p>
+                  </div>
+                </div>
+                <div className="pt-3 border-t border-[#EFE6D9]/80 text-[11px] font-body font-semibold text-[#7A736A] flex items-center gap-1.5">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                  <span>Private Chauffeur Escort</span>
+                </div>
               </div>
-              <h3 className="font-serif font-bold text-base text-text-primary">Hotel Check-In & Rest</h3>
-              <p className="text-xs text-text-secondary leading-relaxed">
-                Escorted to your pre-booked comfortable hotel for check-in, refreshment, and sacred preparation.
-              </p>
-            </div>
 
-            <div className="space-y-4 text-center p-6 bg-temple-ivory/60 rounded-3xl border border-amber-900/10 relative">
-              <div className="w-12 h-12 rounded-2xl bg-[#F48D08] text-white font-serif font-bold text-xl flex items-center justify-center mx-auto shadow-md">
-                4
+              {/* Step 03 */}
+              <div className="group bg-white hover:bg-[#FAF7F2]/60 rounded-[20px] p-6 sm:p-7 border border-[#EFE6D9] hover:border-[#C6922E]/60 transition-all duration-300 hover:-translate-y-1.5 shadow-sm hover:shadow-xl flex flex-col justify-between space-y-5">
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-[16px] bg-[#FAF7F2] border border-[#EFE6D9] text-[#C6922E] group-hover:bg-[#C6922E] group-hover:text-white transition-all duration-300 flex items-center justify-center shadow-sm">
+                      <Hotel className="w-5 h-5 sm:w-6 sm:h-6" />
+                    </div>
+                    <span className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-[#FAF7F2] border-2 border-[#EFE6D9] group-hover:border-[#C6922E] group-hover:bg-[#C6922E] group-hover:text-white text-[#C6922E] font-display font-bold text-xl sm:text-2xl flex items-center justify-center shadow-sm transition-all duration-300 select-none">
+                      03
+                    </span>
+                  </div>
+                  <div className="space-y-1.5">
+                    <h3 className="font-display font-semibold text-xl text-[#2B2118] group-hover:text-[#C6922E] transition-colors leading-snug">
+                      Hotel Check-In & Rest
+                    </h3>
+                    <p className="text-xs sm:text-[13px] font-body text-[#5A5148] leading-relaxed">
+                      Assisted check-in to pre-reserved hygienic AC hotel room for refreshment, bath, and ritual readiness.
+                    </p>
+                  </div>
+                </div>
+                <div className="pt-3 border-t border-[#EFE6D9]/80 text-[11px] font-body font-semibold text-[#7A736A] flex items-center gap-1.5">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                  <span>Pre-Arranged Clean Stay</span>
+                </div>
               </div>
-              <h3 className="font-serif font-bold text-base text-text-primary">Ritual Sites Escort</h3>
-              <p className="text-xs text-text-secondary leading-relaxed">
-                Cab takes you to Vishnupad Temple, Falgu River & Akshayavat where your Teerth Panda conducts Pind Daan.
-              </p>
-            </div>
 
-            <div className="space-y-4 text-center p-6 bg-temple-ivory/60 rounded-3xl border border-amber-900/10 relative">
-              <div className="w-12 h-12 rounded-2xl bg-[#F48D08] text-white font-serif font-bold text-xl flex items-center justify-center mx-auto shadow-md">
-                5
+              {/* Step 04 */}
+              <div className="group bg-white hover:bg-[#FAF7F2]/60 rounded-[20px] p-6 sm:p-7 border border-[#EFE6D9] hover:border-[#C6922E]/60 transition-all duration-300 hover:-translate-y-1.5 shadow-sm hover:shadow-xl flex flex-col justify-between space-y-5">
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-[16px] bg-[#FAF7F2] border border-[#EFE6D9] text-[#C6922E] group-hover:bg-[#C6922E] group-hover:text-white transition-all duration-300 flex items-center justify-center shadow-sm">
+                      <Flame className="w-5 h-5 sm:w-6 sm:h-6" />
+                    </div>
+                    <span className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-[#FAF7F2] border-2 border-[#EFE6D9] group-hover:border-[#C6922E] group-hover:bg-[#C6922E] group-hover:text-white text-[#C6922E] font-display font-bold text-xl sm:text-2xl flex items-center justify-center shadow-sm transition-all duration-300 select-none">
+                      04
+                    </span>
+                  </div>
+                  <div className="space-y-1.5">
+                    <h3 className="font-display font-semibold text-xl text-[#2B2118] group-hover:text-[#C6922E] transition-colors leading-snug">
+                      Ritual Sites & Pind Daan
+                    </h3>
+                    <p className="text-xs sm:text-[13px] font-body text-[#5A5148] leading-relaxed">
+                      Escorted to Vishnupad Temple, Falgu River & Akshayavat with verified hereditary Teerth Panda.
+                    </p>
+                  </div>
+                </div>
+                <div className="pt-3 border-t border-[#EFE6D9]/80 text-[11px] font-body font-semibold text-[#7A736A] flex items-center gap-1.5">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                  <span>Verified Purohit Guidance</span>
+                </div>
               </div>
-              <h3 className="font-serif font-bold text-base text-text-primary">Safe Departure Drop</h3>
-              <p className="text-xs text-text-secondary leading-relaxed">
-                After lineage registration and prasadam, cab drops you back safely to hotel, station, or airport.
-              </p>
-            </div>
 
+              {/* Step 05 */}
+              <div className="group bg-white hover:bg-[#FAF7F2]/60 rounded-[20px] p-6 sm:p-7 border border-[#EFE6D9] hover:border-[#C6922E]/60 transition-all duration-300 hover:-translate-y-1.5 shadow-sm hover:shadow-xl flex flex-col justify-between space-y-5">
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-[16px] bg-[#FAF7F2] border border-[#EFE6D9] text-[#C6922E] group-hover:bg-[#C6922E] group-hover:text-white transition-all duration-300 flex items-center justify-center shadow-sm">
+                      <ShieldCheck className="w-5 h-5 sm:w-6 sm:h-6" />
+                    </div>
+                    <span className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-[#FAF7F2] border-2 border-[#EFE6D9] group-hover:border-[#C6922E] group-hover:bg-[#C6922E] group-hover:text-white text-[#C6922E] font-display font-bold text-xl sm:text-2xl flex items-center justify-center shadow-sm transition-all duration-300 select-none">
+                      05
+                    </span>
+                  </div>
+                  <div className="space-y-1.5">
+                    <h3 className="font-display font-semibold text-xl text-[#2B2118] group-hover:text-[#C6922E] transition-colors leading-snug">
+                      Safe Departure Drop
+                    </h3>
+                    <p className="text-xs sm:text-[13px] font-body text-[#5A5148] leading-relaxed">
+                      Ancestral bahi-khata record registered, sanctified prasad handed over, and cab drops you safely.
+                    </p>
+                  </div>
+                </div>
+                <div className="pt-3 border-t border-[#EFE6D9]/80 text-[11px] font-body font-semibold text-[#7A736A] flex items-center gap-1.5">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                  <span>Prasad & Safe Return Drop</span>
+                </div>
+              </div>
+
+            </div>
           </div>
+
         </div>
       </section>
 
@@ -266,7 +372,7 @@ export default async function HomePage() {
         <div className="pt-4 text-center">
           <Link 
             href="/sacred-places"
-            className="inline-flex items-center gap-2 bg-[#F48D08] hover:bg-[#D97706] text-white px-8 py-4 rounded-full font-bold text-sm transition-all shadow-lg hover:shadow-xl hover:scale-105"
+            className="inline-flex items-center gap-2 bg-[#C6922E] hover:bg-[#A97718] text-white px-8 py-4 rounded-[16px] font-body font-semibold text-sm transition-all shadow-sm active:scale-95"
           >
             <Sparkles className="w-4 h-4 fill-current" />
             <span>Explore All 45 Sacred Shrines of Gaya Ji</span>
@@ -276,15 +382,15 @@ export default async function HomePage() {
 
       </section>
 
-      {/* Curated Ritual Packages Showcase with Inline BASIC & GOLD Switchers */}
-      <section className="py-12 px-4 max-w-7xl mx-auto space-y-12">
-        <div className="text-center max-w-3xl mx-auto space-y-3">
-          <span className="text-xs uppercase tracking-widest font-bold text-[#F48D08]">Transparent Pricing</span>
-          <h2 className="text-3xl sm:text-5xl font-serif font-bold tracking-tight text-text-primary">
+      {/* Curated Ritual Packages Showcase with Inline GOLD & PLATINUM Switchers */}
+      <section className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 max-w-[1400px] mx-auto space-y-12 sm:space-y-16">
+        <div className="text-center max-w-[720px] mx-auto space-y-4">
+          <span className="text-xs uppercase tracking-[0.2em] font-body font-semibold text-[#C6922E]">Transparent Sacred Dakshina • पारदर्शी दक्षिणा</span>
+          <h2 className="text-3xl sm:text-4xl md:text-[46px] font-display font-bold tracking-[-0.02em] text-[#2B2118] leading-[1.15]">
             Curated Pind Daan Packages
           </h2>
-          <p className="text-text-secondary text-sm sm:text-base leading-relaxed max-w-2xl mx-auto">
-            Choose between <strong>BASIC PLAN</strong> for essential rites or <strong>GOLD VIP PLAN</strong> for complete VIP chauffeur pickup, 3-star hotel stay & senior Teerth Panda care.
+          <p className="text-[#5A5148] text-base sm:text-lg font-body leading-relaxed max-w-[680px] mx-auto">
+            Choose between <strong className="text-[#2B2118]">GOLD PLAN</strong> for essential Vedic rites or <strong className="text-[#2B2118]">PLATINUM VIP PLAN</strong> for complete VIP chauffeur pickup, 3-star hotel stay & senior Teerth Panda care.
           </p>
         </div>
 
@@ -342,42 +448,18 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* Devotee Reviews Section */}
-      <section className="bg-temple-alt/60 py-20 px-4 border-y border-amber-900/10">
-        <div className="max-w-7xl mx-auto space-y-12">
-          <div className="text-center max-w-2xl mx-auto space-y-2">
-            <span className="text-xs uppercase tracking-widest font-bold text-[#F48D08]">Devotee Testimonials</span>
-            <h2 className="text-3xl font-serif font-bold text-text-primary">What Pilgrims Say About PindDaanWale</h2>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {testimonials.map((t) => (
-              <div key={t.id} className="bg-white p-8 rounded-3xl border border-amber-900/10 shadow-sm space-y-4">
-                <div className="flex text-[#F48D08] gap-1">
-                  {[...Array(t.rating || 5)].map((_, i) => (
-                    <Star key={i} className="w-4 h-4 fill-current" />
-                  ))}
-                </div>
-                <p className="text-xs text-text-secondary leading-relaxed italic">&quot;{t.content}&quot;</p>
-                <div className="pt-2 border-t border-gray-100">
-                  <h4 className="font-bold text-sm text-text-primary">{t.author}</h4>
-                  <p className="text-[11px] text-gray-400">{t.city} • {t.ritual}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* Devotee Video Testimonials & Pooja Showcase */}
+      <DevoteeVideoShowcase testimonials={testimonials} />
 
       {/* District Helplines Banner */}
       <section className="max-w-7xl mx-auto px-4">
         <div className="bg-white p-8 rounded-3xl border border-amber-900/10 shadow-sm flex flex-col sm:flex-row justify-between items-center gap-6">
           <div className="space-y-1 text-center sm:text-left">
-            <span className="text-xs uppercase font-bold text-[#F48D08]">Official Gaya Ji Helpdesk</span>
+            <span className="text-xs uppercase font-bold text-[#C6922E] tracking-wider">Direct Devotee Helpline • Gaya Ji</span>
             <h3 className="text-2xl font-serif font-bold text-text-primary">Need Assistance Planning Your Visit?</h3>
-            <p className="text-xs text-text-secondary">Speak directly with our Gaya Ji Temple coordination team.</p>
+            <p className="text-xs text-text-secondary">Speak directly with our Gaya Ji pilgrimage coordination team for transparent, fixed-dakshina guidance.</p>
           </div>
-          <a href="tel:+917463055338" className="bg-[#F48D08] hover:bg-[#D97706] text-white px-8 py-3.5 rounded-full font-bold text-xs transition-colors flex items-center gap-2 shrink-0">
+          <a href="tel:+917463055338" className="bg-[#C6922E] hover:bg-[#A97718] text-white px-8 py-3.5 rounded-[16px] font-bold text-xs transition-colors flex items-center gap-2 shrink-0">
             <Phone className="w-4 h-4" /> Call +91 7463055338
           </a>
         </div>

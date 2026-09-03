@@ -52,7 +52,7 @@ export async function sendBookingConfirmationEmail(bookingData: {
           
           <div style="text-align: center; padding-bottom: 20px; border-bottom: 2px solid #f3f4f6;">
             <h1 style="color: #6f1d14; margin: 0; font-size: 24px;">PindDaanWale Pilgrimage Services</h1>
-            <p style="color: #F48D08; font-weight: bold; margin-top: 5px; font-size: 13px; text-transform: uppercase;">Official Gaya Ji Teerth Authority</p>
+            <p style="color: #C6922E; font-weight: bold; margin-top: 5px; font-size: 13px; text-transform: uppercase;">Sacred Gaya Ji Devotee Desk • In Collaboration with Hereditary Pandas</p>
           </div>
 
           <div style="padding: 20px 0;">
@@ -105,7 +105,7 @@ export async function sendBookingConfirmationEmail(bookingData: {
 
           <div style="border-top: 1px solid #e5e7eb; pt-20px; text-align: center; font-size: 12px; color: #9ca3af; margin-top: 20px;">
             <p>PindDaanWale Pilgrimage Services • Vishnupad Temple Compound, Gaya Ji, Bihar - 823001</p>
-            <p>Official Helpline: +91 7463055338 | Email: support@pinddaanwale.com</p>
+            <p>Pooja Coordination Desk: +91 7463055338 | Email: support@pinddaanwale.com</p>
           </div>
         </div>
       </div>

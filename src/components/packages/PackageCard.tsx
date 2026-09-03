@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { Crown, CheckCircle2, ArrowRight, Phone, Sparkles, Scale, Gem } from 'lucide-react';
+import { Crown, CheckCircle2, ArrowRight, Phone, Scale, Sparkles, Clock, ShieldCheck } from 'lucide-react';
 
 interface PackageCardProps {
   pkg: {
@@ -27,98 +27,121 @@ export default function PackageCard({ pkg, showCompareLink = true }: PackageCard
   const isPlatinum = tier === 'PLATINUM';
   const price = isPlatinum && pkg.goldPriceINR ? pkg.goldPriceINR : pkg.priceINR;
   const inclusionsText = isPlatinum && pkg.goldInclusions ? pkg.goldInclusions : pkg.inclusions;
-  const inclusionsList = inclusionsText ? inclusionsText.split('\n') : [];
+  const inclusionsList = inclusionsText ? inclusionsText.split('\n').filter(Boolean) : [];
+
+  // Shorten lengthy badges for a sleek single-line header
+  const getCleanBadge = (b?: string) => {
+    if (!b) return 'Sacred Pilgrimage Plan';
+    if (b.includes('NRI')) return 'NRI Live Video Plan';
+    if (b.includes('UNTIMELY')) return 'Narayan Bali Shanti';
+    if (b.includes('48-VEDI') || b.includes('45-VEDI') || b.includes('PARIKRAMA')) return 'Complete 45-Vedi Parikrama';
+    if (b.includes('POPULAR')) return 'Most Popular Plan';
+    if (b.includes('RECOMMENDED')) return 'Recommended Plan';
+    return b;
+  };
+
+  const badgeLabel = isPlatinum ? 'Platinum VIP Plan' : getCleanBadge(pkg.badge);
 
   return (
     <div
-      className={`bg-white rounded-3xl p-6 sm:p-8 border transition-all flex flex-col justify-between space-y-6 relative ${
+      className={`group bg-white rounded-[24px] p-6 sm:p-8 border transition-all duration-300 flex flex-col justify-between relative ${
         isPlatinum 
-          ? 'border-2 border-[#C6922E] shadow-xl bg-gradient-to-b from-amber-50/40 via-white to-amber-50/20' 
-          : 'border-amber-900/10 shadow-sm hover:shadow-md'
+          ? 'border-2 border-[#C6922E] shadow-[0_12px_36px_rgba(198,146,46,0.14)] bg-gradient-to-b from-[#FAF7F2]/80 via-white to-[#FAF7F2]/40' 
+          : 'border-[#EFE6D9] shadow-[0_4px_24px_rgba(43,33,24,0.05)] hover:shadow-[0_12px_32px_rgba(43,33,24,0.10)] hover:border-[#C6922E]/50 hover:-translate-y-1'
       }`}
     >
-      {/* Top Badge */}
-      <div className="flex justify-between items-center gap-2">
-        <span className={`text-[10px] uppercase font-extrabold px-3 py-1 rounded-full tracking-wider shadow-sm ${
-          isPlatinum 
-            ? 'bg-gradient-to-r from-[#4A154B] via-[#6f1d14] to-[#C6922E] text-white' 
-            : 'bg-amber-100 text-[#F48D08]'
-        }`}>
-          {isPlatinum ? '💎 PLATINUM VIP TIER' : (pkg.badge || '🌟 GOLD PLAN')}
+      
+      {/* 1. Top Bar: Balanced Badge & Duration */}
+      <div className="flex items-center justify-between gap-3 pb-3 border-b border-[#EFE6D9]/70">
+        <span 
+          title={pkg.badge || badgeLabel}
+          className={`text-[10.5px] uppercase font-body font-bold px-3 py-1 rounded-full tracking-wider truncate max-w-[180px] sm:max-w-[200px] select-none ${
+            isPlatinum 
+              ? 'bg-[#2B2118] text-amber-300 border border-amber-500/30 shadow-sm' 
+              : 'bg-[#FAF7F2] text-[#C6922E] border border-[#EFE6D9]'
+          }`}
+        >
+          {badgeLabel}
         </span>
 
-        {showCompareLink && (
-          <Link 
-            href={`/packages/${pkg.slug}/compare`}
-            className="text-[11px] font-bold text-text-secondary hover:text-[#F48D08] inline-flex items-center gap-1"
-          >
-            <Scale className="w-3.5 h-3.5" />
-            <span>Compare Tiers</span>
-          </Link>
-        )}
+        <span className="text-[11px] font-body font-semibold text-[#7A736A] flex items-center gap-1 shrink-0">
+          <Clock className="w-3.5 h-3.5 text-[#C6922E]" />
+          <span className="truncate max-w-[120px]">{pkg.duration}</span>
+        </span>
       </div>
 
-      <div className="space-y-4 pt-1">
+      {/* 2. Structured Content Body */}
+      <div className="space-y-4 pt-3 flex-1 flex flex-col justify-between">
         
-        {/* Title & Duration */}
-        <div className="space-y-1">
-          <span className="text-xs font-semibold text-[#F48D08]">{pkg.duration}</span>
-          <h3 className="text-2xl font-serif font-bold text-text-primary leading-tight">
+        {/* Title (Consistent 2-line min-height) */}
+        <div className="min-h-[58px] sm:min-h-[64px] flex items-center">
+          <h3 className="text-xl sm:text-[23px] font-display font-bold text-[#2B2118] group-hover:text-[#C6922E] transition-colors leading-[1.25] line-clamp-2">
             {pkg.title}
           </h3>
         </div>
 
-        <p className="text-xs text-text-secondary leading-relaxed">
-          {pkg.shortDesc}
-        </p>
+        {/* Short Description (Consistent 3-line min-height) */}
+        <div className="min-h-[60px] sm:min-h-[66px] flex items-start">
+          <p className="text-[13px] sm:text-[13.5px] font-body text-[#5A5148] leading-relaxed line-clamp-3">
+            {pkg.shortDesc}
+          </p>
+        </div>
 
-        {/* INLINE GOLD VS PLATINUM SWITCHER BUTTON INSIDE CARD */}
-        <div className="bg-amber-50/80 p-1 rounded-2xl border border-amber-900/10 flex items-center gap-1">
+        {/* 3. Luxury Segmented Tier Switcher */}
+        <div className="bg-[#FAF7F2] p-1.5 rounded-[16px] border border-[#EFE6D9] grid grid-cols-2 gap-1.5 shadow-inner">
           <button
             type="button"
             onClick={() => setTier('GOLD')}
-            className={`flex-1 py-2 px-3 rounded-xl text-[11px] font-bold transition-all ${
+            className={`py-2 px-2.5 rounded-[12px] text-xs font-body font-semibold transition-all flex items-center justify-center text-center leading-tight select-none ${
               !isPlatinum 
-                ? 'bg-[#F48D08] text-white shadow-sm' 
-                : 'text-text-secondary hover:text-text-primary'
+                ? 'bg-[#C6922E] text-white shadow-sm' 
+                : 'text-[#7A736A] hover:text-[#2B2118] hover:bg-white/60'
             }`}
           >
-            GOLD (₹{pkg.priceINR.toLocaleString('en-IN')})
+            <span>Gold Plan</span>
           </button>
 
           <button
             type="button"
             onClick={() => setTier('PLATINUM')}
-            className={`flex-1 py-2 px-3 rounded-xl text-[11px] font-bold transition-all flex items-center justify-center gap-1 ${
+            className={`py-2 px-2.5 rounded-[12px] text-xs font-body font-semibold transition-all flex items-center justify-center text-center leading-tight gap-1 select-none ${
               isPlatinum 
-                ? 'bg-gradient-to-r from-[#6f1d14] via-[#F48D08] to-[#C6922E] text-white shadow-sm' 
-                : 'text-text-secondary hover:text-text-primary'
+                ? 'bg-[#2B2118] text-amber-300 shadow-sm' 
+                : 'text-[#7A736A] hover:text-[#2B2118] hover:bg-white/60'
             }`}
           >
-            <Crown className="w-3 h-3 text-amber-300" />
-            <span>PLATINUM (₹{(pkg.goldPriceINR || pkg.priceINR * 1.5).toLocaleString('en-IN')})</span>
+            <Crown className="w-3.5 h-3.5 text-amber-300 shrink-0" />
+            <span>Platinum VIP</span>
           </button>
         </div>
 
-        {/* Dynamic Price Calculation Display */}
-        <div className="pt-2 flex items-baseline gap-2">
-          <div className="text-3xl font-serif font-bold text-[#F48D08]">
-            ₹{price.toLocaleString('en-IN')}
+        {/* 4. Price Section (Aligned Baseline) */}
+        <div className="py-3 px-3.5 rounded-[16px] bg-[#FAF7F2]/60 border border-[#EFE6D9]/80 flex items-center justify-between">
+          <div>
+            <div className="text-2xl sm:text-3xl font-body font-extrabold text-[#2B2118] tracking-tight">
+              ₹{price.toLocaleString('en-IN')}
+            </div>
+            <span className="text-[10.5px] font-body text-[#7A736A] font-medium block">
+              All-Inclusive Fixed Dakshina
+            </span>
           </div>
-          <span className="text-[11px] text-gray-400 font-medium">All-Inclusive Fixed Dakshina</span>
+          <span className="text-[10.5px] font-body font-semibold text-[#C6922E] bg-white border border-[#EFE6D9] px-2.5 py-1 rounded-full shadow-sm text-right">
+            {isPlatinum ? 'VIP Cab + Stay' : 'Essential Rites'}
+          </span>
         </div>
 
-        {/* Included Services List Difference */}
-        <div className="space-y-2.5 pt-4 border-t border-gray-100">
-          <span className="text-[11px] uppercase tracking-wider font-bold text-gray-500 flex items-center justify-between">
-            <span>{isPlatinum ? '💎 Platinum VIP Services Included:' : '🌟 Gold Services Included:'}</span>
-            <span className="text-[10px] font-bold text-[#F48D08]">{inclusionsList.length} Features</span>
-          </span>
-          <ul className="space-y-2 text-xs text-text-secondary font-medium">
-            {inclusionsList.map((inc: string, idx: number) => (
+        {/* 5. Inclusions List (Even Height & Clear Checkmarks) */}
+        <div className="space-y-2.5 pt-3 border-t border-[#EFE6D9]">
+          <div className="flex items-center justify-between text-[11px] font-body font-bold text-[#7A736A] uppercase tracking-wider">
+            <span>{isPlatinum ? '💎 Platinum Inclusions:' : '🌟 Key Inclusions:'}</span>
+            <span className="text-[#C6922E]">{inclusionsList.length} Rites</span>
+          </div>
+
+          <ul className="space-y-2 text-[12.5px] font-body text-[#5A5148] min-h-[140px]">
+            {inclusionsList.slice(0, 4).map((inc: string, idx: number) => (
               <li key={idx} className="flex items-start gap-2">
-                <CheckCircle2 className={`w-4 h-4 shrink-0 mt-0.5 ${isPlatinum ? 'text-[#C6922E]' : 'text-emerald-600'}`} />
-                <span>{inc}</span>
+                <CheckCircle2 className={`w-4 h-4 shrink-0 mt-0.5 ${isPlatinum ? 'text-[#C6922E]' : 'text-emerald-700'}`} />
+                <span className="leading-snug line-clamp-2">{inc}</span>
               </li>
             ))}
           </ul>
@@ -126,27 +149,33 @@ export default function PackageCard({ pkg, showCompareLink = true }: PackageCard
 
       </div>
 
-      {/* Action Buttons */}
-      <div className="space-y-3 pt-4 border-t border-gray-100">
+      {/* 6. Action Footer (16px Radius Button & Call Link) */}
+      <div className="space-y-3.5 pt-4 border-t border-[#EFE6D9] mt-3">
         <Link
           href={`/pre-booking?package=${pkg.slug}&tier=${tier}`}
-          className={`w-full text-center py-3.5 rounded-full font-bold text-xs transition-all shadow flex items-center justify-center gap-2 ${
-            isPlatinum
-              ? 'bg-gradient-to-r from-[#6f1d14] via-[#F48D08] to-[#C6922E] hover:opacity-95 text-white'
-              : 'bg-[#F48D08] hover:bg-[#D97706] text-white'
-          }`}
+          className="w-full text-center py-3.5 rounded-[16px] font-body font-semibold text-sm transition-all shadow-sm flex items-center justify-center gap-2 bg-[#C6922E] hover:bg-[#A97718] text-white active:scale-95"
         >
-          <span>Book {tier} Plan Now</span>
+          <span>Book {tier === 'PLATINUM' ? 'Platinum VIP' : 'Gold'} Plan Now</span>
           <ArrowRight className="w-4 h-4" />
         </Link>
 
-        <div className="flex justify-between items-center text-[11px] text-gray-500 font-medium px-1">
-          <a href="tel:+917463055338" className="hover:text-[#F48D08] flex items-center gap-1 font-bold">
-            <Phone className="w-3 h-3 text-[#F48D08]" /> Call Panda
+        <div className="flex justify-between items-center text-xs font-body text-[#7A736A] font-medium px-1">
+          <a 
+            href="tel:+917463055338" 
+            className="hover:text-[#C6922E] flex items-center gap-1.5 font-semibold transition-colors"
+          >
+            <Phone className="w-3.5 h-3.5 text-[#C6922E]" />
+            <span>Call <span translate="no" className="notranslate">PindDaanWale</span></span>
           </a>
-          <Link href={`/packages/${pkg.slug}/compare`} className="hover:text-[#F48D08] font-bold">
-            Full Comparison →
-          </Link>
+          
+          {showCompareLink && (
+            <Link 
+              href={`/packages/${pkg.slug}/compare`} 
+              className="hover:text-[#C6922E] font-semibold transition-colors text-[11px] flex items-center gap-1"
+            >
+              <span>Full Comparison →</span>
+            </Link>
+          )}
         </div>
       </div>
 

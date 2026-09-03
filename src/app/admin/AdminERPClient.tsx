@@ -228,6 +228,7 @@ export default function AdminERPClient({ initialData, session }: AdminERPClientP
   const [mediaItems, setMediaItems] = useState<any[]>(initialData.mediaItems || []);
   const [heroSlides, setHeroSlides] = useState<any[]>(initialData.heroSlides || []);
   const [siteSettings, setSiteSettings] = useState<any>(initialData.siteSettings || {});
+  const [sacredPlaceSearch, setSacredPlaceSearch] = useState<string>('');
 
   // Copy Feedback Toast
   const [copyToast, setCopyToast] = useState('');
@@ -239,7 +240,7 @@ export default function AdminERPClient({ initialData, session }: AdminERPClientP
   // Dynamic Forms State
   const [heroSlideForm, setHeroSlideForm] = useState({
     id: '',
-    badge: 'OFFICIAL GAYA JI DESTINATION',
+    badge: 'GAYA JI SACRED PILGRIMAGE',
     title: '',
     subtitle: '',
     mediaType: 'IMAGE',
@@ -305,6 +306,8 @@ export default function AdminERPClient({ initialData, session }: AdminERPClientP
     content: '',
     rating: 5,
     avatarUrl: '/images/gaya_vishnupad.jpg',
+    videoUrl: '',
+    poojaImage: '/images/pind_daan_vidhi.jpg',
     status: 'APPROVED'
   });
 
@@ -329,7 +332,7 @@ export default function AdminERPClient({ initialData, session }: AdminERPClientP
     upiId: initialData.siteSettings?.upiId || '7463055338@sbi',
     footerBgImage: initialData.siteSettings?.footerBgImage || '/images/gaya_vishnupad.jpg',
     upiQrImage: initialData.siteSettings?.upiQrImage || '/images/gaya_vishnupad.jpg',
-    metaTitle: initialData.siteSettings?.metaTitle || 'PindDaanWale | The Official Gaya Ji Digital Destination',
+    metaTitle: initialData.siteSettings?.metaTitle || 'PindDaanWale | Sacred & Authentic Gaya Ji Pind Daan',
     metaDescription: initialData.siteSettings?.metaDescription || 'The definitive digital platform for sacred rites, Pind Daan, and Pitru Paksha at Vishnupad Temple, Gaya Ji.',
     canonicalUrl: initialData.siteSettings?.canonicalUrl || 'https://www.pinddaanwale.com',
     latitude: initialData.siteSettings?.latitude || '24.7788',
@@ -380,7 +383,7 @@ export default function AdminERPClient({ initialData, session }: AdminERPClientP
           upiId: res.siteSettings.upiId || '7463055338@sbi',
           footerBgImage: res.siteSettings.footerBgImage || '/images/gaya_vishnupad.jpg',
           upiQrImage: res.siteSettings.upiQrImage || '/images/gaya_vishnupad.jpg',
-          metaTitle: res.siteSettings.metaTitle || 'PindDaanWale | The Official Gaya Ji Digital Destination',
+          metaTitle: res.siteSettings.metaTitle || 'PindDaanWale | Sacred & Authentic Gaya Ji Pind Daan',
           metaDescription: res.siteSettings.metaDescription || 'The definitive digital platform for sacred rites, Pind Daan, and Pitru Paksha at Vishnupad Temple, Gaya Ji.',
           canonicalUrl: res.siteSettings.canonicalUrl || 'https://www.pinddaanwale.com',
           latitude: res.siteSettings.latitude || '24.7788',
@@ -465,7 +468,7 @@ export default function AdminERPClient({ initialData, session }: AdminERPClientP
   const handleEditHeroSlide = (slide: any) => {
     setHeroSlideForm({
       id: slide.id || '',
-      badge: slide.badge || 'OFFICIAL GAYA JI DESTINATION',
+      badge: slide.badge || 'GAYA JI SACRED PILGRIMAGE',
       title: slide.title || '',
       subtitle: slide.subtitle || '',
       mediaType: slide.mediaType || 'IMAGE',
@@ -542,10 +545,12 @@ export default function AdminERPClient({ initialData, session }: AdminERPClientP
       author: t.author || '',
       city: t.city || '',
       country: t.country || 'India',
-      ritual: t.ritual || '',
+      ritual: t.ritual || 'Vedic Pind Daan',
       content: t.content || '',
       rating: t.rating || 5,
       avatarUrl: t.avatarUrl || '/images/gaya_vishnupad.jpg',
+      videoUrl: t.videoUrl || '',
+      poojaImage: t.poojaImage || '/images/pind_daan_vidhi.jpg',
       status: t.status || 'APPROVED'
     });
     setModalType('testimonial');
@@ -1017,7 +1022,7 @@ export default function AdminERPClient({ initialData, session }: AdminERPClientP
                     </div>
                     <div>
                       <span className="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded bg-amber-500/20 text-[#F48D08]">
-                        {slide.badge || 'OFFICIAL GAYA JI DESTINATION'}
+                        {slide.badge || 'GAYA JI SACRED PILGRIMAGE'}
                       </span>
                       <h4 className="font-serif font-bold text-lg text-white mt-1">{slide.title}</h4>
                       <p className="text-xs text-slate-300 leading-relaxed mt-1">{slide.subtitle}</p>
@@ -1071,53 +1076,167 @@ export default function AdminERPClient({ initialData, session }: AdminERPClientP
 
           {/* SACRED PLACES CMS MODULE */}
           {activeTab === 'sacred_places' && (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 animate-fadeIn">
-              {sacredPlaces.map(place => (
-                <div key={place.id} className="bg-[#1E293B] p-6 rounded-3xl border border-slate-800 space-y-3 flex flex-col justify-between">
-                  <div className="space-y-2">
-                    <div className="flex justify-between items-start">
-                      <h4 className="font-serif font-bold text-base text-white">{place.name}</h4>
-                      <span className="text-xs text-[#F48D08] font-bold">{place.hindiName}</span>
-                    </div>
-                    <p className="text-xs text-slate-300 leading-relaxed">{place.description}</p>
-                  </div>
-                  <div className="flex justify-between items-center text-xs pt-3 border-t border-slate-800">
-                    <button onClick={() => handleEditPlace(place)} className="bg-slate-800 hover:bg-slate-700 text-[#F48D08] px-3.5 py-1.5 rounded-xl font-bold flex items-center gap-1">
-                      <Edit className="w-3.5 h-3.5" /> Edit Place
-                    </button>
-                    <button onClick={() => deleteSacredPlaceAction(place.id).then(loadERPData)} className="text-red-400 font-bold flex items-center gap-1">
-                      <Trash2 className="w-3.5 h-3.5" /> Delete
-                    </button>
-                  </div>
+            <div className="space-y-6 animate-fadeIn">
+              {/* Top Controls: Search & Add Button */}
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-[#1E293B] p-4 rounded-2xl border border-slate-800">
+                <div className="relative w-full sm:w-80">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                  <input
+                    type="text"
+                    value={sacredPlaceSearch}
+                    onChange={e => setSacredPlaceSearch(e.target.value)}
+                    placeholder="Search from 45+ Sacred Vedis..."
+                    className="w-full pl-9 pr-3 py-2 bg-slate-900 border border-slate-700 rounded-xl text-xs text-white placeholder:text-slate-400 focus:outline-none focus:border-[#C6922E]"
+                  />
                 </div>
-              ))}
+                <div className="flex items-center gap-3 w-full sm:w-auto justify-between sm:justify-end">
+                  <span className="text-xs text-slate-400">
+                    Total: <strong className="text-white">{sacredPlaces.length}</strong> Sacred Vedis
+                  </span>
+                  <button
+                    onClick={() => {
+                      setPlaceForm({ id: '', name: '', hindiName: '', tagline: '', description: '', history: '', heroImage: '/images/gaya_vishnupad.jpg' });
+                      setModalType('place');
+                      setIsModalOpen(true);
+                    }}
+                    className="bg-[#C6922E] hover:bg-[#A97718] text-white px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all shrink-0"
+                  >
+                    <Plus className="w-3.5 h-3.5" /> + Add Sacred Place
+                  </button>
+                </div>
+              </div>
+
+              {/* Cards Grid with Photo Thumbnails */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {sacredPlaces
+                  .filter(place => {
+                    const q = sacredPlaceSearch.toLowerCase().trim();
+                    if (!q) return true;
+                    return (
+                      place.name?.toLowerCase().includes(q) ||
+                      place.hindiName?.includes(q) ||
+                      place.description?.toLowerCase().includes(q)
+                    );
+                  })
+                  .map(place => (
+                    <div key={place.id} className="bg-[#1E293B] p-5 rounded-3xl border border-slate-800 space-y-4 flex flex-col justify-between">
+                      <div className="flex gap-4 items-start">
+                        <img
+                          src={place.heroImage || '/images/gaya_vishnupad.jpg'}
+                          alt={place.name}
+                          className="w-20 h-20 rounded-2xl object-cover shrink-0 border border-slate-700 bg-slate-900"
+                        />
+                        <div className="space-y-1 min-w-0 flex-1">
+                          <div className="flex justify-between items-start gap-2">
+                            <h4 className="font-bold text-sm text-white truncate">{place.name}</h4>
+                            <span className="text-xs text-[#C6922E] font-bold shrink-0">{place.hindiName}</span>
+                          </div>
+                          {place.tagline && (
+                            <p className="text-[11px] text-amber-300 line-clamp-1">{place.tagline}</p>
+                          )}
+                          <p className="text-xs text-slate-300 line-clamp-2 leading-relaxed">{place.description}</p>
+                        </div>
+                      </div>
+                      <div className="flex justify-between items-center text-xs pt-3 border-t border-slate-800">
+                        <a
+                          href={`/sacred-places/${place.slug}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-slate-400 hover:text-white flex items-center gap-1 text-[11px]"
+                        >
+                          <span>View Public Page ↗</span>
+                        </a>
+                        <div className="flex items-center gap-2">
+                          <button onClick={() => handleEditPlace(place)} className="bg-slate-800 hover:bg-slate-700 text-[#C6922E] px-3 py-1.5 rounded-xl font-bold flex items-center gap-1">
+                            <Edit className="w-3.5 h-3.5" /> Edit & Photo
+                          </button>
+                          <button onClick={() => deleteSacredPlaceAction(place.id).then(loadERPData)} className="text-red-400 hover:text-red-300 font-bold flex items-center gap-1 p-1">
+                            <Trash2 className="w-3.5 h-3.5" /> Delete
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+              </div>
             </div>
           )}
 
           {/* TESTIMONIALS CMS MODULE */}
           {activeTab === 'testimonials' && (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 animate-fadeIn">
-              {testimonials.map(t => (
-                <div key={t.id} className="bg-[#1E293B] p-6 rounded-3xl border border-slate-800 space-y-4 flex flex-col justify-between">
-                  <div className="space-y-2">
-                    <div className="flex justify-between items-start">
-                      <div>
-                        <h4 className="font-serif font-bold text-base text-white">{t.author}</h4>
-                        <span className="text-xs text-slate-400">{t.city}, {t.country || 'India'}</span>
+            <div className="space-y-6 animate-fadeIn">
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-[#1E293B] p-4 rounded-2xl border border-slate-800">
+                <div>
+                  <h3 className="font-bold text-sm text-white">Devotee Pooja Photos & Video Testimonials</h3>
+                  <p className="text-xs text-slate-400">Manage authentic devotee recordings, pooja photos, and pilgrimage reviews.</p>
+                </div>
+                <button
+                  onClick={() => {
+                    setTestimonialForm({
+                      id: '',
+                      author: '',
+                      city: '',
+                      country: 'India',
+                      ritual: 'Vishnupad & Falgu Pind Daan',
+                      content: '',
+                      rating: 5,
+                      avatarUrl: '',
+                      videoUrl: '',
+                      poojaImage: '/images/pind_daan_vidhi.jpg',
+                      status: 'APPROVED'
+                    });
+                    setModalType('testimonial');
+                    setIsModalOpen(true);
+                  }}
+                  className="bg-[#C6922E] hover:bg-[#A97718] text-white px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all shrink-0"
+                >
+                  <Plus className="w-3.5 h-3.5" /> + Add Devotee Video / Review
+                </button>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {testimonials.map(t => (
+                  <div key={t.id} className="bg-[#1E293B] rounded-3xl border border-slate-800 overflow-hidden flex flex-col justify-between shadow-sm">
+                    {/* Pooja Image & Video Status */}
+                    <div className="relative h-44 bg-slate-900">
+                      <img
+                        src={t.poojaImage || t.avatarUrl || '/images/pind_daan_vidhi.jpg'}
+                        alt={t.author}
+                        className="w-full h-full object-cover opacity-80"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+                      {t.videoUrl ? (
+                        <span className="absolute top-3 right-3 bg-[#C6922E] text-white px-2.5 py-1 rounded-full text-[10.5px] font-bold flex items-center gap-1 shadow">
+                          ▶ Video Attached
+                        </span>
+                      ) : (
+                        <span className="absolute top-3 right-3 bg-black/60 text-slate-300 px-2 py-0.5 rounded-full text-[10px]">
+                          Photo Only
+                        </span>
+                      )}
+                      <div className="absolute bottom-3 left-4 right-4">
+                        <span className="text-[11px] text-amber-300 font-semibold">{t.ritual}</span>
+                        <h4 className="font-bold text-sm text-white">{t.author}</h4>
                       </div>
                     </div>
-                    <p className="text-xs text-slate-300 italic">"{t.content}"</p>
+
+                    <div className="p-5 space-y-3 flex-1 flex flex-col justify-between">
+                      <div className="space-y-2">
+                        <span className="text-xs text-slate-400">{t.city}{t.country ? `, ${t.country}` : ''}</span>
+                        <p className="text-xs text-slate-300 italic line-clamp-3 leading-relaxed">&quot;{t.content}&quot;</p>
+                      </div>
+
+                      <div className="flex justify-between items-center text-xs pt-3 border-t border-slate-800">
+                        <button onClick={() => handleEditTestimonial(t)} className="bg-slate-800 hover:bg-slate-700 text-[#C6922E] px-3.5 py-1.5 rounded-xl font-bold flex items-center gap-1">
+                          <Edit className="w-3.5 h-3.5" /> Edit Video/Review
+                        </button>
+                        <button onClick={() => deleteTestimonialAction(t.id).then(loadERPData)} className="text-red-400 hover:text-red-300 font-bold p-1">
+                          <Trash2 className="w-3.5 h-3.5" /> Delete
+                        </button>
+                      </div>
+                    </div>
                   </div>
-                  <div className="flex justify-between items-center text-xs pt-3 border-t border-slate-800">
-                    <button onClick={() => handleEditTestimonial(t)} className="bg-slate-800 hover:bg-slate-700 text-[#F48D08] px-3 py-1 rounded-xl font-bold">
-                      Edit
-                    </button>
-                    <button onClick={() => deleteTestimonialAction(t.id).then(loadERPData)} className="text-red-400 font-bold">
-                      Delete
-                    </button>
-                  </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           )}
 
@@ -1500,7 +1619,7 @@ export default function AdminERPClient({ initialData, session }: AdminERPClientP
                 <div className="space-y-3">
                   <div>
                     <label className="block text-slate-400 mb-1">Global Meta Title</label>
-                    <input type="text" value={settingsForm.metaTitle || ''} onChange={e => setSettingsForm({ ...settingsForm, metaTitle: e.target.value })} placeholder="PindDaanWale | The Official Gaya Ji Digital Destination" className="w-full p-3 bg-slate-900 border border-slate-700 rounded-xl text-white font-bold" />
+                    <input type="text" value={settingsForm.metaTitle || ''} onChange={e => setSettingsForm({ ...settingsForm, metaTitle: e.target.value })} placeholder="PindDaanWale | Sacred & Authentic Gaya Ji Pind Daan" className="w-full p-3 bg-slate-900 border border-slate-700 rounded-xl text-white font-bold" />
                   </div>
 
                   <div>
@@ -1815,13 +1934,13 @@ export default function AdminERPClient({ initialData, session }: AdminERPClientP
                     </div>
 
                     <div>
-                      <label className="block font-semibold text-slate-300 mb-1.5">Top Pill Badge Tag (e.g. OFFICIAL GAYA JI DESTINATION)</label>
+                      <label className="block font-semibold text-slate-300 mb-1.5">Top Pill Badge Tag (e.g. GAYA JI SACRED PILGRIMAGE)</label>
                       <input 
                         type="text" 
                         value={heroSlideForm.badge} 
                         onChange={e => setHeroSlideForm({ ...heroSlideForm, badge: e.target.value })} 
                         required 
-                        placeholder="OFFICIAL GAYA JI DESTINATION"
+                        placeholder="GAYA JI SACRED PILGRIMAGE"
                         className="w-full p-3 bg-slate-900 border border-slate-700 rounded-xl text-white font-bold focus:outline-none focus:border-[#F48D08]" 
                       />
                     </div>
@@ -1997,8 +2116,16 @@ export default function AdminERPClient({ initialData, session }: AdminERPClientP
                     <input type="text" value={placeForm.hindiName} onChange={e => setPlaceForm({ ...placeForm, hindiName: e.target.value })} className="w-full p-3 bg-slate-900 border border-slate-700 rounded-xl text-white font-bold" />
                   </div>
                   <div>
+                    <label className="block font-semibold mb-1">Tagline / Key Spot</label>
+                    <input type="text" value={placeForm.tagline || ''} onChange={e => setPlaceForm({ ...placeForm, tagline: e.target.value })} className="w-full p-3 bg-slate-900 border border-slate-700 rounded-xl text-white font-medium" />
+                  </div>
+                  <div>
                     <label className="block font-semibold mb-1">Description *</label>
                     <textarea rows={3} value={placeForm.description} onChange={e => setPlaceForm({ ...placeForm, description: e.target.value })} required className="w-full p-3 bg-slate-900 border border-slate-700 rounded-xl text-white" />
+                  </div>
+                  <div>
+                    <label className="block font-semibold mb-1">Historical & Scriptural Heritage</label>
+                    <textarea rows={2} value={placeForm.history || ''} onChange={e => setPlaceForm({ ...placeForm, history: e.target.value })} className="w-full p-3 bg-slate-900 border border-slate-700 rounded-xl text-white" />
                   </div>
                   <button type="submit" className="w-full bg-[#F48D08] text-white py-3.5 rounded-xl font-bold">Save Sacred Place</button>
                 </form>
@@ -2007,22 +2134,50 @@ export default function AdminERPClient({ initialData, session }: AdminERPClientP
               {/* 5. TESTIMONIALS CMS MODAL */}
               {modalType === 'testimonial' && (
                 <form onSubmit={handleSaveTestimonial} className="space-y-4 text-xs">
-                  <div>
-                    <label className="block font-semibold mb-1">Devotee Author Name *</label>
-                    <input type="text" value={testimonialForm.author} onChange={e => setTestimonialForm({ ...testimonialForm, author: e.target.value })} required className="w-full p-3 bg-slate-900 border border-slate-700 rounded-xl text-white font-bold" />
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                      <label className="block font-semibold mb-1">Devotee / Family Name *</label>
+                      <input type="text" value={testimonialForm.author} onChange={e => setTestimonialForm({ ...testimonialForm, author: e.target.value })} required className="w-full p-3 bg-slate-900 border border-slate-700 rounded-xl text-white font-bold" />
+                    </div>
+                    <div>
+                      <label className="block font-semibold mb-1">City & State/Country *</label>
+                      <input type="text" value={testimonialForm.city} onChange={e => setTestimonialForm({ ...testimonialForm, city: e.target.value })} required className="w-full p-3 bg-slate-900 border border-slate-700 rounded-xl text-white" placeholder="e.g. Bengaluru, Karnataka" />
+                    </div>
                   </div>
 
+                  <div>
+                    <label className="block font-semibold mb-1">Ritual Performed *</label>
+                    <input type="text" value={testimonialForm.ritual} onChange={e => setTestimonialForm({ ...testimonialForm, ritual: e.target.value })} required className="w-full p-3 bg-slate-900 border border-slate-700 rounded-xl text-white font-medium" placeholder="e.g. Vishnupad & Falgu River Pind Daan" />
+                  </div>
+
+                  {/* Devotee Pooja Image */}
                   <MediaUploaderInput 
-                    label="Devotee Photo / Video File or URL" 
-                    value={testimonialForm.avatarUrl} 
+                    label="Devotee Performing Pooja Photo (पूजा की तस्वीर - Upload or URL) *" 
+                    value={testimonialForm.poojaImage || ''} 
+                    onChange={url => setTestimonialForm({ ...testimonialForm, poojaImage: url })} 
+                  />
+
+                  {/* Recorded Video Testimonial File/URL */}
+                  <MediaUploaderInput 
+                    label="Recorded Video Testimonial (रिकॉर्ड किया गया वीडियो - Upload MP4 or Paste Video URL)" 
+                    value={testimonialForm.videoUrl || ''} 
+                    onChange={url => setTestimonialForm({ ...testimonialForm, videoUrl: url })} 
+                  />
+
+                  {/* Devotee Avatar Photo */}
+                  <MediaUploaderInput 
+                    label="Devotee Profile Photo / Avatar (Optional)" 
+                    value={testimonialForm.avatarUrl || ''} 
                     onChange={url => setTestimonialForm({ ...testimonialForm, avatarUrl: url })} 
                   />
 
                   <div>
-                    <label className="block font-semibold mb-1">Testimonial Content *</label>
-                    <textarea rows={3} value={testimonialForm.content} onChange={e => setTestimonialForm({ ...testimonialForm, content: e.target.value })} required className="w-full p-3 bg-slate-900 border border-slate-700 rounded-xl text-white" />
+                    <label className="block font-semibold mb-1">Devotee Testimony / Review *</label>
+                    <textarea rows={3} value={testimonialForm.content} onChange={e => setTestimonialForm({ ...testimonialForm, content: e.target.value })} required className="w-full p-3 bg-slate-900 border border-slate-700 rounded-xl text-white" placeholder="Devotee experience and feedback..." />
                   </div>
-                  <button type="submit" className="w-full bg-[#F48D08] text-white py-3.5 rounded-xl font-bold">Save Testimonial</button>
+                  <button type="submit" className="w-full bg-[#C6922E] hover:bg-[#A97718] text-white py-3.5 rounded-xl font-bold text-sm transition-colors">
+                    Save Devotee Video & Review
+                  </button>
                 </form>
               )}
 

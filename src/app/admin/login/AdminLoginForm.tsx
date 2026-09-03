@@ -54,7 +54,7 @@ export default function AdminLoginForm() {
             </span>
           </h1>
           <p className="text-slate-400 text-xs sm:text-sm mt-1">
-            Official Gaya Ji Command Center • Authorized Access Only
+            Administrative Pilgrimage Control Center • Authorized Access Only
           </p>
         </div>
 

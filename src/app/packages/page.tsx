@@ -75,8 +75,11 @@ export default async function PackagesPage() {
         <span className="text-xs uppercase tracking-widest font-bold text-[#F48D08]">
           Transparent & Fixed Dakshina Packages
         </span>
-        <h1 className="text-4xl sm:text-6xl font-serif font-bold tracking-tight text-text-primary">
-          Curated Pind Daan Packages
+        <h1 className="text-3xl sm:text-5xl md:text-6xl font-display font-bold tracking-tight leading-[1.15]">
+          <span className="block text-[#2B2118]">Curated Vedic Rites &</span>
+          <span className="block text-transparent bg-clip-text bg-gradient-to-r from-[#6f1d14] via-[#C6922E] to-[#F48D08]">
+            Pind Daan Pilgrimage Packages
+          </span>
         </h1>
         <p className="text-text-secondary text-sm sm:text-base leading-relaxed max-w-2xl mx-auto">
           Choose between our <strong>GOLD PLAN</strong> for essential rites or <strong>PLATINUM VIP PLAN</strong> for complete VIP chauffeur pickup, 3-star hotel stay & senior Teerth Panda care.
