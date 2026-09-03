@@ -11,17 +11,17 @@ export const metadata = {
 
 const db = prisma as any;
 
+import { getCachedData } from '@/lib/dbCache';
+
 export default async function SacredPlacesPage() {
   let places: any[] = [];
 
   try {
-    if (db.sacredPlace) {
-      places = await db.sacredPlace.findMany({
-        orderBy: { name: 'asc' }
-      });
-    }
+    places = await getCachedData('all_sacred_places', async () => {
+      return db.sacredPlace ? await db.sacredPlace.findMany({ orderBy: { name: 'asc' } }) : [];
+    });
   } catch (err) {
-    console.error('Error fetching sacred places from DB:', err);
+    // handled by fallback below
   }
 
   // Fallback to master dataset if database is empty

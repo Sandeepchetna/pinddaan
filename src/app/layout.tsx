@@ -76,6 +76,8 @@ export const metadata: Metadata = {
   }
 };
 
+import { getCachedData } from "@/lib/dbCache";
+
 export default async function RootLayout({
   children,
 }: Readonly<{
@@ -86,15 +88,15 @@ export default async function RootLayout({
   let siteSettings: any = null;
 
   try {
-    if (db.ritualPackage) {
-      packages = await db.ritualPackage.findMany({ orderBy: { createdAt: 'desc' } });
-    }
-    if (db.sacredPlace) {
-      sacredPlaces = await db.sacredPlace.findMany({ orderBy: { createdAt: 'desc' } });
-    }
-    if (db.siteSettings) {
-      siteSettings = await db.siteSettings.findUnique({ where: { id: 'default' } });
-    }
+    packages = await getCachedData('layout_packages', async () => {
+      return db.ritualPackage ? await db.ritualPackage.findMany({ orderBy: { createdAt: 'desc' } }) : [];
+    });
+    sacredPlaces = await getCachedData('layout_places', async () => {
+      return db.sacredPlace ? await db.sacredPlace.findMany({ orderBy: { createdAt: 'desc' } }) : [];
+    });
+    siteSettings = await getCachedData('layout_settings', async () => {
+      return db.siteSettings ? await db.siteSettings.findUnique({ where: { id: 'default' } }) : null;
+    });
   } catch (err) {
     // fallback
   }

@@ -21,14 +21,16 @@ export async function generateStaticParams() {
   }
 }
 
+import { getCachedData } from '@/lib/dbCache';
+
 export default async function SacredPlaceDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   let place: any = null;
 
   try {
-    if (db.sacredPlace) {
-      place = await db.sacredPlace.findUnique({ where: { slug } });
-    }
+    place = await getCachedData(`place_${slug}`, async () => {
+      return db.sacredPlace ? await db.sacredPlace.findUnique({ where: { slug } }) : null;
+    });
   } catch (err) {
     // fallback
   }

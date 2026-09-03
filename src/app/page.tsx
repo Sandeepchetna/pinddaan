@@ -23,6 +23,7 @@ import {
   Sparkles
 } from 'lucide-react';
 import prisma from '@/lib/prisma';
+import { getCachedData } from '@/lib/dbCache';
 import HeroSlider from '@/components/home/HeroSlider';
 import VishnupadShowcase from '@/components/home/VishnupadShowcase';
 import PackageCard from '@/components/packages/PackageCard';
@@ -38,21 +39,18 @@ export default async function HomePage() {
   let testimonials: any[] = [];
 
   try {
-    if (db.heroSlide) {
-      heroSlides = await db.heroSlide.findMany({
-        where: { isActive: true },
-        orderBy: { order: 'asc' }
-      });
-    }
-    if (db.sacredPlace) {
-      sacredPlaces = await db.sacredPlace.findMany({ take: 4 });
-    }
-    if (db.ritualPackage) {
-      packages = await db.ritualPackage.findMany({ orderBy: { createdAt: 'desc' } });
-    }
-    if (db.testimonial) {
-      testimonials = await db.testimonial.findMany({ where: { status: 'APPROVED' }, take: 3 });
-    }
+    heroSlides = await getCachedData('home_hero_slides', async () => {
+      return db.heroSlide ? await db.heroSlide.findMany({ where: { isActive: true }, orderBy: { order: 'asc' } }) : [];
+    });
+    sacredPlaces = await getCachedData('home_sacred_places', async () => {
+      return db.sacredPlace ? await db.sacredPlace.findMany({ take: 4 }) : [];
+    });
+    packages = await getCachedData('home_packages', async () => {
+      return db.ritualPackage ? await db.ritualPackage.findMany({ orderBy: { createdAt: 'desc' } }) : [];
+    });
+    testimonials = await getCachedData('home_testimonials', async () => {
+      return db.testimonial ? await db.testimonial.findMany({ where: { status: 'APPROVED' }, take: 3 }) : [];
+    });
   } catch (err) {
     // fallback
   }

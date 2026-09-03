@@ -23,14 +23,59 @@ export async function generateStaticParams() {
   ];
 }
 
+import { getCachedData } from '@/lib/dbCache';
+
+const FALLBACK_ARTICLES: Record<string, any> = {
+  'why-pind-daan-is-performed-only-at-gaya-ji': {
+    slug: 'why-pind-daan-is-performed-only-at-gaya-ji',
+    title: 'Why Pind Daan is Performed Only at Holy Gaya Ji: Scriptural Proofs from Vayu Purana',
+    category: 'Scriptural Knowledge',
+    summary: 'Explore why Lord Vishnu bestowed the supreme boon of eternal salvation upon Gayasura and how offering pinds at Vishnupad grants instant Moksha to departed ancestors.',
+    content: 'Holy Gaya Ji is revered across Vedic literature as the ultimate Moksha Dham for ancestral salvation...',
+    readTime: '6 min read',
+    publishedAt: '2026-08-15'
+  },
+  'complete-pitru-paksha-guidelines-for-nris': {
+    slug: 'complete-pitru-paksha-guidelines-for-nris',
+    title: 'Complete Pitru Paksha 2026 Guidelines for NRI Devotees Across USA, UK & Canada',
+    category: 'NRI Pilgrimage Guide',
+    summary: 'A step-by-step handbook on performing remote live stream Pind Daan, proxy Sankalp, and international delivery of sanctified prasadam.',
+    content: 'For NRIs living across North America, Europe, and the Gulf, performing ancestor rites in Gaya Ji is now seamlessly enabled through 4K live video streams...',
+    readTime: '8 min read',
+    publishedAt: '2026-08-20'
+  },
+  'tri-sthali-pind-daan-gaya-kashi-prayag': {
+    slug: 'tri-sthali-pind-daan-gaya-kashi-prayag',
+    title: 'Tri-Sthali Pilgrimage: The Holy Trinity of Gaya, Kashi & Prayagraj for Ancestral Peace',
+    category: 'Pilgrimage Circuit',
+    summary: 'The spiritual sequence and eternal rewards of performing ancestral oblations across the sacred triangle of Bharat.',
+    content: 'Sanatan Dharma mandates the sacred Tri-Sthali pilgrimage comprising Prayagraj (Mundan & Veni Daan), Kashi (Tarpan & Manikarnika Rites), and Gaya Ji (Final Pind Daan at Vishnupad)...',
+    readTime: '7 min read',
+    publishedAt: '2026-08-25'
+  },
+  'akshayavat-and-falgu-river-significance': {
+    slug: 'akshayavat-and-falgu-river-significance',
+    title: 'Akshayavat and Falgu River: The Mystical Secrets of Undying Blessings and Sita Kund',
+    category: 'Sacred Shrines',
+    summary: 'The timeless story of Mata Sita offering sand pind to King Dasharatha and the eternal blessing of Akshayavat Banyan.',
+    content: 'During their exile, Lord Rama, Lakshmana, and Mata Sita arrived in Gaya to perform Shradh for King Dasharatha...',
+    readTime: '5 min read',
+    publishedAt: '2026-08-28'
+  }
+};
+
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   let article: any = null;
   try {
-    if (db.article) {
-      article = await db.article.findUnique({ where: { slug } });
-    }
+    article = await getCachedData(`article_${slug}`, async () => {
+      return db.article ? await db.article.findUnique({ where: { slug } }) : null;
+    });
   } catch (e) {}
+
+  if (!article) {
+    article = FALLBACK_ARTICLES[slug];
+  }
 
   if (!article) return { title: 'Gaya Ji Vedic Knowledge | PindDaanWale' };
 
@@ -50,11 +95,15 @@ export default async function ArticleDetailPage({ params }: { params: Promise<{ 
   let article: any = null;
 
   try {
-    if (db.article) {
-      article = await db.article.findUnique({ where: { slug } });
-    }
+    article = await getCachedData(`article_${slug}`, async () => {
+      return db.article ? await db.article.findUnique({ where: { slug } }) : null;
+    });
   } catch (err) {
-    console.error('Error fetching article:', err);
+    // handled below
+  }
+
+  if (!article) {
+    article = FALLBACK_ARTICLES[slug];
   }
 
   if (!article) {
