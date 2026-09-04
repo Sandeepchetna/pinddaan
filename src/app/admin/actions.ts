@@ -769,6 +769,8 @@ export async function upsertArticleAction(data: any) {
     }
     revalidatePath('/admin');
     revalidatePath('/blog');
+    revalidatePath(`/blog/${slug}`);
+    revalidatePath('/sitemap.xml');
     return { success: true };
   } catch (e: any) {
     return { success: false, error: e.message };
@@ -780,6 +782,8 @@ export async function deleteArticleAction(id: string) {
   try {
     await db.article.delete({ where: { id } });
     revalidatePath('/admin');
+    revalidatePath('/blog');
+    revalidatePath('/sitemap.xml');
     return { success: true };
   } catch (e: any) {
     return { success: false, error: e.message };
@@ -795,6 +799,9 @@ export async function upsertSacredPlaceAction(data: any) {
       await db.sacredPlace.create({ data: { ...data, slug } });
     }
     revalidatePath('/admin');
+    revalidatePath('/sacred-places');
+    revalidatePath(`/sacred-places/${slug}`);
+    revalidatePath('/sitemap.xml');
     return { success: true };
   } catch (e: any) {
     return { success: false, error: e.message };
@@ -805,6 +812,8 @@ export async function deleteSacredPlaceAction(id: string) {
   try {
     await db.sacredPlace.delete({ where: { id } });
     revalidatePath('/admin');
+    revalidatePath('/sacred-places');
+    revalidatePath('/sitemap.xml');
     return { success: true };
   } catch (e: any) {
     return { success: false, error: e.message };
@@ -820,6 +829,9 @@ export async function upsertPackageAction(data: any) {
       await db.ritualPackage.create({ data: { ...data, slug } });
     }
     revalidatePath('/admin');
+    revalidatePath('/packages');
+    revalidatePath(`/packages/${slug}`);
+    revalidatePath('/sitemap.xml');
     return { success: true };
   } catch (e: any) {
     return { success: false, error: e.message };
@@ -830,6 +842,8 @@ export async function deletePackageAction(id: string) {
   try {
     await db.ritualPackage.delete({ where: { id } });
     revalidatePath('/admin');
+    revalidatePath('/packages');
+    revalidatePath('/sitemap.xml');
     return { success: true };
   } catch (e: any) {
     return { success: false, error: e.message };
