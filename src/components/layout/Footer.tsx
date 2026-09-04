@@ -254,7 +254,7 @@ export default async function Footer() {
                 <div className="w-8 h-8 rounded-full bg-black/40 border border-white/20 flex items-center justify-center text-[#F48D08] shrink-0 mt-0.5">
                   <MapPin className="w-3.5 h-3.5" />
                 </div>
-                <span className="leading-snug">Vishnupad Temple Compound, Gaya Ji, Bihar – 823001</span>
+                <span className="leading-snug">Assam Bhawan Yatri Niwash, Gaya, Bihar – 823001</span>
               </div>
 
               <div className="pt-1">

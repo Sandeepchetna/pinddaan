@@ -78,6 +78,9 @@ export const metadata: Metadata = {
 
 import { getCachedData } from "@/lib/dbCache";
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export default async function RootLayout({
   children,
 }: Readonly<{
@@ -88,15 +91,15 @@ export default async function RootLayout({
   let siteSettings: any = null;
 
   try {
-    packages = await getCachedData('layout_packages', async () => {
-      return db.ritualPackage ? await db.ritualPackage.findMany({ orderBy: { createdAt: 'desc' } }) : [];
-    });
-    sacredPlaces = await getCachedData('layout_places', async () => {
-      return db.sacredPlace ? await db.sacredPlace.findMany({ orderBy: { createdAt: 'desc' } }) : [];
-    });
-    siteSettings = await getCachedData('layout_settings', async () => {
-      return db.siteSettings ? await db.siteSettings.findUnique({ where: { id: 'default' } }) : null;
-    });
+    packages = db.ritualPackage 
+      ? await db.ritualPackage.findMany({ orderBy: { priceINR: 'asc' } }) 
+      : [];
+    sacredPlaces = db.sacredPlace 
+      ? await db.sacredPlace.findMany({ take: 6 }) 
+      : [];
+    siteSettings = db.siteSettings 
+      ? await db.siteSettings.findUnique({ where: { id: 'default' } }) 
+      : null;
   } catch (err) {
     // fallback
   }

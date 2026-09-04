@@ -18,11 +18,18 @@ interface PackageCardProps {
     goldInclusions?: string;
   };
   showCompareLink?: boolean;
+  defaultTier?: 'GOLD' | 'PLATINUM';
 }
 
-export default function PackageCard({ pkg, showCompareLink = true }: PackageCardProps) {
-  // Tier state: 'GOLD' (Standard) or 'PLATINUM' (VIP)
-  const [tier, setTier] = useState<'GOLD' | 'PLATINUM'>('GOLD');
+export default function PackageCard({ pkg, showCompareLink = true, defaultTier = 'PLATINUM' }: PackageCardProps) {
+  // Tier state: 'GOLD' (Standard) or 'PLATINUM' (VIP) - Defaults to PLATINUM as requested
+  const [tier, setTier] = useState<'GOLD' | 'PLATINUM'>(defaultTier);
+
+  React.useEffect(() => {
+    if (defaultTier) {
+      setTier(defaultTier);
+    }
+  }, [defaultTier]);
 
   const isPlatinum = tier === 'PLATINUM';
   const price = isPlatinum && pkg.goldPriceINR ? pkg.goldPriceINR : pkg.priceINR;

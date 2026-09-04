@@ -104,7 +104,7 @@ export async function sendBookingConfirmationEmail(bookingData: {
           </div>
 
           <div style="border-top: 1px solid #e5e7eb; pt-20px; text-align: center; font-size: 12px; color: #9ca3af; margin-top: 20px;">
-            <p>PindDaanWale Pilgrimage Services • Vishnupad Temple Compound, Gaya Ji, Bihar - 823001</p>
+            <p>PindDaanWale Pilgrimage Services • Assam Bhawan Yatri Niwash, Gaya, Bihar 823001</p>
             <p>Pooja Coordination Desk: +91 7463055338 | Email: support@pinddaanwale.com</p>
           </div>
         </div>

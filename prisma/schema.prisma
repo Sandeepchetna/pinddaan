@@ -222,7 +222,7 @@ model SiteSettings {
   footerBgImage String   @db.Text
   helpdeskPhone String   @default("+91 7463055338")
   email         String   @default("support@pinddaanwale.com")
-  address       String   @default("Vishnupad Temple Compound, Gaya Ji, Bihar - 823001")
+  address       String   @default("Assam Bhawan Yatri Niwash, Gaya, Bihar 823001")
   bankName      String   @default("State Bank of India")
   accountName   String   @default("PindDaanWale Pilgrimage Services")
   accountNumber String   @default("40982317822")

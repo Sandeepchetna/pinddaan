@@ -6,7 +6,19 @@ import { Crown, Scale } from 'lucide-react';
 import PackageCard from '@/components/packages/PackageCard';
 
 export default function PackageTierToggle({ initialPackages }: { initialPackages: any[] }) {
-  const [globalTier, setGlobalTier] = useState<'GOLD' | 'PLATINUM'>('GOLD');
+  const [globalTier, setGlobalTier] = useState<'GOLD' | 'PLATINUM'>('PLATINUM');
+
+  // Custom sort order: 1-Day, 3-Day, Tripindi, then Narayan Bali
+  const getRank = (pkg: any) => {
+    const s = ((pkg.slug || '') + ' ' + (pkg.title || '')).toLowerCase();
+    if (s.includes('1-day') || s.includes('1 day')) return 1;
+    if (s.includes('3-day') || s.includes('3 day')) return 2;
+    if (s.includes('tripindi') || s.includes('pitidosh')) return 3;
+    if (s.includes('narayan')) return 4;
+    return 5;
+  };
+
+  const sortedPackages = [...initialPackages].sort((a, b) => getRank(a) - getRank(b));
 
   return (
     <div className="space-y-10 max-w-7xl mx-auto">
@@ -51,10 +63,10 @@ export default function PackageTierToggle({ initialPackages }: { initialPackages
 
       </div>
 
-      {/* Package Cards Grid - Each card has its own inline Gold vs Platinum switcher! */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-        {initialPackages.map((pkg) => (
-          <PackageCard key={pkg.id || pkg.slug} pkg={pkg} />
+      {/* Package Cards Grid - All 4 packages in 1 single row on desktop! */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        {sortedPackages.map((pkg) => (
+          <PackageCard key={pkg.id || pkg.slug} pkg={pkg} defaultTier={globalTier} />
         ))}
       </div>
 

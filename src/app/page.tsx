@@ -32,22 +32,27 @@ import VedicDiagnosticBanner from '@/components/home/VedicDiagnosticBanner';
 
 const db = prisma as any;
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export default async function HomePage() {
-  // Fetch Dynamic Hero Slides, Sacred Places & Packages from Live Hostinger MySQL Database
+  // Fetch Dynamic Hero Slides, Sacred Places & Packages live from Database
   let heroSlides: any[] = [];
   let sacredPlaces: any[] = [];
   let packages: any[] = [];
   let testimonials: any[] = [];
 
   try {
-    heroSlides = await getCachedData('home_hero_slides', async () => {
-      return db.heroSlide ? await db.heroSlide.findMany({ where: { isActive: true }, orderBy: { order: 'asc' } }) : [];
-    });
-    sacredPlaces = await getCachedData('home_sacred_places_falgu_first', async () => {
-      let places = db.sacredPlace ? await db.sacredPlace.findMany({ take: 8 }) : [];
-      if (!places || places.length === 0) return [];
+    heroSlides = db.heroSlide 
+      ? await db.heroSlide.findMany({ where: { isActive: true }, orderBy: { order: 'asc' } }) 
+      : [];
+    
+    let rawPlaces = db.sacredPlace 
+      ? await db.sacredPlace.findMany({ take: 8 }) 
+      : [];
+    if (rawPlaces && rawPlaces.length > 0) {
       const priorityOrder = ['falgu-river', 'vishnupad-temple', 'akshayavat', 'pretshila'];
-      return [...places].sort((a: any, b: any) => {
+      sacredPlaces = [...rawPlaces].sort((a: any, b: any) => {
         const aIdx = priorityOrder.findIndex(s => a.slug === s || a.slug?.includes(s));
         const bIdx = priorityOrder.findIndex(s => b.slug === s || b.slug?.includes(s));
         if (aIdx !== -1 && bIdx !== -1) return aIdx - bIdx;
@@ -55,15 +60,28 @@ export default async function HomePage() {
         if (bIdx !== -1) return 1;
         return 0;
       }).slice(0, 4);
-    });
-    packages = await getCachedData('home_packages', async () => {
-      return db.ritualPackage ? await db.ritualPackage.findMany({ orderBy: { createdAt: 'desc' } }) : [];
-    });
-    testimonials = await getCachedData('home_testimonials', async () => {
-      return db.testimonial ? await db.testimonial.findMany({ where: { status: 'APPROVED' }, take: 3 }) : [];
-    });
+    }
+
+    packages = db.ritualPackage 
+      ? await db.ritualPackage.findMany() 
+      : [];
+
+    // Explicit custom sort: 1-Day, 3-Day, Tripindi, then Narayan Bali
+    const getPkgRank = (pkg: any) => {
+      const s = ((pkg.slug || '') + ' ' + (pkg.title || '')).toLowerCase();
+      if (s.includes('1-day') || s.includes('1 day')) return 1;
+      if (s.includes('3-day') || s.includes('3 day')) return 2;
+      if (s.includes('tripindi') || s.includes('pitidosh')) return 3;
+      if (s.includes('narayan')) return 4;
+      return 5;
+    };
+    packages = [...packages].sort((a, b) => getPkgRank(a) - getPkgRank(b));
+    
+    testimonials = db.testimonial 
+      ? await db.testimonial.findMany({ where: { status: 'APPROVED' }, take: 3 }) 
+      : [];
   } catch (err) {
-    // fallback
+    // fallback handled below
   }
 
   // Ensure both authentic holy temple hero slides are always present
@@ -413,13 +431,13 @@ export default async function HomePage() {
             Curated Pind Daan Packages
           </h2>
           <p className="text-[#5A5148] text-base sm:text-lg font-body leading-relaxed max-w-[680px] mx-auto">
-            Choose between <strong className="text-[#2B2118]">GOLD PLAN</strong> for essential Vedic rites or <strong className="text-[#2B2118]">PLATINUM VIP PLAN</strong> for complete VIP chauffeur pickup, 3-star hotel stay & senior Teerth Panda care.
+            Choose between <strong className="text-[#2B2118]">GOLD PLAN</strong> for essential Vedic rites or <strong className="text-[#2B2118]">PLATINUM VIP PLAN</strong> for complete VIP chauffeur pickup, AC Deluxe to 4-Star Hotel & Resort stay & senior Teerth Panda care.
           </p>
         </div>
 
-        {/* Dynamic Package Cards (Top 3 Featured) */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {(packages.length > 0 ? packages.slice(0, 3) : [
+        {/* Dynamic Package Cards (Live from Database) - All 4 in 1 single row on desktop! */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {(packages.length > 0 ? packages : [
             {
               slug: '1-day-essential-pind-daan',
               title: '1-Day Essential Pind Daan',
@@ -429,7 +447,7 @@ export default async function HomePage() {
               badge: 'MOST POPULAR',
               shortDesc: 'Ideal for devotees visiting Gaya Ji for a single day to perform essential rites at Vishnupad Temple & Falgu River.',
               inclusions: 'Verified Vishnupad Temple Teerth Panda\nComplete Vedic Samagri\nFalgu River & Vishnupad Temple Rites\nAncestral Lineage Registration',
-              goldInclusions: 'VIP Senior Lineage Teerth Panda\nPrivate AC Cab Station/Hotel Pickup & Drop\n3-Star Deluxe Hotel Accommodations\nVIP Priority Temple Darshan Access'
+              goldInclusions: 'VIP Senior Lineage Teerth Panda\nPrivate AC Cab Station/Hotel Pickup & Drop\nAC Deluxe to 4-Star Hotel & Resort Accommodations\nVIP Priority Temple Darshan Access'
             },
             {
               slug: '3-day-complete-tri-sthali',
@@ -440,32 +458,43 @@ export default async function HomePage() {
               badge: 'RECOMMENDED',
               shortDesc: 'Comprehensive pilgrimage covering Vishnupad, Falgu River, Akshayavat Banyan, Pretshila, and Ramshila.',
               inclusions: 'Dedicated Vishnupad Teerth Panda Escort\n2 Nights Hotel Accommodation\nPrivate AC Station Pickup & Drop\nAll 45-Vedi Sacred Site Visits',
-              goldInclusions: 'VIP Senior Lineage Teerth Panda Escort\n2 Nights 3-Star AC Deluxe Hotel Stay + Meals\nPrivate Chauffeur AC SUV Transport\nOfficial Gold Lineage Certificate'
+              goldInclusions: 'VIP Senior Lineage Teerth Panda Escort\n2 Nights AC Deluxe to 4-Star Hotel & Resort Stay + Meals\nPrivate Chauffeur AC SUV Transport\nOfficial Gold Lineage Certificate'
             },
             {
-              slug: 'nri-remote-live-stream',
-              title: 'NRI Remote Live Stream Pind Daan',
-              duration: 'Remote Live Stream (2 Hours)',
-              priceINR: 8500,
-              goldPriceINR: 14500,
-              badge: 'NRI SPECIAL',
-              shortDesc: 'For devotees abroad. Live 4K Zoom stream from Falgu River with sacred prasadam shipped globally to USA/UK.',
-              inclusions: 'Dedicated 4K HD Live Stream on Zoom\nName & Gotra Recitation during Sankalp\nHigh-Definition Recording Provided\nSacred Prasadam Shipped Overseas',
-              goldInclusions: 'Exclusive 1-on-1 Private 4K Live Stream\nFull Ancestral Recitation of 3 Generations\nPersonalized Sankalp Video Recording\nVIP Prasadam Box Express Shipped Overseas'
+              slug: 'pitidosh-puja-tripindi-shradh-',
+              title: 'PitiDosh Puja ( Tripindi Shradh)',
+              duration: '1 Day (4–5 Hours)',
+              priceINR: 10449,
+              goldPriceINR: 10433,
+              badge: 'MOST POPULAR',
+              shortDesc: 'Phalgu River are used to perform the early cleansing rites, tarpan, and the final immersion rituals required during the Tripindi Shradh process',
+              inclusions: 'Senior Jyotish & Vedic Karma-Kand Acharya in Gaya Ji\nAltar Rites with Wheat Sattu\nTripindi Homa with Ghee Ahutis on the Bank of Falgu River',
+              goldInclusions: 'Senior Jyotish & Vedic Karma-Kand Acharya in Gaya Ji\nAltar Rites with Wheat Sattu\nTripindi Homa with Ghee Ahutis on the Bank of Falgu River'
+            },
+            {
+              slug: 'gaya-ji-narayan-bali-',
+              title: 'Gaya Ji Narayan Bali',
+              duration: '1 Day (5–6 Hours)',
+              priceINR: 12499,
+              goldPriceINR: 12499,
+              badge: 'SPECIALIZED REMEDY',
+              shortDesc: 'Specialized Vedic karma-kand performed at bank of falgu river near Vishnupad for souls who passed away unnaturally.',
+              inclusions: 'Senior Jyotish & Vedic Karma-Kand Acharya in Gaya Ji\nAltar Rites & Pind Daan with Wheat Sattu\nNarayan Bali Homa with Ghee Ahutis',
+              goldInclusions: 'Senior Jyotish & Vedic Karma-Kand Acharya in Gaya Ji\nAltar Rites & Pind Daan with Wheat Sattu\nNarayan Bali Homa with Ghee Ahutis'
             }
           ]).map((pkg) => (
-            <PackageCard key={pkg.id || pkg.slug} pkg={pkg} />
+            <PackageCard key={pkg.id || pkg.slug} pkg={pkg} defaultTier="PLATINUM" />
           ))}
         </div>
 
-        {/* PROMINENT BUTTON BELOW 3 FEATURED PACKAGES TO SEE ALL PACKAGES */}
+        {/* PROMINENT BUTTON BELOW PACKAGES TO SEE ALL PACKAGES */}
         <div className="pt-4 text-center">
           <Link 
             href="/packages"
             className="inline-flex items-center gap-2 bg-[#F48D08] hover:bg-[#D97706] text-white px-8 py-4 rounded-full font-bold text-sm transition-all shadow-lg hover:shadow-xl hover:scale-105"
           >
             <Sparkles className="w-4 h-4 fill-current" />
-            <span>Explore All Pind Daan Packages ({packages.length > 0 ? packages.length : 3})</span>
+            <span>Explore All Pind Daan Packages ({packages.length > 0 ? packages.length : 4})</span>
             <ArrowRight className="w-4 h-4" />
           </Link>
         </div>

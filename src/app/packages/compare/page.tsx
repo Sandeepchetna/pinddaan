@@ -31,7 +31,7 @@ export default function PackageComparisonPage() {
     {
       name: 'Hotel Accommodation & Meals',
       gold: 'Comfortable Standard AC Room',
-      platinum: '3-Star Deluxe AC Hotel + Pure Veg Sattvic Meals',
+      platinum: 'AC Deluxe to 4-Star Hotel & Resort + Pure Veg Sattvic Meals',
       icon: Hotel
     },
     {

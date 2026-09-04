@@ -68,7 +68,7 @@ export function getBookingReceiptHTML(data: BookingPDFData): string {
   const accountNumber = data.accountNumber || '40982317822';
   const ifscCode = data.ifscCode || 'SBIN0000078';
   const upiId = data.upiId || '7463055338@sbi';
-  const officialAddress = data.officialAddress || 'Vishnupad Temple Compound, Gaya Ji, Bihar - 823001';
+  const officialAddress = data.officialAddress || 'Assam Bhawan Yatri Niwash, Gaya, Bihar 823001';
   const officialPhone = data.officialPhone || '+91 7463055338';
   const officialEmail = data.officialEmail || 'support@pinddaanwale.com';
   const baseUrl = typeof window !== 'undefined' ? window.location.origin : 'https://www.pinddaanwale.com';
@@ -271,7 +271,7 @@ export function getBookingReceiptHTML(data: BookingPDFData): string {
               <div class="field"><span class="label">Ritual Purpose:</span><span class="value">${data.purpose || 'Pitru Paksha Pind Daan'}</span></div>
               <div class="field"><span class="label">Selected Package:</span><span class="value">${data.packageName || 'Essential Rites'}</span></div>
               <div class="field"><span class="label">Visit Date:</span><span class="value">${data.preferredDate || 'To be confirmed'}</span></div>
-              <div class="field"><span class="label">Hotel Stay Choice:</span><span class="value">${data.selectedHotelName || (isPlatinum ? '3-Star AC Deluxe Hotel' : 'Not Required / Self')}</span></div>
+              <div class="field"><span class="label">Hotel Stay Choice:</span><span class="value">${data.selectedHotelName || (isPlatinum ? 'AC Deluxe to 4-Star Hotel & Resort' : 'Not Required / Self')}</span></div>
               <div class="field"><span class="label">Station/Airport Pickup:</span><span class="value">${data.pickupFrom || (isPlatinum ? 'Private AC Cab Station Pickup' : 'Not Required / Self')}</span></div>
               <div class="field"><span class="label">Estimated Total Cost:</span><span class="value" style="color: #6f1d14; font-size: 13px;">₹${(data.estimatedCost || 4500).toLocaleString('en-IN')}</span></div>
             </div>

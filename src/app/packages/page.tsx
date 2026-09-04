@@ -12,14 +12,25 @@ import PackageTierToggle from '@/components/packages/PackageTierToggle';
 
 const db = prisma as any;
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export default async function PackagesPage() {
   let packages: any[] = [];
 
   try {
     if (db.ritualPackage) {
-      packages = await db.ritualPackage.findMany({
-        orderBy: { createdAt: 'desc' }
-      });
+      packages = await db.ritualPackage.findMany();
+      // Explicit custom sort: 1-Day, 3-Day, Tripindi, then Narayan Bali
+      const getPkgRank = (pkg: any) => {
+        const s = ((pkg.slug || '') + ' ' + (pkg.title || '')).toLowerCase();
+        if (s.includes('1-day') || s.includes('1 day')) return 1;
+        if (s.includes('3-day') || s.includes('3 day')) return 2;
+        if (s.includes('tripindi') || s.includes('pitidosh')) return 3;
+        if (s.includes('narayan')) return 4;
+        return 5;
+      };
+      packages = [...packages].sort((a, b) => getPkgRank(a) - getPkgRank(b));
     }
   } catch (err) {
     // fallback
@@ -50,19 +61,31 @@ export default async function PackagesPage() {
         badge: 'RECOMMENDED',
         shortDesc: 'Comprehensive pilgrimage covering Vishnupad, Falgu River, Akshayavat Banyan, Pretshila Hill, Ramshila, and Mangla Gauri Temple.',
         inclusions: 'Dedicated Vishnupad Teerth Panda Escort\n2 Nights Comfortable Hotel Accommodation\nPrivate AC Station Pickup from Gaya Station / Airport\nAll 45-Vedi Sacred Site Visits\nFull Ritual Samagri & Dakshina Included',
-        goldInclusions: 'VIP Senior Lineage Teerth Panda Escort\n2 Nights 3-Star AC Deluxe Hotel Stay with Pure Veg Meals\nPrivate Chauffeur AC SUV Transport for Entire Trip\nVIP Escort across All 45 Sacred Vedis & Pretshila Hill\nSpecial Vishnupad Temple Aarti Access & Bhog Prasadam\nOfficial Teerth Lineage Certificate & Gold Blessing Kit'
+        goldInclusions: 'VIP Senior Lineage Teerth Panda Escort\n2 Nights AC Deluxe to 4-Star Hotel & Resort Stay with Pure Veg Meals\nPrivate Chauffeur AC SUV Transport for Entire Trip\nVIP Escort across All 45 Sacred Vedis & Pretshila Hill\nSpecial Vishnupad Temple Aarti Access & Bhog Prasadam\nOfficial Teerth Lineage Certificate & Gold Blessing Kit'
       },
       {
         id: 'p-3',
-        slug: 'nri-remote-live-stream',
-        title: 'NRI Remote Live Stream Pind Daan',
-        duration: 'Remote Live Stream (2 Hours)',
-        priceINR: 8500,
-        goldPriceINR: 14500,
-        badge: 'NRI SPECIAL',
-        shortDesc: 'For devotees abroad unable to travel. Live 4K video stream from Falgu River with sacred prasadam shipped globally.',
-        inclusions: 'Dedicated 4K HD Live Stream on Zoom / YouTube Live\nName & Gotra Recitation during Sankalp\nPandit Ji Interactive Family Participation\nHigh-Definition Recording Provided\nSacred Pind Prasadam Shipped to USA/UK/Canada',
-        goldInclusions: 'Exclusive 1-on-1 Private 4K Live Stream from Falgu & Vishnupad\nFull Ancestral Recitation of 3 Generations (Paternal & Maternal)\nPersonalized Sankalp Video Recording & Digital Certificate\nVIP Prasadam Box Shipped via Express Courier to Overseas Address\nSpecial Mahaprasad offering made in devotee name at Vishnupad'
+        slug: 'pitidosh-puja-tripindi-shradh-',
+        title: 'PitiDosh Puja ( Tripindi Shradh)',
+        duration: '1 Day (4–5 Hours)',
+        priceINR: 10449,
+        goldPriceINR: 10433,
+        badge: 'MOST POPULAR',
+        shortDesc: 'Phalgu River are used to perform the early cleansing rites, tarpan, and the final immersion rituals required during the Tripindi Shradh process',
+        inclusions: 'Senior Jyotish & Vedic Karma-Kand Acharya in Gaya Ji\nAltar Rites with Wheat Sattu\nTripindi Homa with Ghee Ahutis on the Bank of Falgu River',
+        goldInclusions: 'Senior Jyotish & Vedic Karma-Kand Acharya in Gaya Ji\nAltar Rites with Wheat Sattu\nTripindi Homa with Ghee Ahutis on the Bank of Falgu River'
+      },
+      {
+        id: 'p-4',
+        slug: 'gaya-ji-narayan-bali-',
+        title: 'Gaya Ji Narayan Bali',
+        duration: '1 Day (5–6 Hours)',
+        priceINR: 12499,
+        goldPriceINR: 12499,
+        badge: 'SPECIALIZED REMEDY',
+        shortDesc: 'Specialized Vedic karma-kand performed at bank of falgu river near Vishnupad for souls who passed away unnaturally.',
+        inclusions: 'Senior Jyotish & Vedic Karma-Kand Acharya in Gaya Ji\nAltar Rites & Pind Daan with Wheat Sattu\nNarayan Bali Homa with Ghee Ahutis',
+        goldInclusions: 'Senior Jyotish & Vedic Karma-Kand Acharya in Gaya Ji\nAltar Rites & Pind Daan with Wheat Sattu\nNarayan Bali Homa with Ghee Ahutis'
       }
     ];
   }
@@ -82,7 +105,7 @@ export default async function PackagesPage() {
           </span>
         </h1>
         <p className="text-text-secondary text-sm sm:text-base leading-relaxed max-w-2xl mx-auto">
-          Choose between our <strong>GOLD PLAN</strong> for essential rites or <strong>PLATINUM VIP PLAN</strong> for complete VIP chauffeur pickup, 3-star hotel stay & senior Teerth Panda care.
+          Choose between our <strong>GOLD PLAN</strong> for essential rites or <strong>PLATINUM VIP PLAN</strong> for complete VIP chauffeur pickup, AC Deluxe to 4-Star Hotel & Resort stay & senior Teerth Panda care.
         </p>
       </div>
 
@@ -107,7 +130,7 @@ export default async function PackagesPage() {
           <div className="space-y-1">
             <h4 className="font-serif font-bold text-sm text-[#6f1d14]">PLATINUM VIP PLAN TIER</h4>
             <p className="text-xs text-text-secondary leading-relaxed">
-              Includes Senior Panda, Private AC SUV Pickup/Drop, 3-Star Hotel Stay, VIP Temple Access & Prasadam Box.
+              Includes Senior Panda, Private AC SUV Pickup/Drop, AC Deluxe to 4-Star Hotel & Resort Stay, VIP Temple Access & Prasadam Box.
             </p>
           </div>
         </div>

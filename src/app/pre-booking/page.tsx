@@ -113,7 +113,7 @@ If the user specifies father/mother/navami/ekadashi/amavasya or an English date,
       shortDesc: 'Comprehensive pilgrimage covering Vishnupad, Falgu River, Akshayavat Banyan, Pretshila Hill, Ramshila, and Mangla Gauri Temple.',
       image: '/images/hero_cinematic.jpg',
       inclusions: 'Dedicated Vishnupad Teerth Panda Escort\n2 Nights Hotel Accommodation in Gaya Ji\nStation Pickup & Drop Assistance\nAll Sacred Vedi Visits (Falgu, Vishnupad, Akshayavat)\nFull Ritual Samagri & Dakshina Included',
-      goldInclusions: 'VIP Senior Lineage Teerth Panda Escort\n2 Nights 3-Star AC Deluxe Hotel Stay with Pure Veg Meals\nPrivate Chauffeur AC SUV Transport for Entire Pilgrimage\nVIP Escort across All 45 Sacred Vedis & Pretshila Hill\nSpecial Vishnupad Temple Aarti Access & Bhog Prasadam\nOfficial Teerth Lineage Certificate'
+      goldInclusions: 'VIP Senior Lineage Teerth Panda Escort\n2 Nights AC Deluxe to 4-Star Hotel & Resort Stay with Pure Veg Meals\nPrivate Chauffeur AC SUV Transport for Entire Pilgrimage\nVIP Escort across All 45 Sacred Vedis & Pretshila Hill\nSpecial Vishnupad Temple Aarti Access & Bhog Prasadam\nOfficial Teerth Lineage Certificate'
     },
     {
       slug: '1-day-express-pind-daan',
@@ -149,7 +149,7 @@ If the user specifies father/mother/navami/ekadashi/amavasya or an English date,
     accountNumber: '40982317822',
     ifscCode: 'SBIN0000078',
     upiId: '7463055338@sbi',
-    address: 'Vishnupad Temple Compound, Gaya Ji, Bihar - 823001',
+    address: 'Assam Bhawan Yatri Niwash, Gaya, Bihar 823001',
     helpdeskPhone: '+91 7463055338',
     email: 'support@pinddaanwale.com'
   });
@@ -272,7 +272,7 @@ If the user specifies father/mother/navami/ekadashi/amavasya or an English date,
     accountNumber: siteSettings?.accountNumber || '40982317822',
     ifscCode: siteSettings?.ifscCode || 'SBIN0000078',
     upiId: siteSettings?.upiId || '7463055338@sbi',
-    officialAddress: siteSettings?.address || 'Vishnupad Temple Compound, Gaya Ji, Bihar - 823001',
+    officialAddress: siteSettings?.address || 'Assam Bhawan Yatri Niwash, Gaya, Bihar 823001',
     officialPhone: siteSettings?.helpdeskPhone || '+91 7463055338',
     officialEmail: siteSettings?.email || 'support@pinddaanwale.com'
   });
@@ -370,7 +370,7 @@ If the user specifies father/mother/navami/ekadashi/amavasya or an English date,
                       Sacred. Trusted. Complete.
                     </span>
                     <span className="text-[10px] text-gray-500 block mt-0.5">
-                      Vishnupad Temple Compound, Gaya Ji, Bihar - 823001
+                      Assam Bhawan Yatri Niwash, Gaya, Bihar 823001
                     </span>
                   </div>
                 </div>
@@ -448,7 +448,7 @@ If the user specifies father/mother/navami/ekadashi/amavasya or an English date,
                   </div>
                   <div className="flex justify-between items-start py-1 gap-2">
                     <span className="text-gray-500 shrink-0">Hotel Stay Choice:</span>
-                    <strong className="text-text-primary text-right break-words min-w-0">{isPlatinum ? '3-Star AC Deluxe Hotel' : 'Not Required / Self'}</strong>
+                    <strong className="text-text-primary text-right break-words min-w-0">{isPlatinum ? 'AC Deluxe to 4-Star Hotel & Resort' : 'Not Required / Self'}</strong>
                   </div>
                   <div className="flex justify-between items-start py-1 gap-2">
                     <span className="text-gray-500 shrink-0">Station/Airport Pickup:</span>

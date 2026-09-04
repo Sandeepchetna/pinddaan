@@ -60,7 +60,7 @@ export default function ContactPage() {
                 <div>
                   <h3 className="font-semibold text-sm text-text-primary">Temple Desk Address</h3>
                   <p className="text-xs text-text-secondary leading-relaxed">
-                    Vishnupad Temple Compound, Near Falgu Ghat, Gaya, Bihar - 823001
+                    Assam Bhawan Yatri Niwash, Gaya, Bihar 823001
                   </p>
                 </div>
               </div>

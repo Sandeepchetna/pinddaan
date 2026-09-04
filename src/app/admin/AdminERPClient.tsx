@@ -361,7 +361,7 @@ export default function AdminERPClient({ initialData, session }: AdminERPClientP
     logoUrl: initialData.siteSettings?.logoUrl || '/images/pinddaanwale_logo.png',
     helpdeskPhone: initialData.siteSettings?.helpdeskPhone || '+91 7463055338',
     email: initialData.siteSettings?.email || 'support@pinddaanwale.com',
-    address: initialData.siteSettings?.address || 'Vishnupad Temple Compound, Gaya Ji, Bihar - 823001',
+    address: initialData.siteSettings?.address || 'Assam Bhawan Yatri Niwash, Gaya, Bihar 823001',
     bankName: initialData.siteSettings?.bankName || 'State Bank of India',
     accountName: initialData.siteSettings?.accountName || 'PindDaanWale Pilgrimage Services',
     accountNumber: initialData.siteSettings?.accountNumber || '40982317822',
@@ -414,7 +414,7 @@ export default function AdminERPClient({ initialData, session }: AdminERPClientP
           logoUrl: res.siteSettings.logoUrl || '/images/pinddaanwale_logo.png',
           helpdeskPhone: res.siteSettings.helpdeskPhone || '+91 7463055338',
           email: res.siteSettings.email || 'support@pinddaanwale.com',
-          address: res.siteSettings.address || 'Vishnupad Temple Compound, Gaya Ji, Bihar - 823001',
+          address: res.siteSettings.address || 'Assam Bhawan Yatri Niwash, Gaya, Bihar 823001',
           bankName: res.siteSettings.bankName || 'State Bank of India',
           accountName: res.siteSettings.accountName || 'PindDaanWale Pilgrimage Services',
           accountNumber: res.siteSettings.accountNumber || '40982317822',
@@ -2022,7 +2022,7 @@ export default function AdminERPClient({ initialData, session }: AdminERPClientP
                   </div>
                   <div>
                     <label className="block text-slate-400 mb-1">Official Teerth Address</label>
-                    <input type="text" value={settingsForm.address || ''} onChange={e => setSettingsForm({ ...settingsForm, address: e.target.value })} placeholder="Vishnupad Temple Compound, Gaya Ji, Bihar - 823001" className="w-full p-3 bg-slate-900 border border-slate-700 rounded-xl text-white font-bold" />
+                    <input type="text" value={settingsForm.address || ''} onChange={e => setSettingsForm({ ...settingsForm, address: e.target.value })} placeholder="Assam Bhawan Yatri Niwash, Gaya, Bihar 823001" className="w-full p-3 bg-slate-900 border border-slate-700 rounded-xl text-white font-bold" />
                   </div>
                 </div>
               </div>

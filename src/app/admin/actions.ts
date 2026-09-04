@@ -2,6 +2,7 @@
 
 import prisma from '@/lib/prisma';
 import { revalidatePath } from 'next/cache';
+import { invalidateCache } from '@/lib/dbCache';
 import { GAYA_SACRED_STHALIS, RITUAL_PACKAGES, INITIAL_HOTELS, INITIAL_BOOKINGS, INITIAL_LEADS, INITIAL_HERO_SLIDES } from '@/data/mockData';
 import { sendBookingConfirmationEmail } from '@/lib/email';
 import { syncLeadToAIWCRM } from '@/lib/aiwcrm';
@@ -502,7 +503,7 @@ export async function getAdminERPData() {
         footerBgImage: '/images/gaya_vishnupad.jpg',
         helpdeskPhone: '+91 7463055338',
         email: 'support@pinddaanwale.com',
-        address: 'Vishnupad Temple Compound, Gaya Ji, Bihar - 823001',
+        address: 'Assam Bhawan Yatri Niwash, Gaya, Bihar 823001',
         bankName: 'State Bank of India',
         accountName: 'PindDaanWale Pilgrimage Services',
         accountNumber: '40982317822',
@@ -828,6 +829,9 @@ export async function upsertPackageAction(data: any) {
     } else {
       await db.ritualPackage.create({ data: { ...data, slug } });
     }
+    invalidateCache();
+    revalidatePath('/', 'layout');
+    revalidatePath('/');
     revalidatePath('/admin');
     revalidatePath('/packages');
     revalidatePath(`/packages/${slug}`);
@@ -841,6 +845,9 @@ export async function upsertPackageAction(data: any) {
 export async function deletePackageAction(id: string) {
   try {
     await db.ritualPackage.delete({ where: { id } });
+    invalidateCache();
+    revalidatePath('/', 'layout');
+    revalidatePath('/');
     revalidatePath('/admin');
     revalidatePath('/packages');
     revalidatePath('/sitemap.xml');

@@ -9,7 +9,7 @@ export default function SchemaMarkup({ siteSettings }: SchemaMarkupProps) {
   const logoUrl = siteSettings?.logoUrl || 'https://www.pinddaanwale.com/Pind-Daan-Wale.svg';
   const phone = siteSettings?.helpdeskPhone || '+91 7463055338';
   const email = siteSettings?.email || 'support@pinddaanwale.com';
-  const address = siteSettings?.address || 'Vishnupad Temple Compound, Gaya Ji, Bihar - 823001';
+  const address = siteSettings?.address || 'Assam Bhawan Yatri Niwash, Gaya, Bihar 823001';
   const latitude = siteSettings?.latitude || '24.7788';
   const longitude = siteSettings?.longitude || '85.0084';
 
@@ -26,7 +26,7 @@ export default function SchemaMarkup({ siteSettings }: SchemaMarkupProps) {
     'email': email,
     'address': {
       '@type': 'PostalAddress',
-      'streetAddress': 'Vishnupad Temple Compound',
+      'streetAddress': 'Assam Bhawan Yatri Niwash',
       'addressLocality': 'Gaya',
       'addressRegion': 'Bihar',
       'postalCode': '823001',
