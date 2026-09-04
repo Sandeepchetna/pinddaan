@@ -591,7 +591,7 @@ export default function AdminERPClient({ initialData, session }: AdminERPClientP
   ];
 
   return (
-    <div className="min-h-screen bg-[#0B0F19] text-slate-100 flex font-sans antialiased">
+    <div className="h-screen h-[100dvh] w-full bg-[#0B0F19] text-slate-100 flex overflow-hidden font-sans antialiased">
       
       {/* COPY TOAST FEEDBACK */}
       {copyToast && (
@@ -678,8 +678,8 @@ export default function AdminERPClient({ initialData, session }: AdminERPClientP
         </div>
       )}
 
-      {/* DESKTOP SIDEBAR NAVIGATION */}
-      <aside className="w-64 bg-[#0E1626] border-r border-slate-800/80 flex flex-col justify-between shrink-0 hidden md:flex">
+      {/* DESKTOP SIDEBAR NAVIGATION (PERMANENTLY STICKY FULL-HEIGHT) */}
+      <aside className="w-64 h-screen h-[100dvh] bg-[#0E1626] border-r border-slate-800/80 flex flex-col justify-between shrink-0 hidden md:flex sticky top-0 z-30 overflow-y-auto no-scrollbar">
         <div className="p-5 space-y-6">
           
           {/* BRAND LOGO & SYSTEM STATUS */}
@@ -771,11 +771,11 @@ export default function AdminERPClient({ initialData, session }: AdminERPClientP
         </div>
       </aside>
 
-      {/* MAIN WORKSPACE CONTENT AREA */}
-      <main className="flex-1 flex flex-col min-w-0 overflow-y-auto bg-[#0B0F19]">
+      {/* MAIN WORKSPACE CONTENT AREA (INDEPENDENT SCROLL CONTAINER) */}
+      <main className="flex-1 flex flex-col min-w-0 h-screen h-[100dvh] overflow-y-auto bg-[#0B0F19] relative">
         
-        {/* EXECUTIVE HEADER (NON-STICKY) */}
-        <header className="h-16 border-b border-slate-800/80 bg-[#0E1626] px-4 sm:px-6 flex items-center justify-between">
+        {/* EXECUTIVE HEADER (PERMANENTLY STICKY AT TOP) */}
+        <header className="h-16 border-b border-slate-800/80 bg-[#0E1626]/95 backdrop-blur-xl px-4 sm:px-6 flex items-center justify-between sticky top-0 z-30 shrink-0 shadow-sm">
           <div className="flex items-center gap-3 sm:gap-4">
             <button
               onClick={() => setMobileNavOpen(true)}
@@ -860,8 +860,8 @@ export default function AdminERPClient({ initialData, session }: AdminERPClientP
           </div>
         </header>
 
-        {/* MOBILE QUICK NAVIGATION HORIZONTAL CHIPS */}
-        <div className="md:hidden flex items-center gap-2 px-4 py-2.5 bg-[#0E1626]/90 border-b border-slate-800/80 overflow-x-auto no-scrollbar shrink-0">
+        {/* MOBILE QUICK NAVIGATION HORIZONTAL CHIPS (STICKY DIRECTLY UNDER HEADER) */}
+        <div className="md:hidden flex items-center gap-2 px-4 py-2.5 bg-[#0E1626]/95 backdrop-blur-xl border-b border-slate-800/80 overflow-x-auto no-scrollbar shrink-0 sticky top-16 z-20 shadow-sm">
           {[
             { id: 'dashboard', label: 'Dashboard' },
             { id: 'booking_requests', label: `Requests (${pendingBookingRequests.length})` },
@@ -925,12 +925,12 @@ export default function AdminERPClient({ initialData, session }: AdminERPClientP
           {(activeTab === 'booking_requests' || activeTab === 'confirmed_bookings') && (
             <div className="space-y-6 animate-fadeIn">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-gradient-to-r from-[#141C2B] to-[#0E1626] p-4 rounded-2xl border border-slate-800/80 shadow-md">
-                <div className="flex items-center gap-3">
-                  <span className="font-bold text-base text-white">
-                    {activeTab === 'confirmed_bookings' ? 'Confirmed Pilgrimage Bookings' : 'Pending Booking Requests'}
+                <div className="flex items-center justify-between sm:justify-start gap-3 w-full sm:w-auto">
+                  <span className="font-bold text-sm sm:text-base text-white">
+                    {activeTab === 'confirmed_bookings' ? 'Confirmed Pilgrimages' : 'Pending Booking Requests'}
                   </span>
-                  <span className="bg-amber-500/15 text-amber-300 text-xs px-2.5 py-0.5 rounded-full font-bold border border-amber-500/25">
-                    {activeTab === 'confirmed_bookings' ? confirmedCount : pendingBookingRequests.length} Record(s)
+                  <span className="bg-amber-500/15 text-amber-300 text-xs px-3 py-1 rounded-full font-bold border border-amber-500/25 whitespace-nowrap shrink-0 inline-flex items-center">
+                    {activeTab === 'confirmed_bookings' ? confirmedCount : pendingBookingRequests.length} Record{((activeTab === 'confirmed_bookings' ? confirmedCount : pendingBookingRequests.length) === 1 ? '' : 's')}
                   </span>
                 </div>
 
@@ -1169,9 +1169,9 @@ export default function AdminERPClient({ initialData, session }: AdminERPClientP
           {activeTab === 'leads_crm' && (
             <div className="space-y-6 animate-fadeIn">
               <div className="flex justify-between items-center bg-gradient-to-r from-[#141C2B] to-[#0E1626] p-4 rounded-2xl border border-slate-800/80 shadow-md">
-                <div className="flex items-center gap-3">
+                <div className="flex items-center justify-between sm:justify-start gap-3 w-full sm:w-auto">
                   <span className="font-bold text-base text-white">Ad Leads & CRM Pipeline</span>
-                  <span className="bg-amber-500/15 text-amber-300 text-xs px-2.5 py-0.5 rounded-full font-bold border border-amber-500/25">
+                  <span className="bg-amber-500/15 text-amber-300 text-xs px-3 py-1 rounded-full font-bold border border-amber-500/25 whitespace-nowrap shrink-0 inline-flex items-center">
                     {leads.length} Active Leads
                   </span>
                 </div>
@@ -1223,9 +1223,9 @@ export default function AdminERPClient({ initialData, session }: AdminERPClientP
           {activeTab === 'customers' && (
             <div className="space-y-6 animate-fadeIn">
               <div className="flex justify-between items-center bg-gradient-to-r from-[#141C2B] to-[#0E1626] p-4 rounded-2xl border border-slate-800/80 shadow-md">
-                <div className="flex items-center gap-3">
+                <div className="flex items-center justify-between sm:justify-start gap-3 w-full sm:w-auto">
                   <span className="font-bold text-base text-white">Registered Devotees Directory</span>
-                  <span className="bg-amber-500/15 text-amber-300 text-xs px-2.5 py-0.5 rounded-full font-bold border border-amber-500/25">
+                  <span className="bg-amber-500/15 text-amber-300 text-xs px-3 py-1 rounded-full font-bold border border-amber-500/25 whitespace-nowrap shrink-0 inline-flex items-center">
                     {customers.length} Devotees
                   </span>
                 </div>
