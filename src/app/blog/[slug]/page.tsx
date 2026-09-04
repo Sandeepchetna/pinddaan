@@ -9,21 +9,28 @@ import {
   ShieldCheck, 
   Sparkles, 
   MapPin, 
-  ArrowRight,
-  BookOpen,
-  CheckCircle2,
-  HelpCircle,
-  Users,
-  Award,
-  Star,
-  MessageCircle,
-  ExternalLink,
-  ChevronRight
+  ArrowRight, 
+  BookOpen, 
+  CheckCircle2, 
+  HelpCircle, 
+  Users, 
+  Award, 
+  Star, 
+  MessageCircle, 
+  ExternalLink, 
+  ChevronRight,
+  Flame,
+  Check,
+  Compass
 } from 'lucide-react';
 import type { Metadata } from 'next';
 import prisma from '@/lib/prisma';
 import { getCachedData } from '@/lib/dbCache';
-import { ArticleShareBar, ArticleFaqAccordion } from '@/components/blog/ArticleInteractiveExtras';
+import { 
+  ArticleShareBar, 
+  ArticleFaqAccordion, 
+  SlidingCarousel 
+} from '@/components/blog/ArticleInteractiveExtras';
 
 const db = prisma as any;
 
@@ -35,9 +42,7 @@ export async function generateStaticParams() {
         return articles.map((a: any) => ({ slug: a.slug }));
       }
     }
-  } catch (err) {
-    // fallback
-  }
+  } catch (err) {}
   return [
     { slug: 'why-pind-daan-is-performed-only-at-gaya-ji' },
     { slug: 'complete-pitru-paksha-guidelines-for-nris' },
@@ -158,16 +163,23 @@ const DEFAULT_SACRED_PLACES = [
   {
     slug: 'falgu-river',
     name: 'Falgu River & Sita Kund',
-    tagline: 'Antahsalila Holy River of Mata Sita\'s Sand Pind',
+    tagline: 'Antahsalila River of Mata Sita\'s Sand Pind',
     image: '/images/falgu_river.png',
-    description: 'The holy riverbank where Mata Sita offered sand pinda to King Dasharatha, renowned for its subterranean pure water.'
+    description: 'The holy riverbank where Mata Sita offered sand pinda to King Dasharatha, renowned for subterranean pure water.'
   },
   {
     slug: 'akshayavat',
-    name: 'Akshayavat Immortal Banyan',
+    name: 'Akshayavat Banyan Tree',
     tagline: 'The Eternal Tree of Everlasting Ancestral Peace',
     image: '/images/akshayavat.png',
     description: 'Blessed by Mata Sita to withstand cosmic deluge. Rites concluded here grant permanent release from the cycle of birth.'
+  },
+  {
+    slug: 'pretshila',
+    name: 'Pretshila Hill Shrine',
+    tagline: 'Sacred Hill for Unfulfilled Ancestral Souls',
+    image: '/images/pind_daan_vidhi.jpg',
+    description: 'High vantage sacred shrine dedicated to pacifying spirits that passed untimely or with unfulfilled longings.'
   }
 ];
 
@@ -176,49 +188,51 @@ const DEFAULT_PACKAGES = [
     slug: '1-day-essential-pind-daan',
     title: '1-Day Essential Pind Daan',
     priceINR: 4500,
-    shortDesc: 'Complete single-day rites at Falgu River, Vishnupad Temple, and Akshayavat with dedicated Gaya Panda.',
-    features: ['3 Sacred Vedis', 'Complete Puja Samagri', 'Hereditary Panda', 'Brahman Bhoj']
+    shortDesc: 'Falgu River, Vishnupad & Akshayavat with verified hereditary panda.',
+    features: ['3 Sacred Vedis', 'Puja Samagri', 'Brahman Bhoj']
   },
   {
     slug: '3-day-complete-tri-sthali',
     title: '3-Day Tri-Sthali Pilgrimage',
     priceINR: 12500,
-    shortDesc: 'Vedic sequence covering Prayagraj Sangam, Kashi Manikarnika, and all Gaya 45-Vedis with AC transfers.',
-    features: ['Prayag + Kashi + Gaya', 'AC Private Cab', 'Comfort Hotel Stay', 'All 45 Vedis Covered']
+    shortDesc: 'Prayagraj Sangam, Kashi Manikarnika & all Gaya 45-Vedis with AC cab.',
+    features: ['Prayag + Kashi + Gaya', 'AC Cab & Hotel', 'All 45 Vedis']
   },
   {
     slug: 'nri-remote-live-stream',
     title: 'NRI Remote Live Stream Rites',
     priceINR: 8500,
-    shortDesc: 'Interactive two-way 4K Zoom live Shradh ceremony from Vishnupad with international prasadam courier.',
-    features: ['4K Zoom Live Stream', 'Gotra Sankalp by Panda', 'Video Recording', 'Global DHL Prasadam']
+    shortDesc: 'Interactive 4K Zoom live Shradh with international DHL prasadam.',
+    features: ['4K Zoom Live Stream', 'Gotra Sankalp', 'Global DHL Courier']
+  },
+  {
+    slug: '1-day-express-pind-daan',
+    title: 'Express Same-Day Rites',
+    priceINR: 6500,
+    shortDesc: 'Same-day priority puja at Vishnupad with station pickup and return.',
+    features: ['Priority Darshan', 'Station Transfer', 'Full Samagri']
   }
 ];
 
 const DEFAULT_FAQS = [
   {
     q: 'Can Pind Daan be performed in Falgu river even when it appears dry?',
-    a: 'Yes, absolutely. Because of Mata Sita\'s sacred curse, the Falgu river flows as Antahsalila (underground stream). Pilgrims dig just 6 to 12 inches into the clean white sand to reveal crystal-clear holy water for performing Tarpan and sand pinda offerings, following the exact tradition started by Mata Sita.'
+    a: 'Yes, absolutely. Because of Mata Sita\'s sacred curse, the Falgu river flows as Antahsalila (underground stream). Pilgrims dig 6 to 12 inches into clean sand to reveal pure water for performing Tarpan and sand pinda offerings, following the exact tradition started by Mata Sita.'
   },
   {
     q: 'Why is Akshayavat Banyan tree mandatory for concluding Pind Daan?',
-    a: 'Scriptures state that while rites at Falgu river and Vishnupad fulfill the soul\'s immediate hunger, offering the final pinda and receiving Panda Aashirwad under the Akshayavat Banyan tree seals the liberation permanently (Akshay Tripti). Mata Sita blessed this tree so that oblations here never decay.'
+    a: 'Scriptures state that while rites at Falgu and Vishnupad fulfill the soul\'s immediate needs, offering the final pinda and receiving Panda Aashirwad under the Akshayavat Banyan tree seals eternal liberation (Akshay Tripti).'
   },
   {
     q: 'Can women perform Pind Daan according to Vedic scriptures?',
-    a: 'Yes. The Valmiki Ramayana and Garuda Purana establish that Mata Sita performed Pind Daan for King Dasharatha in the absence of Lord Rama and Lakshmana. Daughters and wives are fully authorized to offer pinda and perform Tarpan if there are no male descendants.'
+    a: 'Yes. Valmiki Ramayana and Garuda Purana establish that Mata Sita performed Pind Daan for King Dasharatha. Daughters and wives are fully authorized to offer pinda if there are no male descendants.'
   },
   {
     q: 'How does PindDaanWale protect devotees from middleman exploitation in Gaya?',
-    a: 'PindDaanWale provides transparent, pre-booked arrangements directly with hereditary Vishnupad Pandas with 0% middleman fees. Every package has fixed dakshina, all-inclusive samagri, guaranteed Brahman Bhoj, and no on-spot demands or haggling.'
-  },
-  {
-    q: 'What if I do not know the exact tithi of my ancestor\'s passing?',
-    a: 'According to the Garuda Purana, if the exact lunar tithi of death is unknown, Sarva Pitru Amavasya (the new moon day of Pitru Paksha) is universally auspicious for performing ancestral rites for all departed souls.'
+    a: 'PindDaanWale provides transparent, pre-booked arrangements directly with hereditary Vishnupad Pandas with 0% middleman fees, fixed dakshina, all-inclusive samagri, and no on-spot demands.'
   }
 ];
 
-// Lightweight, resilient Markdown Renderer for rich article bodies
 function parseInlineMarkdown(text: string): React.ReactNode[] {
   const parts: React.ReactNode[] = [];
   const regex = /(\*\*.*?\*\*|\*.*?\*)/g;
@@ -263,10 +277,10 @@ function ArticleMarkdownContent({ content }: { content: string }) {
     if (!currentList) return;
     if (currentList.type === 'ol') {
       blocks.push(
-        <ol key={`ol-${key}`} className="my-6 space-y-3 pl-1">
+        <ol key={`ol-${key}`} className="my-5 space-y-2.5 pl-1">
           {currentList.items.map((item, i) => (
-            <li key={i} className="flex items-start gap-3.5 text-sm sm:text-base text-slate-700 leading-relaxed bg-amber-50/30 p-3 rounded-xl border border-amber-900/5">
-              <span className="w-6 h-6 rounded-full bg-gradient-to-tr from-[#8B2516] to-[#F48D08] text-white font-bold text-xs flex items-center justify-center shrink-0 mt-0.5 shadow-sm">
+            <li key={i} className="flex items-start gap-3 text-xs sm:text-sm text-slate-700 leading-relaxed bg-amber-50/30 p-2.5 rounded-xl border border-amber-900/5">
+              <span className="w-5 h-5 rounded-full bg-gradient-to-tr from-[#8B2516] to-[#F48D08] text-white font-bold text-[10px] flex items-center justify-center shrink-0 mt-0.5 shadow-xs">
                 {i + 1}
               </span>
               <span className="pt-0.5 flex-1">{parseInlineMarkdown(item)}</span>
@@ -276,10 +290,10 @@ function ArticleMarkdownContent({ content }: { content: string }) {
       );
     } else {
       blocks.push(
-        <ul key={`ul-${key}`} className="my-5 space-y-2.5 pl-2">
+        <ul key={`ul-${key}`} className="my-4 space-y-2 pl-2">
           {currentList.items.map((item, i) => (
-            <li key={i} className="flex items-start gap-3 text-sm sm:text-base text-slate-700 leading-relaxed">
-              <span className="w-2 h-2 rounded-full bg-[#F48D08] shrink-0 mt-2.5" />
+            <li key={i} className="flex items-start gap-2.5 text-xs sm:text-sm text-slate-700 leading-relaxed">
+              <span className="w-2 h-2 rounded-full bg-[#F48D08] shrink-0 mt-2" />
               <span>{parseInlineMarkdown(item)}</span>
             </li>
           ))}
@@ -294,13 +308,13 @@ function ArticleMarkdownContent({ content }: { content: string }) {
     blocks.push(
       <blockquote
         key={`quote-${key}`}
-        className="my-7 pl-6 py-5 pr-6 bg-gradient-to-r from-amber-50 via-orange-50/60 to-transparent border-l-4 border-amber-600 rounded-r-2xl text-amber-950 font-serif italic text-base sm:text-lg leading-relaxed shadow-xs"
+        className="my-5 pl-5 py-3.5 pr-4 bg-gradient-to-r from-amber-50 via-orange-50/50 to-transparent border-l-4 border-amber-600 rounded-r-xl text-amber-950 font-serif italic text-sm sm:text-base leading-relaxed shadow-2xs"
       >
-        <div className="flex items-start gap-3">
-          <span className="text-4xl text-amber-500 font-serif select-none leading-none">“</span>
+        <div className="flex items-start gap-2.5">
+          <span className="text-3xl text-amber-500 font-serif select-none leading-none">“</span>
           <div>
             {currentQuote.map((q, i) => (
-              <p key={i} className="mb-1.5 last:mb-0">
+              <p key={i} className="mb-1 last:mb-0">
                 {parseInlineMarkdown(q)}
               </p>
             ))}
@@ -332,8 +346,8 @@ function ArticleMarkdownContent({ content }: { content: string }) {
       flushList(idx);
       const headingText = trimmed.replace(/^###\s+/, '');
       blocks.push(
-        <h3 key={idx} className="text-xl sm:text-2xl font-serif font-bold text-[#6f1d14] mt-9 mb-3.5 flex items-center gap-2.5">
-          <span className="w-1.5 h-6 rounded-full bg-[#F48D08]" />
+        <h3 key={idx} className="text-lg sm:text-xl font-serif font-bold text-[#6f1d14] mt-7 mb-2.5 flex items-center gap-2">
+          <span className="w-1.5 h-5 rounded-full bg-[#F48D08]" />
           <span>{parseInlineMarkdown(headingText)}</span>
         </h3>
       );
@@ -344,7 +358,7 @@ function ArticleMarkdownContent({ content }: { content: string }) {
       flushList(idx);
       const headingText = trimmed.replace(/^#+\s+/, '');
       blocks.push(
-        <h2 key={idx} className="text-2xl sm:text-3xl font-serif font-bold text-[#2B2118] mt-11 mb-4 pb-2.5 border-b border-amber-900/10">
+        <h2 key={idx} className="text-xl sm:text-2xl font-serif font-bold text-[#2B2118] mt-8 mb-3 pb-2 border-b border-amber-900/10">
           {parseInlineMarkdown(headingText)}
         </h2>
       );
@@ -373,7 +387,7 @@ function ArticleMarkdownContent({ content }: { content: string }) {
 
     flushList(idx);
     blocks.push(
-      <p key={idx} className="text-slate-700 text-sm sm:text-base leading-relaxed my-3.5 font-sans">
+      <p key={idx} className="text-slate-700 text-xs sm:text-sm md:text-[15px] leading-relaxed my-2.5 font-sans">
         {parseInlineMarkdown(trimmed)}
       </p>
     );
@@ -429,13 +443,13 @@ export default async function ArticleDetailPage({ params }: { params: Promise<{ 
     notFound();
   }
 
-  // Load Related Articles from DB or Fallbacks
+  // Related Articles
   let relatedArticles: any[] = [];
   try {
     if (db.article) {
       relatedArticles = await db.article.findMany({
         where: { slug: { not: slug } },
-        take: 3,
+        take: 6,
         orderBy: { createdAt: 'desc' }
       });
     }
@@ -443,26 +457,25 @@ export default async function ArticleDetailPage({ params }: { params: Promise<{ 
 
   if (!relatedArticles || relatedArticles.length === 0) {
     relatedArticles = Object.values(FALLBACK_ARTICLES)
-      .filter((a: any) => a.slug !== slug)
-      .slice(0, 3);
+      .filter((a: any) => a.slug !== slug);
   }
 
-  // Load Sacred Vedis
+  // Sacred Vedis
   let sacredPlaces: any[] = [];
   try {
     if (db.sacredPlace) {
-      sacredPlaces = await db.sacredPlace.findMany({ take: 3 });
+      sacredPlaces = await db.sacredPlace.findMany({ take: 6 });
     }
   } catch (_) {}
   if (!sacredPlaces || sacredPlaces.length === 0) {
     sacredPlaces = DEFAULT_SACRED_PLACES;
   }
 
-  // Load Packages
+  // Packages
   let packages: any[] = [];
   try {
     if (db.ritualPackage) {
-      packages = await db.ritualPackage.findMany({ take: 3 });
+      packages = await db.ritualPackage.findMany({ take: 6 });
     }
   } catch (_) {}
   if (!packages || packages.length === 0) {
@@ -470,111 +483,236 @@ export default async function ArticleDetailPage({ params }: { params: Promise<{ 
   }
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2] text-[#2B2118] py-8 sm:py-12 px-4 sm:px-6">
-      <div className="max-w-4xl mx-auto space-y-10">
+    <div className="min-h-screen bg-[#FAF7F2] text-[#2B2118] py-6 sm:py-10 px-4 sm:px-6 lg:px-8">
+      {/* WIDE LUXURY CONTAINER (MAX-W-7XL) UTILIZING BROWSER HORIZONTAL REAL ESTATE */}
+      <div className="max-w-7xl mx-auto space-y-8">
         
-        {/* TOP BREADCRUMBS & SOCIAL SHARE */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-amber-900/10">
-          <nav className="flex items-center gap-2 text-xs text-slate-500 font-medium overflow-x-auto whitespace-nowrap">
+        {/* TOP BREADCRUMB & SOCIAL SHARE HEADER */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-amber-900/10">
+          <nav className="flex items-center gap-1.5 text-xs text-slate-500 font-medium overflow-x-auto whitespace-nowrap">
             <Link href="/" className="hover:text-[#F48D08] transition-colors">Home</Link>
             <ChevronRight className="w-3.5 h-3.5 text-slate-400 shrink-0" />
             <Link href="/blog" className="hover:text-[#F48D08] transition-colors">Knowledge Centre</Link>
             <ChevronRight className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-            <span className="text-amber-800 font-semibold truncate max-w-[200px] sm:max-w-xs">{article.category || 'Scriptural Guide'}</span>
+            <span className="text-amber-800 font-semibold truncate max-w-[240px] sm:max-w-sm">
+              {article.category || 'Scripture Guide'}
+            </span>
           </nav>
           
           <ArticleShareBar title={article.title} />
         </div>
 
-        {/* MAIN ARTICLE HERO & BODY CONTAINER */}
-        <article className="bg-white rounded-3xl border border-amber-900/10 shadow-xl overflow-hidden">
+        {/* 2-COLUMN MODERN MAGAZINE EDITORIAL LAYOUT */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           
-          {/* Hero Banner Image */}
-          {article.image && (
-            <div className="h-72 sm:h-96 w-full relative overflow-hidden bg-slate-900">
-              <img 
-                src={article.image} 
-                alt={article.title} 
-                className="w-full h-full object-cover" 
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent flex items-end p-6 sm:p-10">
-                <div className="space-y-2">
-                  <span className="inline-block bg-[#F48D08] text-white text-xs font-bold px-3.5 py-1 rounded-full uppercase tracking-wider shadow">
-                    {article.category || 'Vedic Guidance'}
-                  </span>
-                  <p className="text-white/80 text-xs font-medium flex items-center gap-1.5">
-                    <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
-                    <span>Garuda & Vayu Purana Verified Sanctity</span>
-                  </p>
+          {/* LEFT / MAIN ARTICLE CANVAS (8 COLS) */}
+          <main className="lg:col-span-8 space-y-6">
+            <article className="bg-white rounded-3xl border border-amber-900/10 shadow-md overflow-hidden">
+              
+              {/* Hero Banner Image */}
+              {article.image && (
+                <div className="h-64 sm:h-80 md:h-96 w-full relative overflow-hidden bg-slate-900">
+                  <img 
+                    src={article.image} 
+                    alt={article.title} 
+                    className="w-full h-full object-cover" 
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent flex items-end p-5 sm:p-8">
+                    <div className="space-y-1.5">
+                      <span className="inline-block bg-[#F48D08] text-white text-[11px] font-bold px-3 py-0.5 rounded-full uppercase tracking-wider shadow">
+                        {article.category || 'Vedic Sanctity'}
+                      </span>
+                      <p className="text-white/80 text-[11px] font-medium flex items-center gap-1.5">
+                        <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+                        <span>Garuda Purana & Vishnupad Temple Certified Guide</span>
+                      </p>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-          )}
+              )}
 
-          <div className="p-6 sm:p-10 md:p-12 space-y-8">
+              <div className="p-5 sm:p-8 md:p-10 space-y-6">
+                {/* Title & Meta */}
+                <div className="space-y-3">
+                  <h1 className="text-2xl sm:text-3xl md:text-4xl font-serif font-bold text-[#6f1d14] leading-tight">
+                    {article.title}
+                  </h1>
+
+                  <div className="flex flex-wrap items-center gap-3 sm:gap-5 text-xs text-slate-500 border-y border-amber-900/10 py-2.5 font-medium">
+                    <span className="flex items-center gap-1.5 text-slate-700">
+                      <Clock className="w-3.5 h-3.5 text-[#F48D08]" /> {article.readTime || '5 min read'}
+                    </span>
+                    <span>•</span>
+                    <span className="flex items-center gap-1.5 text-slate-700">
+                      <Calendar className="w-3.5 h-3.5 text-[#F48D08]" /> Pitru Paksha 2026 Edition
+                    </span>
+                    <span>•</span>
+                    <span className="flex items-center gap-1.5 text-emerald-700 font-bold">
+                      <ShieldCheck className="w-4 h-4 text-emerald-600" /> Verified Rites
+                    </span>
+                  </div>
+                </div>
+
+                {/* Lead Summary */}
+                {article.summary && (
+                  <div className="bg-gradient-to-r from-amber-500/10 via-orange-50/50 to-transparent border-l-4 border-[#F48D08] p-4 sm:p-5 rounded-r-2xl text-xs sm:text-sm text-amber-950 font-medium leading-relaxed shadow-2xs">
+                    <div className="flex items-center gap-2 text-amber-800 font-bold uppercase text-[10px] tracking-wider mb-1">
+                      <Sparkles className="w-3 h-3 text-amber-600 fill-current" />
+                      <span>Key Scriptural Essence</span>
+                    </div>
+                    {article.summary}
+                  </div>
+                )}
+
+                {/* Body Content */}
+                <div className="prose prose-amber max-w-none">
+                  <ArticleMarkdownContent content={article.content} />
+                </div>
+
+                {/* Hereditary Pandit Ji Lineage Signature Card */}
+                <div className="bg-amber-50/50 rounded-2xl p-4 sm:p-5 border border-amber-200/80 flex items-center gap-4">
+                  <div className="w-11 h-11 rounded-full bg-gradient-to-tr from-[#8B2516] to-[#F48D08] flex items-center justify-center text-white font-serif font-bold text-base shrink-0 shadow-sm">
+                    प
+                  </div>
+                  <div className="space-y-0.5">
+                    <div className="flex items-center gap-2">
+                      <h4 className="font-bold text-xs sm:text-sm text-[#2B2118]">
+                        Reviewed by Hereditary Gayawal Panda Council
+                      </h4>
+                      <span className="text-[9px] bg-emerald-100 text-emerald-800 font-bold px-1.5 py-0.2 rounded-full">Verified</span>
+                    </div>
+                    <p className="text-[11px] sm:text-xs text-slate-600 leading-relaxed">
+                      Authored in compliance with Vayu Purana & Garuda Purana by Acharyas with 30+ years hereditary service at Vishnupad Temple.
+                    </p>
+                  </div>
+                </div>
+
+              </div>
+            </article>
+          </main>
+
+          {/* RIGHT / STICKY EDITORIAL SIDEBAR (4 COLS) - UTILIZES PREVIOUSLY EMPTY WHITESPACE */}
+          <aside className="lg:col-span-4 space-y-6 lg:sticky lg:top-24">
             
-            {/* Title & Editorial Bar */}
-            <div className="space-y-4">
-              <h1 className="text-2xl sm:text-4xl font-serif font-bold text-[#6f1d14] leading-tight">
-                {article.title}
-              </h1>
-
-              <div className="flex flex-wrap items-center gap-4 sm:gap-6 text-xs text-slate-500 border-y border-amber-900/10 py-3 font-medium">
-                <span className="flex items-center gap-1.5 text-slate-700">
-                  <Clock className="w-3.5 h-3.5 text-[#F48D08]" /> {article.readTime || '6 min read'}
+            {/* WIDGET 1: DIRECT PRIEST & PRE-BOOKING CARD */}
+            <div className="bg-gradient-to-br from-[#241006] via-[#1B0B04] to-[#2E1208] text-amber-100 p-5 rounded-2xl border border-amber-500/30 shadow-xl space-y-4">
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] uppercase font-mono font-extrabold tracking-wider text-amber-400 bg-amber-500/20 px-2 py-0.5 rounded-md">
+                  Vedic Booking Desk
                 </span>
-                <span>•</span>
-                <span className="flex items-center gap-1.5 text-slate-700">
-                  <Calendar className="w-3.5 h-3.5 text-[#F48D08]" /> Updated for Pitru Paksha 2026
-                </span>
-                <span>•</span>
-                <span className="flex items-center gap-1.5 text-emerald-700 font-bold">
-                  <ShieldCheck className="w-4 h-4 text-emerald-600" /> Vishnupad Certified Rites
+                <span className="text-[11px] text-emerald-400 font-bold flex items-center gap-1">
+                  <CheckCircle2 className="w-3.5 h-3.5" /> Zero Middleman
                 </span>
               </div>
-            </div>
 
-            {/* Executive Summary / Lead Blurb */}
-            {article.summary && (
-              <div className="bg-gradient-to-r from-amber-500/10 via-orange-50/60 to-transparent border-l-4 border-[#F48D08] p-5 sm:p-6 rounded-r-2xl text-xs sm:text-sm text-amber-950 font-medium leading-relaxed shadow-xs">
-                <div className="flex items-center gap-2 text-amber-800 font-bold uppercase text-[11px] tracking-wider mb-1.5">
-                  <Sparkles className="w-3.5 h-3.5 text-amber-600 fill-current" />
-                  <span>Scriptural Core Essence</span>
-                </div>
-                {article.summary}
-              </div>
-            )}
-
-            {/* Main Content Body (Rich Markdown Parsed) */}
-            <div className="prose prose-amber max-w-none">
-              <ArticleMarkdownContent content={article.content} />
-            </div>
-
-            {/* Hereditary Pandit Ji Lineage Signature Box */}
-            <div className="bg-amber-50/50 rounded-2xl p-5 border border-amber-200/80 flex flex-col sm:flex-row items-start sm:items-center gap-4">
-              <div className="w-12 h-12 rounded-full bg-gradient-to-tr from-[#8B2516] to-[#F48D08] flex items-center justify-center text-white font-serif font-bold text-lg shrink-0 shadow-md">
-                प
-              </div>
-              <div className="space-y-1">
-                <div className="flex items-center gap-2">
-                  <h4 className="font-bold text-sm text-[#2B2118]">Reviewed by Hereditary Gayawal Panda Council</h4>
-                  <span className="text-[10px] bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded-full">Authorized</span>
-                </div>
-                <p className="text-xs text-slate-600 leading-relaxed">
-                  Verified by Acharyas with over 30 years of hereditary service at Vishnupad Temple and Falgu River. Every ritual step adheres strictly to the Garuda Purana, Vayu Purana, and Vedic Shradh Paddhati.
+              <div>
+                <h3 className="font-serif font-bold text-lg text-white leading-snug">
+                  Plan Sacred Gaya Rites
+                </h3>
+                <p className="text-xs text-gray-300 mt-1 leading-relaxed">
+                  Fixed dakshina, hereditary Vishnupad Panda, and complete samagri arrangements without bargaining.
                 </p>
               </div>
+
+              <div className="space-y-2 pt-1">
+                <Link
+                  href="/pre-booking"
+                  className="w-full py-2.5 rounded-xl bg-gradient-to-r from-amber-500 via-amber-400 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-950 font-extrabold text-xs flex items-center justify-center gap-1.5 shadow-md transition-all"
+                >
+                  <Sparkles className="w-3.5 h-3.5 fill-current" />
+                  <span>Pre-Book Pind Daan (Pitru Paksha 2026)</span>
+                </Link>
+
+                <div className="grid grid-cols-2 gap-2">
+                  <a
+                    href="tel:+917463055338"
+                    className="py-2 px-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-[11px] flex items-center justify-center gap-1 border border-white/15 transition-all text-center"
+                  >
+                    <Phone className="w-3 h-3 text-[#F48D08]" />
+                    <span>Call Helpline</span>
+                  </a>
+
+                  <a
+                    href="https://wa.me/917463055338?text=Pranam%20Pandit%20Ji%2C%20I%20need%20Gotra%20and%20Pind%20Daan%20guidance%20for%20Gaya%20Ji."
+                    target="_blank"
+                    rel="noreferrer"
+                    className="py-2 px-2.5 rounded-xl bg-emerald-600/25 hover:bg-emerald-600/35 text-emerald-300 font-bold text-[11px] flex items-center justify-center gap-1 border border-emerald-500/30 transition-all text-center"
+                  >
+                    <MessageCircle className="w-3 h-3 text-emerald-400" />
+                    <span>WhatsApp Help</span>
+                  </a>
+                </div>
+              </div>
             </div>
 
-          </div>
-        </article>
+            {/* WIDGET 2: SACRED VEDIS COMPACT HIGHLIGHTS */}
+            <div className="bg-white rounded-2xl border border-amber-900/10 p-5 shadow-xs space-y-3.5">
+              <div className="flex items-center justify-between pb-2 border-b border-gray-100">
+                <div className="flex items-center gap-1.5 text-xs font-bold text-[#2B2118]">
+                  <MapPin className="w-3.5 h-3.5 text-[#F48D08]" />
+                  <span>Key Vedis Mentioned</span>
+                </div>
+                <Link href="/sacred-places" className="text-[11px] font-semibold text-[#F48D08] hover:underline">
+                  All 45+ Vedis →
+                </Link>
+              </div>
 
-        {/* SECTION 1: RELATED ARTICLES & SCRIPTURAL GUIDES */}
-        <section className="space-y-5">
+              <div className="space-y-2.5">
+                {sacredPlaces.slice(0, 3).map((place: any) => (
+                  <Link
+                    key={place.slug}
+                    href={`/sacred-places/${place.slug}`}
+                    className="flex items-center gap-3 p-2 rounded-xl hover:bg-amber-50/60 transition-colors border border-transparent hover:border-amber-200 group"
+                  >
+                    <div className="w-12 h-12 rounded-lg overflow-hidden shrink-0 bg-slate-100">
+                      <img 
+                        src={place.heroImage || place.image || '/images/gaya_vishnupad.jpg'} 
+                        alt={place.name} 
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h4 className="font-serif font-bold text-xs text-[#2B2118] group-hover:text-[#F48D08] transition-colors truncate">
+                        {place.name}
+                      </h4>
+                      <p className="text-[10px] text-slate-500 truncate mt-0.5">
+                        {place.tagline || 'Sacred ancestral shrine'}
+                      </p>
+                    </div>
+                    <ChevronRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-[#F48D08] shrink-0" />
+                  </Link>
+                ))}
+              </div>
+            </div>
+
+            {/* WIDGET 3: PITRU PAKSHA 2026 CALENDAR BADGE */}
+            <div className="bg-gradient-to-r from-amber-50 to-orange-50/60 rounded-2xl border border-amber-200 p-4 space-y-2">
+              <div className="flex items-center gap-2 text-amber-900 font-bold text-xs">
+                <Calendar className="w-4 h-4 text-amber-700" />
+                <span>Pitru Paksha Mela 2026 Schedule</span>
+              </div>
+              <p className="text-[11px] text-slate-700 leading-relaxed">
+                <strong>26 Sept – 10 Oct 2026</strong>. Thousands of devotees arrive daily. Advance booking secures verified panda lineage and private Ghat space.
+              </p>
+              <Link
+                href="/pre-booking"
+                className="inline-flex items-center gap-1 text-xs font-bold text-amber-800 hover:text-amber-950 pt-1 underline"
+              >
+                <span>Check Auspicious Tithi & Book</span>
+                <ArrowRight className="w-3 h-3" />
+              </Link>
+            </div>
+
+          </aside>
+
+        </div>
+
+        {/* BOTTOM SECTION 1: RELATED ARTICLES (HORIZONTAL SLIDING CAROUSEL) */}
+        <section className="space-y-4 pt-4 border-t border-amber-900/10">
           <div className="flex items-center justify-between">
-            <div className="space-y-1">
-              <div className="flex items-center gap-2 text-amber-700 font-bold text-xs uppercase tracking-wider">
-                <BookOpen className="w-4 h-4" />
+            <div className="space-y-0.5">
+              <div className="flex items-center gap-1.5 text-amber-700 font-bold text-xs uppercase tracking-wider">
+                <BookOpen className="w-3.5 h-3.5" />
                 <span>Knowledge Expansion</span>
               </div>
               <h2 className="text-xl sm:text-2xl font-serif font-bold text-[#2B2118]">
@@ -585,107 +723,57 @@ export default async function ArticleDetailPage({ params }: { params: Promise<{ 
               href="/blog" 
               className="text-xs font-bold text-[#F48D08] hover:text-[#D97706] flex items-center gap-1 transition-colors"
             >
-              <span>View All</span>
+              <span>View All ({relatedArticles.length + 1})</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </Link>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+          <SlidingCarousel>
             {relatedArticles.map((rel: any) => (
               <Link 
                 key={rel.slug} 
                 href={`/blog/${rel.slug}`}
-                className="group bg-white rounded-2xl border border-amber-900/10 hover:border-amber-400 overflow-hidden shadow-sm hover:shadow-lg transition-all flex flex-col justify-between"
+                className="group bg-white rounded-2xl border border-amber-900/10 hover:border-amber-400 overflow-hidden shadow-xs hover:shadow-md transition-all flex flex-col justify-between min-w-[280px] sm:min-w-[320px] max-w-[340px] shrink-0 snap-start"
               >
                 <div>
-                  <div className="h-40 w-full relative overflow-hidden bg-slate-100">
+                  <div className="h-36 w-full relative overflow-hidden bg-slate-100">
                     <img 
                       src={rel.image || '/images/gaya_vishnupad.jpg'} 
                       alt={rel.title} 
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                     />
-                    <span className="absolute top-3 left-3 bg-[#F48D08] text-white text-[10px] font-bold px-2.5 py-0.5 rounded-full shadow">
+                    <span className="absolute top-2.5 left-2.5 bg-[#F48D08] text-white text-[10px] font-bold px-2.5 py-0.5 rounded-full shadow">
                       {rel.category || 'Vedic Rites'}
                     </span>
                   </div>
-                  <div className="p-4 space-y-2">
-                    <div className="flex items-center gap-2 text-[11px] text-slate-500 font-medium">
+                  <div className="p-4 space-y-1.5">
+                    <div className="flex items-center gap-1.5 text-[10px] text-slate-500 font-medium">
                       <Clock className="w-3 h-3 text-[#F48D08]" />
                       <span>{rel.readTime || '5 min read'}</span>
                     </div>
-                    <h3 className="font-serif font-bold text-sm text-[#2B2118] group-hover:text-[#F48D08] transition-colors line-clamp-2 leading-snug">
+                    <h3 className="font-serif font-bold text-xs sm:text-sm text-[#2B2118] group-hover:text-[#F48D08] transition-colors line-clamp-2 leading-snug">
                       {rel.title}
                     </h3>
-                    <p className="text-xs text-slate-600 line-clamp-2 leading-relaxed">
+                    <p className="text-[11px] text-slate-600 line-clamp-2 leading-relaxed">
                       {rel.summary}
                     </p>
                   </div>
                 </div>
                 <div className="p-4 pt-0 text-xs font-bold text-[#F48D08] flex items-center gap-1 group-hover:translate-x-1 transition-transform">
-                  <span>Read Scripture Guide</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
+                  <span>Read Guide</span>
+                  <ArrowRight className="w-3 h-3" />
                 </div>
               </Link>
             ))}
-          </div>
+          </SlidingCarousel>
         </section>
 
-        {/* SECTION 2: TOP SACRED VEDIS CONNECTED TO THIS RITUAL */}
-        <section className="space-y-5">
-          <div className="space-y-1">
-            <div className="flex items-center gap-2 text-amber-700 font-bold text-xs uppercase tracking-wider">
-              <MapPin className="w-4 h-4" />
-              <span>Sacred Pilgrimage Shrines</span>
-            </div>
-            <h2 className="text-xl sm:text-2xl font-serif font-bold text-[#2B2118]">
-              Primary Vedis Connected to Gaya Ji Pind Daan
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
-            {sacredPlaces.map((place: any) => (
-              <div 
-                key={place.slug}
-                className="bg-white rounded-2xl border border-amber-900/10 p-4 space-y-3 shadow-xs hover:border-amber-300 transition-all flex flex-col justify-between"
-              >
-                <div className="space-y-3">
-                  <div className="h-32 w-full rounded-xl overflow-hidden relative">
-                    <img 
-                      src={place.heroImage || place.image || '/images/gaya_vishnupad.jpg'} 
-                      alt={place.name} 
-                      className="w-full h-full object-cover" 
-                    />
-                  </div>
-                  <div>
-                    <h3 className="font-serif font-bold text-base text-[#2B2118] leading-tight">
-                      {place.name}
-                    </h3>
-                    <p className="text-[11px] font-medium text-amber-800 line-clamp-1 mt-0.5">
-                      {place.tagline || 'Sacred Ancestral Spot'}
-                    </p>
-                    <p className="text-xs text-slate-600 line-clamp-2 mt-1.5 leading-relaxed">
-                      {place.description}
-                    </p>
-                  </div>
-                </div>
-                <Link 
-                  href={`/sacred-places/${place.slug}`}
-                  className="text-xs font-bold text-[#F48D08] hover:text-[#D97706] inline-flex items-center gap-1 pt-2 border-t border-gray-100"
-                >
-                  <span>Explore Pilgrimage History</span>
-                  <ArrowRight className="w-3 h-3" />
-                </Link>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* SECTION 3: RECOMMENDED RITUAL PACKAGES */}
-        <section className="space-y-5">
+        {/* BOTTOM SECTION 2: RECOMMENDED RITUAL PACKAGES (HORIZONTAL SLIDING CAROUSEL) */}
+        <section className="space-y-4">
           <div className="flex items-center justify-between">
-            <div className="space-y-1">
-              <div className="flex items-center gap-2 text-amber-700 font-bold text-xs uppercase tracking-wider">
-                <Sparkles className="w-4 h-4 fill-current" />
+            <div className="space-y-0.5">
+              <div className="flex items-center gap-1.5 text-amber-700 font-bold text-xs uppercase tracking-wider">
+                <Sparkles className="w-3.5 h-3.5 fill-current" />
                 <span>Zero Middleman • Fixed Dakshina</span>
               </div>
               <h2 className="text-xl sm:text-2xl font-serif font-bold text-[#2B2118]">
@@ -701,59 +789,59 @@ export default async function ArticleDetailPage({ params }: { params: Promise<{ 
             </Link>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+          <SlidingCarousel>
             {packages.map((pkg: any) => (
               <div 
                 key={pkg.slug} 
-                className="bg-white rounded-2xl border border-amber-900/10 p-5 shadow-xs hover:border-amber-400 transition-all flex flex-col justify-between"
+                className="bg-white rounded-2xl border border-amber-900/10 p-4 shadow-xs hover:border-amber-400 transition-all flex flex-col justify-between min-w-[280px] sm:min-w-[310px] max-w-[330px] shrink-0 snap-start"
               >
-                <div className="space-y-3">
+                <div className="space-y-2.5">
                   <div className="flex items-start justify-between gap-2">
-                    <h3 className="font-serif font-bold text-base text-[#2B2118] leading-snug">
+                    <h3 className="font-serif font-bold text-sm sm:text-base text-[#2B2118] leading-snug">
                       {pkg.title}
                     </h3>
-                    <span className="bg-amber-100 text-amber-900 text-xs font-extrabold px-2.5 py-1 rounded-full whitespace-nowrap">
+                    <span className="bg-amber-100 text-amber-900 text-[11px] font-extrabold px-2 py-0.5 rounded-full whitespace-nowrap">
                       ₹{pkg.priceINR.toLocaleString('en-IN')}
                     </span>
                   </div>
-                  <p className="text-xs text-slate-600 leading-relaxed line-clamp-3">
+                  <p className="text-[11px] text-slate-600 leading-relaxed line-clamp-2">
                     {pkg.shortDesc}
                   </p>
-                  <ul className="space-y-1.5 text-xs text-slate-700 pt-2 border-t border-gray-100">
+                  <ul className="space-y-1 text-[11px] text-slate-700 pt-1.5 border-t border-gray-100">
                     <li className="flex items-center gap-1.5">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
-                      <span>Verified Hereditary Gaya Panda</span>
+                      <CheckCircle2 className="w-3 h-3 text-emerald-600 shrink-0" />
+                      <span>Hereditary Vishnupad Panda</span>
                     </li>
                     <li className="flex items-center gap-1.5">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
-                      <span>Complete Vedic Puja Samagri Included</span>
+                      <CheckCircle2 className="w-3 h-3 text-emerald-600 shrink-0" />
+                      <span>Complete Puja Samagri</span>
                     </li>
                     <li className="flex items-center gap-1.5">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
-                      <span>Brahman Bhoj & Dakshina Fixed</span>
+                      <CheckCircle2 className="w-3 h-3 text-emerald-600 shrink-0" />
+                      <span>Brahman Bhoj Included</span>
                     </li>
                   </ul>
                 </div>
 
-                <div className="pt-4 mt-2">
+                <div className="pt-3">
                   <Link
                     href={`/pre-booking?package=${pkg.slug}`}
-                    className="w-full py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-sm transition-all"
+                    className="w-full py-2 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-bold text-xs flex items-center justify-center gap-1 shadow-xs transition-all"
                   >
                     <span>Pre-Book This Package</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
+                    <ArrowRight className="w-3 h-3" />
                   </Link>
                 </div>
               </div>
             ))}
-          </div>
+          </SlidingCarousel>
         </section>
 
-        {/* SECTION 4: INTERACTIVE SCRIPTURAL FAQS */}
-        <section className="space-y-5">
-          <div className="space-y-1">
-            <div className="flex items-center gap-2 text-amber-700 font-bold text-xs uppercase tracking-wider">
-              <HelpCircle className="w-4 h-4" />
+        {/* BOTTOM SECTION 3: SCRIPTURAL FAQS (COMPACT 2-COLUMN GRID) */}
+        <section className="space-y-4">
+          <div className="space-y-0.5">
+            <div className="flex items-center gap-1.5 text-amber-700 font-bold text-xs uppercase tracking-wider">
+              <HelpCircle className="w-3.5 h-3.5" />
               <span>Devotee Clarifications</span>
             </div>
             <h2 className="text-xl sm:text-2xl font-serif font-bold text-[#2B2118]">
@@ -764,51 +852,48 @@ export default async function ArticleDetailPage({ params }: { params: Promise<{ 
           <ArticleFaqAccordion faqs={DEFAULT_FAQS} />
         </section>
 
-        {/* SECTION 5: DEVOTEE DESK & IMMEDIATE ASSISTANCE CALLOUT */}
-        <div className="bg-gradient-to-br from-[#2A1208] via-[#1B0B04] to-[#3B170A] text-amber-100 p-8 sm:p-10 rounded-3xl space-y-5 border border-amber-500/30 shadow-2xl relative overflow-hidden">
-          <div className="absolute right-0 top-0 w-64 h-64 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
-          
-          <div className="flex items-center gap-2 text-[#F48D08]">
-            <Sparkles className="w-5 h-5 fill-current" />
-            <span className="text-xs uppercase font-extrabold tracking-wider text-amber-300">
-              Official Gaya Ji Devotee Helpdesk
-            </span>
-          </div>
-
-          <div className="space-y-2 max-w-2xl">
-            <h3 className="font-serif font-bold text-2xl sm:text-3xl text-white">
-              Planning Ancestral Rites at Holy Gaya Ji?
+        {/* BOTTOM SECTION 4: COMPACT LUXURY DEVOTEE HELP DESK */}
+        <div className="bg-gradient-to-r from-[#2A1208] via-[#1B0B04] to-[#2A1208] text-amber-100 p-6 sm:p-8 rounded-3xl border border-amber-500/30 shadow-xl flex flex-col md:flex-row items-center justify-between gap-6">
+          <div className="space-y-1.5 text-center md:text-left">
+            <div className="flex items-center justify-center md:justify-start gap-2 text-[#F48D08]">
+              <Sparkles className="w-4 h-4 fill-current" />
+              <span className="text-[11px] uppercase font-mono font-extrabold tracking-wider text-amber-300">
+                Gaya Ji Sacred Devotee Desk
+              </span>
+            </div>
+            <h3 className="font-serif font-bold text-xl sm:text-2xl text-white">
+              Need Gotra Guidance or Custom Tithi Arrangements?
             </h3>
-            <p className="text-xs sm:text-sm text-gray-300 leading-relaxed">
-              Ensure authentic gotra recitation, verified hereditary Gaya Pandas, and 100% transparent arrangements without bargaining or middleman harassment. Whether attending in-person at Vishnupad Temple or booking remote live rites from abroad.
+            <p className="text-xs text-gray-300 max-w-xl leading-relaxed">
+              Connect directly with hereditary Gaya Purohits. In-person or remote 4K Zoom live stream with worldwide prasadam delivery.
             </p>
           </div>
 
-          <div className="flex flex-wrap items-center gap-3.5 pt-2">
+          <div className="flex flex-wrap items-center justify-center gap-3 shrink-0">
             <Link 
               href="/pre-booking" 
-              className="bg-gradient-to-r from-[#F48D08] to-[#D97706] hover:from-[#D97706] hover:to-[#B45309] text-white px-7 py-3 rounded-full font-bold text-xs transition-all shadow-lg flex items-center gap-2"
+              className="bg-gradient-to-r from-[#F48D08] to-[#D97706] hover:from-[#D97706] hover:to-[#B45309] text-white px-6 py-2.5 rounded-full font-bold text-xs transition-all shadow-md flex items-center gap-1.5"
             >
-              <span>Pre-Book Pind Daan Package</span>
+              <span>Pre-Book Rites</span>
               <Sparkles className="w-3.5 h-3.5 fill-current" />
             </Link>
             
             <a 
               href="tel:+917463055338" 
-              className="bg-white/10 hover:bg-white/20 text-white px-5 py-3 rounded-full font-bold text-xs border border-white/20 transition-all flex items-center gap-2"
+              className="bg-white/10 hover:bg-white/20 text-white px-5 py-2.5 rounded-full font-bold text-xs border border-white/20 transition-all flex items-center gap-1.5"
             >
               <Phone className="w-3.5 h-3.5 text-[#F48D08]" />
-              <span>Call Helpline: +91 7463055338</span>
+              <span>+91 7463055338</span>
             </a>
 
             <a 
-              href="https://wa.me/917463055338?text=Pranam%20Pandit%20Ji%2C%20I%20want%20guidance%20regarding%20Pind%20Daan%20at%20Gaya%20Ji." 
+              href="https://wa.me/917463055338?text=Pranam%20Pandit%20Ji%2C%20I%20need%20assistance%20regarding%20Gaya%20Pind%20Daan." 
               target="_blank"
               rel="noreferrer"
-              className="bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-300 px-5 py-3 rounded-full font-bold text-xs border border-emerald-500/30 transition-all flex items-center gap-2"
+              className="bg-emerald-600/25 hover:bg-emerald-600/35 text-emerald-300 px-5 py-2.5 rounded-full font-bold text-xs border border-emerald-500/30 transition-all flex items-center gap-1.5"
             >
               <MessageCircle className="w-3.5 h-3.5 text-emerald-400" />
-              <span>WhatsApp Gotra Help</span>
+              <span>WhatsApp</span>
             </a>
           </div>
         </div>
