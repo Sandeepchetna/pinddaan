@@ -41,7 +41,10 @@ import {
   Link as LinkIcon,
   Crown,
   CheckCircle,
-  LogOut
+  LogOut,
+  Menu,
+  Mail,
+  ArrowUpRight
 } from 'lucide-react';
 import { 
   getAdminERPData, 
@@ -205,6 +208,7 @@ export default function AdminERPClient({ initialData, session }: AdminERPClientP
   const [loading, setLoading] = useState(false);
   const [loggingOut, setLoggingOut] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
 
   const handleLogout = async () => {
     if (confirm('क्या आप एडमिन पैनल से लॉगआउट करना चाहते हैं? / Are you sure you want to log out?')) {
@@ -568,87 +572,184 @@ export default function AdminERPClient({ initialData, session }: AdminERPClientP
   const totalRevenue = preBookings.reduce((sum, b) => sum + (b.estimatedCost || 0), 0);
   const confirmedCount = confirmedBookings.length;
 
+
+  const navTabs = [
+    { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard, count: null },
+    { id: 'booking_requests', label: 'Booking Requests', icon: CalendarCheck, count: pendingBookingRequests.length, badgeColor: 'bg-amber-500/20 text-amber-300 border-amber-500/30' },
+    { id: 'confirmed_bookings', label: 'Confirmed Bookings', icon: CheckCircle2, count: confirmedCount, badgeColor: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30' },
+    { id: 'leads_crm', label: 'Lead Management', icon: UserCheck, count: leads.length, badgeColor: 'bg-blue-500/20 text-blue-300 border-blue-500/30' },
+    { id: 'customers', label: 'Devotees Directory', icon: Users, count: customers.length, badgeColor: null },
+    { id: 'packages', label: 'Packages & Pricing', icon: Package, count: packages.length, badgeColor: null },
+    { id: 'sacred_places', label: 'Sacred Vedis (45+)', icon: MapPin, count: sacredPlaces.length, badgeColor: null },
+    { id: 'hero_slides', label: 'Website CMS Slides', icon: Sparkles, count: heroSlides.length, badgeColor: null },
+    { id: 'knowledge_centre', label: 'Knowledge Centre', icon: BookOpen, count: articles.length, badgeColor: null },
+    { id: 'testimonials', label: 'Devotee Reviews & Video', icon: MessageSquare, count: testimonials.length, badgeColor: null },
+    { id: 'media_library', label: 'Digital Assets', icon: ImageIcon, count: mediaItems.length, badgeColor: null },
+    { id: 'seo_manager', label: 'SEO & AI Search', icon: Globe, count: null },
+    { id: 'reports', label: 'Analytics & Revenue', icon: BarChart3, count: null },
+    { id: 'settings', label: 'Platform Configuration', icon: Settings, count: null }
+  ];
+
   return (
-    <div className="min-h-screen bg-[#0F172A] text-slate-100 flex font-sans antialiased">
+    <div className="min-h-screen bg-[#0B0F19] text-slate-100 flex font-sans antialiased">
       
       {/* COPY TOAST FEEDBACK */}
       {copyToast && (
-        <div className="fixed top-4 right-4 z-50 bg-[#F48D08] text-white font-bold text-xs px-5 py-3 rounded-2xl shadow-2xl animate-bounce flex items-center gap-2">
+        <div className="fixed top-5 right-5 z-50 bg-gradient-to-r from-amber-500 to-amber-600 text-white font-bold text-xs px-5 py-3 rounded-2xl shadow-2xl border border-amber-400/30 animate-bounce flex items-center gap-2">
           <Check className="w-4 h-4" />
           <span>{copyToast}</span>
         </div>
       )}
 
-      {/* LEFT SIDEBAR NAVIGATION */}
-      <aside className="w-64 bg-[#1E293B] border-r border-slate-800 flex flex-col justify-between shrink-0 hidden md:flex">
-        <div className="p-6 space-y-6">
+      {/* MOBILE NAVIGATION DRAWER OVERLAY */}
+      {mobileNavOpen && (
+        <div className="fixed inset-0 z-50 md:hidden flex">
+          <div 
+            className="fixed inset-0 bg-black/80 backdrop-blur-sm transition-opacity" 
+            onClick={() => setMobileNavOpen(false)} 
+          />
+          <aside className="relative w-72 max-w-[85vw] bg-[#0E1626] border-r border-slate-800 h-full flex flex-col justify-between p-5 overflow-y-auto shadow-2xl z-10">
+            <div className="space-y-6">
+              <div className="flex items-center justify-between pb-4 border-b border-slate-800/80">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-[#8B2516] via-[#B45309] to-[#F59E0B] p-0.5 ring-1 ring-amber-500/30 flex items-center justify-center font-bold text-white text-xs shadow-md">
+                    PD
+                  </div>
+                  <div>
+                    <span className="font-bold text-sm text-white block leading-tight">PindDaanWale</span>
+                    <span className="text-[9px] uppercase font-mono font-extrabold text-amber-400">Command Center</span>
+                  </div>
+                </div>
+                <button 
+                  onClick={() => setMobileNavOpen(false)}
+                  className="p-1.5 rounded-lg bg-slate-800 text-slate-400 hover:text-white"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+
+              <nav className="space-y-1 text-xs font-medium">
+                {navTabs.map((tab) => {
+                  const Icon = tab.icon;
+                  const isActive = activeTab === tab.id;
+                  return (
+                    <button
+                      key={tab.id}
+                      onClick={() => {
+                        setActiveTab(tab.id as ModuleTab);
+                        setMobileNavOpen(false);
+                      }}
+                      className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl transition-all ${
+                        isActive
+                          ? 'bg-gradient-to-r from-amber-500/20 via-amber-500/10 to-transparent text-amber-300 font-bold border-l-4 border-amber-500 shadow-sm'
+                          : 'text-slate-400 hover:bg-slate-800/50 hover:text-slate-200'
+                      }`}
+                    >
+                      <div className="flex items-center gap-3">
+                        <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-amber-400' : 'text-slate-400'}`} />
+                        <span className="truncate">{tab.label}</span>
+                      </div>
+                      {tab.count !== null && (
+                        <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold ${
+                          isActive 
+                            ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30' 
+                            : 'bg-slate-800 text-slate-400 border border-slate-700/50'
+                        }`}>
+                          {tab.count}
+                        </span>
+                      )}
+                    </button>
+                  );
+                })}
+              </nav>
+            </div>
+
+            <div className="pt-4 border-t border-slate-800 space-y-3">
+              <button
+                onClick={handleLogout}
+                disabled={loggingOut}
+                className="w-full flex items-center justify-center gap-2 py-2 px-3 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 border border-rose-500/20 transition-all text-xs font-bold"
+              >
+                <LogOut className="w-3.5 h-3.5" />
+                <span>{loggingOut ? 'लॉगआउट हो रहे हैं...' : 'लॉगआउट / Sign Out'}</span>
+              </button>
+            </div>
+          </aside>
+        </div>
+      )}
+
+      {/* DESKTOP SIDEBAR NAVIGATION */}
+      <aside className="w-64 bg-[#0E1626] border-r border-slate-800/80 flex flex-col justify-between shrink-0 hidden md:flex">
+        <div className="p-5 space-y-6">
           
+          {/* BRAND LOGO & SYSTEM STATUS */}
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-[#6f1d14] via-[#F48D08] to-[#C6922E] flex items-center justify-center font-bold text-white shadow-lg">
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-[#8B2516] via-[#B45309] to-[#F59E0B] p-0.5 ring-1 ring-amber-500/30 flex items-center justify-center font-bold text-white shadow-lg text-sm">
               PD
             </div>
             <div>
-              <span className="font-serif font-bold text-base text-white block leading-tight">PindDaanWale</span>
-              <span className="text-[10px] uppercase font-mono font-extrabold text-[#F48D08]">Command Center 2.0</span>
+              <div className="flex items-center gap-1.5">
+                <span className="font-bold text-sm text-white leading-tight">PindDaanWale</span>
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" title="System Online" />
+              </div>
+              <span className="text-[10px] uppercase font-mono font-extrabold text-amber-400 tracking-wider">Command Center 2.0</span>
             </div>
           </div>
 
-          <nav className="space-y-1 text-xs font-semibold">
-            {[
-              { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
-              { id: 'hero_slides', label: `Website CMS (${heroSlides.length})`, icon: Sparkles },
-              { id: 'booking_requests', label: `Booking Requests (${pendingBookingRequests.length})`, icon: CalendarCheck },
-              { id: 'confirmed_bookings', label: `Confirmed Bookings (${confirmedCount})`, icon: CheckCircle2 },
-              { id: 'packages', label: `Packages & Pricing (${packages.length})`, icon: Package },
-              { id: 'customers', label: `Devotees (${customers.length})`, icon: Users },
-              { id: 'leads_crm', label: `Lead Management (${leads.length})`, icon: UserCheck },
-              { id: 'knowledge_centre', label: `Knowledge Centre (${articles.length})`, icon: BookOpen },
-              { id: 'sacred_places', label: `Sacred Places (${sacredPlaces.length})`, icon: MapPin },
-              { id: 'testimonials', label: `Testimonials (${testimonials.length})`, icon: MessageSquare },
-              { id: 'media_library', label: `Digital Assets (${mediaItems.length})`, icon: ImageIcon },
-              { id: 'seo_manager', label: 'SEO & AI Search', icon: Globe },
-              { id: 'reports', label: 'Reports & Insights', icon: BarChart3 },
-              { id: 'settings', label: 'Platform Configuration', icon: Settings }
-            ].map((tab) => {
+          {/* NAVIGATION LINKS */}
+          <nav className="space-y-1 text-xs font-medium">
+            {navTabs.map((tab) => {
               const Icon = tab.icon;
               const isActive = activeTab === tab.id;
               return (
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id as ModuleTab)}
-                  className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all text-xs font-semibold ${
+                  className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl transition-all ${
                     isActive 
-                      ? 'bg-gradient-to-r from-[#F48D08] to-[#D97706] text-white font-bold shadow-md' 
-                      : 'text-slate-400 hover:bg-slate-800 hover:text-slate-200'
+                      ? 'bg-gradient-to-r from-amber-500/15 via-amber-500/5 to-transparent text-amber-300 font-bold border-l-[3px] border-amber-500 shadow-sm' 
+                      : 'text-slate-400 hover:bg-slate-800/50 hover:text-slate-200'
                   }`}
                 >
-                  <Icon className="w-4 h-4 shrink-0" />
-                  <span className="truncate whitespace-nowrap">{tab.label}</span>
+                  <div className="flex items-center gap-2.5 truncate">
+                    <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-amber-400' : 'text-slate-400'}`} />
+                    <span className="truncate whitespace-nowrap">{tab.label}</span>
+                  </div>
+                  {tab.count !== null && (
+                    <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold ml-1.5 shrink-0 ${
+                      isActive 
+                        ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30' 
+                        : 'bg-slate-800/90 text-slate-400 border border-slate-700/50'
+                    }`}>
+                      {tab.count}
+                    </span>
+                  )}
                 </button>
               );
             })}
           </nav>
         </div>
 
-        <div className="p-4 border-t border-slate-800 bg-[#0F172A]/50 space-y-3">
+        {/* BOTTOM USER PROFILE & ROLE */}
+        <div className="p-4 border-t border-slate-800/80 bg-[#0B1120]/40 space-y-3">
           {session && (
-            <div className="bg-slate-800/60 p-2.5 rounded-xl border border-slate-700/60 flex items-center justify-between">
+            <div className="bg-slate-800/50 p-2.5 rounded-xl border border-slate-700/50 flex items-center justify-between">
               <div className="truncate pr-2">
                 <div className="text-[11px] font-bold text-white truncate">{session.name || 'Super Admin'}</div>
                 <div className="text-[9px] text-slate-400 font-mono truncate">{session.email}</div>
               </div>
-              <span className="text-[9px] px-1.5 py-0.5 rounded bg-amber-500/20 text-[#F48D08] font-bold shrink-0">
+              <span className="text-[9px] px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-300 font-bold border border-amber-500/25 shrink-0">
                 {session.role || 'ADMIN'}
               </span>
             </div>
           )}
 
           <div>
-            <div className="text-[10px] uppercase font-bold text-slate-400 mb-1.5">RBAC Active Access:</div>
+            <div className="text-[10px] uppercase font-bold text-slate-400 mb-1">RBAC Active Access:</div>
             <select
               value={currentRole}
               onChange={(e) => setCurrentRole(e.target.value as Role)}
-              className="w-full bg-slate-800 border border-slate-700 text-xs font-bold text-[#F48D08] rounded-xl p-2 focus:outline-none"
+              className="w-full bg-slate-900 border border-slate-700/80 text-xs font-bold text-amber-300 rounded-xl p-2 focus:outline-none focus:border-amber-500"
             >
               <option value="SUPER_ADMIN">👑 Super Admin</option>
               <option value="ADMIN">🛡️ Admin</option>
@@ -671,30 +772,67 @@ export default function AdminERPClient({ initialData, session }: AdminERPClientP
       </aside>
 
       {/* MAIN WORKSPACE CONTENT AREA */}
-      <main className="flex-1 flex flex-col min-w-0 overflow-y-auto bg-[#0F172A]">
+      <main className="flex-1 flex flex-col min-w-0 overflow-y-auto bg-[#0B0F19]">
         
-        <header className="h-16 border-b border-slate-800 bg-[#1E293B]/80 backdrop-blur-md px-6 flex items-center justify-between sticky top-0 z-20">
-          <div className="flex items-center gap-4">
-            <h1 className="font-serif font-bold text-lg text-white capitalize">{activeTab.replace('_', ' ')}</h1>
-            <div className="relative w-64 hidden sm:block">
-              <Search className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
+        {/* EXECUTIVE HEADER */}
+        <header className="h-16 border-b border-slate-800/80 bg-[#0E1626]/85 backdrop-blur-xl px-4 sm:px-6 flex items-center justify-between sticky top-0 z-20">
+          <div className="flex items-center gap-3 sm:gap-4">
+            <button
+              onClick={() => setMobileNavOpen(true)}
+              className="md:hidden p-2 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700/60 transition-colors"
+              title="Open Navigation Menu"
+            >
+              <Menu className="w-5 h-5" />
+            </button>
+
+            <div>
+              <div className="text-[10px] text-slate-400 font-mono hidden sm:block">Admin ERP /</div>
+              <h1 className="font-bold text-base sm:text-lg text-white capitalize tracking-tight leading-none">
+                {activeTab.replace(/_/g, ' ')}
+              </h1>
+            </div>
+
+            {/* SEARCH INPUT WITH EXPLICIT DARK THEME GUARD */}
+            <div className="relative w-48 sm:w-64 md:w-72 hidden sm:block">
+              <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
               <input
                 type="text"
                 placeholder="Search Ref ID, Devotee, Mobile..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-slate-900 border border-slate-700 rounded-full pl-9 pr-4 py-1.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-[#F48D08]"
+                style={{ backgroundColor: '#0B1120', color: '#FFFFFF' }}
+                className="w-full bg-[#0B1120] border border-slate-700/80 rounded-full pl-8 pr-8 py-1.5 text-xs text-white placeholder-slate-400 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition-all shadow-inner"
               />
+              {searchQuery && (
+                <button
+                  onClick={() => setSearchQuery('')}
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white"
+                >
+                  <X className="w-3 h-3" />
+                </button>
+              )}
             </div>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3">
+            <a
+              href="/"
+              target="_blank"
+              rel="noreferrer"
+              title="View Public Website"
+              className="hidden lg:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-800/70 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-semibold border border-slate-700/60 transition-all"
+            >
+              <span>View Site</span>
+              <ArrowUpRight className="w-3.5 h-3.5" />
+            </a>
+
             <button
               onClick={loadERPData}
-              className="bg-slate-800 hover:bg-slate-700 text-slate-200 px-3.5 py-1.5 rounded-full text-xs font-bold transition-all flex items-center gap-1.5 border border-slate-700"
+              title="Refresh ERP Data"
+              className="bg-slate-800/80 hover:bg-slate-700 text-slate-200 px-3 py-1.5 rounded-full text-xs font-bold transition-all flex items-center gap-1.5 border border-slate-700/60 shadow-sm"
             >
               <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
-              <span>Refresh ERP</span>
+              <span className="hidden sm:inline">Refresh ERP</span>
             </button>
 
             {['hero_slides', 'packages', 'leads_crm', 'customers', 'knowledge_centre', 'sacred_places', 'testimonials', 'media_library'].includes(activeTab) && (
@@ -703,9 +841,10 @@ export default function AdminERPClient({ initialData, session }: AdminERPClientP
                   setModalType(activeTab === 'hero_slides' ? 'heroslide' : activeTab === 'packages' ? 'package' : activeTab === 'leads_crm' ? 'lead' : activeTab === 'customers' ? 'customer' : activeTab === 'knowledge_centre' ? 'article' : activeTab === 'sacred_places' ? 'place' : activeTab === 'testimonials' ? 'testimonial' : 'media');
                   setIsModalOpen(true);
                 }}
-                className="bg-[#F48D08] hover:bg-[#D97706] text-white px-4 py-1.5 rounded-full text-xs font-bold shadow-md transition-all flex items-center gap-1.5"
+                className="bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white px-3.5 py-1.5 rounded-full text-xs font-bold shadow-md transition-all flex items-center gap-1.5"
               >
-                <Plus className="w-4 h-4" /> Add Record
+                <Plus className="w-3.5 h-3.5" />
+                <span>Add Record</span>
               </button>
             )}
 
@@ -713,7 +852,7 @@ export default function AdminERPClient({ initialData, session }: AdminERPClientP
               onClick={handleLogout}
               disabled={loggingOut}
               title="लॉगआउट / Sign Out"
-              className="bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 hover:text-rose-200 px-3 py-1.5 rounded-full text-xs font-bold transition-all flex items-center gap-1.5 border border-rose-500/30"
+              className="bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 hover:text-rose-200 px-3 py-1.5 rounded-full text-xs font-bold transition-all flex items-center gap-1.5 border border-rose-500/25"
             >
               <LogOut className="w-3.5 h-3.5" />
               <span className="hidden sm:inline">{loggingOut ? 'Signing out...' : 'Logout'}</span>
@@ -721,30 +860,60 @@ export default function AdminERPClient({ initialData, session }: AdminERPClientP
           </div>
         </header>
 
-        <div className="p-6 sm:p-8 space-y-8">
+        {/* MOBILE QUICK NAVIGATION HORIZONTAL CHIPS */}
+        <div className="md:hidden flex items-center gap-2 px-4 py-2.5 bg-[#0E1626]/90 border-b border-slate-800/80 overflow-x-auto no-scrollbar shrink-0">
+          {[
+            { id: 'dashboard', label: 'Dashboard' },
+            { id: 'booking_requests', label: `Requests (${pendingBookingRequests.length})` },
+            { id: 'confirmed_bookings', label: `Confirmed (${confirmedCount})` },
+            { id: 'leads_crm', label: `Leads (${leads.length})` },
+            { id: 'packages', label: `Packages (${packages.length})` },
+            { id: 'sacred_places', label: `Vedis (${sacredPlaces.length})` },
+            { id: 'testimonials', label: `Reviews (${testimonials.length})` }
+          ].map((chip) => (
+            <button
+              key={chip.id}
+              onClick={() => setActiveTab(chip.id as ModuleTab)}
+              className={`px-3 py-1 rounded-full text-xs font-semibold shrink-0 transition-all ${
+                activeTab === chip.id
+                  ? 'bg-amber-500 text-slate-950 font-bold shadow-sm'
+                  : 'bg-slate-800/80 text-slate-300 border border-slate-700/60'
+              }`}
+            >
+              {chip.label}
+            </button>
+          ))}
+        </div>
+
+        <div className="p-4 sm:p-6 lg:p-8 space-y-6 sm:space-y-8">
 
           {/* DASHBOARD MODULE */}
           {activeTab === 'dashboard' && (
-            <div className="space-y-8 animate-fadeIn">
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+            <div className="space-y-6 sm:space-y-8 animate-fadeIn">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
                 {[
                   { label: "Today's Requests", value: preBookings.length, color: 'text-amber-400', icon: CalendarCheck },
                   { label: 'Confirmed Bookings', value: confirmedCount, color: 'text-emerald-400', icon: CheckCircle2 },
-                  { label: 'Total Revenue', value: `₹${totalRevenue.toLocaleString('en-IN')}`, color: 'text-yellow-400', icon: DollarSign },
+                  { label: 'Total Volume', value: `₹${totalRevenue.toLocaleString('en-IN')}`, color: 'text-yellow-400', icon: DollarSign },
                   { label: 'Pending Calls', value: preBookings.filter(b => b.workflowStatus === 'NEW_REQUEST').length, color: 'text-rose-400', icon: Phone },
                   { label: 'Advance Awaiting', value: preBookings.filter(b => b.workflowStatus === 'ADVANCE_AWAITED').length, color: 'text-sky-400', icon: Clock },
                   { label: 'Advance Received', value: preBookings.filter(b => b.workflowStatus === 'ADVANCE_RECEIVED').length, color: 'text-teal-400', icon: CreditCard },
-                  { label: 'Active Hero Slides', value: heroSlides.length, color: 'text-purple-400', icon: Sparkles },
+                  { label: 'Website CMS Slides', value: heroSlides.length, color: 'text-purple-400', icon: Sparkles },
                   { label: 'Active Packages', value: packages.length, color: 'text-indigo-400', icon: Package }
                 ].map((kpi, idx) => {
                   const Icon = kpi.icon;
                   return (
-                    <div key={idx} className="bg-[#1E293B] p-5 rounded-2xl border border-slate-800 space-y-2">
+                    <div 
+                      key={idx} 
+                      className="bg-gradient-to-b from-[#141C2B] to-[#0D1424] p-4 sm:p-5 rounded-2xl border border-slate-800/80 hover:border-slate-700 transition-all space-y-2.5 shadow-lg"
+                    >
                       <div className="flex justify-between items-center text-slate-400 text-xs font-semibold">
-                        <span>{kpi.label}</span>
-                        <Icon className="w-4 h-4" />
+                        <span className="truncate pr-1">{kpi.label}</span>
+                        <div className={`w-7 h-7 rounded-lg bg-slate-800/80 flex items-center justify-center shrink-0 ${kpi.color}`}>
+                          <Icon className="w-3.5 h-3.5" />
+                        </div>
                       </div>
-                      <div className={`text-2xl font-serif font-bold ${kpi.color}`}>{kpi.value}</div>
+                      <div className={`text-xl sm:text-2xl font-bold font-mono tracking-tight ${kpi.color}`}>{kpi.value}</div>
                     </div>
                   );
                 })}
@@ -755,23 +924,44 @@ export default function AdminERPClient({ initialData, session }: AdminERPClientP
           {/* BOOKING REQUESTS & CONFIRMED BOOKINGS MODULE */}
           {(activeTab === 'booking_requests' || activeTab === 'confirmed_bookings') && (
             <div className="space-y-6 animate-fadeIn">
-              <div className="flex justify-between items-center bg-[#1E293B] p-4 rounded-2xl border border-slate-800">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-gradient-to-r from-[#141C2B] to-[#0E1626] p-4 rounded-2xl border border-slate-800/80 shadow-md">
                 <div className="flex items-center gap-3">
-                  <span className="font-serif font-bold text-base text-white">
+                  <span className="font-bold text-base text-white">
                     {activeTab === 'confirmed_bookings' ? 'Confirmed Pilgrimage Bookings' : 'Pending Booking Requests'}
                   </span>
-                  <span className="bg-[#F48D08]/20 text-[#F48D08] text-xs px-2.5 py-0.5 rounded-full font-bold border border-[#F48D08]/30">
+                  <span className="bg-amber-500/15 text-amber-300 text-xs px-2.5 py-0.5 rounded-full font-bold border border-amber-500/25">
                     {activeTab === 'confirmed_bookings' ? confirmedCount : pendingBookingRequests.length} Record(s)
                   </span>
+                </div>
+
+                {/* MOBILE SEARCH BAR */}
+                <div className="sm:hidden relative w-full">
+                  <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+                  <input
+                    type="text"
+                    placeholder="Search name, phone, ref id..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    style={{ backgroundColor: '#0B1120', color: '#FFFFFF' }}
+                    className="w-full bg-[#0B1120] border border-slate-700/80 rounded-full pl-8 pr-8 py-1.5 text-xs text-white placeholder-slate-400 focus:outline-none focus:border-amber-500"
+                  />
+                  {searchQuery && (
+                    <button
+                      onClick={() => setSearchQuery('')}
+                      className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white"
+                    >
+                      <X className="w-3 h-3" />
+                    </button>
+                  )}
                 </div>
               </div>
 
               {((activeTab === 'confirmed_bookings' ? confirmedBookings : pendingBookingRequests).length === 0) ? (
-                <div className="bg-[#1E293B] p-12 rounded-3xl border border-slate-800 text-center space-y-3">
+                <div className="bg-gradient-to-b from-[#141C2B] to-[#0D1424] p-12 rounded-3xl border border-slate-800/80 text-center space-y-3 shadow-lg">
                   <CalendarCheck className="w-10 h-10 text-slate-500 mx-auto" />
-                  <h4 className="font-serif font-bold text-base text-white">No Booking Requests Found</h4>
+                  <h4 className="font-bold text-base text-white">No Booking Records Found</h4>
                   <p className="text-xs text-slate-400 max-w-sm mx-auto">
-                    New pre-bookings submitted via /pre-booking will automatically appear here in real-time.
+                    New pre-bookings submitted by devotees will automatically appear here in real-time.
                   </p>
                 </div>
               ) : (
@@ -788,97 +978,184 @@ export default function AdminERPClient({ initialData, session }: AdminERPClientP
                       );
                     })
                     .map((booking) => (
-                      <div key={booking.id} className="bg-[#1E293B] p-6 rounded-3xl border border-slate-800 space-y-4">
-                        <div className="flex flex-wrap justify-between items-start gap-4 border-b border-slate-800 pb-4">
-                          <div>
-                            <div className="flex items-center gap-2">
-                              <span className="text-xs font-mono font-extrabold text-[#F48D08] bg-[#F48D08]/10 px-2.5 py-1 rounded-lg border border-[#F48D08]/20">
-                                {booking.bookingRef || `PDW-${booking.id.slice(-6)}`}
-                              </span>
-                              <span className={`text-[10px] font-extrabold uppercase px-2 py-0.5 rounded ${
-                                booking.planTier === 'PLATINUM' ? 'bg-yellow-400/20 text-yellow-300 border border-yellow-400/30' : 'bg-amber-500/20 text-amber-400 border border-amber-500/30'
-                              }`}>
-                                {booking.planTier || 'GOLD'} VIP
-                              </span>
-                            </div>
-                            <h4 className="font-serif font-bold text-lg text-white mt-1">{booking.devoteeName}</h4>
-                            <div className="flex items-center gap-4 text-xs text-slate-400 mt-1">
-                              <span>📱 Phone: <strong className="text-white">{booking.phone}</strong></span>
-                              {booking.email && <span>📧 {booking.email}</span>}
-                              {booking.city && <span>📍 {booking.city}, {booking.country || 'India'}</span>}
-                            </div>
-                          </div>
-
-                          <div className="text-right space-y-2">
-                            <div>
-                              <span className="text-[10px] text-slate-400 block font-bold">Estimated Dakshina</span>
-                              <span className="text-xl font-serif font-bold text-amber-400">
-                                ₹{booking.estimatedCost?.toLocaleString('en-IN') || (booking.planTier === 'PLATINUM' ? '7,500' : '4,500')}
-                              </span>
-                            </div>
-                            <div className="flex items-center justify-end gap-2">
-                              <a
-                                href={`https://wa.me/${(booking.whatsappPhone || booking.phone).replace(/[^0-9]/g, '')}?text=${encodeURIComponent(`Pranam ${booking.devoteeName} Ji, regarding your Gaya Ji Pind Daan Pre-Booking (Ref: ${booking.bookingRef || booking.id})...`)}`}
-                                target="_blank"
-                                rel="noreferrer"
-                                className="bg-emerald-600 hover:bg-emerald-500 text-white px-3 py-1.5 rounded-xl font-bold text-xs flex items-center gap-1.5 transition-all shadow"
-                              >
-                                💬 WhatsApp Devotee
-                              </a>
-                            </div>
-                          </div>
-                        </div>
-
-                        {/* Booking Details Grid */}
-                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 bg-slate-900/60 p-4 rounded-2xl border border-slate-800 text-xs">
-                          <div>
-                            <span className="text-slate-400 block text-[10px] font-bold">Package & Ritual</span>
-                            <span className="font-bold text-white block mt-0.5">{booking.packageName || booking.purpose}</span>
-                          </div>
-                          <div>
-                            <span className="text-slate-400 block text-[10px] font-bold">Preferred Travel Date</span>
-                            <span className="font-bold text-amber-300 block mt-0.5">{booking.preferredDate || 'Flexible / Date TBD'}</span>
-                          </div>
-                          <div>
-                            <span className="text-slate-400 block text-[10px] font-bold">Gotra & Devotee Count</span>
-                            <span className="font-bold text-white block mt-0.5">Gotra: {booking.gotra || 'Not Specified'} · {booking.devoteeCount || '2 Devotees'}</span>
-                          </div>
-                        </div>
-
-                        {/* Status Change Selector */}
-                        <div className="flex flex-wrap justify-between items-center gap-4 pt-2">
-                          <div className="flex items-center gap-3">
-                            <span className="text-xs text-slate-400 font-bold">Workflow Status:</span>
-                            <select
-                              value={booking.workflowStatus || booking.status || 'NEW_REQUEST'}
-                              onChange={(e) => {
-                                const newStatus = e.target.value;
-                                setPreBookings(prev => prev.map(b => b.id === booking.id ? { ...b, workflowStatus: newStatus, status: newStatus } : b));
-                                updateBookingWorkflowStatusAction({
-                                  bookingId: booking.id,
-                                  status: newStatus,
-                                  user: currentRole
-                                }).then((res) => {
-                                  if (res && res.success) {
-                                    triggerCopyToast('Status Updated', newStatus.replace('_', ' '));
-                                  }
-                                });
-                              }}
-                              className="bg-slate-900 border border-slate-700 text-xs font-bold text-amber-400 rounded-xl p-2 focus:outline-none"
+                      <div 
+                        key={booking.id} 
+                        className="group relative rounded-2xl border border-slate-800/90 bg-gradient-to-b from-[#141C2B] to-[#0D1424] p-5 sm:p-6 shadow-xl hover:border-amber-500/40 transition-all duration-200 space-y-4"
+                      >
+                        {/* CARD TOP HEADER: REF ID, TIER, STATUS & DAKSHINA */}
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800/70 pb-4">
+                          <div className="flex flex-wrap items-center gap-2">
+                            <button
+                              onClick={() => triggerCopyToast(booking.bookingRef || `PDW-${booking.id.slice(-6)}`, 'Booking Ref ID')}
+                              title="Click to copy Reference ID"
+                              className="inline-flex items-center gap-1.5 font-mono text-xs font-bold text-amber-400 bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/25 px-2.5 py-1 rounded-lg transition-colors group/copy"
                             >
-                              <option value="NEW_REQUEST">🆕 New Request</option>
-                              <option value="PHONE_CONTACTED">📞 Phone Contacted</option>
-                              <option value="ADVANCE_AWAITED">⏳ Advance Payment Awaited</option>
-                              <option value="BOOKING_CONFIRMED">✅ Booking Confirmed</option>
-                              <option value="HOTEL_RESERVED">🏨 Hotel Reserved</option>
-                              <option value="ARRIVAL_CONFIRMED">🚩 Devotee Arrived Gaya</option>
-                              <option value="RITUAL_COMPLETED">🌸 Ritual Completed</option>
-                              <option value="CANCELLED">❌ Cancelled</option>
-                            </select>
+                              <span>{booking.bookingRef || `PDW-${booking.id.slice(-6)}`}</span>
+                              <Copy className="w-3 h-3 text-amber-500/70 group-hover/copy:text-amber-300" />
+                            </button>
+
+                            <span className={`inline-flex items-center gap-1 text-[10px] font-extrabold uppercase px-2.5 py-1 rounded-lg tracking-wider ${
+                              booking.planTier === 'PLATINUM' 
+                                ? 'bg-gradient-to-r from-amber-500/20 to-yellow-500/20 text-yellow-300 border border-yellow-500/40' 
+                                : 'bg-amber-500/15 text-amber-400 border border-amber-500/30'
+                            }`}>
+                              {booking.planTier === 'PLATINUM' ? <Crown className="w-3 h-3 text-yellow-400" /> : <Star className="w-3 h-3 text-amber-400" />}
+                              <span>{booking.planTier || 'GOLD'} VIP</span>
+                            </span>
+
+                            {/* WORKFLOW STATUS BADGE */}
+                            <span className={`text-[10px] font-bold uppercase px-2.5 py-1 rounded-lg border ${
+                              (booking.workflowStatus || booking.status) === 'BOOKING_CONFIRMED'
+                                ? 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30'
+                                : (booking.workflowStatus || booking.status) === 'ADVANCE_AWAITED'
+                                ? 'bg-sky-500/15 text-sky-400 border-sky-500/30'
+                                : (booking.workflowStatus || booking.status) === 'CANCELLED'
+                                ? 'bg-rose-500/15 text-rose-400 border-rose-500/30'
+                                : 'bg-amber-500/15 text-amber-300 border-amber-500/30'
+                            }`}>
+                              {(booking.workflowStatus || booking.status || 'NEW_REQUEST').replace(/_/g, ' ')}
+                            </span>
                           </div>
 
-                          <div className="text-xs text-slate-400">
-                            Requested: {new Date(booking.createdAt).toLocaleString('en-IN', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                          <div className="flex items-center justify-between sm:justify-end gap-3">
+                            <div className="text-left sm:text-right">
+                              <span className="text-[10px] uppercase font-bold tracking-wider text-slate-400 block">
+                                Estimated Dakshina
+                              </span>
+                              <span className="text-xl sm:text-2xl font-bold font-mono text-amber-300 tracking-tight">
+                                ₹{(booking.estimatedCost || (booking.planTier === 'PLATINUM' ? 7500 : 4500)).toLocaleString('en-IN')}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* DEVOTEES & CONTACT BAR */}
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                          <div className="space-y-1.5">
+                            <div className="flex items-center gap-2">
+                              <h4 className="font-bold text-lg text-white tracking-tight">
+                                {booking.devoteeName}
+                              </h4>
+                            </div>
+                            <div className="flex flex-wrap items-center gap-3 text-xs text-slate-300">
+                              <a 
+                                href={`tel:${booking.phone}`} 
+                                className="inline-flex items-center gap-1.5 bg-slate-800/80 hover:bg-slate-700 px-2.5 py-1 rounded-lg text-slate-200 font-semibold transition-colors"
+                              >
+                                <Phone className="w-3.5 h-3.5 text-amber-400" />
+                                <span>{booking.phone}</span>
+                              </a>
+                              {booking.city && (
+                                <span className="inline-flex items-center gap-1 text-slate-400">
+                                  <MapPin className="w-3.5 h-3.5 text-amber-500/70" />
+                                  <span>{booking.city}, {booking.country || 'India'}</span>
+                                </span>
+                              )}
+                              {booking.email && (
+                                <span className="inline-flex items-center gap-1 text-slate-400">
+                                  <Mail className="w-3.5 h-3.5 text-slate-500" />
+                                  <span>{booking.email}</span>
+                                </span>
+                              )}
+                            </div>
+                          </div>
+
+                          {/* WHATSAPP DEVOTEE BUTTON (OFFICIAL WHATSAPP DESIGN) */}
+                          <div className="shrink-0">
+                            <a
+                              href={`https://wa.me/${(booking.whatsappPhone || booking.phone).replace(/[^0-9]/g, '')}?text=${encodeURIComponent(`Pranam ${booking.devoteeName} Ji, regarding your Gaya Ji Pind Daan Pre-Booking (Ref: ${booking.bookingRef || booking.id})...`)}`}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="inline-flex items-center gap-2 bg-[#25D366] hover:bg-[#20BD5A] text-slate-950 font-bold px-4 py-2.5 rounded-xl text-xs shadow-md shadow-emerald-950/40 hover:scale-[1.02] active:scale-[0.98] transition-all"
+                            >
+                              <MessageCircle className="w-4 h-4 fill-slate-950 text-transparent" />
+                              <span>WhatsApp Devotee</span>
+                            </a>
+                          </div>
+                        </div>
+
+                        {/* BOOKING DETAILS 3-COLUMN METRIC GRID */}
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 bg-slate-900/70 p-4 rounded-xl border border-slate-800/80">
+                          <div className="space-y-1">
+                            <span className="text-[10px] uppercase font-bold tracking-wider text-slate-400 flex items-center gap-1">
+                              <Package className="w-3 h-3 text-amber-400" />
+                              Package & Ritual
+                            </span>
+                            <p className="text-xs font-semibold text-slate-100 leading-snug">
+                              {booking.packageName || booking.purpose || 'Complete Gaya Ji Pind Daan'}
+                            </p>
+                          </div>
+                          <div className="space-y-1 sm:border-l sm:border-slate-800/80 sm:pl-4">
+                            <span className="text-[10px] uppercase font-bold tracking-wider text-slate-400 flex items-center gap-1">
+                              <CalendarCheck className="w-3 h-3 text-amber-400" />
+                              Preferred Travel Date
+                            </span>
+                            <p className="text-xs font-bold text-amber-300">
+                              {booking.preferredDate || 'Flexible / Date TBD'}
+                            </p>
+                          </div>
+                          <div className="space-y-1 sm:border-l sm:border-slate-800/80 sm:pl-4">
+                            <span className="text-[10px] uppercase font-bold tracking-wider text-slate-400 flex items-center gap-1">
+                              <Users className="w-3 h-3 text-amber-400" />
+                              Gotra & Pilgrims
+                            </span>
+                            <p className="text-xs font-semibold text-slate-100">
+                              Gotra: <strong className="text-amber-200">{booking.gotra || 'Not Specified'}</strong> · {booking.devoteeCount || '2 Devotees'}
+                            </p>
+                          </div>
+                        </div>
+
+                        {/* WORKFLOW STATUS SELECTOR & TIMESTAMP */}
+                        <div className="flex flex-wrap justify-between items-center gap-3 pt-1 border-t border-slate-800/60 text-xs">
+                          <div className="flex items-center gap-2.5">
+                            <span className="text-xs text-slate-400 font-semibold">Change Status:</span>
+                            <div className="relative inline-block">
+                              <select
+                                value={booking.workflowStatus || booking.status || 'NEW_REQUEST'}
+                                onChange={(e) => {
+                                  const newStatus = e.target.value;
+                                  setPreBookings(prev => prev.map(b => b.id === booking.id ? { ...b, workflowStatus: newStatus, status: newStatus } : b));
+                                  updateBookingWorkflowStatusAction({
+                                    bookingId: booking.id,
+                                    status: newStatus,
+                                    user: currentRole
+                                  }).then((res) => {
+                                    if (res && res.success) {
+                                      triggerCopyToast('Status Updated', newStatus.replace(/_/g, ' '));
+                                    }
+                                  });
+                                }}
+                                className="bg-slate-900 border border-slate-700/80 text-xs font-bold text-amber-300 rounded-xl px-3 py-1.5 pr-7 appearance-none focus:outline-none focus:border-amber-500 cursor-pointer shadow-sm hover:border-slate-600 transition-colors"
+                              >
+                                <option value="NEW_REQUEST">🆕 New Request</option>
+                                <option value="PHONE_CONTACTED">📞 Phone Contacted</option>
+                                <option value="ADVANCE_AWAITED">⏳ Advance Payment Awaited</option>
+                                <option value="BOOKING_CONFIRMED">✅ Booking Confirmed</option>
+                                <option value="HOTEL_RESERVED">🏨 Hotel Reserved</option>
+                                <option value="ARRIVAL_CONFIRMED">🚩 Devotee Arrived Gaya</option>
+                                <option value="RITUAL_COMPLETED">🌸 Ritual Completed</option>
+                                <option value="CANCELLED">❌ Cancelled</option>
+                              </select>
+                              <span className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 text-[9px]">▼</span>
+                            </div>
+                          </div>
+
+                          <div className="flex items-center gap-3 text-slate-400">
+                            <span className="flex items-center gap-1 text-[11px]">
+                              <Clock className="w-3.5 h-3.5 text-slate-500" />
+                              <span>Requested: {new Date(booking.createdAt).toLocaleString('en-IN', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</span>
+                            </span>
+                            <button
+                              onClick={() => {
+                                if (confirm(`Are you sure you want to delete pre-booking for ${booking.devoteeName}?`)) {
+                                  deleteBookingAction(booking.id).then(loadERPData);
+                                }
+                              }}
+                              className="text-slate-500 hover:text-rose-400 p-1.5 rounded-lg hover:bg-rose-500/10 transition-colors"
+                              title="Delete Booking Record"
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
+                            </button>
                           </div>
                         </div>
                       </div>
@@ -891,24 +1168,51 @@ export default function AdminERPClient({ initialData, session }: AdminERPClientP
           {/* LEADS CRM MODULE */}
           {activeTab === 'leads_crm' && (
             <div className="space-y-6 animate-fadeIn">
-              <div className="flex justify-between items-center bg-[#1E293B] p-4 rounded-2xl border border-slate-800">
-                <span className="font-serif font-bold text-base text-white">Ad Leads & CRM Pipeline ({leads.length})</span>
+              <div className="flex justify-between items-center bg-gradient-to-r from-[#141C2B] to-[#0E1626] p-4 rounded-2xl border border-slate-800/80 shadow-md">
+                <div className="flex items-center gap-3">
+                  <span className="font-bold text-base text-white">Ad Leads & CRM Pipeline</span>
+                  <span className="bg-amber-500/15 text-amber-300 text-xs px-2.5 py-0.5 rounded-full font-bold border border-amber-500/25">
+                    {leads.length} Active Leads
+                  </span>
+                </div>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
                 {leads.map(lead => (
-                  <div key={lead.id} className="bg-[#1E293B] p-5 rounded-3xl border border-slate-800 space-y-3">
+                  <div key={lead.id} className="bg-gradient-to-b from-[#141C2B] to-[#0D1424] p-5 rounded-2xl border border-slate-800/80 hover:border-slate-700 space-y-3 shadow-lg transition-all">
                     <div className="flex justify-between items-start">
                       <div>
-                        <h4 className="font-serif font-bold text-sm text-white">{lead.name}</h4>
-                        <span className="text-xs text-[#F48D08] font-bold block">📱 {lead.phone}</span>
+                        <h4 className="font-bold text-base text-white">{lead.name}</h4>
+                        <a href={`tel:${lead.phone}`} className="text-xs text-amber-400 font-bold block hover:underline mt-0.5">
+                          📱 {lead.phone}
+                        </a>
                       </div>
-                      <span className="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700">
+                      <span className="text-[10px] font-extrabold uppercase px-2.5 py-1 rounded-lg bg-slate-800/80 text-slate-300 border border-slate-700/60">
                         {lead.status || 'NEW'}
                       </span>
                     </div>
-                    <p className="text-xs text-slate-400 bg-slate-900/60 p-3 rounded-xl border border-slate-800">
-                      {lead.packageInterest || lead.notes || 'Inquired via Meta/Google Ads'}
+                    <p className="text-xs text-slate-300 bg-slate-900/80 p-3 rounded-xl border border-slate-800/80 leading-relaxed">
+                      {lead.packageInterest || lead.notes || 'Inquired via Meta / Google Ads'}
                     </p>
+                    <div className="pt-2 flex justify-between items-center text-xs border-t border-slate-800/60">
+                      <a
+                        href={`https://wa.me/${(lead.phone || '').replace(/[^0-9]/g, '')}?text=${encodeURIComponent(`Pranam ${lead.name} Ji, regarding your Gaya Ji Pind Daan inquiry...`)}`}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="text-[#25D366] hover:underline font-bold flex items-center gap-1 text-[11px]"
+                      >
+                        <MessageCircle className="w-3.5 h-3.5" /> WhatsApp Lead
+                      </a>
+                      <button 
+                        onClick={() => {
+                          if (confirm(`Delete lead for ${lead.name}?`)) {
+                            deleteLeadAction(lead.id).then(loadERPData);
+                          }
+                        }}
+                        className="text-slate-500 hover:text-rose-400 p-1 rounded transition-colors"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
                   </div>
                 ))}
               </div>
@@ -918,18 +1222,37 @@ export default function AdminERPClient({ initialData, session }: AdminERPClientP
           {/* DEVOTEES / CUSTOMERS MODULE */}
           {activeTab === 'customers' && (
             <div className="space-y-6 animate-fadeIn">
-              <div className="flex justify-between items-center bg-[#1E293B] p-4 rounded-2xl border border-slate-800">
-                <span className="font-serif font-bold text-base text-white">Registered Devotees Directory ({customers.length})</span>
+              <div className="flex justify-between items-center bg-gradient-to-r from-[#141C2B] to-[#0E1626] p-4 rounded-2xl border border-slate-800/80 shadow-md">
+                <div className="flex items-center gap-3">
+                  <span className="font-bold text-base text-white">Registered Devotees Directory</span>
+                  <span className="bg-amber-500/15 text-amber-300 text-xs px-2.5 py-0.5 rounded-full font-bold border border-amber-500/25">
+                    {customers.length} Devotees
+                  </span>
+                </div>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
                 {customers.map(cust => (
-                  <div key={cust.id} className="bg-[#1E293B] p-5 rounded-3xl border border-slate-800 space-y-3">
+                  <div key={cust.id} className="bg-gradient-to-b from-[#141C2B] to-[#0D1424] p-5 rounded-2xl border border-slate-800/80 hover:border-slate-700 space-y-3 shadow-lg transition-all">
                     <div>
-                      <span className="text-[10px] font-mono text-[#F48D08] font-bold">{cust.customerCode || cust.id}</span>
-                      <h4 className="font-serif font-bold text-base text-white mt-0.5">{cust.name}</h4>
-                      <span className="text-xs text-slate-300 block">📱 {cust.phone}</span>
-                      {cust.email && <span className="text-xs text-slate-400 block">📧 {cust.email}</span>}
-                      {cust.city && <span className="text-xs text-slate-400 block">📍 {cust.city}, {cust.country || 'India'}</span>}
+                      <span className="text-[10px] font-mono text-amber-400 font-bold bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20">
+                        {cust.customerCode || cust.id}
+                      </span>
+                      <h4 className="font-bold text-base text-white mt-2">{cust.name}</h4>
+                      <div className="space-y-1 mt-2 text-xs text-slate-300">
+                        <a href={`tel:${cust.phone}`} className="flex items-center gap-1.5 hover:text-amber-400">
+                          <Phone className="w-3 h-3 text-amber-400" /> {cust.phone}
+                        </a>
+                        {cust.email && (
+                          <div className="flex items-center gap-1.5 text-slate-400">
+                            <Mail className="w-3 h-3 text-slate-500" /> {cust.email}
+                          </div>
+                        )}
+                        {cust.city && (
+                          <div className="flex items-center gap-1.5 text-slate-400">
+                            <MapPin className="w-3 h-3 text-amber-500/70" /> {cust.city}, {cust.country || 'India'}
+                          </div>
+                        )}
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -940,20 +1263,23 @@ export default function AdminERPClient({ initialData, session }: AdminERPClientP
           {/* REPORTS & INSIGHTS MODULE */}
           {activeTab === 'reports' && (
             <div className="space-y-6 animate-fadeIn">
-              <div className="bg-[#1E293B] p-6 rounded-3xl border border-slate-800 space-y-4">
-                <h3 className="font-serif font-bold text-xl text-white">Pilgrimage Analytics & Revenue Summary</h3>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-                  <div className="bg-slate-900 p-5 rounded-2xl border border-slate-800 space-y-1">
+              <div className="bg-gradient-to-b from-[#141C2B] to-[#0D1424] p-6 rounded-3xl border border-slate-800/80 space-y-6 shadow-xl">
+                <div>
+                  <h3 className="font-bold text-xl text-white">Pilgrimage Analytics & Revenue Summary</h3>
+                  <p className="text-xs text-slate-400 mt-1">Real-time financial metrics and pilgrimage rites conversion metrics.</p>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
+                  <div className="bg-slate-900/80 p-5 rounded-2xl border border-slate-800/80 space-y-1.5 shadow-inner">
                     <span className="text-xs text-slate-400 font-bold block">Total Pre-Booking Requests</span>
-                    <span className="text-3xl font-serif font-bold text-amber-400">{preBookings.length}</span>
+                    <span className="text-3xl font-bold font-mono text-amber-400">{preBookings.length}</span>
                   </div>
-                  <div className="bg-slate-900 p-5 rounded-2xl border border-slate-800 space-y-1">
-                    <span className="text-xs text-slate-400 font-bold block">Confirmed Rites</span>
-                    <span className="text-3xl font-serif font-bold text-emerald-400">{confirmedCount}</span>
+                  <div className="bg-slate-900/80 p-5 rounded-2xl border border-slate-800/80 space-y-1.5 shadow-inner">
+                    <span className="text-xs text-slate-400 font-bold block">Confirmed Pilgrimages</span>
+                    <span className="text-3xl font-bold font-mono text-emerald-400">{confirmedCount}</span>
                   </div>
-                  <div className="bg-slate-900 p-5 rounded-2xl border border-slate-800 space-y-1">
+                  <div className="bg-slate-900/80 p-5 rounded-2xl border border-slate-800/80 space-y-1.5 shadow-inner">
                     <span className="text-xs text-slate-400 font-bold block">Gross Estimated Volume</span>
-                    <span className="text-3xl font-serif font-bold text-yellow-300">₹{totalRevenue.toLocaleString('en-IN')}</span>
+                    <span className="text-3xl font-bold font-mono text-yellow-300">₹{totalRevenue.toLocaleString('en-IN')}</span>
                   </div>
                 </div>
               </div>
@@ -964,42 +1290,49 @@ export default function AdminERPClient({ initialData, session }: AdminERPClientP
           {activeTab === 'packages' && (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 animate-fadeIn">
               {packages.map(pkg => (
-                <div key={pkg.id} className="bg-[#1E293B] p-6 rounded-3xl border border-slate-800 space-y-4 flex flex-col justify-between">
+                <div key={pkg.id} className="bg-gradient-to-b from-[#141C2B] to-[#0D1424] p-6 rounded-2xl border border-slate-800/80 hover:border-slate-700 space-y-4 flex flex-col justify-between shadow-xl transition-all">
                   <div className="space-y-3">
-                    <div className="flex justify-between items-start">
+                    <div className="flex justify-between items-start gap-4">
                       <div>
-                        <span className="text-[10px] font-extrabold uppercase px-2.5 py-0.5 rounded bg-[#F48D08]/20 text-[#F48D08] border border-[#F48D08]/30">
+                        <span className="text-[10px] font-extrabold uppercase px-2.5 py-0.5 rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/30">
                           {pkg.badge || 'MOST POPULAR'}
                         </span>
-                        <h4 className="font-serif font-bold text-lg text-white mt-1">{pkg.title}</h4>
-                        {pkg.hindiTitle && <span className="text-xs text-[#F48D08] font-bold block">{pkg.hindiTitle}</span>}
+                        <h4 className="font-bold text-lg text-white mt-1.5 leading-snug">{pkg.title}</h4>
+                        {pkg.hindiTitle && <span className="text-xs text-amber-400 font-semibold block">{pkg.hindiTitle}</span>}
                         <span className="text-xs text-slate-400 block mt-0.5">{pkg.duration}</span>
                       </div>
-                      <div className="text-right">
-                        <span className="text-[10px] text-slate-400 block font-bold">Gold Plan</span>
-                        <span className="text-lg font-serif font-bold text-amber-400">₹{pkg.priceINR?.toLocaleString('en-IN')}</span>
+                      <div className="text-right shrink-0">
+                        <span className="text-[10px] text-slate-400 block font-semibold uppercase">Gold Tier</span>
+                        <span className="text-lg font-bold font-mono text-amber-400">₹{pkg.priceINR?.toLocaleString('en-IN')}</span>
                         {pkg.goldPriceINR && (
                           <div className="mt-1">
-                            <span className="text-[10px] text-slate-400 block font-bold">Platinum VIP</span>
-                            <span className="text-lg font-serif font-bold text-yellow-300">₹{pkg.goldPriceINR?.toLocaleString('en-IN')}</span>
+                            <span className="text-[10px] text-slate-400 block font-semibold uppercase">Platinum VIP</span>
+                            <span className="text-lg font-bold font-mono text-yellow-300">₹{pkg.goldPriceINR?.toLocaleString('en-IN')}</span>
                           </div>
                         )}
                       </div>
                     </div>
-                    <p className="text-xs text-slate-300 leading-relaxed bg-slate-900/60 p-3 rounded-xl border border-slate-800">{pkg.shortDesc}</p>
+                    <p className="text-xs text-slate-300 leading-relaxed bg-slate-900/80 p-3 rounded-xl border border-slate-800/80">{pkg.shortDesc}</p>
                     
                     {/* Key inclusions snippet */}
                     <div className="text-[11px] text-slate-400 space-y-1 pt-1">
-                      <span className="font-bold text-white block">Key Highlights:</span>
-                      <p className="line-clamp-2 italic">{pkg.inclusions}</p>
+                      <span className="font-bold text-white block">Key Inclusions:</span>
+                      <p className="line-clamp-2 text-slate-300">{pkg.inclusions}</p>
                     </div>
                   </div>
 
-                  <div className="flex justify-between items-center text-xs pt-3 border-t border-slate-800">
-                    <button onClick={() => handleEditPackage(pkg)} className="bg-slate-800 hover:bg-slate-700 text-[#F48D08] px-3.5 py-1.5 rounded-xl font-bold flex items-center gap-1.5">
+                  <div className="flex justify-between items-center text-xs pt-3 border-t border-slate-800/80">
+                    <button onClick={() => handleEditPackage(pkg)} className="bg-slate-800/80 hover:bg-slate-700 text-amber-300 px-3.5 py-1.5 rounded-xl font-bold flex items-center gap-1.5 border border-slate-700/60 transition-colors">
                       <Edit className="w-3.5 h-3.5" /> Edit Package (17+ Fields)
                     </button>
-                    <button onClick={() => deletePackageAction(pkg.id).then(loadERPData)} className="text-red-400 font-bold flex items-center gap-1">
+                    <button 
+                      onClick={() => {
+                        if (confirm(`Delete package "${pkg.title}"?`)) {
+                          deletePackageAction(pkg.id).then(loadERPData);
+                        }
+                      }} 
+                      className="text-slate-500 hover:text-rose-400 font-bold flex items-center gap-1 transition-colors"
+                    >
                       <Trash2 className="w-3.5 h-3.5" /> Delete
                     </button>
                   </div>
@@ -1012,27 +1345,34 @@ export default function AdminERPClient({ initialData, session }: AdminERPClientP
           {activeTab === 'hero_slides' && (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 animate-fadeIn">
               {heroSlides.map(slide => (
-                <div key={slide.id} className="bg-[#1E293B] p-6 rounded-3xl border border-slate-800 space-y-4 flex flex-col justify-between">
+                <div key={slide.id} className="bg-gradient-to-b from-[#141C2B] to-[#0D1424] p-6 rounded-2xl border border-slate-800/80 hover:border-slate-700 space-y-4 flex flex-col justify-between shadow-xl transition-all">
                   <div className="space-y-3">
-                    <div className="h-44 bg-slate-900 rounded-2xl overflow-hidden relative">
+                    <div className="h-44 bg-slate-900 rounded-xl overflow-hidden relative border border-slate-800">
                       <img src={slide.mediaUrl} alt={slide.title} className="w-full h-full object-cover" />
-                      <div className="absolute top-3 left-3 bg-black/60 backdrop-blur-md px-3 py-1 rounded-full text-[10px] font-bold text-amber-400">
+                      <div className="absolute top-3 left-3 bg-black/70 backdrop-blur-md px-3 py-1 rounded-full text-[10px] font-bold text-amber-300 border border-amber-500/30">
                         Order #{slide.order || 1}
                       </div>
                     </div>
                     <div>
-                      <span className="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded bg-amber-500/20 text-[#F48D08]">
+                      <span className="text-[10px] font-extrabold uppercase px-2.5 py-0.5 rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/30">
                         {slide.badge || 'GAYA JI SACRED PILGRIMAGE'}
                       </span>
-                      <h4 className="font-serif font-bold text-lg text-white mt-1">{slide.title}</h4>
+                      <h4 className="font-bold text-lg text-white mt-1.5">{slide.title}</h4>
                       <p className="text-xs text-slate-300 leading-relaxed mt-1">{slide.subtitle}</p>
                     </div>
                   </div>
-                  <div className="flex justify-between items-center text-xs pt-3 border-t border-slate-800">
-                    <button onClick={() => handleEditHeroSlide(slide)} className="bg-slate-800 hover:bg-slate-700 text-[#F48D08] px-3.5 py-1.5 rounded-xl font-bold flex items-center gap-1.5">
+                  <div className="flex justify-between items-center text-xs pt-3 border-t border-slate-800/80">
+                    <button onClick={() => handleEditHeroSlide(slide)} className="bg-slate-800/80 hover:bg-slate-700 text-amber-300 px-3.5 py-1.5 rounded-xl font-bold flex items-center gap-1.5 border border-slate-700/60 transition-colors">
                       <Edit className="w-3.5 h-3.5" /> Edit Hero Slide
                     </button>
-                    <button onClick={() => deleteHeroSlideAction(slide.id).then(loadERPData)} className="text-red-400 font-bold flex items-center gap-1">
+                    <button 
+                      onClick={() => {
+                        if (confirm(`Delete slide "${slide.title}"?`)) {
+                          deleteHeroSlideAction(slide.id).then(loadERPData);
+                        }
+                      }} 
+                      className="text-slate-500 hover:text-rose-400 font-bold flex items-center gap-1 transition-colors"
+                    >
                       <Trash2 className="w-3.5 h-3.5" /> Delete
                     </button>
                   </div>
@@ -1043,9 +1383,9 @@ export default function AdminERPClient({ initialData, session }: AdminERPClientP
 
           {/* ARTICLES CMS MODULE */}
           {activeTab === 'knowledge_centre' && (
-            <div className="bg-[#1E293B] rounded-3xl border border-slate-800 overflow-hidden animate-fadeIn">
+            <div className="bg-gradient-to-b from-[#141C2B] to-[#0D1424] rounded-2xl border border-slate-800/80 overflow-hidden shadow-xl animate-fadeIn">
               <table className="w-full text-left text-xs text-slate-300">
-                <thead className="bg-slate-900 border-b border-slate-800 text-slate-400 uppercase font-semibold text-[10px]">
+                <thead className="bg-[#0E1626] border-b border-slate-800/80 text-slate-400 uppercase font-semibold text-[10px]">
                   <tr>
                     <th className="p-4">Article Title</th>
                     <th className="p-4">Category</th>
@@ -1053,17 +1393,24 @@ export default function AdminERPClient({ initialData, session }: AdminERPClientP
                     <th className="p-4 text-right">Actions</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-800">
+                <tbody className="divide-y divide-slate-800/60">
                   {articles.map(art => (
-                    <tr key={art.id} className="hover:bg-slate-800/60">
+                    <tr key={art.id} className="hover:bg-slate-800/40 transition-colors">
                       <td className="p-4 font-bold text-white">{art.title}</td>
                       <td className="p-4 text-slate-400">{art.category}</td>
                       <td className="p-4 text-slate-400">{art.readTime}</td>
                       <td className="p-4 text-right space-x-2">
-                        <button onClick={() => handleEditArticle(art)} className="bg-slate-800 hover:bg-slate-700 text-[#F48D08] px-3 py-1 rounded-xl font-bold">
+                        <button onClick={() => handleEditArticle(art)} className="bg-slate-800/80 hover:bg-slate-700 text-amber-300 px-3 py-1 rounded-xl font-bold border border-slate-700/60">
                           Edit
                         </button>
-                        <button onClick={() => deleteArticleAction(art.id).then(loadERPData)} className="text-red-400 hover:text-red-300 p-1">
+                        <button 
+                          onClick={() => {
+                            if (confirm(`Delete article "${art.title}"?`)) {
+                              deleteArticleAction(art.id).then(loadERPData);
+                            }
+                          }} 
+                          className="text-slate-500 hover:text-rose-400 p-1 transition-colors"
+                        >
                           <Trash2 className="w-4 h-4 inline" />
                         </button>
                       </td>
@@ -1078,7 +1425,7 @@ export default function AdminERPClient({ initialData, session }: AdminERPClientP
           {activeTab === 'sacred_places' && (
             <div className="space-y-6 animate-fadeIn">
               {/* Top Controls: Search & Add Button */}
-              <div className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-[#1E293B] p-4 rounded-2xl border border-slate-800">
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-gradient-to-r from-[#141C2B] to-[#0E1626] p-4 rounded-2xl border border-slate-800/80 shadow-md">
                 <div className="relative w-full sm:w-80">
                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
                   <input
@@ -1086,7 +1433,8 @@ export default function AdminERPClient({ initialData, session }: AdminERPClientP
                     value={sacredPlaceSearch}
                     onChange={e => setSacredPlaceSearch(e.target.value)}
                     placeholder="Search from 45+ Sacred Vedis..."
-                    className="w-full pl-9 pr-3 py-2 bg-slate-900 border border-slate-700 rounded-xl text-xs text-white placeholder:text-slate-400 focus:outline-none focus:border-[#C6922E]"
+                    style={{ backgroundColor: '#0B1120', color: '#FFFFFF' }}
+                    className="w-full pl-9 pr-3 py-2 bg-[#0B1120] border border-slate-700/80 rounded-xl text-xs text-white placeholder:text-slate-400 focus:outline-none focus:border-amber-500"
                   />
                 </div>
                 <div className="flex items-center gap-3 w-full sm:w-auto justify-between sm:justify-end">
@@ -1099,9 +1447,9 @@ export default function AdminERPClient({ initialData, session }: AdminERPClientP
                       setModalType('place');
                       setIsModalOpen(true);
                     }}
-                    className="bg-[#C6922E] hover:bg-[#A97718] text-white px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all shrink-0"
+                    className="bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all shadow-md shrink-0"
                   >
-                    <Plus className="w-3.5 h-3.5" /> + Add Sacred Place
+                    <Plus className="w-3.5 h-3.5" /> Add Sacred Place
                   </button>
                 </div>
               </div>
@@ -1119,7 +1467,7 @@ export default function AdminERPClient({ initialData, session }: AdminERPClientP
                     );
                   })
                   .map(place => (
-                    <div key={place.id} className="bg-[#1E293B] p-5 rounded-3xl border border-slate-800 space-y-4 flex flex-col justify-between">
+                    <div key={place.id} className="bg-gradient-to-b from-[#141C2B] to-[#0D1424] p-5 rounded-2xl border border-slate-800/80 hover:border-slate-700 space-y-4 flex flex-col justify-between shadow-xl transition-all">
                       <div className="flex gap-4 items-start">
                         <img
                           src={place.heroImage || '/images/gaya_vishnupad.jpg'}
@@ -1129,7 +1477,7 @@ export default function AdminERPClient({ initialData, session }: AdminERPClientP
                         <div className="space-y-1 min-w-0 flex-1">
                           <div className="flex justify-between items-start gap-2">
                             <h4 className="font-bold text-sm text-white truncate">{place.name}</h4>
-                            <span className="text-xs text-[#C6922E] font-bold shrink-0">{place.hindiName}</span>
+                            <span className="text-xs text-amber-400 font-bold shrink-0">{place.hindiName}</span>
                           </div>
                           {place.tagline && (
                             <p className="text-[11px] text-amber-300 line-clamp-1">{place.tagline}</p>
@@ -1137,7 +1485,7 @@ export default function AdminERPClient({ initialData, session }: AdminERPClientP
                           <p className="text-xs text-slate-300 line-clamp-2 leading-relaxed">{place.description}</p>
                         </div>
                       </div>
-                      <div className="flex justify-between items-center text-xs pt-3 border-t border-slate-800">
+                      <div className="flex justify-between items-center text-xs pt-3 border-t border-slate-800/80">
                         <a
                           href={`/sacred-places/${place.slug}`}
                           target="_blank"
@@ -1147,10 +1495,17 @@ export default function AdminERPClient({ initialData, session }: AdminERPClientP
                           <span>View Public Page ↗</span>
                         </a>
                         <div className="flex items-center gap-2">
-                          <button onClick={() => handleEditPlace(place)} className="bg-slate-800 hover:bg-slate-700 text-[#C6922E] px-3 py-1.5 rounded-xl font-bold flex items-center gap-1">
-                            <Edit className="w-3.5 h-3.5" /> Edit & Photo
+                          <button onClick={() => handleEditPlace(place)} className="bg-slate-800/80 hover:bg-slate-700 text-amber-300 px-3 py-1.5 rounded-xl font-bold flex items-center gap-1 border border-slate-700/60 transition-colors">
+                            <Edit className="w-3.5 h-3.5" /> Edit
                           </button>
-                          <button onClick={() => deleteSacredPlaceAction(place.id).then(loadERPData)} className="text-red-400 hover:text-red-300 font-bold flex items-center gap-1 p-1">
+                          <button 
+                            onClick={() => {
+                              if (confirm(`Delete sacred place "${place.name}"?`)) {
+                                deleteSacredPlaceAction(place.id).then(loadERPData);
+                              }
+                            }} 
+                            className="text-slate-500 hover:text-rose-400 font-bold flex items-center gap-1 p-1 transition-colors"
+                          >
                             <Trash2 className="w-3.5 h-3.5" /> Delete
                           </button>
                         </div>
@@ -1164,7 +1519,7 @@ export default function AdminERPClient({ initialData, session }: AdminERPClientP
           {/* TESTIMONIALS CMS MODULE */}
           {activeTab === 'testimonials' && (
             <div className="space-y-6 animate-fadeIn">
-              <div className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-[#1E293B] p-4 rounded-2xl border border-slate-800">
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-gradient-to-r from-[#141C2B] to-[#0E1626] p-4 rounded-2xl border border-slate-800/80 shadow-md">
                 <div>
                   <h3 className="font-bold text-sm text-white">Devotee Pooja Photos & Video Testimonials</h3>
                   <p className="text-xs text-slate-400">Manage authentic devotee recordings, pooja photos, and pilgrimage reviews.</p>
@@ -1187,15 +1542,15 @@ export default function AdminERPClient({ initialData, session }: AdminERPClientP
                     setModalType('testimonial');
                     setIsModalOpen(true);
                   }}
-                  className="bg-[#C6922E] hover:bg-[#A97718] text-white px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all shrink-0"
+                  className="bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all shadow-md shrink-0"
                 >
-                  <Plus className="w-3.5 h-3.5" /> + Add Devotee Video / Review
+                  <Plus className="w-3.5 h-3.5" /> Add Devotee Review
                 </button>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {testimonials.map(t => (
-                  <div key={t.id} className="bg-[#1E293B] rounded-3xl border border-slate-800 overflow-hidden flex flex-col justify-between shadow-sm">
+                  <div key={t.id} className="bg-gradient-to-b from-[#141C2B] to-[#0D1424] rounded-2xl border border-slate-800/80 overflow-hidden flex flex-col justify-between shadow-xl">
                     {/* Pooja Image & Video Status */}
                     <div className="relative h-44 bg-slate-900">
                       <img
@@ -1205,7 +1560,7 @@ export default function AdminERPClient({ initialData, session }: AdminERPClientP
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
                       {t.videoUrl ? (
-                        <span className="absolute top-3 right-3 bg-[#C6922E] text-white px-2.5 py-1 rounded-full text-[10.5px] font-bold flex items-center gap-1 shadow">
+                        <span className="absolute top-3 right-3 bg-amber-500 text-slate-950 px-2.5 py-1 rounded-full text-[10.5px] font-bold flex items-center gap-1 shadow">
                           ▶ Video Attached
                         </span>
                       ) : (
@@ -1225,12 +1580,19 @@ export default function AdminERPClient({ initialData, session }: AdminERPClientP
                         <p className="text-xs text-slate-300 italic line-clamp-3 leading-relaxed">&quot;{t.content}&quot;</p>
                       </div>
 
-                      <div className="flex justify-between items-center text-xs pt-3 border-t border-slate-800">
-                        <button onClick={() => handleEditTestimonial(t)} className="bg-slate-800 hover:bg-slate-700 text-[#C6922E] px-3.5 py-1.5 rounded-xl font-bold flex items-center gap-1">
-                          <Edit className="w-3.5 h-3.5" /> Edit Video/Review
+                      <div className="flex justify-between items-center text-xs pt-3 border-t border-slate-800/80">
+                        <button onClick={() => handleEditTestimonial(t)} className="bg-slate-800/80 hover:bg-slate-700 text-amber-300 px-3.5 py-1.5 rounded-xl font-bold flex items-center gap-1 border border-slate-700/60 transition-colors">
+                          <Edit className="w-3.5 h-3.5" /> Edit Review
                         </button>
-                        <button onClick={() => deleteTestimonialAction(t.id).then(loadERPData)} className="text-red-400 hover:text-red-300 font-bold p-1">
-                          <Trash2 className="w-3.5 h-3.5" /> Delete
+                        <button 
+                          onClick={() => {
+                            if (confirm(`Delete review from "${t.author}"?`)) {
+                              deleteTestimonialAction(t.id).then(loadERPData);
+                            }
+                          }} 
+                          className="text-slate-500 hover:text-rose-400 font-bold p-1 transition-colors"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
                         </button>
                       </div>
                     </div>
@@ -1244,17 +1606,26 @@ export default function AdminERPClient({ initialData, session }: AdminERPClientP
           {activeTab === 'media_library' && (
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 animate-fadeIn">
               {mediaItems.map(m => (
-                <div key={m.id} className="bg-[#1E293B] p-4 rounded-3xl border border-slate-800 space-y-3">
-                  <div className="h-36 bg-slate-900 rounded-2xl overflow-hidden relative">
+                <div key={m.id} className="bg-gradient-to-b from-[#141C2B] to-[#0D1424] p-4 rounded-2xl border border-slate-800/80 space-y-3 shadow-xl">
+                  <div className="h-36 bg-slate-900 rounded-xl overflow-hidden relative border border-slate-800">
                     <img src={m.url} alt={m.title} className="w-full h-full object-cover" />
                   </div>
                   <div>
                     <h4 className="font-bold text-xs text-white truncate">{m.title}</h4>
                     <span className="text-[10px] text-slate-400">{m.folder}</span>
                   </div>
-                  <div className="flex justify-between text-xs pt-2 border-t border-slate-800">
-                    <button onClick={() => triggerCopyToast(m.url, 'Image URL')} className="text-[#F48D08] font-bold">Copy URL</button>
-                    <button onClick={() => deleteMediaItemAction(m.id).then(loadERPData)} className="text-red-400 font-bold">Delete</button>
+                  <div className="flex justify-between text-xs pt-2 border-t border-slate-800/80">
+                    <button onClick={() => triggerCopyToast(m.url, 'Image URL')} className="text-amber-400 hover:underline font-bold">Copy URL</button>
+                    <button 
+                      onClick={() => {
+                        if (confirm(`Delete media item "${m.title}"?`)) {
+                          deleteMediaItemAction(m.id).then(loadERPData);
+                        }
+                      }} 
+                      className="text-slate-500 hover:text-rose-400 font-bold transition-colors"
+                    >
+                      Delete
+                    </button>
                   </div>
                 </div>
               ))}
@@ -1263,19 +1634,19 @@ export default function AdminERPClient({ initialData, session }: AdminERPClientP
 
           {/* SEO & AI SEARCH CONTROL CENTER MODULE */}
           {activeTab === 'seo_manager' && (
-            <form onSubmit={handleSaveSettings} className="bg-[#1E293B] p-8 rounded-3xl border border-slate-800 space-y-6 text-xs animate-fadeIn max-w-4xl">
-              <div className="flex justify-between items-center border-b border-slate-800 pb-4">
+            <form onSubmit={handleSaveSettings} className="bg-gradient-to-b from-[#141C2B] to-[#0D1424] p-6 sm:p-8 rounded-2xl border border-slate-800/80 space-y-6 text-xs animate-fadeIn max-w-5xl shadow-xl">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800/80 pb-5">
                 <div>
-                  <h3 className="font-serif font-bold text-xl text-white flex items-center gap-2">
-                    <Globe className="w-5 h-5 text-[#F48D08]" />
+                  <h3 className="font-bold text-lg sm:text-xl text-white flex items-center gap-2">
+                    <Globe className="w-5 h-5 text-amber-400" />
                     <span>SEO, Local GEO & AI Search Command Center</span>
                   </h3>
                   <p className="text-slate-400 text-xs mt-1">
                     Optimize PindDaanWale for Google Search, ChatGPT, Perplexity, Gemini, Claude, and Local GEO Maps.
                   </p>
                 </div>
-                <button type="submit" className="bg-gradient-to-r from-[#F48D08] to-[#D97706] hover:from-[#D97706] hover:to-[#B45309] text-white px-6 py-3 rounded-xl font-bold flex items-center gap-2 shadow-lg">
-                  <Save className="w-4 h-4" /> Save Live SEO & AI Rules
+                <button type="submit" className="bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white px-5 py-2.5 rounded-xl font-bold flex items-center gap-2 shadow-md shrink-0">
+                  <Save className="w-4 h-4" /> Save Live Rules
                 </button>
               </div>
 
@@ -1475,12 +1846,15 @@ export default function AdminERPClient({ initialData, session }: AdminERPClientP
 
           {/* ERP SETTINGS */}
           {activeTab === 'settings' && (
-            <form onSubmit={handleSaveSettings} className="bg-[#1E293B] p-8 rounded-3xl border border-slate-800 space-y-6 text-xs animate-fadeIn max-w-2xl">
-              <h3 className="font-serif font-bold text-lg text-white">Official Brand Logo, Bank, Address & SMTP Settings</h3>
+            <form onSubmit={handleSaveSettings} className="bg-gradient-to-b from-[#141C2B] to-[#0D1424] p-6 sm:p-8 rounded-2xl border border-slate-800/80 space-y-6 text-xs animate-fadeIn max-w-3xl shadow-xl">
+              <div className="border-b border-slate-800/80 pb-4">
+                <h3 className="font-bold text-lg text-white">Official Brand Logo, Bank, Address & SMTP Settings</h3>
+                <p className="text-xs text-slate-400 mt-0.5">Configure platform branding, receiving bank accounts, and transactional mail server.</p>
+              </div>
               
               {/* SECTION 1: BRANDING & CONTACT */}
-              <div className="bg-slate-900/60 p-5 rounded-2xl border border-slate-800 space-y-4">
-                <div className="flex items-center gap-2 font-serif font-bold text-sm text-[#F48D08] border-b border-slate-800 pb-2">
+              <div className="bg-slate-900/80 p-5 rounded-2xl border border-slate-800/80 space-y-4">
+                <div className="flex items-center gap-2 font-bold text-sm text-amber-400 border-b border-slate-800/80 pb-2">
                   <Globe className="w-4 h-4" />
                   <span>SECTION 1: Website Branding & Official Address</span>
                 </div>
@@ -1670,22 +2044,22 @@ export default function AdminERPClient({ initialData, session }: AdminERPClientP
       {/* ========================================================== */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
-          <div className="bg-[#1E293B] rounded-3xl max-w-2xl w-full border border-slate-700/60 text-white shadow-2xl my-8 overflow-hidden animate-fadeIn">
+          <div className="bg-gradient-to-b from-[#141C2B] to-[#0D1424] rounded-2xl max-w-2xl w-full border border-slate-700/80 text-white shadow-2xl my-8 overflow-hidden animate-fadeIn">
             
             {/* MODAL HEADER */}
-            <div className="bg-slate-900/90 px-6 py-5 border-b border-slate-800 flex justify-between items-center sticky top-0 z-10 backdrop-blur-md">
+            <div className="bg-[#0E1626]/95 px-6 py-5 border-b border-slate-800 flex justify-between items-center sticky top-0 z-10 backdrop-blur-md">
               <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-2xl bg-gradient-to-tr from-[#6f1d14] via-[#F48D08] to-[#C6922E] flex items-center justify-center text-white shadow-md">
+                <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-[#8B2516] via-[#B45309] to-[#F59E0B] flex items-center justify-center text-white shadow-md">
                   <Package className="w-4 h-4" />
                 </div>
                 <div>
-                  <h3 className="font-serif font-bold text-lg text-white">Add / Edit {modalType.toUpperCase()} Record</h3>
-                  <p className="text-[11px] text-slate-400">Configure 17+ enterprise ritual fields, inclusions & dual pricing matrix.</p>
+                  <h3 className="font-bold text-lg text-white">Add / Edit {modalType.toUpperCase()} Record</h3>
+                  <p className="text-[11px] text-slate-400">Configure ritual fields, inclusions, pricing & media.</p>
                 </div>
               </div>
               <button 
                 onClick={() => setIsModalOpen(false)}
-                className="w-8 h-8 rounded-full bg-slate-800 hover:bg-slate-700 flex items-center justify-center text-slate-400 hover:text-white transition-all border border-slate-700"
+                className="w-8 h-8 rounded-full bg-slate-800/80 hover:bg-slate-700 flex items-center justify-center text-slate-400 hover:text-white transition-all border border-slate-700/60"
               >
                 <X className="w-4 h-4" />
               </button>
