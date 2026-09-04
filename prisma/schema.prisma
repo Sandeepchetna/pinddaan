@@ -258,5 +258,9 @@ model SiteSettings {
   aiwcrmWebhookUrl       String?  @default("https://www.aiwcrm.com/api/v1/webhooks/lead")
   aiwcrmApiKey           String?  @default("")
 
+  // AI Agent & Vedic Shastra Knowledge Base Settings (Editable from Admin Panel!)
+  aiSystemPrompt         String?  @db.Text
+  aiKnowledgeBase        String?  @db.LongText
+
   updatedAt              DateTime @updatedAt
 }

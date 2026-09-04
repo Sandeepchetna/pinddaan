@@ -1,21 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { getCachedData } from '@/lib/dbCache';
-
-// Deep Gaya Shastra & Tirth Purohit System Instructions Base
-const GAYA_PUROHIT_BASE_PROMPT = `
-आप "पंडित जी AI" (PindDaanWale.com के प्रामाणिक गया जी तीर्थ पुरोहित एवं वैदिक मार्गदर्शक) हैं।
-आपका कार्य गया तीर्थ, पिंडदान, श्राद्ध, तर्पण, गोत्र संकल्प और विष्णुपद मंदिर के संदर्भ में श्रद्धालुओं का प्रामाणिक, संवेदनशील एवं शास्त्रसम्मत मार्गदर्शन करना है।
-
-मुख्य नियम एवं मर्यादा:
-1. अभिवादन: सदैव आदरपूर्वक 'जय श्री विष्णु! 🙏' या 'प्रणाम! 🙏' से शुरुआत करें।
-2. भाषा: श्रद्धालु जिस भाषा में पूछे (हिंदी, हिंग्लिश, या अंग्रेज़ी), उसी में सरल, मधुर एवं आत्मीय भाषा में उत्तर दें।
-3. प्रामाणिकता (शास्त्र): गरुड़ पुराण, वायु पुराण (गया माहात्म्य) के आधार पर उत्तर दें।
-4. मुख्य तीन वेदियाँ (त्रि-स्थली): 1. फल्गु नदी (आदि गया), 2. विष्णुपद मंदिर (भगवान विष्णु के चरण चिह्न), 3. अक्षयवट (अमर वटवृक्ष जहाँ सुफल प्राप्त होता है)। कुल 45 वेदियाँ हैं।
-5. वरिष्ठ नागरिकों हेतु सुविधा: ई-रिक्शा, व्हीलचेयर एवं सुगम दर्शन सहायता।
-6. संपर्क व सहायता: श्रद्धालु को बताएं कि वे सीधे कॉल (+91 7463055338) कर सकते हैं या WhatsApp पर बात कर सकते हैं।
-7. उत्तर संक्षिप्त (2-4 पैराग्राफ), स्पष्ट एवं अत्यंत विनम्र रखें। अनावश्यक बातें न जोड़ें।
-`;
+import { DEFAULT_AI_SYSTEM_PROMPT, DEFAULT_GAYA_KNOWLEDGE_BASE } from '@/lib/gayaKnowledgeBase';
 
 export async function POST(req: NextRequest) {
   try {
@@ -24,7 +10,29 @@ export async function POST(req: NextRequest) {
 
     const lastMessage = messages[messages.length - 1]?.content || '';
 
-    // DYNAMIC LIVE PACKAGES FROM HOSTINGER DATABASE
+    // 1. DYNAMIC LIVE SETTINGS & KNOWLEDGE BASE FROM ADMIN PANEL / SITESETTINGS
+    let activeSystemPrompt = DEFAULT_AI_SYSTEM_PROMPT;
+    let activeKnowledgeBase = DEFAULT_GAYA_KNOWLEDGE_BASE;
+
+    try {
+      const db = prisma as any;
+      if (db.siteSettings) {
+        const settings = await getCachedData('ai_site_settings', async () => {
+          return await db.siteSettings.findUnique({ where: { id: 'default' } });
+        }, 60);
+
+        if (settings?.aiSystemPrompt?.trim()) {
+          activeSystemPrompt = settings.aiSystemPrompt.trim();
+        }
+        if (settings?.aiKnowledgeBase?.trim()) {
+          activeKnowledgeBase = settings.aiKnowledgeBase.trim();
+        }
+      }
+    } catch (err) {
+      console.warn('AI settings cache notice:', err);
+    }
+
+    // 2. DYNAMIC LIVE PACKAGES FROM HOSTINGER DATABASE
     let packageInfoText = `
 • 1-दिवसीय आवश्यक पिंडदान (1 Day): ₹4,500 — फल्गु नदी, विष्णुपद चरण एवं अक्षयवट (सम्पूर्ण पूजन सामग्री व पंडा दक्षिणा सहित)
 • 3-दिवसीय सम्पूर्ण त्रि-स्थली (3 Days): ₹12,500 — 45 वेदियाँ, सम्पूर्ण पार्वण श्राद्ध, एसी वाहन, होटल समन्वय
@@ -51,10 +59,17 @@ export async function POST(req: NextRequest) {
       console.warn('Dynamic packages fallback notice:', e);
     }
 
-    const dynamicSystemPrompt = `
-${GAYA_PUROHIT_BASE_PROMPT}
+    const dynamicFullPrompt = `
+${activeSystemPrompt}
 
-पारदर्शी पैकेज व दक्षिणा (Live Database Pricing - कोई मोलभाव या बिचौलिया नहीं):
+================================================================================
+आधिकारिक शास्त्र एवं सरकारी ज्ञान-कोष (Garuda Purana, Vayu Purana & pitrapakshagaya.bihar.gov.in):
+================================================================================
+${activeKnowledgeBase}
+
+================================================================================
+वर्तमान सक्रिय पिंडदान पैकेज एवं आधिकारिक दक्षिणा दरें (Live Database Records):
+================================================================================
 ${packageInfoText}
 `;
 
@@ -110,7 +125,7 @@ ${packageInfoText}
             body: JSON.stringify({
               model: modelName,
               messages: [
-                { role: 'system', content: dynamicSystemPrompt },
+                { role: 'system', content: dynamicFullPrompt },
                 ...messages.slice(-6) // Keep last 6 exchanges for context
               ],
               temperature: 0.5,

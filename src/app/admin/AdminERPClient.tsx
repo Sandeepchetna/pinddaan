@@ -69,9 +69,10 @@ import {
   deleteMediaItemAction,
   upsertHeroSlideAction,
   deleteHeroSlideAction,
-  updateSiteSettingsAction,
+  updateSiteSettingsAction, 
   logoutAdminAction
 } from './actions';
+import { DEFAULT_AI_SYSTEM_PROMPT, DEFAULT_GAYA_KNOWLEDGE_BASE } from '@/lib/gayaKnowledgeBase';
 
 type ModuleTab = 
   | 'dashboard'
@@ -354,7 +355,9 @@ export default function AdminERPClient({ initialData, session }: AdminERPClientP
     smtpUser: initialData.siteSettings?.smtpUser || 'support@pinddaanwale.com',
     smtpPassword: initialData.siteSettings?.smtpPassword || '',
     smtpFromEmail: initialData.siteSettings?.smtpFromEmail || 'support@pinddaanwale.com',
-    adminNotificationEmail: initialData.siteSettings?.adminNotificationEmail || 'support@pinddaanwale.com'
+    adminNotificationEmail: initialData.siteSettings?.adminNotificationEmail || 'support@pinddaanwale.com',
+    aiSystemPrompt: initialData.siteSettings?.aiSystemPrompt || DEFAULT_AI_SYSTEM_PROMPT,
+    aiKnowledgeBase: initialData.siteSettings?.aiKnowledgeBase || DEFAULT_GAYA_KNOWLEDGE_BASE
   });
 
   // Reload ERP Data
@@ -405,7 +408,9 @@ export default function AdminERPClient({ initialData, session }: AdminERPClientP
           smtpUser: res.siteSettings.smtpUser || 'support@pinddaanwale.com',
           smtpPassword: res.siteSettings.smtpPassword || '',
           smtpFromEmail: res.siteSettings.smtpFromEmail || 'support@pinddaanwale.com',
-          adminNotificationEmail: res.siteSettings.adminNotificationEmail || 'support@pinddaanwale.com'
+          adminNotificationEmail: res.siteSettings.adminNotificationEmail || 'support@pinddaanwale.com',
+          aiSystemPrompt: res.siteSettings.aiSystemPrompt || DEFAULT_AI_SYSTEM_PROMPT,
+          aiKnowledgeBase: res.siteSettings.aiKnowledgeBase || DEFAULT_GAYA_KNOWLEDGE_BASE
         });
       }
     }
@@ -1969,11 +1974,66 @@ export default function AdminERPClient({ initialData, session }: AdminERPClientP
                 </div>
               </div>
 
-              {/* SECTION 4: FOOTER BACKGROUND */}
+              {/* SECTION 4: AI AGENT & VEDIC SHASTRA KNOWLEDGE BASE (GARUDA PURANA & BIHAR GOVT) */}
+              <div className="bg-slate-900/80 p-5 rounded-2xl border border-amber-500/30 space-y-4 shadow-lg">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800/80 pb-3">
+                  <div className="flex items-center gap-2 font-bold text-sm text-amber-400">
+                    <Sparkles className="w-4 h-4 text-amber-400" />
+                    <span>SECTION 4: 🧠 AI Agent Persona & Vedic Shastra Knowledge Base</span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSettingsForm({
+                        ...settingsForm,
+                        aiSystemPrompt: DEFAULT_AI_SYSTEM_PROMPT,
+                        aiKnowledgeBase: DEFAULT_GAYA_KNOWLEDGE_BASE
+                      });
+                      triggerCopyToast('Defaults Restored', 'AI Shastra Knowledge');
+                    }}
+                    className="px-3 py-1 rounded-full bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 border border-amber-500/30 text-[10px] font-bold transition-all shrink-0"
+                  >
+                    Restore Shastra & Bihar Govt Defaults
+                  </button>
+                </div>
+
+                <div>
+                  <div className="flex items-center justify-between mb-1.5">
+                    <label className="text-slate-200 font-bold text-xs">AI Pandit Ji System Instructions (Persona & Tone):</label>
+                    <span className="text-[10px] text-slate-400 font-mono">How the AI talks to devotees</span>
+                  </div>
+                  <textarea
+                    rows={6}
+                    value={settingsForm.aiSystemPrompt}
+                    onChange={(e) => setSettingsForm({ ...settingsForm, aiSystemPrompt: e.target.value })}
+                    placeholder="Enter AI Agent system instructions..."
+                    className="w-full p-3.5 bg-slate-950 border border-slate-700/80 rounded-xl text-white font-mono text-xs focus:outline-none focus:border-amber-500 leading-relaxed shadow-inner"
+                  />
+                </div>
+
+                <div>
+                  <div className="flex items-center justify-between mb-1.5">
+                    <label className="text-slate-200 font-bold text-xs">Vedic Shastra Knowledge Base & Bihar Govt (Garuda Purana, 45 Vedis, Pitru Paksha):</label>
+                    <span className="text-[10px] text-amber-400 font-mono font-bold">pitrapakshagaya.bihar.gov.in verified</span>
+                  </div>
+                  <textarea
+                    rows={12}
+                    value={settingsForm.aiKnowledgeBase}
+                    onChange={(e) => setSettingsForm({ ...settingsForm, aiKnowledgeBase: e.target.value })}
+                    placeholder="Enter scriptural references, 45 vedis list, purana citations..."
+                    className="w-full p-3.5 bg-slate-950 border border-slate-700/80 rounded-xl text-white font-mono text-xs focus:outline-none focus:border-amber-500 leading-relaxed shadow-inner"
+                  />
+                  <p className="text-[11px] text-slate-400 mt-1">
+                    * यह डेटा सीधे AI चैट और वॉइस इंजन में लाइव इंजेक्ट होता है। आप यहाँ नए श्लोक, सरकारी गाइडलाइन या गया जी के विशेष नियम कभी भी जोड़ सकते हैं।
+                  </p>
+                </div>
+              </div>
+
+              {/* SECTION 5: FOOTER BACKGROUND */}
               <div className="bg-slate-900/60 p-5 rounded-2xl border border-slate-800 space-y-4">
                 <div className="flex items-center gap-2 font-serif font-bold text-sm text-[#F48D08] border-b border-slate-800 pb-2">
                   <ImageIcon className="w-4 h-4" />
-                  <span>SECTION 4: Website Footer Background Image</span>
+                  <span>SECTION 5: Website Footer Background Image</span>
                 </div>
 
                 <MediaUploaderInput 

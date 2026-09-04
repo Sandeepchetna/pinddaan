@@ -119,46 +119,38 @@ export default function Navbar({ packages = [], sacredPlaces = [] }: NavbarProps
           
           <Logo />
 
-          <nav className="hidden lg:flex items-center gap-8 font-medium text-xs">
+          <nav className="hidden lg:flex items-center gap-3.5 xl:gap-5 2xl:gap-6 font-medium text-xs shrink-0">
             
-            <Link 
-              href="/" 
-              className="hover:text-[#F48D08] text-text-primary font-bold py-7 border-b-2 border-transparent hover:border-[#F48D08] transition-colors"
-              onMouseEnter={() => setActiveMegaMenu(null)}
-            >
-              Home
-            </Link>
-
             {/* Pinddaan Gaya Ji Mega Menu */}
             <div 
-              className="static group"
+              className="static group shrink-0"
               onMouseEnter={() => setActiveMegaMenu('pinddaan')}
             >
-              <button className={`flex items-center gap-1 py-7 font-bold transition-colors ${activeMegaMenu === 'pinddaan' ? 'text-[#F48D08] border-b-2 border-[#F48D08]' : 'text-text-primary hover:text-[#F48D08]'}`}>
-                <span>Pinddaan Gaya Ji</span>
+              <button className={`flex items-center gap-1 py-7 font-bold transition-colors whitespace-nowrap ${activeMegaMenu === 'pinddaan' ? 'text-[#F48D08] border-b-2 border-[#F48D08]' : 'text-text-primary hover:text-[#F48D08]'}`}>
+                <span className="whitespace-nowrap">Pinddaan Gaya Ji</span>
                 <ChevronDown className={`w-3.5 h-3.5 text-[#F48D08] transition-transform duration-200 ${activeMegaMenu === 'pinddaan' ? 'rotate-180' : ''}`} />
               </button>
             </div>
 
             {/* About Vishnupad Mega Menu */}
             <div 
-              className="static group"
+              className="static group shrink-0"
               onMouseEnter={() => setActiveMegaMenu('vishnupad')}
             >
-              <button className={`flex items-center gap-1 py-7 font-bold transition-colors ${activeMegaMenu === 'vishnupad' ? 'text-[#F48D08] border-b-2 border-[#F48D08]' : 'text-text-primary hover:text-[#F48D08]'}`}>
-                <span>About Vishnupad</span>
+              <button className={`flex items-center gap-1 py-7 font-bold transition-colors whitespace-nowrap ${activeMegaMenu === 'vishnupad' ? 'text-[#F48D08] border-b-2 border-[#F48D08]' : 'text-text-primary hover:text-[#F48D08]'}`}>
+                <span className="whitespace-nowrap">About Vishnupad</span>
                 <ChevronDown className={`w-3.5 h-3.5 text-[#F48D08] transition-transform duration-200 ${activeMegaMenu === 'vishnupad' ? 'rotate-180' : ''}`} />
               </button>
             </div>
 
             {/* Ritual Packages Mega Menu (DYNAMICALLY RENDERED FROM HOSTINGER MYSQL DB!) */}
             <div 
-              className="static group"
+              className="static group shrink-0"
               onMouseEnter={() => setActiveMegaMenu('packages')}
             >
-              <button className={`flex items-center gap-1 py-7 font-bold transition-colors ${activeMegaMenu === 'packages' ? 'text-[#F48D08] border-b-2 border-[#F48D08]' : 'text-text-primary hover:text-[#F48D08]'}`}>
-                <span>Ritual Packages</span>
-                <span className="bg-amber-100 text-[#F48D08] text-[9px] font-extrabold px-1.5 py-0.5 rounded-full ml-0.5">
+              <button className={`flex items-center gap-1 py-7 font-bold transition-colors whitespace-nowrap ${activeMegaMenu === 'packages' ? 'text-[#F48D08] border-b-2 border-[#F48D08]' : 'text-text-primary hover:text-[#F48D08]'}`}>
+                <span className="whitespace-nowrap">Ritual Packages</span>
+                <span className="bg-amber-100 text-[#F48D08] text-[9px] font-extrabold px-1.5 py-0.5 rounded-full ml-0.5 shrink-0">
                   {displayPackages.length}
                 </span>
                 <ChevronDown className={`w-3.5 h-3.5 text-[#F48D08] transition-transform duration-200 ${activeMegaMenu === 'packages' ? 'rotate-180' : ''}`} />
@@ -167,7 +159,7 @@ export default function Navbar({ packages = [], sacredPlaces = [] }: NavbarProps
 
             <Link 
               href="/blog" 
-              className="hover:text-[#F48D08] text-text-primary font-bold py-7 transition-colors"
+              className="hover:text-[#F48D08] text-text-primary font-bold py-7 transition-colors whitespace-nowrap shrink-0"
               onMouseEnter={() => setActiveMegaMenu(null)}
             >
               Videos & Articles
@@ -175,7 +167,7 @@ export default function Navbar({ packages = [], sacredPlaces = [] }: NavbarProps
 
             <Link 
               href="/about" 
-              className="hover:text-[#F48D08] text-text-primary font-bold py-7 transition-colors"
+              className="hover:text-[#F48D08] text-text-primary font-bold py-7 transition-colors whitespace-nowrap shrink-0"
               onMouseEnter={() => setActiveMegaMenu(null)}
             >
               Our Story
@@ -183,7 +175,7 @@ export default function Navbar({ packages = [], sacredPlaces = [] }: NavbarProps
 
             <Link 
               href="/contact" 
-              className="hover:text-[#F48D08] text-text-primary font-bold py-7 transition-colors"
+              className="hover:text-[#F48D08] text-text-primary font-bold py-7 transition-colors whitespace-nowrap shrink-0"
               onMouseEnter={() => setActiveMegaMenu(null)}
             >
               Contact Us
@@ -191,7 +183,7 @@ export default function Navbar({ packages = [], sacredPlaces = [] }: NavbarProps
 
             <button
               onClick={() => setIsSearchOpen(true)}
-              className="p-2 rounded-full text-text-primary hover:text-[#F48D08] hover:bg-amber-50 transition-all flex items-center gap-1 font-bold text-xs"
+              className="px-2.5 py-1.5 rounded-full text-text-primary hover:text-[#F48D08] hover:bg-amber-50 transition-all flex items-center gap-1 font-bold text-xs whitespace-nowrap shrink-0"
               title="Search Packages, Sacred Places, FAQs (Cmd+K)"
             >
               <Search className="w-4 h-4 text-[#F48D08]" />
@@ -200,7 +192,7 @@ export default function Navbar({ packages = [], sacredPlaces = [] }: NavbarProps
 
             <button
               onClick={() => setIsDiagnosticOpen(true)}
-              className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-950 font-extrabold text-[11px] shadow-sm hover:shadow-md transition-all hover:scale-105"
+              className="flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-950 font-extrabold text-[11px] shadow-sm hover:shadow-md transition-all hover:scale-105 whitespace-nowrap shrink-0"
               title="AI वैदिक पितृ दोष एवं पिंडदान जांच"
             >
               <Sparkles className="w-3.5 h-3.5 fill-current text-slate-950" />
