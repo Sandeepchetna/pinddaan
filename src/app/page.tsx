@@ -43,8 +43,18 @@ export default async function HomePage() {
     heroSlides = await getCachedData('home_hero_slides', async () => {
       return db.heroSlide ? await db.heroSlide.findMany({ where: { isActive: true }, orderBy: { order: 'asc' } }) : [];
     });
-    sacredPlaces = await getCachedData('home_sacred_places', async () => {
-      return db.sacredPlace ? await db.sacredPlace.findMany({ take: 4 }) : [];
+    sacredPlaces = await getCachedData('home_sacred_places_falgu_first', async () => {
+      let places = db.sacredPlace ? await db.sacredPlace.findMany({ take: 8 }) : [];
+      if (!places || places.length === 0) return [];
+      const priorityOrder = ['falgu-river', 'vishnupad-temple', 'akshayavat', 'pretshila'];
+      return [...places].sort((a: any, b: any) => {
+        const aIdx = priorityOrder.findIndex(s => a.slug === s || a.slug?.includes(s));
+        const bIdx = priorityOrder.findIndex(s => b.slug === s || b.slug?.includes(s));
+        if (aIdx !== -1 && bIdx !== -1) return aIdx - bIdx;
+        if (aIdx !== -1) return -1;
+        if (bIdx !== -1) return 1;
+        return 0;
+      }).slice(0, 4);
     });
     packages = await getCachedData('home_packages', async () => {
       return db.ritualPackage ? await db.ritualPackage.findMany({ orderBy: { createdAt: 'desc' } }) : [];
@@ -86,42 +96,53 @@ export default async function HomePage() {
     ];
   }
 
-  // Fallback for sacred places if DB empty
-  if (sacredPlaces.length === 0) {
+  // Fallback for sacred places if DB empty (Falgu River placed first as sacred starting point of rites)
+  if (!sacredPlaces || sacredPlaces.length === 0) {
     sacredPlaces = [
       {
         id: 'sp-1',
-        slug: 'vishnupad-temple',
-        name: 'Vishnupad Temple',
-        hindiName: 'विष्णुपद मंदिर',
-        description: 'Housing the 40 cm long footprint of Lord Vishnu embedded in solid basalt rock. The essential sanctuary for ancestral oblations.',
-        heroImage: '/images/gaya_vishnupad.jpg'
+        slug: 'falgu-river',
+        name: 'Falgu River (Devghat)',
+        hindiName: 'फल्गु नदी (मुख्य देवघाट)',
+        description: 'The sacred river where ancestral pilgrimage begins. Due to Mata Sita’s ancient blessing and curse, the river flows beneath the sand.',
+        heroImage: '/images/pind_daan_vidhi.jpg'
       },
       {
         id: 'sp-2',
-        slug: 'falgu-river',
-        name: 'Falgu River & Sita Kund',
-        hindiName: 'फल्गु नदी',
-        description: 'The holy river cursed by Sita Mata to flow underground. Sand Pind offerings made on its banks carry supreme ancestral merit.',
-        heroImage: '/images/pind_daan_vidhi.jpg'
+        slug: 'vishnupad-temple',
+        name: 'Sri Vishnupad Mandir (Main Footprint)',
+        hindiName: 'श्री विष्णुपद मंदिर (मुख्य चरण कमल)',
+        description: 'The supreme sanctum sanctorum of world Sanatana Dharma. The 40cm footprint of Lord Vishnu is embedded in solid basalt rock.',
+        heroImage: '/images/gaya_vishnupad.jpg'
       },
       {
         id: 'sp-3',
         slug: 'akshayavat',
-        name: 'Akshayavat Banyan Tree',
-        hindiName: 'अक्षयवट',
-        description: 'The undying banyan tree blessed by Sita Mata. Completing the Pind Daan ritual here grants eternal peace to ancestors.',
+        name: 'Akshayavat (The Immortal Banyan Tree)',
+        hindiName: 'अक्षयवट (अमर अक्षय वटवृक्ष)',
+        description: 'The celebrated undying banyan tree that stood as the truthful witness when Mata Sita offered sand pinds for King Dasharatha.',
         heroImage: '/images/akshay_vat.jpg'
       },
       {
         id: 'sp-4',
         slug: 'pretshila',
-        name: 'Pretshila Hill',
+        name: 'Pretshila Hill Shrine',
         hindiName: 'प्रेतशिला पहाड़ी',
-        description: 'Located 8 km from Gaya city, this sacred hill is dedicated to liberating ancestors who died unnatural deaths.',
+        description: 'Located 8 km from Gaya city, this sacred hill is dedicated to liberating ancestors who suffered untimely or unnatural deaths.',
         heroImage: '/images/gaya_drone.jpg'
       }
     ];
+  } else {
+    // Strictly ensure Falgu River is always in the 1st position
+    const priorityOrder = ['falgu-river', 'vishnupad-temple', 'akshayavat', 'pretshila'];
+    sacredPlaces = [...sacredPlaces].sort((a: any, b: any) => {
+      const aIdx = priorityOrder.findIndex(s => a.slug === s || a.slug?.includes(s));
+      const bIdx = priorityOrder.findIndex(s => b.slug === s || b.slug?.includes(s));
+      if (aIdx !== -1 && bIdx !== -1) return aIdx - bIdx;
+      if (aIdx !== -1) return -1;
+      if (bIdx !== -1) return 1;
+      return 0;
+    });
   }
 
   return (
