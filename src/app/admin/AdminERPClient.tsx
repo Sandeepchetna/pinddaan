@@ -45,7 +45,9 @@ import {
   Menu,
   Mail,
   ArrowUpRight,
-  Loader2
+  Loader2,
+  Sun,
+  Moon
 } from 'lucide-react';
 import { 
   getAdminERPData, 
@@ -212,6 +214,24 @@ export default function AdminERPClient({ initialData, session }: AdminERPClientP
   const [loggingOut, setLoggingOut] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
+  const [theme, setTheme] = useState<'dark' | 'light'>('dark');
+
+  useEffect(() => {
+    try {
+      const savedTheme = localStorage.getItem('pinddaan_admin_theme') as 'dark' | 'light' | null;
+      if (savedTheme === 'light' || savedTheme === 'dark') {
+        setTheme(savedTheme);
+      }
+    } catch (_) {}
+  }, []);
+
+  const toggleTheme = () => {
+    const nextTheme = theme === 'dark' ? 'light' : 'dark';
+    setTheme(nextTheme);
+    try {
+      localStorage.setItem('pinddaan_admin_theme', nextTheme);
+    } catch (_) {}
+  };
 
   const handleLogout = async () => {
     if (confirm('क्या आप एडमिन पैनल से लॉगआउट करना चाहते हैं? / Are you sure you want to log out?')) {
@@ -643,7 +663,7 @@ export default function AdminERPClient({ initialData, session }: AdminERPClientP
   ];
 
   return (
-    <div className="h-screen h-[100dvh] w-full bg-[#0B0F19] text-slate-100 flex overflow-hidden font-sans antialiased">
+    <div className={`h-screen h-[100dvh] w-full flex overflow-hidden font-sans antialiased admin-canvas ${theme === 'light' ? 'theme-light' : 'theme-dark bg-[#0B0F19] text-slate-100'}`}>
       
       {/* COPY TOAST FEEDBACK */}
       {copyToast && (
@@ -852,7 +872,7 @@ export default function AdminERPClient({ initialData, session }: AdminERPClientP
                 placeholder="Search Ref ID, Devotee, Mobile..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                style={{ backgroundColor: '#0B1120', color: '#FFFFFF', paddingLeft: '2.75rem', paddingRight: '2.25rem' }}
+                style={{ backgroundColor: theme === 'light' ? '#FFFFFF' : '#0B1120', color: theme === 'light' ? '#0F172A' : '#FFFFFF', paddingLeft: '2.75rem', paddingRight: '2.25rem' }}
                 className="w-full bg-[#0B1120] border border-slate-700/80 rounded-full !pl-11 !pr-8 py-2 text-xs text-white placeholder-slate-400 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition-all shadow-inner"
               />
               {searchQuery && (
@@ -867,6 +887,29 @@ export default function AdminERPClient({ initialData, session }: AdminERPClientP
           </div>
 
           <div className="flex items-center gap-2 sm:gap-3">
+            {/* THEME TOGGLE BUTTON (DARK / LIGHT) */}
+            <button
+              onClick={toggleTheme}
+              title={theme === 'dark' ? 'Switch to Light Theme' : 'Switch to Dark Theme'}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold transition-all border shadow-sm ${
+                theme === 'dark'
+                  ? 'bg-slate-800/80 hover:bg-slate-700 text-amber-300 border-slate-700/60'
+                  : 'bg-amber-50 hover:bg-amber-100 text-amber-900 border-amber-300'
+              }`}
+            >
+              {theme === 'dark' ? (
+                <>
+                  <Sun className="w-3.5 h-3.5 text-amber-400" />
+                  <span className="hidden sm:inline">Light</span>
+                </>
+              ) : (
+                <>
+                  <Moon className="w-3.5 h-3.5 text-slate-700" />
+                  <span className="hidden sm:inline">Dark</span>
+                </>
+              )}
+            </button>
+
             <a
               href="/"
               target="_blank"
@@ -994,7 +1037,7 @@ export default function AdminERPClient({ initialData, session }: AdminERPClientP
                     placeholder="Search name, phone, ref id..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    style={{ backgroundColor: '#0B1120', color: '#FFFFFF', paddingLeft: '2.75rem', paddingRight: '2.25rem' }}
+                    style={{ backgroundColor: theme === 'light' ? '#FFFFFF' : '#0B1120', color: theme === 'light' ? '#0F172A' : '#FFFFFF', paddingLeft: '2.75rem', paddingRight: '2.25rem' }}
                     className="w-full bg-[#0B1120] border border-slate-700/80 rounded-full !pl-11 !pr-8 py-2 text-xs text-white placeholder-slate-400 focus:outline-none focus:border-amber-500 shadow-inner"
                   />
                   {searchQuery && (
@@ -1529,7 +1572,7 @@ export default function AdminERPClient({ initialData, session }: AdminERPClientP
                     value={sacredPlaceSearch}
                     onChange={e => setSacredPlaceSearch(e.target.value)}
                     placeholder="Search from 45+ Sacred Vedis..."
-                    style={{ backgroundColor: '#0B1120', color: '#FFFFFF', paddingLeft: '2.75rem', paddingRight: '1rem' }}
+                    style={{ backgroundColor: theme === 'light' ? '#FFFFFF' : '#0B1120', color: theme === 'light' ? '#0F172A' : '#FFFFFF', paddingLeft: '2.75rem', paddingRight: '1rem' }}
                     className="w-full !pl-11 pr-3 py-2 bg-[#0B1120] border border-slate-700/80 rounded-xl text-xs text-white placeholder:text-slate-400 focus:outline-none focus:border-amber-500 shadow-inner"
                   />
                 </div>

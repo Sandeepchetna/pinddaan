@@ -359,3 +359,202 @@ span[style*="background-color"] {
   -webkit-user-select: none;
   user-select: none;
 }
+
+/* ==========================================================================
+   ADMIN ERP — DYNAMIC LIGHT & DARK THEME DESIGN SYSTEM
+   Aesthetics: Crisp, Executive, Clean SaaS Contrast & Sacred Warmth
+   ========================================================================== */
+
+.theme-light {
+  background-color: #F8FAFC !important;
+  color: #0F172A !important;
+}
+
+/* Base Surfaces & Backgrounds */
+.theme-light.admin-canvas,
+.theme-light .admin-canvas,
+.theme-light .bg-\[\#0B0F19\],
+.theme-light .bg-\[\#0E1626\],
+.theme-light .bg-\[\#111C30\],
+.theme-light .bg-\[\#0B1120\] {
+  background-color: #F8FAFC !important;
+  color: #0F172A !important;
+}
+
+/* Desktop & Mobile Sidebar Navigation */
+.theme-light aside {
+  background-color: #FFFFFF !important;
+  border-color: #E2E8F0 !important;
+  box-shadow: 2px 0 8px -2px rgba(0, 0, 0, 0.04) !important;
+}
+
+.theme-light aside .text-white {
+  color: #0F172A !important;
+}
+
+.theme-light aside nav button:not([class*="border-l"]) {
+  color: #475569 !important;
+}
+
+.theme-light aside nav button:not([class*="border-l"]):hover {
+  background-color: #F1F5F9 !important;
+  color: #0F172A !important;
+}
+
+.theme-light aside nav button[class*="border-l"] {
+  background: linear-gradient(to right, rgba(245, 158, 11, 0.12), rgba(245, 158, 11, 0.03)) !important;
+  color: #B45309 !important;
+  border-color: #D97706 !important;
+}
+
+/* Sticky Header Bar */
+.theme-light header {
+  background-color: rgba(255, 255, 255, 0.95) !important;
+  border-color: #E2E8F0 !important;
+  backdrop-filter: blur(8px) !important;
+}
+
+.theme-light header .text-white {
+  color: #0F172A !important;
+}
+
+/* Content Cards & Modules */
+.theme-light .bg-slate-900,
+.theme-light .bg-slate-900\/90,
+.theme-light .bg-slate-900\/80,
+.theme-light .bg-slate-900\/50,
+.theme-light .bg-slate-950 {
+  background-color: #FFFFFF !important;
+  border-color: #E2E8F0 !important;
+}
+
+.theme-light .bg-slate-800,
+.theme-light .bg-slate-800\/80,
+.theme-light .bg-slate-800\/70,
+.theme-light .bg-slate-800\/50 {
+  background-color: #F1F5F9 !important;
+  border-color: #E2E8F0 !important;
+  color: #1E293B !important;
+}
+
+/* Generic Borders */
+.theme-light .border-slate-800,
+.theme-light .border-slate-800\/80,
+.theme-light .border-slate-800\/50,
+.theme-light .border-slate-700,
+.theme-light .border-slate-700\/80,
+.theme-light .border-slate-700\/60,
+.theme-light .border-slate-700\/50 {
+  border-color: #E2E8F0 !important;
+}
+
+/* Typography Overrides for Light Theme */
+.theme-light h1,
+.theme-light h2,
+.theme-light h3,
+.theme-light h4,
+.theme-light h5,
+.theme-light strong:not([class*="text-amber"]):not([class*="text-emerald"]):not([class*="text-rose"]) {
+  color: #0F172A !important;
+}
+
+.theme-light .text-slate-100,
+.theme-light .text-slate-200 {
+  color: #0F172A !important;
+}
+
+.theme-light .text-slate-300 {
+  color: #334155 !important;
+}
+
+.theme-light .text-slate-400 {
+  color: #64748B !important;
+}
+
+.theme-light .text-slate-500 {
+  color: #94A3B8 !important;
+}
+
+/* Inputs, Textareas, & Select Dropdowns */
+.theme-light input:not([type="checkbox"]):not([type="radio"]),
+.theme-light textarea,
+.theme-light select {
+  background-color: #FFFFFF !important;
+  color: #0F172A !important;
+  border-color: #CBD5E1 !important;
+}
+
+.theme-light input::placeholder,
+.theme-light textarea::placeholder {
+  color: #94A3B8 !important;
+}
+
+.theme-light input:focus,
+.theme-light textarea:focus,
+.theme-light select:focus {
+  border-color: #D97706 !important;
+  box-shadow: 0 0 0 2px rgba(217, 119, 6, 0.15) !important;
+}
+
+/* Tables in Light Mode */
+.theme-light table {
+  background-color: #FFFFFF !important;
+}
+
+.theme-light thead th {
+  background-color: #F8FAFC !important;
+  color: #475569 !important;
+  border-color: #E2E8F0 !important;
+  font-weight: 700 !important;
+}
+
+.theme-light tbody tr {
+  border-color: #F1F5F9 !important;
+  background-color: #FFFFFF !important;
+}
+
+.theme-light tbody tr:hover {
+  background-color: #FFFBEB !important;
+}
+
+.theme-light tbody td {
+  color: #1E293B !important;
+}
+
+/* Modals & Dialogs in Light Mode */
+.theme-light .fixed.inset-0 > div:not([class*="bg-black"]) {
+  background-color: #FFFFFF !important;
+  color: #0F172A !important;
+  border-color: #E2E8F0 !important;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Status Badges and Accents */
+.theme-light .text-amber-400,
+.theme-light .text-amber-300 {
+  color: #B45309 !important;
+}
+
+.theme-light .text-emerald-400,
+.theme-light .text-emerald-300 {
+  color: #047857 !important;
+}
+
+.theme-light .text-rose-400,
+.theme-light .text-rose-300 {
+  color: #BE123C !important;
+}
+
+.theme-light .text-blue-400,
+.theme-light .text-blue-300 {
+  color: #1D4ED8 !important;
+}
+
+/* Buttons with Solid Gradients Preserve White Text */
+.theme-light button[class*="bg-gradient-to"],
+.theme-light a[class*="bg-gradient-to"],
+.theme-light [class*="bg-gradient-to"] span,
+.theme-light [class*="bg-gradient-to"] strong {
+  color: #FFFFFF !important;
+}
+
