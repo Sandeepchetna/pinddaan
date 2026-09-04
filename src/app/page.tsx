@@ -134,7 +134,7 @@ export default async function HomePage() {
       <VishnupadShowcase />
 
       {/* AI Vedic Moksha & Pitru Dosha Diagnostic Showcase Banner */}
-      <VedicDiagnosticBanner />
+      <VedicDiagnosticBanner packages={packages} />
 
       {/* Trust & Reassurance Ribbon */}
       <section className="bg-white border-y border-amber-900/10 py-8 px-4">

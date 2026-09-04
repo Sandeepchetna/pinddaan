@@ -39,10 +39,25 @@ export interface VedicDiagnosisReport {
   garudaPuranaCitation: string;
 }
 
-export function assessVedicMokshaPath(answers: DevoteeAnswers): VedicDiagnosisReport {
+export function assessVedicMokshaPath(
+  answers: DevoteeAnswers,
+  dynamicPackages?: any[]
+): VedicDiagnosisReport {
   const isUntimely = answers.circumstance === 'accidental_untimely';
   const hasSevereSymptoms = answers.symptoms.includes('child_delay') || answers.symptoms.includes('disturbed_dreams');
   const symptomCount = answers.symptoms.length;
+
+  // Helper to find live database package price
+  const findLivePackage = (slugPart: string, defaultPrice: number, defaultTitle: string) => {
+    if (!dynamicPackages || dynamicPackages.length === 0) {
+      return { price: defaultPrice, title: defaultTitle };
+    }
+    const matched = dynamicPackages.find(p => p.slug?.includes(slugPart) || p.title?.toLowerCase().includes(slugPart));
+    return {
+      price: matched?.priceINR || defaultPrice,
+      title: matched?.title || defaultTitle
+    };
+  };
 
   // 1. Determine Pitru Dosha Grade
   let doshaGrade: VedicDiagnosisReport['doshaGrade'] = 'Mild Pitru Rina';
@@ -62,38 +77,41 @@ export function assessVedicMokshaPath(answers: DevoteeAnswers): VedicDiagnosisRe
     doshaSeverity = 'low';
   }
 
-  // 2. Determine Package & Primary Ritual
+  // 2. Determine Package & Primary Ritual (Connecting with Live Database)
   let recommendedPackage: VedicDiagnosisReport['recommendedPackage'];
 
   if (isUntimely) {
+    const livePkg = findLivePackage('tri-sthali', 14500, 'Tripindi Shradh & Narayan Bali Vidhi');
     recommendedPackage = {
       id: 'tripindi_narayan_bali',
-      title: 'Tripindi Shradh & Narayan Bali Vidhi',
+      title: livePkg.title || 'Tripindi Shradh & Narayan Bali Vidhi',
       hindiTitle: 'त्रिपिंडी श्राद्ध एवं नारायण बलि विधान',
       slug: '3-day-complete-tri-sthali',
-      estimatedDakshina: 14500,
+      estimatedDakshina: livePkg.price > 12500 ? livePkg.price + 2000 : 14500,
       durationDays: 3,
       primaryVedicRitual: 'Pretshila Pind Daan + Brahma Kund Snan + Tripindi Vidhi',
       reasoning: 'गरुड़ पुराण के अनुसार अकाल या असमय मृत्यु होने पर आत्मा प्रेत योनि से मुक्ति पाने हेतु त्रिपिंडी और प्रेतशिला पिंडदान अनिवार्य रूप से मांगती है।'
     };
   } else if (answers.relation === 'both_parents' || answers.relation === 'grandparents' || answers.priorRituals === 'first_time_gaya') {
+    const livePkg = findLivePackage('tri-sthali', 12500, '3-Day Complete Tri-Sthali Pilgrimage');
     recommendedPackage = {
       id: 'tri_sthali_complete',
-      title: '3-Day Complete Tri-Sthali Pilgrimage',
+      title: livePkg.title,
       hindiTitle: '3-दिवसीय सम्पूर्ण त्रि-स्थली महातीर्थ पिंडदान',
       slug: '3-day-complete-tri-sthali',
-      estimatedDakshina: 12500,
+      estimatedDakshina: livePkg.price,
       durationDays: 3,
       primaryVedicRitual: 'Parvana Shradh at all 45 Sacred Vedis',
       reasoning: 'वायु पुराण के अनुसार प्रथम बार गया तीर्थ आने वाले कुलवंशियों को 45 वेदियों पर त्रि-स्थली (फल्गु, विष्णुपद, अक्षयवट) सहित सम्पूर्ण पार्वण श्राद्ध करना चाहिए, जिससे 101 कुलों का उद्धार होता है।'
     };
   } else {
+    const livePkg = findLivePackage('essential', 4500, '1-Day Essential Pind Daan');
     recommendedPackage = {
       id: '1_day_essential',
-      title: '1-Day Essential Pind Daan',
+      title: livePkg.title,
       hindiTitle: '1-दिवसीय आवश्यक पिंडदान (त्रि-स्थली)',
       slug: '1-day-essential-pind-daan',
-      estimatedDakshina: 4500,
+      estimatedDakshina: livePkg.price,
       durationDays: 1,
       primaryVedicRitual: 'Ekoddishta / Parvana Shradh at Vishnupad & Falgu',
       reasoning: 'समय के अभाव अथवा नियमित वार्षिक तर्पण हेतु फल्गु तट, विष्णुपद चरण चिह्न एवं अक्षयवट के समक्ष एक-दिवसीय संकल्प पूर्णतः शास्त्रसम्मत है।'

@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { Sparkles, ArrowRight, ShieldCheck, Flame, BookOpen, Clock } from 'lucide-react';
 import VedicDiagnosticModal from '@/components/ai/VedicDiagnosticModal';
 
-export default function VedicDiagnosticBanner() {
+export default function VedicDiagnosticBanner({ packages = [] }: { packages?: any[] }) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -66,6 +66,7 @@ export default function VedicDiagnosticBanner() {
       <VedicDiagnosticModal 
         isOpen={isOpen} 
         onClose={() => setIsOpen(false)} 
+        packages={packages}
       />
     </>
   );

@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
+import { getCachedData } from '@/lib/dbCache';
 
-// Deep Gaya Shastra & Tirth Purohit System Instructions
-const GAYA_PUROHIT_SYSTEM_PROMPT = `
+// Deep Gaya Shastra & Tirth Purohit System Instructions Base
+const GAYA_PUROHIT_BASE_PROMPT = `
 आप "पंडित जी AI" (PindDaanWale.com के प्रामाणिक गया जी तीर्थ पुरोहित एवं वैदिक मार्गदर्शक) हैं।
 आपका कार्य गया तीर्थ, पिंडदान, श्राद्ध, तर्पण, गोत्र संकल्प और विष्णुपद मंदिर के संदर्भ में श्रद्धालुओं का प्रामाणिक, संवेदनशील एवं शास्त्रसम्मत मार्गदर्शन करना है।
 
@@ -11,13 +12,9 @@ const GAYA_PUROHIT_SYSTEM_PROMPT = `
 2. भाषा: श्रद्धालु जिस भाषा में पूछे (हिंदी, हिंग्लिश, या अंग्रेज़ी), उसी में सरल, मधुर एवं आत्मीय भाषा में उत्तर दें।
 3. प्रामाणिकता (शास्त्र): गरुड़ पुराण, वायु पुराण (गया माहात्म्य) के आधार पर उत्तर दें।
 4. मुख्य तीन वेदियाँ (त्रि-स्थली): 1. फल्गु नदी (आदि गया), 2. विष्णुपद मंदिर (भगवान विष्णु के चरण चिह्न), 3. अक्षयवट (अमर वटवृक्ष जहाँ सुफल प्राप्त होता है)। कुल 45 वेदियाँ हैं।
-5. पारदर्शी पैकेज व दक्षिणा (कोई मोलभाव या बिचौलिया नहीं):
-   - 1-दिवसीय आवश्यक पिंडदान: ₹4,500 (फल्गु, विष्णुपद व अक्षयवट; सम्पूर्ण पूजन सामग्री व पंडा दक्षिणा सहित)
-   - 3-दिवसीय सम्पूर्ण त्रि-स्थली महातीर्थ: ₹12,500 (45 वेदियाँ, एसी वाहन, होटल समन्वय, कुल उद्धार)
-   - NRI रिमोट लाइव स्ट्रीम पिंडदान: ₹8,500 (विदेश में रहने वालों हेतु 4K ज़ूम लाइव संकल्प व डाक द्वारा प्रसाद)
-6. वरिष्ठ नागरिकों हेतु सुविधा: ई-रिक्शा, व्हीलचेयर एवं सुगम दर्शन सहायता।
-7. संपर्क व सहायता: श्रद्धालु को बताएं कि वे सीधे कॉल (+91 7463055338) कर सकते हैं या WhatsApp पर बात कर सकते हैं।
-8. उत्तर संक्षिप्त (2-4 पैराग्राफ), स्पष्ट एवं अत्यंत विनम्र रखें। अनावश्यक बातें न जोड़ें।
+5. वरिष्ठ नागरिकों हेतु सुविधा: ई-रिक्शा, व्हीलचेयर एवं सुगम दर्शन सहायता।
+6. संपर्क व सहायता: श्रद्धालु को बताएं कि वे सीधे कॉल (+91 7463055338) कर सकते हैं या WhatsApp पर बात कर सकते हैं।
+7. उत्तर संक्षिप्त (2-4 पैराग्राफ), स्पष्ट एवं अत्यंत विनम्र रखें। अनावश्यक बातें न जोड़ें।
 `;
 
 export async function POST(req: NextRequest) {
@@ -26,6 +23,40 @@ export async function POST(req: NextRequest) {
     const { messages = [], userPhone = '', userName = '' } = body;
 
     const lastMessage = messages[messages.length - 1]?.content || '';
+
+    // DYNAMIC LIVE PACKAGES FROM HOSTINGER DATABASE
+    let packageInfoText = `
+• 1-दिवसीय आवश्यक पिंडदान (1 Day): ₹4,500 — फल्गु नदी, विष्णुपद चरण एवं अक्षयवट (सम्पूर्ण पूजन सामग्री व पंडा दक्षिणा सहित)
+• 3-दिवसीय सम्पूर्ण त्रि-स्थली (3 Days): ₹12,500 — 45 वेदियाँ, सम्पूर्ण पार्वण श्राद्ध, एसी वाहन, होटल समन्वय
+• NRI रिमोट लाइव स्ट्रीम पिंडदान: ₹8,500 — विदेश में रहने वाले श्रद्धालुओं हेतु 4K लाइव संकल्प व डाक द्वारा प्रसाद
+`;
+
+    try {
+      const db = prisma as any;
+      if (db.ritualPackage) {
+        const livePackages = await getCachedData('ai_live_packages', async () => {
+          return await db.ritualPackage.findMany({
+            where: { isActive: true },
+            orderBy: { createdAt: 'desc' }
+          });
+        }, 120);
+
+        if (livePackages && livePackages.length > 0) {
+          packageInfoText = livePackages.map((pkg: any) => {
+            return `• ${pkg.title} (${pkg.duration || 'तीर्थ विधि'}): ₹${pkg.priceINR?.toLocaleString('en-IN') || '4,500'} — ${pkg.shortDesc || ''}`;
+          }).join('\n');
+        }
+      }
+    } catch (e) {
+      console.warn('Dynamic packages fallback notice:', e);
+    }
+
+    const dynamicSystemPrompt = `
+${GAYA_PUROHIT_BASE_PROMPT}
+
+पारदर्शी पैकेज व दक्षिणा (Live Database Pricing - कोई मोलभाव या बिचौलिया नहीं):
+${packageInfoText}
+`;
 
     // Smart Auto-Lead Detection: Check if phone number is present in message or payload
     const phoneRegex = /(\+?\d{1,4}[-.\s]?)?(\d{10})/;
@@ -79,7 +110,7 @@ export async function POST(req: NextRequest) {
             body: JSON.stringify({
               model: modelName,
               messages: [
-                { role: 'system', content: GAYA_PUROHIT_SYSTEM_PROMPT },
+                { role: 'system', content: dynamicSystemPrompt },
                 ...messages.slice(-6) // Keep last 6 exchanges for context
               ],
               temperature: 0.5,
@@ -105,7 +136,7 @@ export async function POST(req: NextRequest) {
     let fallbackReply = 'जय श्री विष्णु! 🙏\nगया जी तीर्थ में पिंडदान से पितरों को शाश्वत वैकुंठ की प्राप्ति होती है। आपके गोत्र संकल्प, सही तिथि एवं प्रामाणिक तीर्थ पंडा सहायता हेतु हमारी टीम 24/7 उपलब्ध है। आप हमें सीधे +91 7463055338 पर कॉल या WhatsApp कर सकते हैं।';
 
     if (lower.includes('price') || lower.includes('cost') || lower.includes('package') || lower.includes('rate') || lower.includes('पैकेज') || lower.includes('खर्च') || lower.includes('रुपए')) {
-      fallbackReply = 'जय श्री विष्णु! 🙏\n\nगया जी में पिंडदान के लिए हमारी सभी सेवाएँ 100% पारदर्शी हैं (बिना किसी बिचौलिए या छुपे खर्च के):\n\n• 1-दिवसीय आवश्यक पिंडदान: ₹4,500 (फल्गु नदी, विष्णुपद चरण एवं अक्षयवट; पंडा दक्षिणा व सामग्री सहित)\n• 3-दिवसीय सम्पूर्ण त्रि-स्थली: ₹12,500 (सभी 45 वेदियों पर सम्पूर्ण पार्वण श्राद्ध, एसी कैब व होटल व्यवस्था)\n• NRI रिमोट लाइव स्ट्रीम: ₹8,500 (विदेश में रहने वाले श्रद्धालुओं हेतु 4K लाइव संकल्प व डाक द्वारा प्रसाद)\n\nक्या आप अपने परिवार के लिए तारीख तय करना चाहते हैं?';
+      fallbackReply = `जय श्री विष्णु! 🙏\n\nगया जी में पिंडदान के लिए हमारी सभी सेवाएँ 100% पारदर्शी हैं (बिना किसी बिचौलिए या छुपे खर्च के):\n\n${packageInfoText}\n\nक्या आप अपने परिवार के लिए तारीख तय करना चाहते हैं?`;
     } else if (lower.includes('daughter') || lower.includes('girl') || lower.includes('woman') || lower.includes('महिला') || lower.includes('बेटी') || lower.includes('पुत्री')) {
       fallbackReply = 'जय श्री विष्णु! 🙏\n\nहाँ, शास्त्रों में माता सीता द्वारा राजा दशरथ जी का पिंडदान करने का स्पष्ट प्रमाण वाल्मीकि रामायण में मिलता है।\n\nयदि परिवार में पुत्र न हो, तो पुत्री, पत्नी या दौहित्र (नाती) भी पूर्ण विधि-विधान से पिंडदान व तर्पण करने के पूर्ण शास्त्रसम्मत अधिकारी हैं। गया जी में तीर्थ पुरोहित विशेष संकल्प करवाकर यह संस्कार संपन्न कराते हैं।';
     } else if (lower.includes('timing') || lower.includes('time') || lower.includes('समय') || lower.includes('मंदिर खुला')) {

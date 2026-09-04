@@ -669,6 +669,7 @@ export default function Navbar({ packages = [], sacredPlaces = [] }: NavbarProps
       <VedicDiagnosticModal 
         isOpen={isDiagnosticOpen} 
         onClose={() => setIsDiagnosticOpen(false)} 
+        packages={displayPackages}
       />
 
     </header>

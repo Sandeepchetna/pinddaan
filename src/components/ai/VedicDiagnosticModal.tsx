@@ -23,9 +23,10 @@ import { assessVedicMokshaPath, DevoteeAnswers, VedicDiagnosisReport } from '@/l
 interface VedicDiagnosticModalProps {
   isOpen: boolean;
   onClose: () => void;
+  packages?: any[];
 }
 
-export default function VedicDiagnosticModal({ isOpen, onClose }: VedicDiagnosticModalProps) {
+export default function VedicDiagnosticModal({ isOpen, onClose, packages = [] }: VedicDiagnosticModalProps) {
   const [step, setStep] = useState<number>(1);
   const [answers, setAnswers] = useState<DevoteeAnswers>({
     relation: 'both_parents',
@@ -53,7 +54,7 @@ export default function VedicDiagnosticModal({ isOpen, onClose }: VedicDiagnosti
   };
 
   const handleCalculate = () => {
-    const result = assessVedicMokshaPath(answers);
+    const result = assessVedicMokshaPath(answers, packages);
     setReport(result);
     setStep(5);
   };
