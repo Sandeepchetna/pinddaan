@@ -8,7 +8,23 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     const { messages = [], userPhone = '', userName = '' } = body;
 
-    const lastMessage = messages[messages.length - 1]?.content || '';
+    const rawMessage = messages[messages.length - 1]?.content || '';
+
+    // Phonetic Vedic Auto-Correction for Speech-to-Text voice misrecognitions
+    const lastMessage = rawMessage
+      .replace(/\b(print\s*out|printout|printer|printing|pint\s*out|pintout|point\s*out|pin\s*out|pin\s*down|pindown|pen\s*down|pin\s*dan|pind\s*dan|pind\s*daan|peen\s*daan|peen\s*dan|been\s*done|bean\s*done|paint\s*out|pin\s*don|pindan|pinda|pinddaan|ping\s*daan|pin\s*dam)\b/gi, 'पिंडदान')
+      .replace(/\b(shard|shrad|shraadh|sharad|shradha|sradh|shraadha)\b/gi, 'श्राद्ध')
+      .replace(/\b(gaia|guy a|gaya ji|gayaji|gaaya)\b/gi, 'गया जी')
+      .replace(/\b(vishnu\s*pad|vishnupad|vishnu\s*feet|vishnu\s*padh|visnu\s*pad)\b/gi, 'विष्णुपद')
+      .replace(/\b(falgu|falgoo|phalguna)\b/gi, 'फल्गु नदी')
+      .replace(/\b(akshay\s*vat|akshayvat|akshay\s*bar)\b/gi, 'अक्षयवट')
+      .replace(/\b(pret\s*shila|pretshila|plate\s*shila)\b/gi, 'प्रेतशिला')
+      .replace(/\b(pitrapaksh|pitru\s*paksha|pitra\s*paksha|peter\s*pack)\b/gi, 'पितृपक्ष');
+
+    // Update the last message in history with the sanitized version
+    const sanitizedMessages = messages.map((m: any, idx: number) => 
+      idx === messages.length - 1 ? { ...m, content: lastMessage } : m
+    );
 
     // 1. DYNAMIC LIVE SETTINGS & KNOWLEDGE BASE FROM ADMIN PANEL / SITESETTINGS
     let activeSystemPrompt = DEFAULT_AI_SYSTEM_PROMPT;
@@ -126,7 +142,7 @@ ${packageInfoText}
               model: modelName,
               messages: [
                 { role: 'system', content: dynamicFullPrompt },
-                ...messages.slice(-6) // Keep last 6 exchanges for context
+                ...sanitizedMessages.slice(-6) // Keep last 6 exchanges with sanitized typos
               ],
               temperature: 0.5,
               max_tokens: 700

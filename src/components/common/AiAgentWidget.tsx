@@ -61,6 +61,110 @@ function AnimatedPanditJiIcon({ className = "w-10 h-10" }: { className?: string 
   );
 }
 
+// 1. Phonetic Vedic Auto-Correction for Speech-to-Text Misrecognitions
+function sanitizeVedicSpeechInput(raw: string): string {
+  if (!raw) return '';
+  let text = raw.trim();
+
+  // Pind Daan misrecognitions (speech engines often hear 'print out' or 'pint out')
+  text = text.replace(/\b(print\s*out|printout|printer|printing|pint\s*out|pintout|point\s*out|pin\s*out|pin\s*down|pindown|pen\s*down|pin\s*dan|pind\s*dan|pind\s*daan|peen\s*daan|peen\s*dan|been\s*done|bean\s*done|paint\s*out|pin\s*don|pindan|pinda|pinddaan|ping\s*daan|pin\s*dam)\b/gi, 'पिंडदान');
+
+  // Shradh misrecognitions
+  text = text.replace(/\b(shard|shrad|shraadh|sharad|shradha|sradh|shraadha)\b/gi, 'श्राद्ध');
+
+  // Gaya Ji misrecognitions
+  text = text.replace(/\b(gaia|guy a|gaya ji|gayaji|gaaya)\b/gi, 'गया जी');
+
+  // Vishnupad misrecognitions
+  text = text.replace(/\b(vishnu\s*pad|vishnupad|vishnu\s*feet|vishnu\s*padh|visnu\s*pad)\b/gi, 'विष्णुपद');
+
+  // Falgu River misrecognitions
+  text = text.replace(/\b(falgu|falgoo|phalguna|falgu nadi)\b/gi, 'फल्गु नदी');
+
+  // Akshayavat misrecognitions
+  text = text.replace(/\b(akshay\s*vat|akshayvat|akshay\s*bar|akshay\s*bad)\b/gi, 'अक्षयवट');
+
+  // Pretshila misrecognitions
+  text = text.replace(/\b(pret\s*shila|pretshila|plate\s*shila|pret\s*sila|pet\s*shila)\b/gi, 'प्रेतशिला');
+
+  // Pitru Paksha misrecognitions
+  text = text.replace(/\b(pitrapaksh|pitru\s*paksha|pitra\s*paksha|petro\s*pack|peter\s*pack)\b/gi, 'पितृपक्ष');
+
+  // Pitra Dosh misrecognitions
+  text = text.replace(/\b(pitra\s*dosh|pitru\s*dosh|pitra\s*dosha|peter\s*dosh)\b/gi, 'पितृ दोष');
+
+  // Gotra misrecognitions
+  text = text.replace(/\b(gautra|goat\s*ra|gotram|gotar)\b/gi, 'गोत्र');
+
+  // Tarpan misrecognitions
+  text = text.replace(/\b(torpon|tarpanam|tarpan)\b/gi, 'तर्पण');
+
+  // Dakshina misrecognitions
+  text = text.replace(/\b(dokshina|dakshna|dakhina)\b/gi, 'दक्षिणा');
+
+  // Sita Kund misrecognitions
+  text = text.replace(/\b(seeta\s*kund|sita\s*kund|sitakund)\b/gi, 'सीता कुंड');
+
+  // Narayan Bali misrecognitions
+  text = text.replace(/\b(narayan\s*bali|narayan\s*bali\s*puja|narayan\s*bali\s*pooja)\b/gi, 'नारायण बली');
+
+  // Tripindi misrecognitions
+  text = text.replace(/\b(tripindi|tripindi\s*shradh|tripindi\s*shraadh)\b/gi, 'त्रिपिंडी श्राद्ध');
+
+  return text;
+}
+
+// 2. High-Fidelity Audio Sanitizer for Text-to-Speech (STRICTLY NO EMOJIS, BULLETS OR SPECIAL SYMBOLS READOUT)
+function cleanTextForAudioSpeech(raw: string): string {
+  if (!raw) return '';
+
+  let text = raw;
+
+  // 1. Remove all Unicode Emojis and Pictographs (folded hands, sparkles, icons)
+  text = text.replace(/[\p{Extended_Pictographic}\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}\u{FE0F}\u{200D}]/gu, '');
+
+  // 2. Remove accidental accessibility readout text (folded hand, pranam symbol, etc.)
+  text = text.replace(/\b(folded\s*hands?|pranam\s*symbol|namaste\s*symbol|folded\s*hand\s*symbol|folded\s*hand|folded\s*hands\s*symbol|emoji)\b/gi, '');
+
+  // 3. Remove Markdown formatting and decorative symbols
+  text = text.replace(/[*#_~`>|]/g, '');
+
+  // 4. Remove bullet characters and dashes that are read aloud
+  text = text.replace(/^[•\-–—]\s*/gm, '');
+  text = text.replace(/[•–—]/g, ' ');
+
+  // 5. Convert Indian Rupee currency symbols to natural spoken words
+  text = text.replace(/₹\s*([0-9,]+)/g, (_, num) => `${num.replace(/,/g, '')} रुपये`);
+
+  // 6. Remove long phone numbers and URLs from audio readout
+  text = text.replace(/\+?91[\s-]?[0-9]{10}/g, 'हमारे हेल्पलाइन नंबर');
+  text = text.replace(/https?:\/\/[^\s]+/g, '');
+
+  // 7. Convert bracket terms that sound robotic
+  text = text.replace(/\(1\s*Day\)/gi, 'एक दिवसीय');
+  text = text.replace(/\(3\s*Days\)/gi, 'तीन दिवसीय');
+  text = text.replace(/\([^\)]+\)/g, ''); // strip remaining parenthetical notes
+
+  // 8. Handle punctuation so synthesizers NEVER pronounce "comma" or "period"
+  // Commas in mixed/Hindi text cause screen readers to speak "comma". Replace with gentle pause space.
+  text = text.replace(/[,;:\"\'\/\\\[\]\(\)\{\}]/g, ' ');
+  text = text.replace(/\.{2,}/g, '।');
+  text = text.replace(/\./g, '।');
+
+  // 9. Clean up extra whitespace
+  text = text.replace(/\s+/g, ' ').trim();
+
+  // Take first 3 spoken sentences so it's sweet, respectful, concise and doesn't drone on
+  const sentences = text.split(/[।!\?]/).map(s => s.trim()).filter(s => s.length > 4);
+  if (sentences.length > 3) {
+    text = sentences.slice(0, 3).join('। ') + '।';
+  } else if (sentences.length > 0) {
+    text = sentences.join('। ') + '।';
+  }
+
+  return text;
+}
+
 export default function AiAgentWidget() {
   const [isOpen, setIsOpen] = useState(false);
   const [chatOpen, setChatOpen] = useState(false);
@@ -69,11 +173,12 @@ export default function AiAgentWidget() {
   const [isAILoading, setIsAILoading] = useState(false);
   const [isListening, setIsListening] = useState(false);
   const [ttsEnabled, setTtsEnabled] = useState(true);
+  const [availableVoices, setAvailableVoices] = useState<SpeechSynthesisVoice[]>([]);
 
   const [chatMessages, setChatMessages] = useState<Array<{ sender: 'user' | 'ai'; text: string }>>([
     {
       sender: 'ai',
-      text: 'जय श्री विष्णु! जय फल्गु माते! 🙏\nमैं गया जी का प्रामाणिक "पंडित जी AI" हूँ। गोत्र संकल्प, पिंडदान तिथि, विष्णुपद मंदिर व पैकेज से जुड़ा कोई भी प्रश्न पूछें या माइक दबाकर बोलें।'
+      text: 'जय श्री विष्णु! जय फल्गु माते!\nमैं गया जी का प्रामाणिक "पंडित जी AI" हूँ। गोत्र संकल्प, पिंडदान तिथि, विष्णुपद मंदिर व पैकेज से जुड़ा कोई भी प्रश्न पूछें या माइक दबाकर बोलें।'
     }
   ]);
 
@@ -129,6 +234,9 @@ export default function AiAgentWidget() {
         setIsOpen(false);
         setChatOpen(false);
         setIsDiagnosticOpen(false);
+        if (typeof window !== 'undefined') {
+          window.speechSynthesis?.cancel();
+        }
       }
     };
 
@@ -140,7 +248,32 @@ export default function AiAgentWidget() {
     };
   }, []);
 
-  // Initialize Web Speech Recognition
+  // Preload and cache SpeechSynthesis voices
+  useEffect(() => {
+    if (typeof window === 'undefined' || !window.speechSynthesis) return;
+
+    const loadVoices = () => {
+      try {
+        const voices = window.speechSynthesis.getVoices();
+        if (voices && voices.length > 0) {
+          setAvailableVoices(voices);
+        }
+      } catch (e) {
+        console.warn('Voice loading notice:', e);
+      }
+    };
+
+    loadVoices();
+    window.speechSynthesis.onvoiceschanged = loadVoices;
+
+    return () => {
+      if (typeof window !== 'undefined' && window.speechSynthesis) {
+        window.speechSynthesis.onvoiceschanged = null;
+      }
+    };
+  }, []);
+
+  // Initialize Web Speech Recognition with explicit Hindi Indian locale
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
@@ -148,13 +281,15 @@ export default function AiAgentWidget() {
         const recognition = new SpeechRecognition();
         recognition.continuous = false;
         recognition.interimResults = false;
-        recognition.lang = 'hi-IN'; // Default to Hindi (India)
+        recognition.lang = 'hi-IN'; // Force Hindi (India) phonetic model
 
         recognition.onresult = (event: any) => {
-          const transcript = event.results[0][0].transcript;
-          if (transcript) {
-            setInputMessage(transcript);
-            submitMessage(transcript);
+          const rawTranscript = event.results[0][0].transcript;
+          if (rawTranscript) {
+            // Apply phonetic Vedic auto-correction
+            const sanitized = sanitizeVedicSpeechInput(rawTranscript);
+            setInputMessage(sanitized);
+            submitMessage(sanitized);
           }
           setIsListening(false);
         };
@@ -184,6 +319,10 @@ export default function AiAgentWidget() {
       setIsListening(false);
     } else {
       try {
+        // Cancel ongoing TTS before listening to user
+        if (typeof window !== 'undefined') {
+          window.speechSynthesis?.cancel();
+        }
         recognitionRef.current.start();
         setIsListening(true);
       } catch (err) {
@@ -192,16 +331,49 @@ export default function AiAgentWidget() {
     }
   };
 
-  // Text to Speech Readout
+  // High-Quality Text to Speech Readout (Strictly Pure Spoken Words)
   const speakText = (text: string) => {
     if (!ttsEnabled || typeof window === 'undefined' || !window.speechSynthesis) return;
     try {
       window.speechSynthesis.cancel();
-      // Clean special characters and markdown stars
-      const cleaned = text.replace(/[*#_~]/g, '').slice(0, 300);
+      const cleaned = cleanTextForAudioSpeech(text);
+      if (!cleaned) return;
+
       const utterance = new SpeechSynthesisUtterance(cleaned);
-      utterance.lang = 'hi-IN';
-      utterance.rate = 0.95;
+      utterance.rate = 0.90; // Respectful Pandit Ji cadence
+      utterance.pitch = 1.0;
+
+      // Select natural Hindi or Indian voice
+      const voices = availableVoices.length > 0 ? availableVoices : window.speechSynthesis.getVoices();
+      
+      // 1. First priority: Pure Hindi voice
+      let selectedVoice = voices.find(v => 
+        v.lang === 'hi-IN' || 
+        v.lang === 'hi_IN' || 
+        v.lang.startsWith('hi') ||
+        v.name.toLowerCase().includes('hindi') || 
+        v.name.toLowerCase().includes('lekha') || 
+        v.name.toLowerCase().includes('neerja')
+      );
+
+      // 2. Second priority: Indian English / Regional Indian voice (pronounces Sanskrit authentic terms)
+      if (!selectedVoice) {
+        selectedVoice = voices.find(v => 
+          v.lang === 'en-IN' || 
+          v.lang === 'en_IN' || 
+          v.name.toLowerCase().includes('india') ||
+          v.name.toLowerCase().includes('veena') ||
+          v.name.toLowerCase().includes('rishi')
+        );
+      }
+
+      if (selectedVoice) {
+        utterance.voice = selectedVoice;
+        utterance.lang = selectedVoice.lang;
+      } else {
+        utterance.lang = 'hi-IN';
+      }
+
       window.speechSynthesis.speak(utterance);
     } catch (e) {
       console.warn('TTS error:', e);
