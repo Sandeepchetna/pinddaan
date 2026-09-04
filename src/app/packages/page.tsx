@@ -47,6 +47,7 @@ export default async function PackagesPage() {
         priceINR: 4500,
         goldPriceINR: 7500,
         badge: 'MOST POPULAR',
+        image: '/images/pind_daan_vidhi.jpg',
         shortDesc: 'Ideal for devotees visiting Gaya Ji for a single day to perform essential rites at Vishnupad Temple & Falgu River.',
         inclusions: 'Verified Vishnupad Temple Teerth Panda\nComplete Vedic Samagri (Pind, Barley, Sesame, Milk, Honey)\nFalgu River & Vishnupad Temple Rites\nAkshayavat Thread Ceremony\nAncestral Dam Register & Lineage Registration',
         goldInclusions: 'VIP Senior Lineage Teerth Panda Assignment\nPrivate AC Cab Station/Hotel Pickup & Drop\nComplete Vedic Samagri & Special Bhog Offerings\nFalgu River, Vishnupad Temple & Sita Kund Rites\nAkshayavat Thread Ceremony & Lineage Certificate\nPriority Temple Darshan Access'
@@ -59,6 +60,7 @@ export default async function PackagesPage() {
         priceINR: 12500,
         goldPriceINR: 18500,
         badge: 'RECOMMENDED',
+        image: '/images/gaya_vishnupad.jpg',
         shortDesc: 'Comprehensive pilgrimage covering Vishnupad, Falgu River, Akshayavat Banyan, Pretshila Hill, Ramshila, and Mangla Gauri Temple.',
         inclusions: 'Dedicated Vishnupad Teerth Panda Escort\n2 Nights Comfortable Hotel Accommodation\nPrivate AC Station Pickup from Gaya Station / Airport\nAll 45-Vedi Sacred Site Visits\nFull Ritual Samagri & Dakshina Included',
         goldInclusions: 'VIP Senior Lineage Teerth Panda Escort\n2 Nights AC Deluxe to 4-Star Hotel & Resort Stay with Pure Veg Meals\nPrivate Chauffeur AC SUV Transport for Entire Trip\nVIP Escort across All 45 Sacred Vedis & Pretshila Hill\nSpecial Vishnupad Temple Aarti Access & Bhog Prasadam\nOfficial Teerth Lineage Certificate & Gold Blessing Kit'
@@ -71,6 +73,7 @@ export default async function PackagesPage() {
         priceINR: 10449,
         goldPriceINR: 10433,
         badge: 'MOST POPULAR',
+        image: '/images/akshay_vat.jpg',
         shortDesc: 'Phalgu River are used to perform the early cleansing rites, tarpan, and the final immersion rituals required during the Tripindi Shradh process',
         inclusions: 'Senior Jyotish & Vedic Karma-Kand Acharya in Gaya Ji\nAltar Rites with Wheat Sattu\nTripindi Homa with Ghee Ahutis on the Bank of Falgu River',
         goldInclusions: 'Senior Jyotish & Vedic Karma-Kand Acharya in Gaya Ji\nAltar Rites with Wheat Sattu\nTripindi Homa with Ghee Ahutis on the Bank of Falgu River'
@@ -83,6 +86,7 @@ export default async function PackagesPage() {
         priceINR: 12499,
         goldPriceINR: 12499,
         badge: 'SPECIALIZED REMEDY',
+        image: '/images/gaya_drone.jpg',
         shortDesc: 'Specialized Vedic karma-kand performed at bank of falgu river near Vishnupad for souls who passed away unnaturally.',
         inclusions: 'Senior Jyotish & Vedic Karma-Kand Acharya in Gaya Ji\nAltar Rites & Pind Daan with Wheat Sattu\nNarayan Bali Homa with Ghee Ahutis',
         goldInclusions: 'Senior Jyotish & Vedic Karma-Kand Acharya in Gaya Ji\nAltar Rites & Pind Daan with Wheat Sattu\nNarayan Bali Homa with Ghee Ahutis'
@@ -98,9 +102,9 @@ export default async function PackagesPage() {
         <span className="text-xs uppercase tracking-widest font-bold text-[#F48D08]">
           Transparent & Fixed Dakshina Packages
         </span>
-        <h1 className="text-3xl sm:text-5xl md:text-6xl font-display font-bold tracking-tight leading-[1.15]">
-          <span className="block text-[#2B2118]">Curated Vedic Rites &</span>
-          <span className="block text-transparent bg-clip-text bg-gradient-to-r from-[#6f1d14] via-[#C6922E] to-[#F48D08]">
+        <h1 className="text-3xl sm:text-5xl md:text-6xl font-display font-bold tracking-tight leading-[1.25] pb-2">
+          <span className="block text-[#2B2118] pb-1">Curated Vedic Rites &</span>
+          <span className="inline-block text-transparent bg-clip-text bg-gradient-to-r from-[#6f1d14] via-[#C6922E] to-[#F48D08] pb-3 -mb-3">
             Pind Daan Pilgrimage Packages
           </span>
         </h1>

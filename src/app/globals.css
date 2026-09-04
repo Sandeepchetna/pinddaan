@@ -152,11 +152,13 @@ p.prose-luxury {
   font-family: var(--font-hindi), 'Noto Sans Devanagari', sans-serif !important;
 }
 
-/* Fix bg-clip-text clipping for Devanagari Hindi matras & ascenders */
+/* Fix bg-clip-text clipping for letters with descenders (g, y, p, j, q) & Devanagari Hindi matras */
 .bg-clip-text,
 [class*="bg-clip-text"] {
   -webkit-box-decoration-break: clone;
   box-decoration-break: clone;
+  padding-bottom: 0.15em;
+  display: inline-block;
 }
 
 /* ==========================================================================

@@ -447,6 +447,7 @@ export default async function HomePage() {
               badge: 'MOST POPULAR',
               shortDesc: 'Ideal for devotees visiting Gaya Ji for a single day to perform essential rites at Vishnupad Temple & Falgu River.',
               inclusions: 'Verified Vishnupad Temple Teerth Panda\nComplete Vedic Samagri\nFalgu River & Vishnupad Temple Rites\nAncestral Lineage Registration',
+              image: '/images/pind_daan_vidhi.jpg',
               goldInclusions: 'VIP Senior Lineage Teerth Panda\nPrivate AC Cab Station/Hotel Pickup & Drop\nAC Deluxe to 4-Star Hotel & Resort Accommodations\nVIP Priority Temple Darshan Access'
             },
             {
@@ -456,6 +457,7 @@ export default async function HomePage() {
               priceINR: 12500,
               goldPriceINR: 18500,
               badge: 'RECOMMENDED',
+              image: '/images/gaya_vishnupad.jpg',
               shortDesc: 'Comprehensive pilgrimage covering Vishnupad, Falgu River, Akshayavat Banyan, Pretshila, and Ramshila.',
               inclusions: 'Dedicated Vishnupad Teerth Panda Escort\n2 Nights Hotel Accommodation\nPrivate AC Station Pickup & Drop\nAll 45-Vedi Sacred Site Visits',
               goldInclusions: 'VIP Senior Lineage Teerth Panda Escort\n2 Nights AC Deluxe to 4-Star Hotel & Resort Stay + Meals\nPrivate Chauffeur AC SUV Transport\nOfficial Gold Lineage Certificate'
@@ -467,6 +469,7 @@ export default async function HomePage() {
               priceINR: 10449,
               goldPriceINR: 10433,
               badge: 'MOST POPULAR',
+              image: '/images/akshay_vat.jpg',
               shortDesc: 'Phalgu River are used to perform the early cleansing rites, tarpan, and the final immersion rituals required during the Tripindi Shradh process',
               inclusions: 'Senior Jyotish & Vedic Karma-Kand Acharya in Gaya Ji\nAltar Rites with Wheat Sattu\nTripindi Homa with Ghee Ahutis on the Bank of Falgu River',
               goldInclusions: 'Senior Jyotish & Vedic Karma-Kand Acharya in Gaya Ji\nAltar Rites with Wheat Sattu\nTripindi Homa with Ghee Ahutis on the Bank of Falgu River'
@@ -478,6 +481,7 @@ export default async function HomePage() {
               priceINR: 12499,
               goldPriceINR: 12499,
               badge: 'SPECIALIZED REMEDY',
+              image: '/images/gaya_drone.jpg',
               shortDesc: 'Specialized Vedic karma-kand performed at bank of falgu river near Vishnupad for souls who passed away unnaturally.',
               inclusions: 'Senior Jyotish & Vedic Karma-Kand Acharya in Gaya Ji\nAltar Rites & Pind Daan with Wheat Sattu\nNarayan Bali Homa with Ghee Ahutis',
               goldInclusions: 'Senior Jyotish & Vedic Karma-Kand Acharya in Gaya Ji\nAltar Rites & Pind Daan with Wheat Sattu\nNarayan Bali Homa with Ghee Ahutis'

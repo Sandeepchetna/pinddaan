@@ -16,6 +16,7 @@ interface PackageCardProps {
     shortDesc: string;
     inclusions: string;
     goldInclusions?: string;
+    image?: string | null;
   };
   showCompareLink?: boolean;
   defaultTier?: 'GOLD' | 'PLATINUM';
@@ -66,7 +67,7 @@ export default function PackageCard({ pkg, showCompareLink = true, defaultTier =
 
   return (
     <div
-      className={`group bg-white rounded-[24px] p-6 sm:p-8 border transition-all duration-300 flex flex-col justify-between relative ${
+      className={`group bg-white rounded-[24px] p-5 sm:p-7 border transition-all duration-300 flex flex-col justify-between relative ${
         isPlatinum 
           ? 'border-2 border-[#C6922E] shadow-[0_12px_36px_rgba(198,146,46,0.14)] bg-gradient-to-b from-[#FAF7F2]/80 via-white to-[#FAF7F2]/40' 
           : 'border-[#EFE6D9] shadow-[0_4px_24px_rgba(43,33,24,0.05)] hover:shadow-[0_12px_32px_rgba(43,33,24,0.10)] hover:border-[#C6922E]/50 hover:-translate-y-1'
@@ -88,12 +89,29 @@ export default function PackageCard({ pkg, showCompareLink = true, defaultTier =
         </span>
       </div>
 
-      {/* 2. Structured Content Body */}
-      <div className="space-y-4 pt-3 flex-1 flex flex-col justify-between">
+      {/* 2. Package Feature Poster Image */}
+      <div className="relative w-full h-36 sm:h-40 rounded-[18px] overflow-hidden border border-[#EFE6D9] bg-[#FAF7F2] shrink-0 my-3 shadow-inner group-hover:border-[#C6922E]/50 transition-all">
+        <img 
+          src={pkg.image || '/images/gaya_vishnupad.jpg'} 
+          alt={pkg.title}
+          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+          loading="lazy"
+          onError={(e) => {
+            const img = e.currentTarget;
+            if (!img.src.includes('/images/gaya_vishnupad.jpg')) {
+              img.src = '/images/gaya_vishnupad.jpg';
+            }
+          }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
+      </div>
+
+      {/* 3. Structured Content Body */}
+      <div className="space-y-4 flex-1 flex flex-col justify-between">
         
         {/* Title (Consistent 2-line min-height) */}
-        <div className="min-h-[58px] sm:min-h-[64px] flex items-center">
-          <h3 className="text-xl sm:text-[23px] font-display font-bold text-[#2B2118] group-hover:text-[#C6922E] transition-colors leading-[1.25] line-clamp-2">
+        <div className="min-h-[52px] sm:min-h-[58px] flex items-center">
+          <h3 className="text-xl sm:text-[22px] font-display font-bold text-[#2B2118] group-hover:text-[#C6922E] transition-colors leading-[1.25] line-clamp-2">
             {pkg.title}
           </h3>
         </div>

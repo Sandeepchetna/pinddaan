@@ -131,30 +131,93 @@ function MediaUploaderInput({
   onChange: (url: string) => void;
 }) {
   const [uploading, setUploading] = useState(false);
+  const [uploadError, setUploadError] = useState('');
+
+  // Auto-compress large images client-side before sending to server (avoids Nginx 413 & VPS timeouts)
+  const compressImage = async (file: File): Promise<File> => {
+    if (!file.type.startsWith('image/') || file.type.includes('svg')) {
+      return file;
+    }
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = new Image();
+        img.onload = () => {
+          const maxDim = 1920;
+          let { width, height } = img;
+          if (width > maxDim || height > maxDim) {
+            if (width > height) {
+              height = Math.round((height * maxDim) / width);
+              width = maxDim;
+            } else {
+              width = Math.round((width * maxDim) / height);
+              height = maxDim;
+            }
+          }
+          const canvas = document.createElement('canvas');
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          if (!ctx) return resolve(file);
+          ctx.drawImage(img, 0, 0, width, height);
+          canvas.toBlob(
+            (blob) => {
+              if (!blob) return resolve(file);
+              const compressedFile = new File([blob], file.name.replace(/\.[^.]+$/, '.jpg'), {
+                type: 'image/jpeg',
+                lastModified: Date.now(),
+              });
+              resolve(compressedFile);
+            },
+            'image/jpeg',
+            0.85
+          );
+        };
+        img.onerror = () => resolve(file);
+        img.src = e.target?.result as string;
+      };
+      reader.onerror = () => resolve(file);
+      reader.readAsDataURL(file);
+    });
+  };
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
     setUploading(true);
-    const formData = new FormData();
-    formData.append('file', file);
+    setUploadError('');
 
     try {
+      const processedFile = await compressImage(file);
+      const formData = new FormData();
+      formData.append('file', processedFile);
+
       const res = await fetch('/api/upload', {
         method: 'POST',
         body: formData
       });
+
+      if (!res.ok) {
+        const text = await res.text();
+        throw new Error(text || `Server error (${res.status})`);
+      }
+
       const data = await res.json();
       if (data.success && data.url) {
         onChange(data.url);
       } else {
+        setUploadError(data.error || 'Upload failed');
         alert(data.error || 'Upload failed');
       }
-    } catch (err) {
-      alert('File upload error');
+    } catch (err: any) {
+      console.error('File upload error:', err);
+      setUploadError(err.message || 'File upload failed');
+      alert(`Upload error: ${err.message || 'Network or server error'}`);
     } finally {
       setUploading(false);
+      // Reset input value so same file can be re-selected if needed
+      e.target.value = '';
     }
   };
 
@@ -162,45 +225,57 @@ function MediaUploaderInput({
 
   return (
     <div className="space-y-2">
-      <label className="block font-semibold text-xs text-slate-300">{label}</label>
+      <div className="flex justify-between items-center">
+        <label className="block font-semibold text-xs text-slate-300">{label}</label>
+        {uploadError && <span className="text-[10px] text-red-400 font-bold">{uploadError}</span>}
+      </div>
       <div className="flex gap-2">
         <input 
           type="text" 
           value={value || ''} 
           onChange={e => onChange(e.target.value)} 
-          placeholder="Paste Image/Video URL or upload file..."
+          placeholder="Paste Image/Video URL or click Browse File..."
           className="flex-1 p-3 bg-slate-900/90 border border-slate-700 rounded-xl text-white font-bold text-xs focus:outline-none focus:border-[#F48D08]"
         />
-        <label className="bg-gradient-to-r from-[#F48D08] to-[#D97706] hover:from-[#D97706] hover:to-[#B45309] text-white px-4 py-3 rounded-xl font-bold text-xs cursor-pointer flex items-center gap-1.5 shrink-0 shadow-md">
+        <label className="bg-gradient-to-r from-[#F48D08] to-[#D97706] hover:from-[#D97706] hover:to-[#B45309] text-white px-4 py-3 rounded-xl font-bold text-xs cursor-pointer flex items-center gap-1.5 shrink-0 shadow-md transition-all">
           <Upload className={`w-4 h-4 ${uploading ? 'animate-spin' : ''}`} />
-          <span>{uploading ? 'Uploading...' : 'Browse File'}</span>
+          <span>{uploading ? 'Compressing & Uploading...' : 'Browse File'}</span>
           <input 
             type="file" 
             accept="image/*,video/*" 
             onChange={handleFileUpload} 
             className="hidden" 
+            disabled={uploading}
           />
         </label>
       </div>
 
       {value && (
-        <div className="mt-2 h-32 bg-slate-900 rounded-2xl overflow-hidden border border-slate-800 relative group shadow-inner flex items-center justify-center p-2">
+        <div className="mt-2 h-36 bg-slate-900 rounded-2xl overflow-hidden border border-slate-800 relative group shadow-inner flex items-center justify-center p-2">
           {isVideo ? (
-            <video src={value} controls className="w-full h-full object-cover" />
+            <video src={value} controls className="w-full h-full object-cover rounded-xl" />
           ) : (
             <img 
               src={value} 
               alt="Preview" 
               onError={(e: any) => {
                 e.target.onerror = null;
-                e.target.src = '/Pind-Daan-Wale.svg';
+                e.target.src = '/images/gaya_vishnupad.jpg';
               }}
-              className="w-full h-full object-contain" 
+              className="w-full h-full object-contain rounded-xl" 
             />
           )}
           <div className="absolute top-2.5 left-2.5 bg-black/70 backdrop-blur-md px-3 py-1 rounded-full text-[10px] font-extrabold text-amber-400 border border-amber-500/30">
             {isVideo ? '🎥 Live Video Preview' : '🖼️ Live Image Preview'}
           </div>
+          <button
+            type="button"
+            onClick={() => onChange('')}
+            className="absolute top-2.5 right-2.5 bg-red-600/80 hover:bg-red-600 text-white p-1 rounded-full text-[10px] opacity-0 group-hover:opacity-100 transition-opacity"
+            title="Clear Media"
+          >
+            ✕
+          </button>
         </div>
       )}
     </div>
