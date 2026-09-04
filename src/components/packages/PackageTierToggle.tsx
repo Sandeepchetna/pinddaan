@@ -43,11 +43,11 @@ export default function PackageTierToggle({ initialPackages }: { initialPackages
             onClick={() => setGlobalTier('PLATINUM')}
             className={`px-5 py-2 rounded-full font-bold text-xs transition-all flex items-center gap-1.5 ${
               globalTier === 'PLATINUM'
-                ? 'bg-gradient-to-r from-[#6f1d14] via-[#F48D08] to-[#C6922E] text-white shadow-sm'
+                ? 'bg-[#F48D08] text-white shadow-sm'
                 : 'text-text-secondary hover:text-text-primary'
             }`}
           >
-            <Crown className="w-3.5 h-3.5 text-amber-300" />
+            <Crown className="w-3.5 h-3.5 text-white" />
             <span>SHOW ALL PLATINUM VIP PLANS</span>
           </button>
         </div>

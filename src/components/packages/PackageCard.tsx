@@ -47,7 +47,7 @@ export default function PackageCard({ pkg, showCompareLink = true, defaultTier =
     return b;
   };
 
-  const badgeLabel = isPlatinum ? 'Platinum VIP Plan' : getCleanBadge(pkg.badge);
+  const badgeLabel = getCleanBadge(pkg.badge);
 
   return (
     <div
@@ -62,11 +62,7 @@ export default function PackageCard({ pkg, showCompareLink = true, defaultTier =
       <div className="flex items-center justify-between gap-3 pb-3 border-b border-[#EFE6D9]/70">
         <span 
           title={pkg.badge || badgeLabel}
-          className={`text-[10.5px] uppercase font-body font-bold px-3 py-1 rounded-full tracking-wider truncate max-w-[180px] sm:max-w-[200px] select-none ${
-            isPlatinum 
-              ? 'bg-[#2B2118] text-amber-300 border border-amber-500/30 shadow-sm' 
-              : 'bg-[#FAF7F2] text-[#C6922E] border border-[#EFE6D9]'
-          }`}
+          className="text-[10.5px] uppercase font-body font-bold px-3 py-1 rounded-full tracking-wider truncate max-w-[180px] sm:max-w-[200px] select-none bg-[#FAF7F2] text-[#C6922E] border border-[#EFE6D9]"
         >
           {badgeLabel}
         </span>
@@ -113,11 +109,11 @@ export default function PackageCard({ pkg, showCompareLink = true, defaultTier =
             onClick={() => setTier('PLATINUM')}
             className={`py-2 px-2.5 rounded-[12px] text-xs font-body font-semibold transition-all flex items-center justify-center text-center leading-tight gap-1 select-none ${
               isPlatinum 
-                ? 'bg-[#2B2118] text-amber-300 shadow-sm' 
+                ? 'bg-[#C6922E] text-white shadow-sm' 
                 : 'text-[#7A736A] hover:text-[#2B2118] hover:bg-white/60'
             }`}
           >
-            <Crown className="w-3.5 h-3.5 text-amber-300 shrink-0" />
+            <Crown className="w-3.5 h-3.5 text-white shrink-0" />
             <span>Platinum VIP</span>
           </button>
         </div>
