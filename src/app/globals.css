@@ -253,6 +253,16 @@ textarea:focus {
   font-family: var(--font-body), 'Plus Jakarta Sans', system-ui, sans-serif !important;
 }
 
+.admin-erp-root input[type="text"],
+.admin-erp-root input[type="email"],
+.admin-erp-root input[type="tel"],
+.admin-erp-root input[type="number"],
+.admin-erp-root input[type="password"],
+.admin-erp-root select,
+.admin-erp-root textarea {
+  min-height: unset;
+}
+
 /* ==========================================================================
    RESPONSIVE LUXURY CONTAINERS (1280px / 1400px / 1600px)
    ========================================================================== */
