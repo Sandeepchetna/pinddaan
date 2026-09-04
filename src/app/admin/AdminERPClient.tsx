@@ -44,7 +44,8 @@ import {
   LogOut,
   Menu,
   Mail,
-  ArrowUpRight
+  ArrowUpRight,
+  Loader2
 } from 'lucide-react';
 import { 
   getAdminERPData, 
@@ -61,6 +62,7 @@ import {
   deleteCustomerAction,
   upsertArticleAction,
   deleteArticleAction,
+  generateAiArticleAction,
   upsertSacredPlaceAction,
   deleteSacredPlaceAction,
   upsertTestimonialAction,
@@ -242,6 +244,13 @@ export default function AdminERPClient({ initialData, session }: AdminERPClientP
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalType, setModalType] = useState<string>('');
 
+  // AI Article Generator State
+  const [isAiArticleModalOpen, setIsAiArticleModalOpen] = useState(false);
+  const [aiArticleTopic, setAiArticleTopic] = useState('');
+  const [aiArticleLanguage, setAiArticleLanguage] = useState<'en' | 'hi'>('en');
+  const [isGeneratingArticle, setIsGeneratingArticle] = useState(false);
+  const [articleActiveTab, setArticleActiveTab] = useState<'content' | 'seo'>('content');
+
   // Dynamic Forms State
   const [heroSlideForm, setHeroSlideForm] = useState({
     id: '',
@@ -289,7 +298,10 @@ export default function AdminERPClient({ initialData, session }: AdminERPClientP
     summary: '',
     content: '',
     heroImage: '/images/gaya_vishnupad.jpg',
-    readTime: '5 min read'
+    readTime: '5 min read',
+    metaTitle: '',
+    metaDesc: '',
+    keywords: ''
   });
 
   const [placeForm, setPlaceForm] = useState({
@@ -438,6 +450,38 @@ export default function AdminERPClient({ initialData, session }: AdminERPClientP
     loadERPData();
   };
 
+  const handleGenerateAiArticle = async () => {
+    if (!aiArticleTopic.trim() || isGeneratingArticle) return;
+    setIsGeneratingArticle(true);
+    try {
+      const res = await generateAiArticleAction(aiArticleTopic, aiArticleLanguage);
+      if (res.success && res.article) {
+        setArticleForm({
+          id: '',
+          title: res.article.title,
+          slug: res.article.slug,
+          category: res.article.category || 'Scriptural Knowledge',
+          summary: res.article.summary,
+          content: res.article.content,
+          heroImage: res.article.heroImage || '/images/gaya_vishnupad.jpg',
+          readTime: res.article.readTime || '6 min read',
+          metaTitle: res.article.metaTitle || '',
+          metaDesc: res.article.metaDesc || '',
+          keywords: res.article.keywords || ''
+        });
+        setIsAiArticleModalOpen(false);
+        setModalType('article');
+        setIsModalOpen(true);
+      } else {
+        alert(`AI Generation Notice: ${res.error || 'Failed to generate article'}`);
+      }
+    } catch (e: any) {
+      alert(`Error: ${e.message}`);
+    } finally {
+      setIsGeneratingArticle(false);
+    }
+  };
+
   const handleSaveArticle = async (e: React.FormEvent) => {
     e.preventDefault();
     await upsertArticleAction(articleForm);
@@ -527,8 +571,11 @@ export default function AdminERPClient({ initialData, session }: AdminERPClientP
       category: art.category || 'Scriptural Knowledge',
       summary: art.summary || '',
       content: art.content || '',
-      heroImage: art.heroImage || '/images/gaya_vishnupad.jpg',
-      readTime: art.readTime || '5 min read'
+      heroImage: art.image || art.heroImage || '/images/gaya_vishnupad.jpg',
+      readTime: art.readTime || '5 min read',
+      metaTitle: art.metaTitle || art.title || '',
+      metaDesc: art.metaDesc || art.summary || '',
+      keywords: art.keywords || ''
     });
     setModalType('article');
     setIsModalOpen(true);
@@ -1388,11 +1435,54 @@ export default function AdminERPClient({ initialData, session }: AdminERPClientP
 
           {/* ARTICLES CMS MODULE */}
           {activeTab === 'knowledge_centre' && (
-            <div className="bg-gradient-to-b from-[#141C2B] to-[#0D1424] rounded-2xl border border-slate-800/80 overflow-hidden shadow-xl animate-fadeIn">
-              <table className="w-full text-left text-xs text-slate-300">
-                <thead className="bg-[#0E1626] border-b border-slate-800/80 text-slate-400 uppercase font-semibold text-[10px]">
-                  <tr>
-                    <th className="p-4">Article Title</th>
+            <div className="space-y-6 animate-fadeIn">
+              {/* Top Controls: AI Generator & Add Button */}
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-gradient-to-r from-[#141C2B] to-[#0E1626] p-4 rounded-2xl border border-slate-800/80 shadow-md">
+                <div className="text-xs text-slate-400">
+                  Total: <strong className="text-white">{articles.length}</strong> Articles & Guides
+                </div>
+                <div className="flex items-center gap-2.5 w-full sm:w-auto justify-end">
+                  <button
+                    onClick={() => {
+                      setAiArticleTopic('');
+                      setIsAiArticleModalOpen(true);
+                    }}
+                    className="bg-gradient-to-r from-amber-500 via-amber-400 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-950 px-4 py-2 rounded-xl text-xs font-extrabold flex items-center gap-1.5 transition-all shadow-md shrink-0"
+                  >
+                    <Sparkles className="w-3.5 h-3.5" />
+                    <span>AI Article Generator (Groq LPU)</span>
+                  </button>
+                  <button
+                    onClick={() => {
+                      setArticleForm({
+                        id: '',
+                        title: '',
+                        slug: '',
+                        category: 'Scriptural Knowledge',
+                        summary: '',
+                        content: '',
+                        heroImage: '/images/gaya_vishnupad.jpg',
+                        readTime: '5 min read',
+                        metaTitle: '',
+                        metaDesc: '',
+                        keywords: ''
+                      });
+                      setModalType('article');
+                      setIsModalOpen(true);
+                    }}
+                    className="bg-slate-800 hover:bg-slate-700 text-white px-3.5 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all border border-slate-700 shrink-0"
+                  >
+                    <Plus className="w-3.5 h-3.5" />
+                    <span>Add Manually</span>
+                  </button>
+                </div>
+              </div>
+
+              <div className="bg-gradient-to-b from-[#141C2B] to-[#0D1424] rounded-2xl border border-slate-800/80 overflow-hidden shadow-xl">
+                <table className="w-full text-left text-xs text-slate-300">
+                  <thead className="bg-[#0E1626] border-b border-slate-800/80 text-slate-400 uppercase font-semibold text-[10px]">
+                    <tr>
+                      <th className="p-4">Article Title</th>
                     <th className="p-4">Category</th>
                     <th className="p-4">Read Time</th>
                     <th className="p-4 text-right">Actions</th>
@@ -1424,7 +1514,8 @@ export default function AdminERPClient({ initialData, session }: AdminERPClientP
                 </tbody>
               </table>
             </div>
-          )}
+          </div>
+        )}
 
           {/* SACRED PLACES CMS MODULE */}
           {activeTab === 'sacred_places' && (
@@ -2104,17 +2195,21 @@ export default function AdminERPClient({ initialData, session }: AdminERPClientP
       {/* ========================================================== */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
-          <div className="bg-gradient-to-b from-[#141C2B] to-[#0D1424] rounded-2xl max-w-2xl w-full border border-slate-700/80 text-white shadow-2xl my-8 overflow-hidden animate-fadeIn">
+          <div className={`bg-gradient-to-b from-[#141C2B] to-[#0D1424] rounded-2xl ${modalType === 'article' ? 'max-w-4xl' : 'max-w-2xl'} w-full border border-slate-700/80 text-white shadow-2xl my-8 overflow-hidden animate-fadeIn`}>
             
             {/* MODAL HEADER */}
             <div className="bg-[#0E1626]/95 px-6 py-5 border-b border-slate-800 flex justify-between items-center sticky top-0 z-10 backdrop-blur-md">
               <div className="flex items-center gap-3">
                 <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-[#8B2516] via-[#B45309] to-[#F59E0B] flex items-center justify-center text-white shadow-md">
-                  <Package className="w-4 h-4" />
+                  {modalType === 'article' ? <BookOpen className="w-4 h-4" /> : <Package className="w-4 h-4" />}
                 </div>
                 <div>
-                  <h3 className="font-bold text-lg text-white">Add / Edit {modalType.toUpperCase()} Record</h3>
-                  <p className="text-[11px] text-slate-400">Configure ritual fields, inclusions, pricing & media.</p>
+                  <h3 className="font-bold text-lg text-white">
+                    {modalType === 'article' ? 'Article & SEO Publishing Studio' : `Add / Edit ${modalType.toUpperCase()} Record`}
+                  </h3>
+                  <p className="text-[11px] text-slate-400">
+                    {modalType === 'article' ? 'Publish Vedic guides & blogs with Google SERP simulator, keywords & rich Schema.' : 'Configure ritual fields, inclusions, pricing & media.'}
+                  </p>
                 </div>
               </div>
               <button 
@@ -2505,31 +2600,317 @@ export default function AdminERPClient({ initialData, session }: AdminERPClientP
                 </form>
               )}
 
-              {/* 3. ARTICLES CMS MODAL */}
+              {/* 3. ADVANCED ARTICLES & SEO CMS STUDIO */}
               {modalType === 'article' && (
-                <form onSubmit={handleSaveArticle} className="space-y-4 text-xs">
-                  <div>
-                    <label className="block font-semibold mb-1">Article Title *</label>
-                    <input type="text" value={articleForm.title} onChange={e => setArticleForm({ ...articleForm, title: e.target.value, slug: e.target.value.toLowerCase().replace(/[^a-z0-9]+/g, '-') })} required className="w-full p-3 bg-slate-900 border border-slate-700 rounded-xl text-white font-bold" />
-                  </div>
+                <form onSubmit={handleSaveArticle} className="space-y-6 text-xs">
                   
-                  <MediaUploaderInput 
-                    label="Article Banner Image / Video File or URL" 
-                    value={articleForm.heroImage} 
-                    onChange={url => setArticleForm({ ...articleForm, heroImage: url })} 
-                  />
+                  {/* 1-CLICK AI AUTO-WRITER BAR */}
+                  <div className="p-4 rounded-2xl bg-gradient-to-r from-amber-500/15 via-amber-400/10 to-amber-500/15 border border-amber-500/30 flex flex-col sm:flex-row items-center justify-between gap-3 shadow-inner">
+                    <div className="flex items-center gap-2.5 text-xs text-amber-300">
+                      <Sparkles className="w-4 h-4 text-amber-400 shrink-0" />
+                      <div>
+                        <strong className="block text-white text-xs">AI Smart SEO Writer (Groq LPU)</strong>
+                        <span className="text-[11px] text-slate-400">Auto-compose full 1,000+ word article, meta title, meta desc & keywords</span>
+                      </div>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (articleForm.title.trim()) {
+                          setAiArticleTopic(articleForm.title);
+                        }
+                        setIsAiArticleModalOpen(true);
+                      }}
+                      className="px-3.5 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold text-xs flex items-center gap-1.5 shadow-md shrink-0 transition-all"
+                    >
+                      <Sparkles className="w-3.5 h-3.5" />
+                      <span>Generate with AI</span>
+                    </button>
+                  </div>
 
-                  <div>
-                    <label className="block font-semibold mb-1">Category *</label>
-                    <input type="text" value={articleForm.category} onChange={e => setArticleForm({ ...articleForm, category: e.target.value })} required className="w-full p-3 bg-slate-900 border border-slate-700 rounded-xl text-white" />
+                  {/* SUB-TABS: CONTENT vs ADVANCED SEO */}
+                  <div className="flex rounded-xl bg-slate-900/90 p-1 border border-slate-800">
+                    <button
+                      type="button"
+                      onClick={() => setArticleActiveTab('content')}
+                      className={`flex-1 py-2 px-3 rounded-lg font-bold text-xs transition-all flex items-center justify-center gap-1.5 ${
+                        articleActiveTab === 'content'
+                          ? 'bg-amber-500 text-slate-950 shadow'
+                          : 'text-slate-400 hover:text-white'
+                      }`}
+                    >
+                      <BookOpen className="w-3.5 h-3.5" />
+                      <span>1. Content, Media & Story</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setArticleActiveTab('seo')}
+                      className={`flex-1 py-2 px-3 rounded-lg font-bold text-xs transition-all flex items-center justify-center gap-1.5 ${
+                        articleActiveTab === 'seo'
+                          ? 'bg-amber-500 text-slate-950 shadow'
+                          : 'text-slate-400 hover:text-white'
+                      }`}
+                    >
+                      <Globe className="w-3.5 h-3.5" />
+                      <span>2. Advanced SEO & SERP Simulator</span>
+                    </button>
                   </div>
-                  <div>
-                    <label className="block font-semibold mb-1">Summary *</label>
-                    <textarea rows={3} value={articleForm.summary} onChange={e => setArticleForm({ ...articleForm, summary: e.target.value })} required className="w-full p-3 bg-slate-900 border border-slate-700 rounded-xl text-white" />
+
+                  {/* TAB 1: CONTENT, MEDIA & STORY */}
+                  {articleActiveTab === 'content' && (
+                    <div className="space-y-4 animate-fadeIn">
+                      {/* Title */}
+                      <div>
+                        <div className="flex items-center justify-between mb-1">
+                          <label className="font-semibold text-slate-300">Article Title *</label>
+                          <span className="text-[10px] text-slate-500">{(articleForm.title || '').length} characters</span>
+                        </div>
+                        <input
+                          type="text"
+                          value={articleForm.title}
+                          onChange={e => {
+                            const newTitle = e.target.value;
+                            const generatedSlug = newTitle.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+                            setArticleForm({
+                              ...articleForm,
+                              title: newTitle,
+                              slug: articleForm.slug ? articleForm.slug : generatedSlug,
+                              metaTitle: articleForm.metaTitle ? articleForm.metaTitle : newTitle
+                            });
+                          }}
+                          required
+                          placeholder="e.g. Complete Gaya Pind Daan Guide for Devotees from Mumbai"
+                          className="w-full p-3 bg-slate-900 border border-slate-700 rounded-xl text-white font-bold text-sm focus:outline-none focus:border-amber-400"
+                        />
+                      </div>
+
+                      {/* Slug */}
+                      <div>
+                        <label className="block font-semibold text-slate-300 mb-1">URL Slug (Permlink) *</label>
+                        <div className="flex items-center bg-slate-900 border border-slate-700 rounded-xl overflow-hidden px-3 py-2 text-xs">
+                          <span className="text-slate-500 font-mono select-none">https://pinddaanwale.com/blog/</span>
+                          <input
+                            type="text"
+                            value={articleForm.slug}
+                            onChange={e => setArticleForm({ ...articleForm, slug: e.target.value.toLowerCase().replace(/[^a-z0-9]+/g, '-') })}
+                            required
+                            className="flex-1 bg-transparent text-amber-300 font-mono font-bold focus:outline-none pl-1"
+                          />
+                        </div>
+                      </div>
+
+                      {/* Category & Read Time Grid */}
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                          <label className="block font-semibold text-slate-300 mb-1">Category *</label>
+                          <select
+                            value={articleForm.category}
+                            onChange={e => setArticleForm({ ...articleForm, category: e.target.value })}
+                            className="w-full p-3 bg-slate-900 border border-slate-700 rounded-xl text-white font-medium focus:outline-none focus:border-amber-400"
+                          >
+                            <option value="Scriptural Knowledge">Scriptural Knowledge (शास्त्र सम्मत ज्ञान)</option>
+                            <option value="Pilgrimage Guide">Pilgrimage Guide (तीर्थ यात्रा मार्गदर्शिका)</option>
+                            <option value="Vedic Rituals">Vedic Rituals (वैदिक अनुष्ठान एवं विधि)</option>
+                            <option value="Devotee Advisory">Devotee Advisory (दलालों से बचाव व सलाह)</option>
+                            <option value="NRI Pilgrimage Guide">NRI Pilgrimage Guide (प्रवासी भारतीय सेवा)</option>
+                          </select>
+                        </div>
+
+                        <div>
+                          <label className="block font-semibold text-slate-300 mb-1">Estimated Read Time</label>
+                          <input
+                            type="text"
+                            value={articleForm.readTime}
+                            onChange={e => setArticleForm({ ...articleForm, readTime: e.target.value })}
+                            placeholder="e.g. 6 min read"
+                            className="w-full p-3 bg-slate-900 border border-slate-700 rounded-xl text-white font-medium focus:outline-none focus:border-amber-400"
+                          />
+                        </div>
+                      </div>
+
+                      {/* Media Uploader */}
+                      <MediaUploaderInput 
+                        label="Article Feature Banner (High-Res 16:9 Image or Video)" 
+                        value={articleForm.heroImage} 
+                        onChange={url => setArticleForm({ ...articleForm, heroImage: url })} 
+                      />
+
+                      {/* Short Summary / Blurb */}
+                      <div>
+                        <div className="flex items-center justify-between mb-1">
+                          <label className="font-semibold text-slate-300">Article Summary / Blurb *</label>
+                          <span className="text-[10px] text-slate-500">{(articleForm.summary || '').length} characters</span>
+                        </div>
+                        <textarea
+                          rows={3}
+                          value={articleForm.summary}
+                          onChange={e => setArticleForm({ ...articleForm, summary: e.target.value, metaDesc: articleForm.metaDesc ? articleForm.metaDesc : e.target.value })}
+                          required
+                          placeholder="A compelling 2-sentence hook displayed on blog listing cards and social media shares..."
+                          className="w-full p-3 bg-slate-900 border border-slate-700 rounded-xl text-white leading-relaxed focus:outline-none focus:border-amber-400"
+                        />
+                      </div>
+
+                      {/* Full Markdown Article Content */}
+                      <div>
+                        <div className="flex items-center justify-between mb-1">
+                          <label className="font-semibold text-slate-300">Full Article Content (Markdown) *</label>
+                          <span className="text-[10px] text-amber-400 font-mono">
+                            {(articleForm.content || '').split(/\s+/).filter(Boolean).length} words
+                          </span>
+                        </div>
+                        <textarea
+                          rows={14}
+                          value={articleForm.content}
+                          onChange={e => setArticleForm({ ...articleForm, content: e.target.value })}
+                          required
+                          placeholder={`# Article Title\n\n## 1. Introduction\nExplain the scriptural context...\n\n## 2. Sacred Vedis to Visit\n- Vishnupad Temple\n- Falgu River\n- Akshayavat\n\n## 3. Verified Advice\nBeware of railway station middlemen...`}
+                          className="w-full p-3.5 bg-slate-900 border border-slate-700 rounded-xl text-white font-mono text-[11.5px] leading-relaxed focus:outline-none focus:border-amber-400"
+                        />
+                      </div>
+                    </div>
+                  )}
+
+                  {/* TAB 2: ADVANCED SEO & SERP SIMULATOR */}
+                  {articleActiveTab === 'seo' && (
+                    <div className="space-y-5 animate-fadeIn">
+                      {/* GOOGLE SEARCH SERP SIMULATOR */}
+                      <div className="p-4 rounded-2xl bg-[#202124] border border-slate-700 space-y-2 shadow-xl">
+                        <div className="flex items-center justify-between text-[11px] text-slate-400 border-b border-slate-700 pb-1.5">
+                          <span className="font-bold flex items-center gap-1.5 text-white">
+                            <Globe className="w-3.5 h-3.5 text-[#8AB4F8]" />
+                            <span>Google Search (SERP) Live Preview</span>
+                          </span>
+                          <span className="text-[10px] text-emerald-400">Search Engine View</span>
+                        </div>
+
+                        <div className="space-y-1 pt-1 font-sans">
+                          <div className="text-[11px] text-[#BDC1C6] flex items-center gap-1.5 truncate">
+                            <span className="w-4 h-4 rounded-full bg-amber-500/20 text-amber-400 flex items-center justify-center text-[9px] font-bold">P</span>
+                            <span className="truncate">https://www.pinddaanwale.com &gt; blog &gt; {articleForm.slug || 'slug'}</span>
+                          </div>
+                          <div className="text-base text-[#8AB4F8] hover:underline cursor-pointer font-medium leading-snug line-clamp-1">
+                            {articleForm.metaTitle || articleForm.title || 'Your SEO Meta Title Will Appear Here'}
+                          </div>
+                          <div className="text-xs text-[#BDC1C6] leading-relaxed line-clamp-2">
+                            {articleForm.metaDesc || articleForm.summary || 'Your compelling meta description will be displayed here in Google search engine results...'}
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* SEO Meta Title */}
+                      <div>
+                        <div className="flex items-center justify-between mb-1">
+                          <label className="font-semibold text-slate-300">SEO Meta Title (Title Tag)</label>
+                          <span className={`text-[10px] font-mono ${
+                            (articleForm.metaTitle || '').length > 60 
+                              ? 'text-rose-400' 
+                              : (articleForm.metaTitle || '').length >= 30 
+                              ? 'text-emerald-400' 
+                              : 'text-amber-400'
+                          }`}>
+                            {(articleForm.metaTitle || '').length} / 60 chars
+                          </span>
+                        </div>
+                        <input
+                          type="text"
+                          value={articleForm.metaTitle}
+                          onChange={e => setArticleForm({ ...articleForm, metaTitle: e.target.value })}
+                          placeholder="Best under 60 characters for maximum Google click-through rate"
+                          className="w-full p-3 bg-slate-900 border border-slate-700 rounded-xl text-white font-medium focus:outline-none focus:border-amber-400"
+                        />
+                      </div>
+
+                      {/* SEO Meta Description */}
+                      <div>
+                        <div className="flex items-center justify-between mb-1">
+                          <label className="font-semibold text-slate-300">SEO Meta Description</label>
+                          <span className={`text-[10px] font-mono ${
+                            (articleForm.metaDesc || '').length > 160 
+                              ? 'text-rose-400' 
+                              : (articleForm.metaDesc || '').length >= 120 
+                              ? 'text-emerald-400' 
+                              : 'text-amber-400'
+                          }`}>
+                            {(articleForm.metaDesc || '').length} / 160 chars
+                          </span>
+                        </div>
+                        <textarea
+                          rows={3}
+                          value={articleForm.metaDesc}
+                          onChange={e => setArticleForm({ ...articleForm, metaDesc: e.target.value })}
+                          placeholder="Optimal 120-160 characters summarizing the article with natural keywords..."
+                          className="w-full p-3 bg-slate-900 border border-slate-700 rounded-xl text-white leading-relaxed focus:outline-none focus:border-amber-400"
+                        />
+                      </div>
+
+                      {/* Target SEO Keywords */}
+                      <div>
+                        <label className="block font-semibold text-slate-300 mb-1">Target SEO Keywords (Comma-Separated)</label>
+                        <input
+                          type="text"
+                          value={articleForm.keywords}
+                          onChange={e => setArticleForm({ ...articleForm, keywords: e.target.value })}
+                          placeholder="e.g. pind daan in gaya, vishnupad temple timings, gaya panda charges, pitru paksha 2026"
+                          className="w-full p-3 bg-slate-900 border border-slate-700 rounded-xl text-white font-medium focus:outline-none focus:border-amber-400"
+                        />
+                        {articleForm.keywords && (
+                          <div className="flex flex-wrap gap-1.5 pt-2">
+                            {articleForm.keywords.split(',').map((kw, i) => kw.trim() && (
+                              <span key={i} className="px-2.5 py-0.5 rounded-full bg-amber-500/15 border border-amber-500/30 text-amber-300 text-[10px] font-mono">
+                                #{kw.trim()}
+                              </span>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+
+                      {/* SEO Audit Checklist */}
+                      <div className="p-3.5 rounded-2xl bg-slate-900/60 border border-slate-800 space-y-2">
+                        <span className="font-bold text-slate-300 block text-[11px]">Instant SEO Readiness Audit:</span>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[10.5px]">
+                          <div className={`flex items-center gap-1.5 ${(articleForm.title || '').length >= 20 ? 'text-emerald-400' : 'text-slate-500'}`}>
+                            <CheckCircle className="w-3.5 h-3.5 shrink-0" />
+                            <span>Descriptive Title (≥20 chars)</span>
+                          </div>
+                          <div className={`flex items-center gap-1.5 ${(articleForm.metaTitle || '').length <= 60 && (articleForm.metaTitle || '').length >= 30 ? 'text-emerald-400' : 'text-slate-500'}`}>
+                            <CheckCircle className="w-3.5 h-3.5 shrink-0" />
+                            <span>Optimized Meta Title (30-60 chars)</span>
+                          </div>
+                          <div className={`flex items-center gap-1.5 ${(articleForm.metaDesc || '').length <= 160 && (articleForm.metaDesc || '').length >= 80 ? 'text-emerald-400' : 'text-slate-500'}`}>
+                            <CheckCircle className="w-3.5 h-3.5 shrink-0" />
+                            <span>Compelling Meta Description</span>
+                          </div>
+                          <div className={`flex items-center gap-1.5 ${(articleForm.keywords || '').trim().length > 0 ? 'text-emerald-400' : 'text-slate-500'}`}>
+                            <CheckCircle className="w-3.5 h-3.5 shrink-0" />
+                            <span>Target SEO Keywords Defined</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* SUBMIT BUTTON */}
+                  <div className="pt-2 flex gap-3">
+                    <button
+                      type="button"
+                      onClick={() => setIsModalOpen(false)}
+                      className="px-5 py-3.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-xs transition-colors"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      type="submit"
+                      className="flex-1 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-950 py-3.5 rounded-xl font-extrabold text-xs shadow-lg transition-all flex items-center justify-center gap-2"
+                    >
+                      <Save className="w-4 h-4" />
+                      <span>Save Article & Publish to Live DB</span>
+                    </button>
                   </div>
-                  <button type="submit" className="w-full bg-[#F48D08] text-white py-3.5 rounded-xl font-bold">Save Article to Live DB</button>
+
                 </form>
               )}
+
 
               {/* 4. SACRED PLACES CMS MODAL */}
               {modalType === 'place' && (
@@ -2638,6 +3019,95 @@ export default function AdminERPClient({ initialData, session }: AdminERPClientP
         </div>
       )}
 
+      {/* AI ARTICLE GENERATOR MODAL */}
+      {isAiArticleModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fadeIn">
+          <div className="bg-[#0E1626] border border-amber-500/40 rounded-3xl p-6 max-w-lg w-full shadow-2xl space-y-4 text-xs text-slate-200">
+            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+              <div className="flex items-center gap-2 text-sm font-bold text-amber-300">
+                <Sparkles className="w-4 h-4 text-amber-400" />
+                <span>Groq LPU SEO Article Generator</span>
+              </div>
+              <button onClick={() => setIsAiArticleModalOpen(false)} className="text-slate-400 hover:text-white p-1">
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            <p className="text-slate-300 leading-relaxed text-[11.5px]">
+              Enter any pilgrimage topic, city guide, or scriptural question. The Groq LPU will compose an authoritative, 1,000+ word, SEO-structured article with H2/H3 headings, meta tags, and anti-middleman advisories in ~2 seconds.
+            </p>
+
+            <div className="space-y-1.5">
+              <label className="font-bold text-white block">Topic or Target Keywords *</label>
+              <input
+                type="text"
+                value={aiArticleTopic}
+                onChange={(e) => setAiArticleTopic(e.target.value)}
+                placeholder="e.g. Complete Guide for Hyderabad Devotees performing Pind Daan in Gaya"
+                className="w-full p-3 bg-slate-900 border border-slate-700 rounded-xl text-white font-medium focus:outline-none focus:border-amber-400"
+              />
+            </div>
+
+            <div className="space-y-1.5">
+              <label className="font-bold text-white block">Language *</label>
+              <div className="flex gap-2">
+                <button
+                  type="button"
+                  onClick={() => setAiArticleLanguage('en')}
+                  className={`flex-1 py-2 rounded-xl font-bold border transition-all ${
+                    aiArticleLanguage === 'en'
+                      ? 'bg-amber-500 text-slate-950 border-amber-400'
+                      : 'bg-slate-900 text-slate-400 border-slate-800'
+                  }`}
+                >
+                  English
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setAiArticleLanguage('hi')}
+                  className={`flex-1 py-2 rounded-xl font-bold border transition-all ${
+                    aiArticleLanguage === 'hi'
+                      ? 'bg-amber-500 text-slate-950 border-amber-400'
+                      : 'bg-slate-900 text-slate-400 border-slate-800'
+                  }`}
+                >
+                  हिंदी (Devanagari)
+                </button>
+              </div>
+            </div>
+
+            <div className="pt-3 flex gap-3">
+              <button
+                type="button"
+                onClick={() => setIsAiArticleModalOpen(false)}
+                className="flex-1 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 font-bold text-slate-300 transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={handleGenerateAiArticle}
+                disabled={isGeneratingArticle || !aiArticleTopic.trim()}
+                className="flex-1 py-3 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 font-bold text-slate-950 flex items-center justify-center gap-1.5 shadow-lg disabled:opacity-50 transition-all"
+              >
+                {isGeneratingArticle ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    <span>Generating Article...</span>
+                  </>
+                ) : (
+                  <>
+                    <Sparkles className="w-4 h-4" />
+                    <span>Generate Article</span>
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 }
+

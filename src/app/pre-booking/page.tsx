@@ -22,7 +22,8 @@ import {
   Clock,
   Award,
   CheckCircle,
-  HelpCircle
+  HelpCircle,
+  Loader2
 } from 'lucide-react';
 import { createPreBookingAction, getPublicBookingData } from '@/app/admin/actions';
 import { printBookingReceipt, BookingPDFData } from '@/lib/pdfGenerator';
@@ -31,6 +32,7 @@ function PreBookingFormContent() {
   const searchParams = useSearchParams();
   const packageParam = searchParams.get('package');
   const tierParam = searchParams.get('tier');
+  const cityParam = searchParams.get('city');
 
   // Tier State: GOLD or PLATINUM
   const [selectedTier, setSelectedTier] = useState<'GOLD' | 'PLATINUM'>('GOLD');
@@ -41,6 +43,51 @@ function PreBookingFormContent() {
   const [phone, setPhone] = useState<string>('');
   const [preferredDate, setPreferredDate] = useState<string>('');
   const [address, setAddress] = useState<string>('');
+  const [gotra, setGotra] = useState<string>('');
+
+  // AI Tithi & Shradh Assistant State
+  const [isAiTithiOpen, setIsAiTithiOpen] = useState(false);
+  const [tithiQuery, setTithiQuery] = useState('');
+  const [tithiAdvice, setTithiAdvice] = useState<{ date: string; explanation: string } | null>(null);
+  const [isTithiLoading, setIsTithiLoading] = useState(false);
+
+  const handleCalculateTithi = async () => {
+    if (!tithiQuery.trim() || isTithiLoading) return;
+    setIsTithiLoading(true);
+    setTithiAdvice(null);
+    try {
+      const res = await fetch('/api/ai/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          messages: [
+            {
+              role: 'user',
+              content: `Please calculate the exact auspicious date in Pitru Paksha 2026 (26 Sept to 10 Oct 2026) for this ancestor demise detail: "${tithiQuery}".
+If the user specifies father/mother/navami/ekadashi/amavasya or an English date, identify the corresponding Pitru Paksha 2026 date in YYYY-MM-DD format and explain in 2 simple sentences in Hindi.`
+            }
+          ],
+          language: 'hi'
+        })
+      });
+      if (res.ok) {
+        const data = await res.json();
+        const dateMatch = data.reply.match(/2026-(09|10)-\d{2}/);
+        const matchedDate = dateMatch ? dateMatch[0] : (tithiQuery.toLowerCase().includes('mother') || tithiQuery.toLowerCase().includes('माता') ? '2026-10-06' : '2026-10-10');
+        setTithiAdvice({
+          date: matchedDate,
+          explanation: data.reply
+        });
+      }
+    } catch (e) {
+      setTithiAdvice({
+        date: '2026-10-10',
+        explanation: 'सर्वपितृ अमावस्या (10 अक्टूबर 2026) सभी ज्ञात-अज्ञात पितरों के लिए सर्वोपरि एवं सर्वोत्तम तिथि है।'
+      });
+    } finally {
+      setIsTithiLoading(false);
+    }
+  };
 
   // Packages & Settings from Public Database
   const [packagesList, setPackagesList] = useState<any[]>([
@@ -124,7 +171,10 @@ function PreBookingFormContent() {
         setSelectedTier(upper as 'GOLD' | 'PLATINUM');
       }
     }
-  }, [packageParam, tierParam]);
+    if (cityParam && !address) {
+      setAddress(cityParam);
+    }
+  }, [packageParam, tierParam, cityParam, address]);
 
   // Load live packages & settings from DB
   useEffect(() => {
@@ -180,6 +230,7 @@ function PreBookingFormContent() {
         whatsappPhone: phone.trim(),
         city: address.trim(),
         address: address.trim(),
+        gotra: gotra.trim() || undefined,
         preferredDate,
         purpose: fullPackageTitle,
         packageSlug: selectedPackageSlug,
@@ -476,6 +527,7 @@ I have successfully pre-booked my Pind Daan through PindDaanWale.
 🆔 Booking ID: ${bookingRefId}
 👤 Name: ${devoteeName}
 📱 Mobile: ${phone}
+🪔 Gotra: ${gotra || 'Kashyap Gotra (Universal)'}
 🎖️ Package: ${activePackage?.title} (${selectedTier} Tier)
 📅 Visit Date: ${formattedDate || 'To be finalized'}
 📍 Location: Gaya Ji (${address || 'Bihar'})
@@ -783,19 +835,119 @@ Dhanyawad! 🙏`;
                     </button>
                     <button
                       type="button"
+                      onClick={() => setPreferredDate('2026-10-06')}
+                      className="text-[10px] bg-amber-100 hover:bg-amber-200 text-[#6f1d14] px-2.5 py-1 rounded-full font-bold transition-colors"
+                    >
+                      मातृ नवमी (6 Oct)
+                    </button>
+                    <button
+                      type="button"
                       onClick={() => setPreferredDate('2026-10-10')}
                       className="text-[10px] bg-amber-100 hover:bg-amber-200 text-[#6f1d14] px-2.5 py-1 rounded-full font-bold transition-colors"
                     >
                       सर्वपितृ अमावस्या (10 Oct)
                     </button>
                   </div>
+
+                  {/* AI Tithi Finder Expander */}
+                  <div className="pt-2">
+                    <button
+                      type="button"
+                      onClick={() => setIsAiTithiOpen(!isAiTithiOpen)}
+                      className="w-full py-2 px-3 rounded-xl bg-gradient-to-r from-amber-500/10 via-amber-400/15 to-amber-500/10 border border-amber-300 text-[#6f1d14] text-xs font-bold flex items-center justify-between shadow-sm hover:bg-amber-100/70 transition-all"
+                    >
+                      <span className="flex items-center gap-1.5">
+                        <Sparkles className="w-3.5 h-3.5 text-[#F48D08]" />
+                        <span>सही तिथि नहीं पता? AI से गणना करवाएं</span>
+                      </span>
+                      <span className="text-[10px] text-[#C6922E] font-mono">{isAiTithiOpen ? 'बंद करें ▲' : 'खोलें ▼'}</span>
+                    </button>
+
+                    {isAiTithiOpen && (
+                      <div className="mt-2 p-3 rounded-2xl bg-amber-50 border border-amber-300 space-y-2 animate-fadeIn text-xs">
+                        <p className="text-[11px] text-gray-700 font-medium">
+                          पूर्वज की मृत्यु का विवरण या अंग्रेजी तारीख लिखें (जैसे: "माताजी का निधन नवमी को हुआ था"):
+                        </p>
+                        <div className="flex gap-2">
+                          <input
+                            type="text"
+                            value={tithiQuery}
+                            onChange={(e) => setTithiQuery(e.target.value)}
+                            onKeyDown={(e) => {
+                              if (e.key === 'Enter') {
+                                e.preventDefault();
+                                handleCalculateTithi();
+                              }
+                            }}
+                            placeholder="मृत्यु विवरण या तिथि लिखें..."
+                            className="flex-1 bg-white border border-amber-200 rounded-xl px-3 py-1.5 text-xs text-black focus:outline-none focus:border-[#F48D08]"
+                          />
+                          <button
+                            type="button"
+                            onClick={handleCalculateTithi}
+                            disabled={isTithiLoading || !tithiQuery.trim()}
+                            className="px-3 py-1.5 rounded-xl bg-[#F48D08] hover:bg-[#D97706] text-white font-bold text-xs flex items-center gap-1 shrink-0 disabled:opacity-50"
+                          >
+                            {isTithiLoading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Sparkles className="w-3.5 h-3.5" />}
+                            <span>तिथि निकालें</span>
+                          </button>
+                        </div>
+
+                        {tithiAdvice && (
+                          <div className="p-3 rounded-xl bg-white border border-amber-300/80 space-y-2 text-xs">
+                            <p className="text-gray-800 text-[11px] leading-relaxed">
+                              {tithiAdvice.explanation}
+                            </p>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setPreferredDate(tithiAdvice.date);
+                                setIsAiTithiOpen(false);
+                              }}
+                              className="w-full py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-[11px] flex items-center justify-center gap-1 shadow"
+                            >
+                              <Check className="w-3.5 h-3.5" />
+                              <span>यह तिथि चुनें ({tithiAdvice.date})</span>
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
                 </div>
 
-                {/* 5. ADDRESS / CITY */}
+                {/* 5. FAMILY GOTRA */}
+                <div className="space-y-1.5">
+                  <div className="flex items-center justify-between">
+                    <label className="block text-xs font-bold uppercase tracking-wider text-text-primary flex items-center gap-1.5">
+                      <Award className="w-4 h-4 text-[#F48D08]" />
+                      <span>5. Family Gotra (परिवार का गोत्र)</span>
+                    </label>
+                    <button
+                      type="button"
+                      onClick={() => setGotra('कश्यप गोत्र (Kashyap Gotra - सार्वभौमिक शास्त्रीय नियम)')}
+                      className="text-[10.5px] text-amber-900 bg-amber-100 hover:bg-amber-200 px-2.5 py-0.5 rounded-full font-bold transition-colors border border-amber-200"
+                    >
+                      गोत्र नहीं पता? (Unknown Gotra?)
+                    </button>
+                  </div>
+                  <input
+                    type="text"
+                    value={gotra}
+                    onChange={(e) => setGotra(e.target.value)}
+                    placeholder="जैसे: कश्यप, भारद्वाज, वशिष्ठ, शांडिल्य (यदि ज्ञात हो)"
+                    className="w-full bg-gray-50 border border-gray-300 rounded-2xl p-3 text-xs sm:text-sm text-text-primary focus:outline-none focus:border-[#F48D08] focus:bg-white transition-all"
+                  />
+                  <p className="text-[10px] text-gray-500">
+                    *गरुड़ पुराण एवं वायु पुराण: यदि गोत्र ज्ञात न हो तो 'कश्यप गोत्र' से संपूर्ण पिंडदान व तर्पण 100% शास्त्रसम्मत फलदायी होता है।
+                  </p>
+                </div>
+
+                {/* 6. ADDRESS / CITY */}
                 <div className="space-y-1.5">
                   <label className="block text-xs font-bold uppercase tracking-wider text-text-primary flex items-center gap-1.5">
                     <MapPin className="w-4 h-4 text-[#F48D08]" />
-                    <span>5. City / Address (शहर / पता) *</span>
+                    <span>6. City / Address (शहर / पता) *</span>
                   </label>
                   <input
                     type="text"
@@ -806,6 +958,7 @@ Dhanyawad! 🙏`;
                     className="w-full bg-gray-50 border border-gray-300 rounded-2xl p-3 text-xs sm:text-sm text-text-primary focus:outline-none focus:border-[#F48D08] focus:bg-white transition-all"
                   />
                 </div>
+
 
                 {/* SUBMIT BUTTON */}
                 <div className="pt-2">

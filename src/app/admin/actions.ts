@@ -748,18 +748,33 @@ export async function deleteCustomerAction(id: string) {
 
 export async function upsertArticleAction(data: any) {
   try {
-    const slug = data.slug || data.title.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+    const slug = (data.slug || data.title.toLowerCase().replace(/[^a-z0-9]+/g, '-')).replace(/^-+|-+$/g, '');
+    const payload = {
+      title: data.title,
+      slug,
+      category: data.category || 'Scriptural Knowledge',
+      summary: data.summary || '',
+      content: data.content || '',
+      image: data.image || data.heroImage || '/images/gaya_vishnupad.jpg',
+      metaTitle: data.metaTitle || data.title,
+      metaDesc: data.metaDesc || data.summary,
+      readTime: data.readTime || '5 min read',
+      published: data.published !== false
+    };
+
     if (data.id) {
-      await db.article.update({ where: { id: data.id }, data: { ...data, slug } });
+      await db.article.update({ where: { id: data.id }, data: payload });
     } else {
-      await db.article.create({ data: { ...data, slug } });
+      await db.article.create({ data: payload });
     }
     revalidatePath('/admin');
+    revalidatePath('/blog');
     return { success: true };
   } catch (e: any) {
     return { success: false, error: e.message };
   }
 }
+
 
 export async function deleteArticleAction(id: string) {
   try {
@@ -909,3 +924,65 @@ export async function updateSiteSettingsAction(data: any) {
     return { success: false, error: error.message };
   }
 }
+
+export async function generateAiArticleAction(topic: string, language: string = 'en') {
+  try {
+    await assertAdminAuth();
+    const groqApiKey = process.env.GROQ_API_KEY;
+    if (!groqApiKey) {
+      throw new Error('GROQ_API_KEY is not configured in .env');
+    }
+
+    const systemPrompt = `You are a world-class Hindu Vedic scholar and Senior SEO strategist for PindDaanWale.com (authentic Gaya Ji Pind Daan platform).
+Generate an authoritative, scripturally sound, and high-ranking article in ${language === 'hi' ? 'Hindi (शुद्ध देवनागरी)' : 'English'} about the requested topic.
+
+Return ONLY a strict valid JSON object (no markdown formatting outside the JSON, no backticks around the json) with this exact schema:
+{
+  "title": "Compelling, high-ranking article title",
+  "slug": "url-friendly-slug-with-hyphens",
+  "category": "Scriptural Knowledge",
+  "summary": "150-160 character meta description and excerpt",
+  "content": "Full markdown content with ## H2, ### H3, bullet points, Garuda Purana/Vayu Purana citations, anti-middleman warnings, transparent pricing details, and FAQ section.",
+  "metaTitle": "SEO title under 60 chars",
+  "metaDesc": "SEO meta description under 160 chars",
+  "keywords": "comma-separated high-volume search keywords",
+  "readTime": "6 min read",
+  "heroImage": "/images/gaya_vishnupad.jpg"
+}`;
+
+    const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${groqApiKey.trim()}`
+      },
+      body: JSON.stringify({
+        model: 'qwen/qwen3.8-27b',
+        messages: [
+          { role: 'system', content: systemPrompt },
+          { role: 'user', content: `Write a complete, comprehensive SEO article about: "${topic}"` }
+        ],
+        temperature: 0.4,
+        max_tokens: 2500
+      })
+    });
+
+    if (!res.ok) {
+      const errText = await res.text();
+      throw new Error(`Groq API returned ${res.status}: ${errText.slice(0, 200)}`);
+    }
+
+    const data = await res.json();
+    const rawContent = data.choices?.[0]?.message?.content?.trim() || '';
+    
+    // Clean any backticks if model wrapped json
+    const jsonStr = rawContent.replace(/^```json\s*/i, '').replace(/\s*```$/i, '').trim();
+    const articleData = JSON.parse(jsonStr);
+
+    return { success: true, article: articleData };
+  } catch (error: any) {
+    console.error('generateAiArticleAction error:', error);
+    return { success: false, error: error.message };
+  }
+}
+
