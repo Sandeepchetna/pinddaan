@@ -21,8 +21,8 @@ interface PackageCardProps {
   defaultTier?: 'GOLD' | 'PLATINUM';
 }
 
-export default function PackageCard({ pkg, showCompareLink = true, defaultTier = 'PLATINUM' }: PackageCardProps) {
-  // Tier state: 'GOLD' (Standard) or 'PLATINUM' (VIP) - Defaults to PLATINUM as requested
+export default function PackageCard({ pkg, showCompareLink = true, defaultTier = 'GOLD' }: PackageCardProps) {
+  // Tier state: 'GOLD' (Standard) or 'PLATINUM' (VIP) - Defaults to GOLD as requested
   const [tier, setTier] = useState<'GOLD' | 'PLATINUM'>(defaultTier);
 
   React.useEffect(() => {
@@ -35,6 +35,21 @@ export default function PackageCard({ pkg, showCompareLink = true, defaultTier =
   const price = isPlatinum && pkg.goldPriceINR ? pkg.goldPriceINR : pkg.priceINR;
   const inclusionsText = isPlatinum && pkg.goldInclusions ? pkg.goldInclusions : pkg.inclusions;
   const inclusionsList = inclusionsText ? inclusionsText.split('\n').filter(Boolean) : [];
+
+  // Accurate, non-wrapping badge beside price
+  const getPriceBadge = () => {
+    const s = ((pkg.slug || '') + ' ' + (pkg.title || '')).toLowerCase();
+    const is3Day = s.includes('3-day') || s.includes('3 day');
+    const is1Day = s.includes('1-day') || s.includes('1 day');
+
+    if (isPlatinum) {
+      if (is3Day || is1Day) return 'VIP Cab + Stay';
+      return 'VIP Vidhi';
+    } else {
+      if (is3Day || is1Day) return 'Auto + Stay';
+      return 'Essential Rites';
+    }
+  };
 
   // Shorten lengthy badges for a sleek single-line header
   const getCleanBadge = (b?: string) => {
@@ -118,18 +133,18 @@ export default function PackageCard({ pkg, showCompareLink = true, defaultTier =
           </button>
         </div>
 
-        {/* 4. Price Section (Aligned Baseline) */}
-        <div className="py-3 px-3.5 rounded-[16px] bg-[#FAF7F2]/60 border border-[#EFE6D9]/80 flex items-center justify-between">
-          <div>
-            <div className="text-2xl sm:text-3xl font-body font-extrabold text-[#2B2118] tracking-tight">
+        {/* 4. Price Section */}
+        <div className="py-3 px-3.5 rounded-[16px] bg-[#FAF7F2]/80 border border-[#EFE6D9] flex items-center justify-between gap-2">
+          <div className="min-w-0">
+            <div className="text-2xl sm:text-[27px] font-body font-extrabold text-[#2B2118] tracking-tight leading-none mb-1">
               ₹{price.toLocaleString('en-IN')}
             </div>
-            <span className="text-[10.5px] font-body text-[#7A736A] font-medium block">
-              All-Inclusive Fixed Dakshina
+            <span className="text-[10px] font-body text-[#7A736A] font-medium block whitespace-nowrap">
+              Fixed Vedic Dakshina
             </span>
           </div>
-          <span className="text-[10.5px] font-body font-semibold text-[#C6922E] bg-white border border-[#EFE6D9] px-2.5 py-1 rounded-full shadow-sm text-right">
-            {isPlatinum ? 'VIP Cab + Stay' : 'Essential Rites'}
+          <span className="text-[11px] font-body font-semibold text-[#C6922E] bg-white border border-[#EFE6D9] px-2.5 py-1 rounded-full shadow-sm whitespace-nowrap shrink-0">
+            {getPriceBadge()}
           </span>
         </div>
 

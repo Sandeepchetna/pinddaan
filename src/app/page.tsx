@@ -483,7 +483,7 @@ export default async function HomePage() {
               goldInclusions: 'Senior Jyotish & Vedic Karma-Kand Acharya in Gaya Ji\nAltar Rites & Pind Daan with Wheat Sattu\nNarayan Bali Homa with Ghee Ahutis'
             }
           ]).map((pkg) => (
-            <PackageCard key={pkg.id || pkg.slug} pkg={pkg} defaultTier="PLATINUM" />
+            <PackageCard key={pkg.id || pkg.slug} pkg={pkg} defaultTier="GOLD" />
           ))}
         </div>
 

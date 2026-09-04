@@ -6,7 +6,7 @@ import { Crown, Scale } from 'lucide-react';
 import PackageCard from '@/components/packages/PackageCard';
 
 export default function PackageTierToggle({ initialPackages }: { initialPackages: any[] }) {
-  const [globalTier, setGlobalTier] = useState<'GOLD' | 'PLATINUM'>('PLATINUM');
+  const [globalTier, setGlobalTier] = useState<'GOLD' | 'PLATINUM'>('GOLD');
 
   // Custom sort order: 1-Day, 3-Day, Tripindi, then Narayan Bali
   const getRank = (pkg: any) => {
