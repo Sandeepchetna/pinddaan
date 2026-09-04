@@ -156,11 +156,14 @@ ${packageInfoText}
     const groqApiKey = process.env.GROQ_API_KEY;
 
     if (groqApiKey && !groqApiKey.includes('your_groq_api_key')) {
-      // Available model candidates on Groq LPUs
-      const candidateModels = ['openai/gpt-oss-120b', 'llama-3.3-70b-versatile', 'openai/gpt-oss-20b', 'qwen/qwen3.8-27b'];
+      // Prioritize lightning-fast verified models on Groq LPUs
+      // qwen/qwen3.8-27b: ultra-fast ~300ms direct generation (ideal for voice AI)
+      // openai/gpt-oss-120b: deep reasoning model (needs >=800 tokens for reasoning + answer)
+      const candidateModels = ['qwen/qwen3.8-27b', 'openai/gpt-oss-120b', 'openai/gpt-oss-20b'];
       
       for (const modelName of candidateModels) {
         try {
+          const isReasoningModel = modelName.includes('gpt-oss');
           const groqResponse = await fetch('https://api.groq.com/openai/v1/chat/completions', {
             method: 'POST',
             headers: {
@@ -174,16 +177,19 @@ ${packageInfoText}
                 ...sanitizedMessages.slice(-6) // Keep last 6 exchanges with sanitized typos
               ],
               temperature: 0.5,
-              max_tokens: 700
+              max_tokens: isReasoningModel ? 900 : 600
             })
           });
 
           if (groqResponse.ok) {
             const data = await groqResponse.json();
-            const aiReply = data.choices?.[0]?.message?.content;
+            const aiReply = data.choices?.[0]?.message?.content?.trim();
             if (aiReply) {
               return NextResponse.json({ reply: aiReply, engine: `groq-${modelName}` });
             }
+          } else {
+            const errText = await groqResponse.text();
+            console.warn(`Groq model ${modelName} returned status ${groqResponse.status}:`, errText.slice(0, 150));
           }
         } catch (groqErr) {
           console.warn(`Groq model ${modelName} error, trying next:`, groqErr);
