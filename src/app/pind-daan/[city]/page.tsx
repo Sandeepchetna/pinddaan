@@ -1,4 +1,4 @@
-import Metadata from 'next';
+import { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { 
@@ -9,225 +9,17 @@ import {
   Clock, 
   Phone, 
   ArrowRight, 
-  CheckCircle2, 
   Calendar,
-  Compass
+  Compass,
+  AlertTriangle,
+  HelpCircle,
+  Award,
+  Sparkles,
+  Check,
+  ChevronRight
 } from 'lucide-react';
-
-// City Data Registry for Programmatic SEO
-interface CityInfo {
-  slug: string;
-  name: string;
-  stateOrCountry: string;
-  flightRoute: string;
-  trainRoute: string;
-  travelTime: string;
-  popularRitual: string;
-  nriSupport: boolean;
-}
-
-const CITY_DATABASE: Record<string, CityInfo> = {
-  'from-bengaluru': {
-    slug: 'from-bengaluru',
-    name: 'Bengaluru (Bangalore)',
-    stateOrCountry: 'Karnataka',
-    flightRoute: 'Direct flights available from BLR (Kempegowda Int. Airport) to PAT (Patna Airport - 2.5 hrs) or GAY (Gaya Airport).',
-    trainRoute: 'Sanghamitra Express / Anga Express directly connects SBC/YPR to Gaya Junction (GAYA).',
-    travelTime: 'Flight: 2.5 hrs | Train: 34 hrs',
-    popularRitual: '3-Day Tri-Sthali Pind Daan Package',
-    nriSupport: false,
-  },
-  'from-mumbai': {
-    slug: 'from-mumbai',
-    name: 'Mumbai',
-    stateOrCountry: 'Maharashtra',
-    flightRoute: 'Non-stop flights from BOM (Chhatrapati Shivaji Maharaj Airport) to PAT (Patna Airport) & seasonal flights to GAY.',
-    trainRoute: 'Mumbai CSMT - Gaya Express & LTT Patna Superfast.',
-    travelTime: 'Flight: 2.5 hrs | Train: 28 hrs',
-    popularRitual: '1-Day Vishnupad & Falgu Sacred Pind Daan',
-    nriSupport: false,
-  },
-  'from-delhi': {
-    slug: 'from-delhi',
-    name: 'Delhi NCR',
-    stateOrCountry: 'Delhi',
-    flightRoute: 'Multiple direct daily flights from DEL (Indira Gandhi Int. Airport) to PAT and seasonal direct flights to GAY.',
-    trainRoute: 'Vande Bharat Express / Mahabodhi Express / Rajdhani Express directly to Gaya Junction.',
-    travelTime: 'Flight: 1.5 hrs | Train: 12 hrs (Vande Bharat / Rajdhani)',
-    popularRitual: '1-Day & 3-Day Complete Pitru Paksha Package',
-    nriSupport: false,
-  },
-  'from-kolkata': {
-    slug: 'from-kolkata',
-    name: 'Kolkata',
-    stateOrCountry: 'West Bengal',
-    flightRoute: '1 hr direct flight from CCU (Netaji Subhash Chandra Bose Airport) to Patna/Gaya.',
-    trainRoute: 'Howrah-Gaya Express / Doon Express / Vande Bharat Express (approx 6-7 hrs directly to Gaya).',
-    travelTime: 'Flight: 1 hr | Train: 6.5 hrs',
-    popularRitual: 'Annual Shradh & 1-Day Pind Daan',
-    nriSupport: false,
-  },
-  'from-hyderabad': {
-    slug: 'from-hyderabad',
-    name: 'Hyderabad',
-    stateOrCountry: 'Telangana',
-    flightRoute: 'Direct and 1-stop flights from HYD (Rajiv Gandhi Int. Airport) to PAT / GAY.',
-    trainRoute: 'Secunderabad - Patna Express to Gaya Junction.',
-    travelTime: 'Flight: 2.5 hrs | Train: 26 hrs',
-    popularRitual: 'Tri-Sthali Pind Daan Package',
-    nriSupport: false,
-  },
-  'from-chennai': {
-    slug: 'from-chennai',
-    name: 'Chennai',
-    stateOrCountry: 'Tamil Nadu',
-    flightRoute: 'Daily connecting flights from MAA (Chennai Airport) to Patna (PAT) / Gaya (GAY).',
-    trainRoute: 'Ganga Kaveri Express / Sanghamitra Express to Gaya Junction.',
-    travelTime: 'Flight: 2.5 hrs | Train: 36 hrs',
-    popularRitual: '3-Day Complete Tri-Sthali Pilgrimage',
-    nriSupport: false,
-  },
-  'from-pune': {
-    slug: 'from-pune',
-    name: 'Pune',
-    stateOrCountry: 'Maharashtra',
-    flightRoute: 'Connecting flights from PNQ (Pune Airport) to Patna / Gaya via Delhi or Mumbai.',
-    trainRoute: 'Pune-Danapur Express & Azad Hind Express to Gaya Junction.',
-    travelTime: 'Flight: 3 hrs | Train: 30 hrs',
-    popularRitual: '1-Day & 3-Day Complete Pitru Paksha Package',
-    nriSupport: false,
-  },
-  'from-ahmedabad': {
-    slug: 'from-ahmedabad',
-    name: 'Ahmedabad & Gujarat',
-    stateOrCountry: 'Gujarat',
-    flightRoute: 'Direct & connecting flights from AMD (Sardar Vallabhbhai Patel Airport) to Patna (PAT) / Gaya (GAY).',
-    trainRoute: 'Paraswanath Express & Ahmedabad-Patna Express to Gaya Junction.',
-    travelTime: 'Flight: 2 hrs | Train: 28 hrs',
-    popularRitual: '3-Day Tri-Sthali & Sita Kund Snan Package',
-    nriSupport: false,
-  },
-  'from-surat': {
-    slug: 'from-surat',
-    name: 'Surat',
-    stateOrCountry: 'Gujarat',
-    flightRoute: 'Flights from Surat (STV) via Delhi/Mumbai to Patna & Gaya.',
-    trainRoute: 'Tapti Ganga Express / Udhna-Danapur Express to Gaya Junction.',
-    travelTime: 'Flight: 3.5 hrs | Train: 26 hrs',
-    popularRitual: '1-Day Essential & 3-Day Pilgrimage Package',
-    nriSupport: false,
-  },
-  'from-jaipur': {
-    slug: 'from-jaipur',
-    name: 'Jaipur & Rajasthan',
-    stateOrCountry: 'Rajasthan',
-    flightRoute: 'Flights from JAI (Jaipur Airport) connecting to Patna/Gaya.',
-    trainRoute: 'Bikaner-Howrah Express / Pratap Express directly through Gaya Junction.',
-    travelTime: 'Flight: 2 hrs | Train: 16 hrs',
-    popularRitual: 'Vedic Pind Daan & Akshayavat Vidhi',
-    nriSupport: false,
-  },
-  'from-lucknow': {
-    slug: 'from-lucknow',
-    name: 'Lucknow & Kanpur',
-    stateOrCountry: 'Uttar Pradesh',
-    flightRoute: 'Quick 1 hr flight from LKO (Chaudhary Charan Singh Airport) or direct expressway cab.',
-    trainRoute: 'Vande Bharat / Doon Express / Neelachal Express directly to Gaya Junction.',
-    travelTime: 'Expressway: 6 hrs | Train: 7 hrs',
-    popularRitual: '1-Day Essential & Annual Shradh Package',
-    nriSupport: false,
-  },
-  'from-patna': {
-    slug: 'from-patna',
-    name: 'Patna Airport Hub',
-    stateOrCountry: 'Bihar',
-    flightRoute: 'Patna Jay Prakash Narayan Airport (PAT) is the major connecting airport for Gaya Ji.',
-    trainRoute: 'Patna-Gaya Vande Bharat Express (1.5 hrs) & private AC cab via NH-83 Expressway (1.5-2 hrs).',
-    travelTime: 'Expressway Cab: 1.5 hrs | Train: 1.5 hrs',
-    popularRitual: 'Same-Day Return Essential Pind Daan',
-    nriSupport: false,
-  },
-  'from-ranchi': {
-    slug: 'from-ranchi',
-    name: 'Ranchi & Jamshedpur',
-    stateOrCountry: 'Jharkhand',
-    flightRoute: 'Birsa Munda Airport (IXR) connection or direct 3-hr road drive via NH-20.',
-    trainRoute: 'Vande Bharat Express / Ranchi-Patna Jan Shatabdi via Gaya.',
-    travelTime: 'Road: 3.5 hrs | Train: 3 hrs',
-    popularRitual: '1-Day & 2-Day Pind Daan Pilgrimage',
-    nriSupport: false,
-  },
-  'from-bhubaneswar': {
-    slug: 'from-bhubaneswar',
-    name: 'Bhubaneswar & Odisha',
-    stateOrCountry: 'Odisha',
-    flightRoute: 'Connecting flights from BBI (Biju Patnaik Airport) to Patna/Gaya.',
-    trainRoute: 'Puri-New Delhi Purushottam Express directly connects Bhubaneswar & Cuttack to Gaya.',
-    travelTime: 'Flight: 2.5 hrs | Train: 14 hrs',
-    popularRitual: 'Tri-Sthali (Gaya-Puri Lineage) Pind Daan',
-    nriSupport: false,
-  },
-  'from-usa-nri': {
-    slug: 'from-usa-nri',
-    name: 'USA & North America NRIs',
-    stateOrCountry: 'United States & Canada',
-    flightRoute: 'Fly into DEL / BOM / CCU international hubs, followed by a quick connecting flight to Patna (PAT) or Gaya (GAY).',
-    trainRoute: 'Private luxury chauffeur pickup from Patna Airport (PAT) directly to Gaya hotel (2 hrs via NH-83 expressway).',
-    travelTime: 'Dedicated 24/7 NRI Concierge Assistance',
-    popularRitual: 'Remote Live Stream Pind Daan or 3-Day VIP Concierge Package',
-    nriSupport: true,
-  },
-  'from-uk-london': {
-    slug: 'from-uk-london',
-    name: 'London & UK NRIs',
-    stateOrCountry: 'United Kingdom',
-    flightRoute: 'Direct London Heathrow (LHR) to Delhi (DEL), connecting directly to Patna (PAT) or Gaya (GAY).',
-    trainRoute: 'Chauffeur airport transfer with dedicated English/Hindi speaking escort.',
-    travelTime: 'Full International Support Team',
-    popularRitual: 'Remote Live Stream Pind Daan & VIP In-Person Package',
-    nriSupport: true,
-  },
-  'from-canada-nri': {
-    slug: 'from-canada-nri',
-    name: 'Canada (Toronto / Vancouver) NRIs',
-    stateOrCountry: 'Canada',
-    flightRoute: 'Flights from Toronto Pearson (YYZ) & Vancouver (YVR) via Delhi connecting to Gaya / Patna.',
-    trainRoute: 'Dedicated VIP airport pickup & hotel escort for Canadian Hindu diaspora.',
-    travelTime: '24/7 Canada Timezone NRI Support',
-    popularRitual: '4K Remote Live Sankalp & Sanctified Prasad Courier',
-    nriSupport: true,
-  },
-  'from-australia-nri': {
-    slug: 'from-australia-nri',
-    name: 'Australia (Sydney / Melbourne) NRIs',
-    stateOrCountry: 'Australia',
-    flightRoute: 'Flights from Sydney (SYD) & Melbourne (MEL) connecting to India with Patna/Gaya transit.',
-    trainRoute: 'VIP concierge escort and ancestral lineage registration with Vishnupad pandas.',
-    travelTime: 'Australia-Friendly Scheduling',
-    popularRitual: 'Remote Two-Way Interactive Pind Daan & VIP In-Person Package',
-    nriSupport: true,
-  },
-  'from-dubai-uae-nri': {
-    slug: 'from-dubai-uae-nri',
-    name: 'Dubai & UAE Gulf NRIs',
-    stateOrCountry: 'United Arab Emirates & GCC',
-    flightRoute: 'Direct 3.5 hr international flights from Dubai (DXB) / Sharjah (SHJ) to Delhi/Patna.',
-    trainRoute: 'Express AC sedan pickup from airport directly to Vishnupad Temple.',
-    travelTime: 'Same-Day Quick Access',
-    popularRitual: 'Weekend Express 1-Day & 2-Day Pind Daan',
-    nriSupport: true,
-  },
-  'from-singapore-nri': {
-    slug: 'from-singapore-nri',
-    name: 'Singapore & SE Asia NRIs',
-    stateOrCountry: 'Singapore & Malaysia',
-    flightRoute: 'Direct flights from Singapore Changi (SIN) to Kolkata/Delhi connecting directly to Gaya.',
-    trainRoute: 'Full VIP ground protocol with senior lineage Panda assignment.',
-    travelTime: 'Fast SE Asia Regional Transit',
-    popularRitual: 'Remote 4K Live Stream & Annual Shradh Package',
-    nriSupport: true,
-  }
-};
+import ZeroExtortionPledge from '@/components/common/ZeroExtortionPledge';
+import { CITY_DATABASE } from '@/data/cityDatabase';
 
 export async function generateStaticParams() {
   return Object.keys(CITY_DATABASE).map((city) => ({
@@ -235,22 +27,41 @@ export async function generateStaticParams() {
   }));
 }
 
-export async function generateMetadata({ params }: { params: Promise<{ city: string }> }) {
+export async function generateMetadata({ params }: { params: Promise<{ city: string }> }): Promise<Metadata> {
   const resolvedParams = await params;
   const cityData = CITY_DATABASE[resolvedParams.city];
   
   if (!cityData) {
     return {
-      title: 'City Guide Not Found | PindDaanWale',
+      title: 'City Pilgrimage Guide Not Found | PindDaanWale',
     };
   }
 
+  const title = `Pind Daan in Gaya Ji from ${cityData.name} | Verified Pandas & Fixed Rates`;
+  const description = `Planning Pind Daan in Gaya Ji from ${cityData.name}? Complete travel route (${cityData.travelTime}), flight & train guide, verified Vishnupad Pandas, 100% fixed dakshina, and zero middlemen.`;
+
   return {
-    title: `Pind Daan in Gaya Ji for Devotees from ${cityData.name} | Travel Guide & Verified Pandas`,
-    description: `Complete travel guide and Pind Daan arrangements for devotees traveling from ${cityData.name} to Gaya Ji. Includes airport pickup, verified Vishnupad Temple pandas, hotel stay, and transparent rituals.`,
-    keywords: `Pind Daan from ${cityData.name}, Gaya Ji Pind Daan ${cityData.name}, Vishnupad temple Pind Daan ${cityData.stateOrCountry}, Pitru Paksha Gaya ${cityData.name}`,
+    title,
+    description,
+    keywords: [
+      `Pind Daan from ${cityData.name}`,
+      `Pind Daan cost in Gaya from ${cityData.name}`,
+      `Gaya Ji Pind Daan train from ${cityData.name}`,
+      `Pind Daan packages for ${cityData.name} devotees`,
+      `Vishnupad temple panda booking ${cityData.name}`,
+      `Pitru Paksha Gaya travel from ${cityData.name}`,
+      `Pind Daan booking official Gaya`
+    ],
     alternates: {
-      canonical: `https://pinddaanwale.com/pind-daan/${cityData.slug}`,
+      canonical: `https://www.pinddaanwale.com/pind-daan/${cityData.slug}`,
+    },
+    openGraph: {
+      title,
+      description,
+      url: `https://www.pinddaanwale.com/pind-daan/${cityData.slug}`,
+      siteName: 'PindDaanWale.com',
+      locale: 'en_IN',
+      type: 'website',
     },
   };
 }
@@ -260,174 +71,374 @@ export default async function CityPindDaanPage({ params }: { params: Promise<{ c
   const cityData = CITY_DATABASE[resolvedParams.city];
 
   if (!cityData) {
-    // Return standard template for dynamically generated cities
-    const cityName = resolvedParams.city.replace('from-', '').replace(/-/g, ' ').toUpperCase();
-    return (
-      <div className="min-h-screen bg-temple-ivory py-20 px-4">
-        <div className="max-w-4xl mx-auto text-center space-y-6">
-          <span className="text-xs font-bold uppercase tracking-widest text-accent-gold">Programmatic Travel Guide</span>
-          <h1 className="text-4xl font-serif font-bold text-text-primary">Pind Daan in Gaya Ji for Devotees from {cityName}</h1>
-          <p className="text-text-secondary leading-relaxed max-w-2xl mx-auto">
-            We provide seamless travel guidance, airport/station pickups, verified Vishnupad Temple pandas, and complete Vedic ritual arrangements for families coming from {cityName}.
-          </p>
-          <div className="pt-6">
-            <Link href="/pre-booking" className="bg-accent-gold text-white px-8 py-3.5 rounded-full font-bold hover:bg-accent-copper transition-colors">
-              Plan Your Sacred Journey from {cityName}
-            </Link>
-          </div>
-        </div>
-      </div>
-    );
+    notFound();
   }
 
-  // Schema.org Structured Data
-  const jsonLd = {
+  // Schema.org JSON-LD Structured Data
+  const jsonLdBreadcrumb = {
     '@context': 'https://schema.org',
-    '@type': 'Service',
-    'name': `Pind Daan Rites for Devotees from ${cityData.name}`,
-    'provider': {
-      '@type': 'LocalBusiness',
-      'name': 'PindDaanWale Gaya Ji Desk',
-      'address': {
-        '@type': 'PostalAddress',
-        'addressLocality': 'Gaya',
-        'addressRegion': 'Bihar',
-        'addressCountry': 'IN'
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Home',
+        item: 'https://www.pinddaanwale.com'
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: 'Pind Daan City Guides',
+        item: 'https://www.pinddaanwale.com/pind-daan'
+      },
+      {
+        '@type': 'ListItem',
+        position: 3,
+        name: `From ${cityData.name}`,
+        item: `https://www.pinddaanwale.com/pind-daan/${cityData.slug}`
       }
+    ]
+  };
+
+  const jsonLdSpiritualService = {
+    '@context': 'https://schema.org',
+    '@type': 'GovernmentPermit',
+    name: `Authentic Pind Daan in Gaya Ji for Devotees from ${cityData.name}`,
+    description: `Official Shastric Pind Daan and Shradh arrangements at Vishnupad Temple, Falgu River, and Akshayavat for pilgrims traveling from ${cityData.name}. 100% fixed transparent dakshina with zero middleman exploitation.`,
+    provider: {
+      '@type': 'TravelAgency',
+      name: 'PindDaanWale.com',
+      telephone: '+917463055338',
+      url: 'https://www.pinddaanwale.com',
+      address: {
+        '@type': 'PostalAddress',
+        streetAddress: 'Near Vishnupad Temple, Chand Chaura',
+        addressLocality: 'Gaya',
+        addressRegion: 'Bihar',
+        postalCode: '823001',
+        addressCountry: 'IN'
+      },
+      priceRange: '₹4,500 - ₹14,500'
     },
-    'areaServed': cityData.name,
-    'description': `Customized Pind Daan ritual arrangements, travel assistance, and verified panda booking for families traveling from ${cityData.name} to Gaya Ji.`
+    areaServed: cityData.name,
+    serviceType: 'Vedic Pind Daan & Ancestral Liberation Rites'
+  };
+
+  const jsonLdHowTo = {
+    '@context': 'https://schema.org',
+    '@type': 'HowTo',
+    name: `How to Perform Pind Daan in Gaya Ji from ${cityData.name}`,
+    description: `Step-by-step verified guide for devotees traveling from ${cityData.name} to complete sacred ancestral rites in Gaya Ji without middlemen.`,
+    step: [
+      {
+        '@type': 'HowToStep',
+        position: 1,
+        name: 'Choose Sacred Date & Pre-Book Verified Purohit',
+        text: 'Select your auspicious tithi (Pitru Paksha, Somvati Amavasya, or monthly Amavasya) and lock in 100% fixed dakshina on PindDaanWale to prevent on-arrival extortion.'
+      },
+      {
+        '@type': 'HowToStep',
+        position: 2,
+        name: `Travel from ${cityData.name} to Gaya / Patna`,
+        text: cityData.flightRoute || cityData.trainRoute
+      },
+      {
+        '@type': 'HowToStep',
+        position: 3,
+        name: 'Station Pickup & Bahi-Khata Lineage Verification',
+        text: 'Meet our authorized representative at Gaya Junction or Patna Airport and verify your family Gotra and ancestral records in authentic Vishnupad bahi-khatas.'
+      },
+      {
+        '@type': 'HowToStep',
+        position: 4,
+        name: 'Perform Sacred Rites across the 3 Mandatory Vedis',
+        text: 'Complete Falgu River achaman, offer pinda on Lord Vishnu 40cm sacred footprint, and receive the eternal Sufal blessing under the holy Akshayavat tree.'
+      }
+    ]
+  };
+
+  const jsonLdFaq = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: [
+      {
+        '@type': 'Question',
+        name: `How do devotees travel from ${cityData.name} to Gaya Ji for Pind Daan?`,
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: `Devotees from ${cityData.name} can travel via ${cityData.flightRoute} or by train via ${cityData.trainRoute}. PindDaanWale provides doorstep station pickup from Gaya Junction or Patna Airport directly to your hotel.`
+        }
+      },
+      {
+        '@type': 'Question',
+        name: 'Are there hidden charges or extra demands at the ghats in Gaya Ji?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'No. With PindDaanWale, your dakshina is 100% fixed at booking (₹4,500 for 1-Day Essential, ₹12,500 for 3-Day Complete). All Vedic samagri, purohit honorarium, temple access, and boat seva are included. Not a single extra rupee will ever be demanded at the holy riverbank.'
+        }
+      },
+      {
+        '@type': 'Question',
+        name: 'How can devotees avoid aggressive touts and middlemen at Gaya railway station?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'Never engage with auto drivers or unsolicited agents at Gaya Junction claiming to represent temple pandas. Pre-booking on PindDaanWale ensures an authorized private driver meets you inside the station with a personalized name board and escorts you directly to verified Vishnupad pandas.'
+        }
+      },
+      {
+        '@type': 'Question',
+        name: 'What items and documents should a devotee bring from home?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'Devotees only need to bring their family Gotra, names of departed ancestors (father, mother, grandparents), and comfortable traditional cotton clothes (dhoti/kurta). All sacred Vedic samagri (kusha ring, barley flour, black sesame, holy Gangajal, vastram) is completely provided by PindDaanWale.'
+        }
+      }
+    ]
   };
 
   return (
-    <div className="min-h-screen bg-temple-ivory text-text-primary">
+    <>
+      {/* Inject Structured Data Schemas */}
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdBreadcrumb) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdSpiritualService) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdHowTo) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdFaq) }}
       />
 
-      {/* Hero Header */}
-      <section className="bg-text-primary text-temple-ivory py-20 border-b border-amber-900/20 relative overflow-hidden">
-        <div className="max-w-5xl mx-auto px-4 text-center space-y-6 relative z-10">
-          <div className="inline-flex items-center gap-2 py-1 px-4 rounded-full bg-amber-500/10 border border-amber-500/30 text-accent-gold text-xs font-semibold uppercase tracking-widest">
-            <MapPin className="w-3.5 h-3.5" />
-            <span>Dedicated Guide for {cityData.name} Devotees</span>
-          </div>
+      <main className="min-h-screen bg-[#070B14] text-slate-100 py-10 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-6xl mx-auto space-y-10">
 
-          <h1 className="text-3xl sm:text-5xl font-serif font-bold leading-tight">
-            Pind Daan at Gaya Ji for Devotees from {cityData.name}
-          </h1>
+          {/* Breadcrumb Navigation */}
+          <nav className="flex items-center gap-2 text-xs text-slate-400 font-medium">
+            <Link href="/" className="hover:text-amber-400 transition-colors">Home</Link>
+            <ChevronRight className="w-3.5 h-3.5 text-slate-600" />
+            <Link href="/pind-daan" className="hover:text-amber-400 transition-colors">City Guides</Link>
+            <ChevronRight className="w-3.5 h-3.5 text-slate-600" />
+            <span className="text-amber-300 font-bold truncate">From {cityData.name}</span>
+          </nav>
 
-          <p className="text-gray-300 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed">
-            Complete, hassle-free pilgrimage guidance from {cityData.name} to Vishnupad Temple & Falgu River. Verified Pandas, guaranteed transparent rites, and personalized travel care.
-          </p>
-
-          <div className="pt-4 flex flex-wrap justify-center gap-4">
-            <Link 
-              href="/pre-booking" 
-              className="bg-accent-gold text-text-primary hover:bg-white px-8 py-3.5 rounded-full font-bold text-sm transition-colors shadow-md"
-            >
-              Book Journey from {cityData.name}
-            </Link>
-            <a 
-              href="tel:+917463055338" 
-              className="w-full sm:w-auto bg-[#F48D08] hover:bg-[#D97706] text-white px-8 py-4 rounded-full font-bold text-sm transition-colors flex items-center justify-center gap-2 shadow-md"
-            >
-              <Phone className="w-4 h-4" />
-              <span>Call Helpline: +91 7463055338</span>
-            </a>
-          </div>
-        </div>
-      </section>
-
-      {/* Travel & Route Logistics Section */}
-      <section className="py-16 max-w-6xl mx-auto px-4 sm:px-6">
-        <div className="text-center max-w-2xl mx-auto mb-12 space-y-2">
-          <span className="text-xs uppercase tracking-widest font-semibold text-accent-copper">Travel Logistics</span>
-          <h2 className="text-2xl sm:text-3xl font-serif font-bold">How to Reach Gaya Ji from {cityData.name}</h2>
-          <p className="text-text-secondary text-sm">We provide full airport/station pickup and hotel coordination upon your arrival.</p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {/* Flight Option */}
-          <div className="bg-white p-8 rounded-2xl border border-amber-900/10 shadow-sm space-y-4">
-            <div className="w-12 h-12 rounded-full bg-amber-100/60 flex items-center justify-center text-accent-gold">
-              <Plane className="w-6 h-6" />
-            </div>
-            <h3 className="text-xl font-serif font-bold text-text-primary">Flight Travel Route</h3>
-            <p className="text-sm text-text-secondary leading-relaxed">{cityData.flightRoute}</p>
-            <div className="pt-2 text-xs font-semibold text-accent-copper flex items-center gap-1.5">
-              <Clock className="w-4 h-4" />
-              <span>Estimated Duration: {cityData.travelTime}</span>
-            </div>
-          </div>
-
-          {/* Train Option */}
-          <div className="bg-white p-8 rounded-2xl border border-amber-900/10 shadow-sm space-y-4">
-            <div className="w-12 h-12 rounded-full bg-amber-100/60 flex items-center justify-center text-accent-gold">
-              <Train className="w-6 h-6" />
-            </div>
-            <h3 className="text-xl font-serif font-bold text-text-primary">Train Travel Route</h3>
-            <p className="text-sm text-text-secondary leading-relaxed">{cityData.trainRoute}</p>
-            <div className="pt-2 text-xs font-semibold text-accent-copper flex items-center gap-1.5">
-              <Compass className="w-4 h-4" />
-              <span>Station Pickup at Gaya Junction (GAYA)</span>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Recommended Rituals for This Region */}
-      <section className="bg-temple-alt/60 py-16 border-y border-amber-900/10">
-        <div className="max-w-5xl mx-auto px-4 text-center space-y-8">
-          <div className="space-y-2">
-            <span className="text-xs uppercase tracking-widest font-semibold text-accent-gold">Recommended Packages</span>
-            <h2 className="text-2xl sm:text-3xl font-serif font-bold">Popular Rites Chosen by Devotees from {cityData.name}</h2>
-          </div>
-
-          <div className="bg-white p-8 rounded-2xl border border-amber-900/10 shadow-sm max-w-2xl mx-auto space-y-6 text-left">
-            <div className="flex justify-between items-start">
-              <div>
-                <span className="text-xs uppercase tracking-widest font-bold text-accent-copper">Most Popular</span>
-                <h3 className="text-xl font-serif font-bold text-text-primary mt-1">{cityData.popularRitual}</h3>
-              </div>
-              <span className="bg-amber-100 text-accent-gold text-xs font-bold px-3 py-1 rounded-full">Recommended</span>
-            </div>
+          {/* Hero Banner Header */}
+          <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#1C160C] via-[#101728] to-[#0A0E1A] border border-amber-500/30 p-6 sm:p-10 shadow-2xl">
+            <div className="absolute top-0 right-0 -mt-10 -mr-10 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
             
-            <ul className="space-y-3 text-xs sm:text-sm text-text-secondary">
-              <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-accent-gold shrink-0" /> Verified Teerth Panda from Vishnupad Temple</li>
-              <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-accent-gold shrink-0" /> All Samagri (Pind, Barley, Sesame, Milk, Honey) Provided</li>
-              <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-accent-gold shrink-0" /> Private AC Cab Transfer from Airport/Station</li>
-              <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-accent-gold shrink-0" /> Complete Ancestral Certificate & Lineage Registration</li>
-            </ul>
+            <div className="relative z-10 space-y-4 max-w-3xl">
+              <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-amber-500/15 border border-amber-500/40 text-amber-300 text-xs font-bold font-mono">
+                <MapPin className="w-3.5 h-3.5" />
+                <span>PILGRIM ROUTE: {cityData.name.toUpperCase()} TO GAYA JI</span>
+              </div>
 
-            <div className="pt-4 border-t border-gray-100 flex flex-col sm:flex-row justify-between items-center gap-4">
-              <Link 
-                href="/pre-booking" 
-                className="w-full sm:w-auto bg-accent-gold hover:bg-accent-copper text-white px-8 py-3 rounded-full font-bold text-sm text-center transition-colors"
-              >
-                Reserve This Package
-              </Link>
-              <Link href="/packages" className="text-xs font-semibold text-text-secondary hover:text-accent-gold">
-                Explore All Packages →
-              </Link>
+              <h1 className="text-2xl sm:text-4xl lg:text-5xl font-serif font-bold text-white leading-tight">
+                Pind Daan in Gaya Ji for Devotees from{' '}
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-amber-100 to-amber-400">
+                  {cityData.name}
+                </span>
+              </h1>
+
+              <p className="text-sm sm:text-base text-slate-300 leading-relaxed">
+                Complete, authentic Shastric arrangements with verified Vishnupad Temple Teerth Purohits. Experience 100% transparent fixed dakshina, door-to-door station pickup, complete Vedic samagri, and zero middleman extortion.
+              </p>
+
+              {/* Fast Facts Tags */}
+              <div className="pt-2 flex flex-wrap items-center gap-3 text-xs">
+                <span className="px-3 py-1.5 rounded-xl bg-slate-900/90 border border-slate-700/80 text-slate-300 flex items-center gap-1.5">
+                  <Clock className="w-3.5 h-3.5 text-amber-400" />
+                  <span>Transit: {cityData.travelTime}</span>
+                </span>
+                <span className="px-3 py-1.5 rounded-xl bg-slate-900/90 border border-slate-700/80 text-slate-300 flex items-center gap-1.5">
+                  <Award className="w-3.5 h-3.5 text-emerald-400" />
+                  <span>Popular: {cityData.popularRitual}</span>
+                </span>
+                <span className="px-3 py-1.5 rounded-xl bg-emerald-950/40 border border-emerald-500/30 text-emerald-300 font-bold flex items-center gap-1.5">
+                  <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+                  <span>100% Fixed Dakshina Guarantee</span>
+                </span>
+              </div>
+
+              {/* Quick Action CTAs */}
+              <div className="pt-4 flex flex-wrap items-center gap-4">
+                <Link
+                  href={`/pre-booking?city=${encodeURIComponent(cityData.name)}`}
+                  className="px-7 py-3.5 rounded-full bg-gradient-to-r from-amber-500 via-amber-400 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-950 font-extrabold text-xs sm:text-sm flex items-center gap-2 shadow-xl shadow-amber-500/20 hover:scale-105 transition-all"
+                >
+                  <span>Pre-Book Sacred Slot</span>
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
+
+                <a
+                  href={`https://wa.me/917463055338?text=${encodeURIComponent(`Pranam! I am traveling from ${cityData.name} to Gaya Ji for Pind Daan. Please share package details and Pandit Ji availability.`)}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="px-6 py-3.5 rounded-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs sm:text-sm flex items-center gap-2 shadow-lg transition-all"
+                >
+                  <Phone className="w-4 h-4 fill-current" />
+                  <span>Consult Verified Pandit Ji on WhatsApp</span>
+                </a>
+              </div>
             </div>
           </div>
-        </div>
-      </section>
 
-      {/* CTA Footer Section */}
-      <section className="py-16 max-w-4xl mx-auto px-4 text-center space-y-6">
-        <h2 className="text-2xl sm:text-3xl font-serif font-bold">Planning Your Visit from {cityData.name}?</h2>
-        <p className="text-text-secondary text-sm max-w-xl mx-auto">
-          Contact our dedicated Gaya Ji Pilgrimage Helpdesk to calculate the exact Muhurat, select Tithi, and book your verified priest.
-        </p>
-        <div className="flex justify-center gap-4 pt-2">
-          <Link href="/pre-booking" className="bg-text-primary text-white px-8 py-3.5 rounded-full font-bold text-sm hover:bg-black transition-colors">
-            Start Pre-Booking Now
-          </Link>
+          {/* Middlemen Warning & Sacred Zero-Extortion Pledge */}
+          <ZeroExtortionPledge cityName={cityData.name} />
+
+          {/* Travel Vectors (Flights, Trains, Road) */}
+          <div className="rounded-3xl bg-[#0E1626] border border-slate-800 p-6 sm:p-8 shadow-xl space-y-6">
+            <div>
+              <div className="inline-flex items-center gap-2 text-amber-400 text-xs font-bold mb-1">
+                <Compass className="w-4 h-4" />
+                <span>TRANSIT LOGISTICS & CONNECTIVITY</span>
+              </div>
+              <h3 className="text-xl sm:text-2xl font-bold text-white">
+                How to Travel from {cityData.name} to Gaya Ji
+              </h3>
+              <p className="text-xs text-slate-400 mt-1">
+                Optimized travel routes for families, elderly pilgrims, and international NRI visitors.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* Flight Vector */}
+              <div className="p-5 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-2.5">
+                <div className="flex items-center gap-2 text-sm font-bold text-sky-400">
+                  <Plane className="w-4 h-4" />
+                  <span>Flight Route & Airport Transfer:</span>
+                </div>
+                <p className="text-xs text-slate-300 leading-relaxed">
+                  {cityData.flightRoute}
+                </p>
+                <div className="pt-2 text-[11px] text-slate-400 border-t border-slate-800/80 flex items-center gap-2">
+                  <Check className="w-3.5 h-3.5 text-emerald-400" />
+                  <span>Patna Airport (PAT) transfer via NH-83 Expressway takes approx 1.5 - 2 hrs.</span>
+                </div>
+              </div>
+
+              {/* Train Vector */}
+              <div className="p-5 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-2.5">
+                <div className="flex items-center gap-2 text-sm font-bold text-amber-400">
+                  <Train className="w-4 h-4" />
+                  <span>Direct Trains to Gaya Junction (GAYA):</span>
+                </div>
+                <p className="text-xs text-slate-300 leading-relaxed">
+                  {cityData.trainRoute}
+                </p>
+                <div className="pt-2 text-[11px] text-slate-400 border-t border-slate-800/80 flex items-center gap-2">
+                  <Check className="w-3.5 h-3.5 text-emerald-400" />
+                  <span>Gaya Junction is situated on the Grand Chord line with 24/7 express connectivity.</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Station Warning Banner */}
+            <div className="p-4 rounded-2xl bg-amber-950/20 border border-amber-900/40 flex items-start gap-3">
+              <AlertTriangle className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" />
+              <div className="space-y-1">
+                <span className="font-bold text-xs text-amber-300 block">
+                  Important Arrival Tip for {cityData.name} Pilgrims:
+                </span>
+                <p className="text-xs text-slate-300 leading-relaxed">
+                  {cityData.stationTips}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Local Devotee Traditions & Shastric Significance */}
+          <div className="rounded-3xl bg-gradient-to-r from-[#172033] via-[#0F172A] to-[#172033] border border-slate-800 p-6 sm:p-8 space-y-4">
+            <div className="flex items-center gap-2 text-xs font-bold text-emerald-400">
+              <Sparkles className="w-4 h-4" />
+              <span>VEDIC TRADITION & LINEAGE RECORDS</span>
+            </div>
+            <h3 className="text-xl sm:text-2xl font-bold text-white">
+              Vedic Ritual Customs for Devotees from {cityData.name}
+            </h3>
+            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+              {cityData.customNotes}
+            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
+              <div className="p-3.5 rounded-xl bg-slate-900/80 border border-slate-800">
+                <span className="text-[11px] font-bold text-amber-300 block mb-1">1. Falgu River Snan</span>
+                <p className="text-[11px] text-slate-400">Achaman, sand pind daan, and soul cleansing purification.</p>
+              </div>
+              <div className="p-3.5 rounded-xl bg-slate-900/80 border border-slate-800">
+                <span className="text-[11px] font-bold text-amber-300 block mb-1">2. Vishnupad Charan</span>
+                <p className="text-[11px] text-slate-400">Pinda offering directly on Lord Vishnu 40cm divine footprint.</p>
+              </div>
+              <div className="p-3.5 rounded-xl bg-slate-900/80 border border-slate-800">
+                <span className="text-[11px] font-bold text-amber-300 block mb-1">3. Akshayavat Sufal</span>
+                <p className="text-[11px] text-slate-400">Eternal blessing and peace for 101 generations under undying banyan.</p>
+              </div>
+            </div>
+          </div>
+
+          {/* High-Intent Frequently Asked Questions */}
+          <div className="rounded-3xl bg-[#0E1626] border border-slate-800 p-6 sm:p-8 space-y-6">
+            <div>
+              <div className="inline-flex items-center gap-2 text-sky-400 text-xs font-bold mb-1">
+                <HelpCircle className="w-4 h-4" />
+                <span>FREQUENTLY ASKED QUESTIONS</span>
+              </div>
+              <h3 className="text-xl sm:text-2xl font-bold text-white">
+                Frequently Asked Questions: Pind Daan from {cityData.name}
+              </h3>
+            </div>
+
+            <div className="space-y-4">
+              {jsonLdFaq.mainEntity.map((item, idx) => (
+                <div key={idx} className="p-5 rounded-2xl bg-slate-900/80 border border-slate-800/90 space-y-2">
+                  <h4 className="font-bold text-sm text-white flex items-center gap-2">
+                    <span className="w-5 h-5 rounded-full bg-amber-500/20 text-amber-400 text-xs flex items-center justify-center shrink-0">
+                      Q
+                    </span>
+                    <span>{item.name}</span>
+                  </h4>
+                  <p className="text-xs text-slate-300 leading-relaxed pl-7">
+                    {item.acceptedAnswer.text}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Bottom Conversion CTA Strip */}
+          <div className="rounded-3xl bg-gradient-to-r from-amber-600 via-amber-500 to-amber-600 p-6 sm:p-8 text-slate-950 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-2xl">
+            <div className="space-y-1 text-center sm:text-left">
+              <h4 className="text-xl sm:text-2xl font-extrabold">
+                Reserve Your Sacred Date from {cityData.name}
+              </h4>
+              <p className="text-xs sm:text-sm font-medium text-slate-900">
+                Guaranteed verified Teerth Purohits, 100% fixed dakshina, and zero unexpected charges.
+              </p>
+            </div>
+
+            <div className="flex flex-col sm:flex-row items-center gap-3 shrink-0 w-full sm:w-auto">
+              <Link
+                href={`/pre-booking?city=${encodeURIComponent(cityData.name)}`}
+                className="w-full sm:w-auto px-7 py-3 rounded-full bg-slate-950 hover:bg-slate-900 text-white font-bold text-xs text-center shadow-lg transition-all"
+              >
+                Pre-Book Ritual Slot
+              </Link>
+              <a
+                href="tel:+917463055338"
+                className="w-full sm:w-auto px-5 py-3 rounded-full bg-amber-100 hover:bg-white text-slate-950 font-bold text-xs flex items-center justify-center gap-1.5 transition-all"
+              >
+                <Phone className="w-3.5 h-3.5 text-amber-600" />
+                <span>Call Helpline: +91 7463055338</span>
+              </a>
+            </div>
+          </div>
+
         </div>
-      </section>
-    </div>
+      </main>
+    </>
   );
 }

@@ -1,5 +1,6 @@
 import { MetadataRoute } from 'next';
 import prisma from '@/lib/prisma';
+import { CITY_DATABASE } from '@/data/cityDatabase';
 
 const db = prisma as any;
 
@@ -24,14 +25,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${baseUrl}/contact`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.6 }
   ];
 
-  // Dynamic city routes (Programmatic Local & Global SEO)
-  const cities = [
-    'bengaluru', 'mumbai', 'delhi', 'kolkata', 'hyderabad', 'chennai', 'pune',
-    'ahmedabad', 'surat', 'jaipur', 'lucknow', 'patna', 'ranchi', 'bhubaneswar',
-    'usa-nri', 'uk-london', 'canada-nri', 'australia-nri', 'dubai-uae-nri', 'singapore-nri'
-  ];
-  const cityRoutes: MetadataRoute.Sitemap = cities.map(city => ({
-    url: `${baseUrl}/pind-daan/from-${city}`,
+  // Dynamic city routes (Programmatic Local & Global SEO for 54+ cities)
+  const cityRoutes: MetadataRoute.Sitemap = Object.keys(CITY_DATABASE).map(slug => ({
+    url: `${baseUrl}/pind-daan/${slug}`,
     lastModified: new Date(),
     changeFrequency: 'weekly',
     priority: 0.85
