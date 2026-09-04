@@ -1,11 +1,13 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Sparkles, ArrowRight, ShieldCheck, Flame, BookOpen, Clock } from 'lucide-react';
+import { Sparkles, ArrowRight, ShieldCheck, Flame, Clock } from 'lucide-react';
 import VedicDiagnosticModal from '@/components/ai/VedicDiagnosticModal';
+import { useAppLanguage } from '@/lib/useAppLanguage';
 
 export default function VedicDiagnosticBanner({ packages = [] }: { packages?: any[] }) {
   const [isOpen, setIsOpen] = useState(false);
+  const { isHindi } = useAppLanguage();
 
   return (
     <>
@@ -25,25 +27,42 @@ export default function VedicDiagnosticBanner({ packages = [] }: { packages?: an
               </div>
 
               <h2 className="text-2xl sm:text-3xl lg:text-4xl font-display font-bold text-white leading-tight">
-                पितरों के मोक्ष व कुल शांति हेतु <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-amber-200 to-amber-400">सटीक पिंडदान विधान</span> जानें
+                {isHindi ? (
+                  <>
+                    पितरों के मोक्ष व कुल शांति हेतु{' '}
+                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-amber-200 to-amber-400">
+                      सटीक पिंडदान विधान
+                    </span>{' '}
+                    जानें
+                  </>
+                ) : (
+                  <>
+                    Discover the Exact Ritual for Ancestor Liberation &{' '}
+                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-amber-200 to-amber-400">
+                      Family Peace
+                    </span>
+                  </>
+                )}
               </h2>
 
               <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
-                गरुड़ पुराण एवं वायु पुराण के आधार पर 2 मिनट में जानें कि आपके कुल के लिए 1-दिवसीय आवश्यक पिंडदान, 3-दिवसीय 45-वेदी त्रि-स्थली, अथवा त्रिपिंडी नारायण बलि में से कौन सा विधान शास्त्रसम्मत है।
+                {isHindi 
+                  ? 'गरुड़ पुराण एवं वायु पुराण के आधार पर 2 मिनट में जानें कि आपके कुल के लिए 1-दिवसीय आवश्यक पिंडदान, 3-दिवसीय 45-वेदी त्रि-स्थली, अथवा त्रिपिंडी नारायण बलि में से कौन सा विधान शास्त्रसम्मत है।'
+                  : 'Based on Garuda Purana and Vayu Purana, find out in 2 minutes whether a 1-Day Essential Pind Daan, 3-Day 45-Vedi Tri-Sthali, or Tripindi Narayan Bali is scripturally prescribed for your lineage.'}
               </p>
 
               <div className="pt-2 flex flex-wrap items-center justify-center lg:justify-start gap-4 text-xs text-slate-400">
                 <span className="flex items-center gap-1.5">
                   <ShieldCheck className="w-4 h-4 text-emerald-400" />
-                  <span>100% निःशुल्क जांच (Free Tool)</span>
+                  <span>{isHindi ? '100% निःशुल्क जांच (Free Tool)' : '100% Free Assessment'}</span>
                 </span>
                 <span className="flex items-center gap-1.5">
                   <Flame className="w-4 h-4 text-amber-400" />
-                  <span>45 पवित्र वेदियों का सटीक मिलान</span>
+                  <span>{isHindi ? '45 पवित्र वेदियों का सटीक मिलान' : '45 Sacred Vedis Mapping'}</span>
                 </span>
                 <span className="flex items-center gap-1.5">
                   <Clock className="w-4 h-4 text-sky-400" />
-                  <span>2 मिनट में संपूर्ण रिपोर्ट</span>
+                  <span>{isHindi ? '2 मिनट में संपूर्ण रिपोर्ट' : 'Instant 2-Minute Audit'}</span>
                 </span>
               </div>
             </div>
@@ -54,7 +73,7 @@ export default function VedicDiagnosticBanner({ packages = [] }: { packages?: an
                 className="w-full sm:w-auto px-8 py-4 rounded-full bg-gradient-to-r from-amber-500 via-amber-400 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-950 font-extrabold text-sm flex items-center justify-center gap-2.5 shadow-xl shadow-amber-500/25 hover:scale-105 transition-all"
               >
                 <Sparkles className="w-4 h-4 fill-current text-slate-950" />
-                <span>AI वैदिक जांच शुरू करें</span>
+                <span>{isHindi ? 'AI वैदिक जांच शुरू करें' : 'Start AI Vedic Assessment'}</span>
                 <ArrowRight className="w-4 h-4" />
               </button>
             </div>

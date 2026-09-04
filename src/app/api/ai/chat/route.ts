@@ -6,25 +6,52 @@ import { DEFAULT_AI_SYSTEM_PROMPT, DEFAULT_GAYA_KNOWLEDGE_BASE } from '@/lib/gay
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { messages = [], userPhone = '', userName = '' } = body;
+    const { messages = [], userPhone = '', userName = '', language = 'en' } = body;
 
     const rawMessage = messages[messages.length - 1]?.content || '';
 
     // Phonetic Vedic Auto-Correction for Speech-to-Text voice misrecognitions
     const lastMessage = rawMessage
-      .replace(/\b(print\s*out|printout|printer|printing|pint\s*out|pintout|point\s*out|pin\s*out|pin\s*down|pindown|pen\s*down|pin\s*dan|pind\s*dan|pind\s*daan|peen\s*daan|peen\s*dan|been\s*done|bean\s*done|paint\s*out|pin\s*don|pindan|pinda|pinddaan|ping\s*daan|pin\s*dam)\b/gi, 'पिंडदान')
-      .replace(/\b(shard|shrad|shraadh|sharad|shradha|sradh|shraadha)\b/gi, 'श्राद्ध')
-      .replace(/\b(gaia|guy a|gaya ji|gayaji|gaaya)\b/gi, 'गया जी')
-      .replace(/\b(vishnu\s*pad|vishnupad|vishnu\s*feet|vishnu\s*padh|visnu\s*pad)\b/gi, 'विष्णुपद')
-      .replace(/\b(falgu|falgoo|phalguna)\b/gi, 'फल्गु नदी')
-      .replace(/\b(akshay\s*vat|akshayvat|akshay\s*bar)\b/gi, 'अक्षयवट')
-      .replace(/\b(pret\s*shila|pretshila|plate\s*shila)\b/gi, 'प्रेतशिला')
-      .replace(/\b(pitrapaksh|pitru\s*paksha|pitra\s*paksha|peter\s*pack)\b/gi, 'पितृपक्ष');
+      .replace(/\b(print\s*out|printout|printer|printing|pint\s*out|pintout|point\s*out|pin\s*out|pin\s*down|pindown|pen\s*down|pin\s*dan|pind\s*dan|pind\s*daan|peen\s*daan|peen\s*dan|been\s*done|bean\s*done|paint\s*out|pin\s*don|pindan|pinda|pinddaan|ping\s*daan|pin\s*dam)\b/gi, language === 'en' ? 'Pind Daan' : 'पिंडदान')
+      .replace(/\b(shard|shrad|shraadh|sharad|shradha|sradh|shraadha)\b/gi, language === 'en' ? 'Shradh' : 'श्राद्ध')
+      .replace(/\b(gaia|guy a|gaya ji|gayaji|gaaya)\b/gi, language === 'en' ? 'Gaya Ji' : 'गया जी')
+      .replace(/\b(vishnu\s*pad|vishnupad|vishnu\s*feet|vishnu\s*padh|visnu\s*pad)\b/gi, language === 'en' ? 'Vishnupad' : 'विष्णुपद')
+      .replace(/\b(falgu|falgoo|phalguna)\b/gi, language === 'en' ? 'Falgu River' : 'फल्गु नदी')
+      .replace(/\b(akshay\s*vat|akshayvat|akshay\s*bar)\b/gi, language === 'en' ? 'Akshayavat' : 'अक्षयवट')
+      .replace(/\b(pret\s*shila|pretshila|plate\s*shila)\b/gi, language === 'en' ? 'Pretshila' : 'प्रेतशिला')
+      .replace(/\b(pitrapaksh|pitru\s*paksha|pitra\s*paksha|peter\s*pack)\b/gi, language === 'en' ? 'Pitru Paksha' : 'पितृपक्ष');
 
     // Update the last message in history with the sanitized version
     const sanitizedMessages = messages.map((m: any, idx: number) => 
       idx === messages.length - 1 ? { ...m, content: lastMessage } : m
     );
+
+    // Language Directive for AI Pandit Ji
+    const languageInstruction = language === 'en'
+      ? `\n\n⚠️ CRITICAL MULTILINGUAL MANDATE (ENGLISH MODE ACTIVE):
+The devotee is using the website in ENGLISH.
+1. You MUST respond completely in warm, respectful, dignified ENGLISH.
+2. Preserve authentic Vedic terms in Roman script (e.g., 'Pind Daan', 'Shradh', 'Vishnupad Temple', 'Falgu River', 'Akshayavat Tree', 'Gotra Sankalp', 'Tarpan', 'Pitru Paksha').
+3. DO NOT output in Devanagari Hindi script unless the devotee explicitly asks in Hindi.
+4. Absolutely NO emojis (like folded hands), NO asterisks (**), NO bullet points (•) in the response so text-to-speech speaks cleanly.
+5. Keep the response polite, direct, concise, and spiritually authentic.`
+      : language === 'bn'
+      ? `\n\n⚠️ CRITICAL MULTILINGUAL MANDATE (BENGALI MODE ACTIVE):
+শ্রদ্ধালু বাংলা ভাষা নির্বাচন করেছেন। সম্পূর্ণ উত্তর শ্রদ্ধা ও সম্মানের সহিত শুদ্ধ বাংলায় দিন। কোনো ইমোজি বা স্টার ব্যবহার করবেন না।`
+      : language === 'te'
+      ? `\n\n⚠️ CRITICAL MULTILINGUAL MANDATE (TELUGU MODE ACTIVE):
+భక్తుడు తెలుగు భాషను ఎంచుకున్నారు. సమాధానం గౌరవప్రదమైన తెలుగులో ఇవ్వండి. ఎమోజీలు లేదా స్టార్స్ ఉపయోగించవద్దు.`
+      : language === 'ta'
+      ? `\n\n⚠️ CRITICAL MULTILINGUAL MANDATE (TAMIL MODE ACTIVE):
+பக்தர் தமிழ் மொழியைத் தேர்ந்தெடுத்துள்ளார். மரியாதையான தமிழில் பதிலளிக்கவும். எமோஜிகள் பயன்படுத்த வேண்டாம்.`
+      : language === 'mr'
+      ? `\n\n⚠️ CRITICAL MULTILINGUAL MANDATE (MARATHI MODE ACTIVE):
+श्रद्धाळू मराठी भाषा वापरत आहेत. उत्तर आदरपूर्वक शुद्ध मराठीत द्या. इमोजी वापरू नका.`
+      : language === 'gu'
+      ? `\n\n⚠️ CRITICAL MULTILINGUAL MANDATE (GUJARATI MODE ACTIVE):
+શ્રદ્ધાળુ ગુજરાતી ભાષા પસંદ કરેલ છે. જવાબ આદરપૂર્વક શુદ્ધ ગુજરાતીમાં આપો. ઇમોજી વાપરશો નહીં.`
+      : `\n\n⚠️ CRITICAL MULTILINGUAL MANDATE (HINDI MODE ACTIVE):
+श्रद्धालु हिंदी भाषा में मार्गदर्शन प्राप्त कर रहे हैं। उत्तर अत्यंत विनम्र, आत्मीय, शुद्ध देवनागरी हिंदी में दें। किसी भी इमोजी (जैसे folded hands) या मार्कडाउन स्टार्स का प्रयोग न करें।`;
 
     // 1. DYNAMIC LIVE SETTINGS & KNOWLEDGE BASE FROM ADMIN PANEL / SITESETTINGS
     let activeSystemPrompt = DEFAULT_AI_SYSTEM_PROMPT;
@@ -77,6 +104,8 @@ export async function POST(req: NextRequest) {
 
     const dynamicFullPrompt = `
 ${activeSystemPrompt}
+
+${languageInstruction}
 
 ================================================================================
 आधिकारिक शास्त्र एवं सरकारी ज्ञान-कोष (Garuda Purana, Vayu Purana & pitrapakshagaya.bihar.gov.in):

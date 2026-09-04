@@ -24,11 +24,13 @@ export interface VedicDiagnosisReport {
     durationDays: number;
     primaryVedicRitual: string;
     reasoning: string;
+    englishReasoning?: string;
   };
   mandatoryVedis: Array<{
     name: string;
     hindiName: string;
     significance: string;
+    englishSignificance?: string;
   }>;
   recommendedTithis: Array<{
     occasion: string;
@@ -90,7 +92,8 @@ export function assessVedicMokshaPath(
       estimatedDakshina: livePkg.price > 12500 ? livePkg.price + 2000 : 14500,
       durationDays: 3,
       primaryVedicRitual: 'Pretshila Pind Daan + Brahma Kund Snan + Tripindi Vidhi',
-      reasoning: 'गरुड़ पुराण के अनुसार अकाल या असमय मृत्यु होने पर आत्मा प्रेत योनि से मुक्ति पाने हेतु त्रिपिंडी और प्रेतशिला पिंडदान अनिवार्य रूप से मांगती है।'
+      reasoning: 'गरुड़ पुराण के अनुसार अकाल या असमय मृत्यु होने पर आत्मा प्रेत योनि से मुक्ति पाने हेतु त्रिपिंडी और प्रेतशिला पिंडदान अनिवार्य रूप से मांगती है।',
+      englishReasoning: 'According to Garuda Purana (Pretakalpa), in cases of untimely, accidental, or unnatural demise, the departed soul requires Tripindi Shradh and Pretshila Pind Daan to attain complete liberation from the ghostly realm (Preta Yoni).'
     };
   } else if (answers.relation === 'both_parents' || answers.relation === 'grandparents' || answers.priorRituals === 'first_time_gaya') {
     const livePkg = findLivePackage('tri-sthali', 12500, '3-Day Complete Tri-Sthali Pilgrimage');
@@ -102,7 +105,8 @@ export function assessVedicMokshaPath(
       estimatedDakshina: livePkg.price,
       durationDays: 3,
       primaryVedicRitual: 'Parvana Shradh at all 45 Sacred Vedis',
-      reasoning: 'वायु पुराण के अनुसार प्रथम बार गया तीर्थ आने वाले कुलवंशियों को 45 वेदियों पर त्रि-स्थली (फल्गु, विष्णुपद, अक्षयवट) सहित सम्पूर्ण पार्वण श्राद्ध करना चाहिए, जिससे 101 कुलों का उद्धार होता है।'
+      reasoning: 'वायु पुराण के अनुसार प्रथम बार गया तीर्थ आने वाले कुलवंशियों को 45 वेदियों पर त्रि-स्थली (फल्गु, विष्णुपद, अक्षयवट) सहित सम्पूर्ण पार्वण श्राद्ध करना चाहिए, जिससे 101 कुलों का उद्धार होता है।',
+      englishReasoning: 'According to Vayu Purana (Gaya Mahatmya), first-time pilgrims should perform comprehensive Parvana Shradh across the 45-Vedi trail including the core Tri-Sthali (Falgu, Vishnupad, Akshayavat), liberating 101 generations of ancestors.'
     };
   } else {
     const livePkg = findLivePackage('essential', 4500, '1-Day Essential Pind Daan');
@@ -114,7 +118,8 @@ export function assessVedicMokshaPath(
       estimatedDakshina: livePkg.price,
       durationDays: 1,
       primaryVedicRitual: 'Ekoddishta / Parvana Shradh at Vishnupad & Falgu',
-      reasoning: 'समय के अभाव अथवा नियमित वार्षिक तर्पण हेतु फल्गु तट, विष्णुपद चरण चिह्न एवं अक्षयवट के समक्ष एक-दिवसीय संकल्प पूर्णतः शास्त्रसम्मत है।'
+      reasoning: 'समय के अभाव अथवा नियमित वार्षिक तर्पण हेतु फल्गु तट, विष्णुपद चरण चिह्न एवं अक्षयवट के समक्ष एक-दिवसीय संकल्प पूर्णतः शास्त्रसम्मत है।',
+      englishReasoning: 'For tight travel schedules or regular annual pitru remembrance, performing sacred rites at the core Tri-Sthali (Falgu River, Lord Vishnupad footprints, and Akshayavat) is completely scripturally valid.'
     };
   }
 
@@ -123,17 +128,20 @@ export function assessVedicMokshaPath(
     {
       name: 'Falgu River (Adi Gaya Ghat)',
       hindiName: 'फल्गु नदी (आदि गया घाट)',
-      significance: 'माता सीता द्वारा बालू से पिंडदान करने का शाश्वत स्थल। यहाँ पहला पिंडदान और आचमन संकल्प होता है।'
+      significance: 'माता सीता द्वारा बालू से पिंडदान करने का शाश्वत स्थल। यहाँ पहला पिंडदान और आचमन संकल्प होता है।',
+      englishSignificance: 'Sacred site where Devi Sita performed pind daan with sand. The first pind offering and purifying achaman take place here.'
     },
     {
       name: 'Vishnupad Temple (Sacred Lotus Footprints)',
       hindiName: 'विष्णुपद मंदिर (श्रीहरि चरण चिह्न)',
-      significance: 'गयासुर की छाती पर स्थित भगवान विष्णु के 40 सेमी पावन चरण। यहाँ पिंडदान से सीधे वैकुंठ प्राप्ति मानी जाती है।'
+      significance: 'गयासुर की छाती पर स्थित भगवान विष्णु के 40 सेमी पावन चरण। यहाँ पिंडदान से सीधे वैकुंठ प्राप्ति मानी जाती है।',
+      englishSignificance: 'Lord Vishnu 40cm divine footprint on Gayasur chest. Offering pinda here grants immediate liberation to Vaikuntha.'
     },
     {
       name: 'Akshayavat (Undying Banyan Tree)',
       hindiName: 'अक्षयवट (अमर वटवृक्ष)',
-      significance: 'यहाँ पिंडदान का फल अक्षय (कभी समाप्त न होने वाला) होता है। तीर्थ पंडा द्वारा सुफल (आशीर्वाद) यहीं प्राप्त होता है।'
+      significance: 'यहाँ पिंडदान का फल अक्षय (कभी समाप्त न होने वाला) होता है। तीर्थ पंडा द्वारा सुफल (आशीर्वाद) यहीं प्राप्त होता है।',
+      englishSignificance: 'The immortal banyan tree where pind daan yields everlasting merit. Devotees receive the sacred Sufal blessing from Teerth Purohits here.'
     }
   ];
 
@@ -141,12 +149,14 @@ export function assessVedicMokshaPath(
     mandatoryVedis.push({
       name: 'Pretshila Hill (Ghost Stone Vedi)',
       hindiName: 'प्रेतशिला पहाड़ी (प्रेत योनि मुक्ति)',
-      significance: 'अकाल मृत्यु, अस्वाभाविक देहावसान अथवा अशांत आत्माओं को प्रेत योनि से तत्काल मुक्त कराने वाली सर्वोच्च वेदी।'
+      significance: 'अकाल मृत्यु, अस्वाभाविक देहावसान अथवा अशांत आत्माओं को प्रेत योनि से तत्काल मुक्त कराने वाली सर्वोच्च वेदी।',
+      englishSignificance: 'The premier 540ft hill vedi specifically designated for liberating unquiet souls from untimely or unnatural passing.'
     });
     mandatoryVedis.push({
       name: 'Brahma Kund & Ramgaya',
       hindiName: 'ब्रह्म कुंड एवं रामगया वेदी',
-      significance: 'जहाँ भगवान श्री राम ने राजा दशरथ का पिंडदान किया था। कुलदोष एवं अज्ञात पापों के शमन की वेदी।'
+      significance: 'जहाँ भगवान श्री राम ने राजा दशरथ का पिंडदान किया था। कुलदोष एवं अज्ञात पापों के शमन की वेदी।',
+      englishSignificance: 'Sacred pool where Bhagwan Shri Ram performed rites for King Dasharatha, expiating lingering family karma.'
     });
   }
 

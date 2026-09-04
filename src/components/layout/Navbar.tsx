@@ -24,6 +24,7 @@ import Logo from '@/components/common/Logo';
 import GlobalSearchModal from '@/components/common/GlobalSearchModal';
 import LanguageConverter from '@/components/common/LanguageConverter';
 import VedicDiagnosticModal from '@/components/ai/VedicDiagnosticModal';
+import { useAppLanguage } from '@/lib/useAppLanguage';
 
 interface NavbarProps {
   packages?: any[];
@@ -31,6 +32,7 @@ interface NavbarProps {
 }
 
 export default function Navbar({ packages = [], sacredPlaces = [] }: NavbarProps) {
+  const { isHindi } = useAppLanguage();
   const [activeMegaMenu, setActiveMegaMenu] = useState<string | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -193,10 +195,10 @@ export default function Navbar({ packages = [], sacredPlaces = [] }: NavbarProps
             <button
               onClick={() => setIsDiagnosticOpen(true)}
               className="flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-950 font-extrabold text-[11px] shadow-sm hover:shadow-md transition-all hover:scale-105 whitespace-nowrap shrink-0"
-              title="AI वैदिक पितृ दोष एवं पिंडदान जांच"
+              title={isHindi ? "AI वैदिक पितृ दोष एवं पिंडदान जांच" : "AI Vedic Moksha & Pitru Dosh Assessment"}
             >
               <Sparkles className="w-3.5 h-3.5 fill-current text-slate-950" />
-              <span>AI पितृ दोष जांच</span>
+              <span>{isHindi ? 'AI पितृ दोष जांच' : 'AI Vedic Assessment'}</span>
             </button>
 
           </nav>
@@ -633,7 +635,7 @@ export default function Navbar({ packages = [], sacredPlaces = [] }: NavbarProps
             className="w-full flex items-center justify-center gap-2 py-3 rounded-2xl bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-extrabold text-xs shadow-md active:scale-95 transition-transform"
           >
             <Sparkles className="w-4 h-4 fill-current text-slate-950" />
-            <span>AI पितृ दोष जांच (Vedic Diagnostic)</span>
+            <span>{isHindi ? 'AI पितृ दोष जांच (Vedic Diagnostic)' : 'AI Vedic Assessment (Vedic Diagnostic)'}</span>
           </button>
 
           {/* Quick Call Helpline Button */}

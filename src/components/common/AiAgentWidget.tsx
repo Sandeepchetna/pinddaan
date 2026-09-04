@@ -2,123 +2,155 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { 
-  MessageCircle, 
-  Phone, 
-  Sparkles, 
   X, 
+  Sparkles, 
   Send, 
-  Flame, 
   Mic, 
   MicOff, 
   Volume2, 
   VolumeX, 
-  Loader2,
-  FileCheck2
+  Loader2, 
+  MessageCircle, 
+  Phone, 
+  Calendar, 
+  Flame, 
+  FileCheck2 
 } from 'lucide-react';
 import Link from 'next/link';
 import VedicDiagnosticModal from '@/components/ai/VedicDiagnosticModal';
+import { 
+  useAppLanguage, 
+  AI_GREETINGS, 
+  AI_PLACEHOLDERS, 
+  AI_HEADER_TEXT, 
+  AppLangCode 
+} from '@/lib/useAppLanguage';
 
-// Animated Pandit Ji & Divine Vishnu Sudarshan Chakra Icon
+// Animated Pandit Ji Divine Avatar Icon
 function AnimatedPanditJiIcon({ className = "w-10 h-10" }: { className?: string }) {
   return (
-    <svg className={className} viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-      {/* Outer Divine Vishnu Sudarshan Chakra Rays */}
-      <g className="animate-spin" style={{ animationDuration: '20s' }}>
-        {[...Array(12)].map((_, i) => (
-          <path
-            key={i}
-            d="M32 4L34 10H30L32 4Z"
-            fill="#FFD700"
-            transform={`rotate(${i * 30} 32 32)`}
-          />
-        ))}
-      </g>
-
-      {/* Saffron Aura Circle with Glowing Pulse */}
-      <circle cx="32" cy="32" r="24" fill="url(#pandit_saffron_grad)" stroke="#FFD700" strokeWidth="2" className="animate-pulse" />
-      
-      {/* Sacred Vishnu Urdhva Pundra Tilak */}
-      <path d="M26 14C26 22 28 30 32 34C36 30 38 22 38 14" stroke="#FFF" strokeWidth="2.5" strokeLinecap="round"/>
-      <path d="M32 18V32" stroke="#FFD700" strokeWidth="3" strokeLinecap="round"/>
-      <circle cx="32" cy="35" r="2" fill="#E53E3E"/>
-
-      {/* Animated Pandit Ji Traditional Attire & Pagdi */}
-      <g className="transition-transform duration-300 hover:scale-105">
-        <path d="M18 48C18 41 23 37 32 37C41 37 46 41 46 48V52H18V48Z" fill="#FFF" opacity="0.95"/>
-        <path d="M21 44C21 39 25 35 32 35C39 35 43 39 43 44" fill="#F48D08"/>
-        <circle cx="32" cy="44" r="2.5" fill="#6f1d14"/>
-      </g>
-
-      {/* Gradients */}
+    <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
+      <circle cx="32" cy="32" r="30" fill="#6f1d14" stroke="#F48D08" strokeWidth="2.5" />
+      <circle cx="32" cy="32" r="28" fill="url(#haloGrad)" opacity="0.4" />
+      {/* Saffron Angavastram / Shawl */}
+      <path d="M12 56C12 45 20 38 32 38C44 38 52 45 52 56" fill="#EA580C" />
+      <path d="M22 40L32 58L42 40" fill="#F97316" />
+      {/* Holy Rudraksha Beads Mala */}
+      <path d="M24 45C27 52 37 52 40 45" stroke="#78350F" strokeWidth="2.5" strokeDasharray="1.5 2.5" strokeLinecap="round" />
+      {/* Sacred Head & Face */}
+      <circle cx="32" cy="27" r="13" fill="#FED7AA" />
+      {/* Pandit Ji Beard & Chibuk */}
+      <path d="M26 31C26 38 38 38 38 31" fill="#FFFFFF" opacity="0.9" />
+      {/* Bright Vaishnava Urdhva Pundra Tilak */}
+      <path d="M30 18V28M34 18V28" stroke="#F8FAFC" strokeWidth="1.8" strokeLinecap="round" />
+      <path d="M30 28C30 30 34 30 34 28" stroke="#F8FAFC" strokeWidth="1.8" />
+      <circle cx="32" cy="26" r="1.3" fill="#DC2626" />
+      {/* Gentle Meditative Eyes & Divine Smile */}
+      <path d="M26 25C27.5 26.5 29 26 29 25" stroke="#451A03" strokeWidth="1.5" strokeLinecap="round" />
+      <path d="M35 25C36.5 26.5 38 26 38 25" stroke="#451A03" strokeWidth="1.5" strokeLinecap="round" />
+      <path d="M30 32C31 33.5 33 33.5 34 32" stroke="#B45309" strokeWidth="1.5" strokeLinecap="round" />
+      {/* Saffron Pagri / Traditional Turban */}
+      <path d="M19 22C19 14 24 10 32 10C40 10 45 14 45 22C41 18 36 17 32 17C28 17 23 18 19 22Z" fill="#F59E0B" />
+      <path d="M24 13C28 11 36 11 40 13" stroke="#D97706" strokeWidth="1.5" />
+      <circle cx="32" cy="11" r="2" fill="#DC2626" />
       <defs>
-        <linearGradient id="pandit_saffron_grad" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
-          <stop stopColor="#6f1d14"/>
-          <stop offset="0.5" stopColor="#F48D08"/>
-          <stop offset="1" stopColor="#C6922E"/>
-        </linearGradient>
+        <radialGradient id="haloGrad" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(32 32) rotate(90) scale(30)">
+          <stop stopColor="#F59E0B" />
+          <stop offset="1" stopColor="#6f1d14" stopOpacity="0" />
+        </radialGradient>
       </defs>
     </svg>
   );
 }
 
 // 1. Phonetic Vedic Auto-Correction for Speech-to-Text Misrecognitions
-function sanitizeVedicSpeechInput(raw: string): string {
+function sanitizeVedicSpeechInput(raw: string, lang: AppLangCode): string {
   if (!raw) return '';
   let text = raw.trim();
 
+  const isEnglish = lang === 'en';
+
   // Pind Daan misrecognitions (speech engines often hear 'print out' or 'pint out')
-  text = text.replace(/\b(print\s*out|printout|printer|printing|pint\s*out|pintout|point\s*out|pin\s*out|pin\s*down|pindown|pen\s*down|pin\s*dan|pind\s*dan|pind\s*daan|peen\s*daan|peen\s*dan|been\s*done|bean\s*done|paint\s*out|pin\s*don|pindan|pinda|pinddaan|ping\s*daan|pin\s*dam)\b/gi, 'पिंडदान');
+  text = text.replace(
+    /\b(print\s*out|printout|printer|printing|pint\s*out|pintout|point\s*out|pin\s*out|pin\s*down|pindown|pen\s*down|pin\s*dan|pind\s*dan|pind\s*daan|peen\s*daan|peen\s*dan|been\s*done|bean\s*done|paint\s*out|pin\s*don|pindan|pinda|pinddaan|ping\s*daan|pin\s*dam)\b/gi, 
+    isEnglish ? 'Pind Daan' : 'पिंडदान'
+  );
 
   // Shradh misrecognitions
-  text = text.replace(/\b(shard|shrad|shraadh|sharad|shradha|sradh|shraadha)\b/gi, 'श्राद्ध');
+  text = text.replace(
+    /\b(shard|shrad|shraadh|sharad|shradha|sradh|shraadha)\b/gi, 
+    isEnglish ? 'Shradh' : 'श्राद्ध'
+  );
 
   // Gaya Ji misrecognitions
-  text = text.replace(/\b(gaia|guy a|gaya ji|gayaji|gaaya)\b/gi, 'गया जी');
+  text = text.replace(
+    /\b(gaia|guy a|gaya ji|gayaji|gaaya)\b/gi, 
+    isEnglish ? 'Gaya Ji' : 'गया जी'
+  );
 
   // Vishnupad misrecognitions
-  text = text.replace(/\b(vishnu\s*pad|vishnupad|vishnu\s*feet|vishnu\s*padh|visnu\s*pad)\b/gi, 'विष्णुपद');
+  text = text.replace(
+    /\b(vishnu\s*pad|vishnupad|vishnu\s*feet|vishnu\s*padh|visnu\s*pad)\b/gi, 
+    isEnglish ? 'Vishnupad' : 'विष्णुपद'
+  );
 
   // Falgu River misrecognitions
-  text = text.replace(/\b(falgu|falgoo|phalguna|falgu nadi)\b/gi, 'फल्गु नदी');
+  text = text.replace(
+    /\b(falgu|falgoo|phalguna|falgu nadi)\b/gi, 
+    isEnglish ? 'Falgu River' : 'फल्गु नदी'
+  );
 
   // Akshayavat misrecognitions
-  text = text.replace(/\b(akshay\s*vat|akshayvat|akshay\s*bar|akshay\s*bad)\b/gi, 'अक्षयवट');
+  text = text.replace(
+    /\b(akshay\s*vat|akshayvat|akshay\s*bar|akshay\s*bad)\b/gi, 
+    isEnglish ? 'Akshayavat' : 'अक्षयवट'
+  );
 
   // Pretshila misrecognitions
-  text = text.replace(/\b(pret\s*shila|pretshila|plate\s*shila|pret\s*sila|pet\s*shila)\b/gi, 'प्रेतशिला');
+  text = text.replace(
+    /\b(pret\s*shila|pretshila|plate\s*shila|pret\s*sila|pet\s*shila)\b/gi, 
+    isEnglish ? 'Pretshila' : 'प्रेतशिला'
+  );
 
   // Pitru Paksha misrecognitions
-  text = text.replace(/\b(pitrapaksh|pitru\s*paksha|pitra\s*paksha|petro\s*pack|peter\s*pack)\b/gi, 'पितृपक्ष');
+  text = text.replace(
+    /\b(pitrapaksh|pitru\s*paksha|pitra\s*paksha|petro\s*pack|peter\s*pack)\b/gi, 
+    isEnglish ? 'Pitru Paksha' : 'पितृपक्ष'
+  );
 
   // Pitra Dosh misrecognitions
-  text = text.replace(/\b(pitra\s*dosh|pitru\s*dosh|pitra\s*dosha|peter\s*dosh)\b/gi, 'पितृ दोष');
+  text = text.replace(
+    /\b(pitra\s*dosh|pitru\s*dosh|pitra\s*dosha|peter\s*dosh)\b/gi, 
+    isEnglish ? 'Pitru Dosh' : 'पितृ दोष'
+  );
 
   // Gotra misrecognitions
-  text = text.replace(/\b(gautra|goat\s*ra|gotram|gotar)\b/gi, 'गोत्र');
+  text = text.replace(
+    /\b(gautra|goat\s*ra|gotram|gotar)\b/gi, 
+    isEnglish ? 'Gotra' : 'गोत्र'
+  );
 
   // Tarpan misrecognitions
-  text = text.replace(/\b(torpon|tarpanam|tarpan)\b/gi, 'तर्पण');
+  text = text.replace(
+    /\b(torpon|tarpanam|tarpan)\b/gi, 
+    isEnglish ? 'Tarpan' : 'तर्पण'
+  );
 
   // Dakshina misrecognitions
-  text = text.replace(/\b(dokshina|dakshna|dakhina)\b/gi, 'दक्षिणा');
-
-  // Sita Kund misrecognitions
-  text = text.replace(/\b(seeta\s*kund|sita\s*kund|sitakund)\b/gi, 'सीता कुंड');
-
-  // Narayan Bali misrecognitions
-  text = text.replace(/\b(narayan\s*bali|narayan\s*bali\s*puja|narayan\s*bali\s*pooja)\b/gi, 'नारायण बली');
-
-  // Tripindi misrecognitions
-  text = text.replace(/\b(tripindi|tripindi\s*shradh|tripindi\s*shraadh)\b/gi, 'त्रिपिंडी श्राद्ध');
+  text = text.replace(
+    /\b(dokshina|dakshna|dakhina)\b/gi, 
+    isEnglish ? 'Dakshina' : 'दक्षिणा'
+  );
 
   return text;
 }
 
 // 2. High-Fidelity Audio Sanitizer for Text-to-Speech (STRICTLY NO EMOJIS, BULLETS OR SPECIAL SYMBOLS READOUT)
-function cleanTextForAudioSpeech(raw: string): string {
+function cleanTextForAudioSpeech(raw: string, lang: AppLangCode): string {
   if (!raw) return '';
 
   let text = raw;
+  const isEnglish = lang === 'en';
 
   // 1. Remove all Unicode Emojis and Pictographs (folded hands, sparkles, icons)
   text = text.replace(/[\p{Extended_Pictographic}\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}\u{FE0F}\u{200D}]/gu, '');
@@ -134,38 +166,47 @@ function cleanTextForAudioSpeech(raw: string): string {
   text = text.replace(/[•–—]/g, ' ');
 
   // 5. Convert Indian Rupee currency symbols to natural spoken words
-  text = text.replace(/₹\s*([0-9,]+)/g, (_, num) => `${num.replace(/,/g, '')} रुपये`);
+  if (isEnglish) {
+    text = text.replace(/₹\s*([0-9,]+)/g, (_, num) => `${num.replace(/,/g, '')} Rupees`);
+    text = text.replace(/\+?91[\s-]?[0-9]{10}/g, 'our helpline number');
+    text = text.replace(/\(1\s*Day\)/gi, 'One Day');
+    text = text.replace(/\(3\s*Days\)/gi, 'Three Days');
+  } else {
+    text = text.replace(/₹\s*([0-9,]+)/g, (_, num) => `${num.replace(/,/g, '')} रुपये`);
+    text = text.replace(/\+?91[\s-]?[0-9]{10}/g, 'हमारे हेल्पलाइन नंबर');
+    text = text.replace(/\(1\s*Day\)/gi, 'एक दिवसीय');
+    text = text.replace(/\(3\s*Days\)/gi, 'तीन दिवसीय');
+  }
 
-  // 6. Remove long phone numbers and URLs from audio readout
-  text = text.replace(/\+?91[\s-]?[0-9]{10}/g, 'हमारे हेल्पलाइन नंबर');
   text = text.replace(/https?:\/\/[^\s]+/g, '');
-
-  // 7. Convert bracket terms that sound robotic
-  text = text.replace(/\(1\s*Day\)/gi, 'एक दिवसीय');
-  text = text.replace(/\(3\s*Days\)/gi, 'तीन दिवसीय');
   text = text.replace(/\([^\)]+\)/g, ''); // strip remaining parenthetical notes
 
-  // 8. Handle punctuation so synthesizers NEVER pronounce "comma" or "period"
-  // Commas in mixed/Hindi text cause screen readers to speak "comma". Replace with gentle pause space.
+  // 6. Handle punctuation so synthesizers NEVER pronounce "comma" or "period"
   text = text.replace(/[,;:\"\'\/\\\[\]\(\)\{\}]/g, ' ');
-  text = text.replace(/\.{2,}/g, '।');
-  text = text.replace(/\./g, '।');
+  text = text.replace(/\.{2,}/g, isEnglish ? '. ' : '। ');
+  if (!isEnglish) {
+    text = text.replace(/\./g, '। ');
+  }
 
-  // 9. Clean up extra whitespace
+  // 7. Clean up extra whitespace
   text = text.replace(/\s+/g, ' ').trim();
 
   // Take first 3 spoken sentences so it's sweet, respectful, concise and doesn't drone on
-  const sentences = text.split(/[।!\?]/).map(s => s.trim()).filter(s => s.length > 4);
+  const sentenceDelimiter = isEnglish ? /[!\?\.](?:\s|$)/ : /[।!\?](?:\s|$)/;
+  const sentences = text.split(sentenceDelimiter).map(s => s.trim()).filter(s => s.length > 4);
+  const endPunct = isEnglish ? '. ' : '। ';
   if (sentences.length > 3) {
-    text = sentences.slice(0, 3).join('। ') + '।';
+    text = sentences.slice(0, 3).join(endPunct) + (isEnglish ? '.' : '।');
   } else if (sentences.length > 0) {
-    text = sentences.join('। ') + '।';
+    text = sentences.join(endPunct) + (isEnglish ? '.' : '।');
   }
 
   return text;
 }
 
 export default function AiAgentWidget() {
+  const { lang, info, isHindi, isEnglish } = useAppLanguage();
+
   const [isOpen, setIsOpen] = useState(false);
   const [chatOpen, setChatOpen] = useState(false);
   const [isDiagnosticOpen, setIsDiagnosticOpen] = useState(false);
@@ -178,9 +219,19 @@ export default function AiAgentWidget() {
   const [chatMessages, setChatMessages] = useState<Array<{ sender: 'user' | 'ai'; text: string }>>([
     {
       sender: 'ai',
-      text: 'जय श्री विष्णु! जय फल्गु माते!\nमैं गया जी का प्रामाणिक "पंडित जी AI" हूँ। गोत्र संकल्प, पिंडदान तिथि, विष्णुपद मंदिर व पैकेज से जुड़ा कोई भी प्रश्न पूछें या माइक दबाकर बोलें।'
+      text: AI_GREETINGS[lang] || AI_GREETINGS.en
     }
   ]);
+
+  // Sync greeting when website language changes
+  useEffect(() => {
+    setChatMessages([
+      {
+        sender: 'ai',
+        text: AI_GREETINGS[lang] || AI_GREETINGS.en
+      }
+    ]);
+  }, [lang]);
 
   // Speech Recognition Reference
   const recognitionRef = useRef<any>(null);
@@ -201,12 +252,9 @@ export default function AiAgentWidget() {
   // Calculate default position on client mount
   useEffect(() => {
     const updateDefaultPos = () => {
-      if (typeof window === 'undefined') return;
-      const isMobile = window.innerWidth < 640;
-      const btnSize = isMobile ? 52 : 58;
-      const x = window.innerWidth - btnSize - (isMobile ? 14 : 24);
-      const y = window.innerHeight - btnSize - (isMobile ? 85 : 30);
-      setPosition({ x, y });
+      const defaultX = window.innerWidth - 88;
+      const defaultY = window.innerHeight - 96;
+      setPosition({ x: Math.max(16, defaultX), y: Math.max(16, defaultY) });
     };
 
     updateDefaultPos();
@@ -214,14 +262,14 @@ export default function AiAgentWidget() {
     return () => window.removeEventListener('resize', updateDefaultPos);
   }, []);
 
-  // Auto-scroll to bottom of chat
+  // Scroll chat to bottom on new message
   useEffect(() => {
     if (chatOpen) {
       messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     }
   }, [chatMessages, chatOpen]);
 
-  // Close when clicking anywhere on the website
+  // Keyboard accessibility and outside click handler
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (widgetRef.current && !widgetRef.current.contains(event.target as Node)) {
@@ -273,7 +321,7 @@ export default function AiAgentWidget() {
     };
   }, []);
 
-  // Initialize Web Speech Recognition with explicit Hindi Indian locale
+  // Initialize Web Speech Recognition with dynamic language locale
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
@@ -281,13 +329,12 @@ export default function AiAgentWidget() {
         const recognition = new SpeechRecognition();
         recognition.continuous = false;
         recognition.interimResults = false;
-        recognition.lang = 'hi-IN'; // Force Hindi (India) phonetic model
+        recognition.lang = info.speechLocale || 'en-IN';
 
         recognition.onresult = (event: any) => {
           const rawTranscript = event.results[0][0].transcript;
           if (rawTranscript) {
-            // Apply phonetic Vedic auto-correction
-            const sanitized = sanitizeVedicSpeechInput(rawTranscript);
+            const sanitized = sanitizeVedicSpeechInput(rawTranscript, lang);
             setInputMessage(sanitized);
             submitMessage(sanitized);
           }
@@ -305,12 +352,12 @@ export default function AiAgentWidget() {
         recognitionRef.current = recognition;
       }
     }
-  }, []);
+  }, [info.speechLocale, lang]);
 
   // Toggle Voice Input
   const toggleListening = () => {
     if (!recognitionRef.current) {
-      alert('आपके ब्राउज़र में वॉइस इनपुट सपोर्ट नहीं है। कृपया गूगल क्रोम या सफारी का उपयोग करें।');
+      alert(isHindi ? 'आपके ब्राउज़र में वॉइस इनपुट सपोर्ट नहीं है। कृपया गूगल क्रोम का उपयोग करें।' : 'Voice input is not supported in this browser. Please use Google Chrome or Edge.');
       return;
     }
 
@@ -319,10 +366,10 @@ export default function AiAgentWidget() {
       setIsListening(false);
     } else {
       try {
-        // Cancel ongoing TTS before listening to user
         if (typeof window !== 'undefined') {
           window.speechSynthesis?.cancel();
         }
+        recognitionRef.current.lang = info.speechLocale || 'en-IN';
         recognitionRef.current.start();
         setIsListening(true);
       } catch (err) {
@@ -331,47 +378,51 @@ export default function AiAgentWidget() {
     }
   };
 
-  // High-Quality Text to Speech Readout (Strictly Pure Spoken Words)
+  // High-Quality Text to Speech Readout (Language Matched)
   const speakText = (text: string) => {
     if (!ttsEnabled || typeof window === 'undefined' || !window.speechSynthesis) return;
     try {
       window.speechSynthesis.cancel();
-      const cleaned = cleanTextForAudioSpeech(text);
+      const cleaned = cleanTextForAudioSpeech(text, lang);
       if (!cleaned) return;
 
       const utterance = new SpeechSynthesisUtterance(cleaned);
-      utterance.rate = 0.90; // Respectful Pandit Ji cadence
+      utterance.rate = 0.92;
       utterance.pitch = 1.0;
 
-      // Select natural Hindi or Indian voice
       const voices = availableVoices.length > 0 ? availableVoices : window.speechSynthesis.getVoices();
-      
-      // 1. First priority: Pure Hindi voice
-      let selectedVoice = voices.find(v => 
-        v.lang === 'hi-IN' || 
-        v.lang === 'hi_IN' || 
-        v.lang.startsWith('hi') ||
-        v.name.toLowerCase().includes('hindi') || 
-        v.name.toLowerCase().includes('lekha') || 
-        v.name.toLowerCase().includes('neerja')
-      );
+      let selectedVoice: SpeechSynthesisVoice | undefined;
 
-      // 2. Second priority: Indian English / Regional Indian voice (pronounces Sanskrit authentic terms)
-      if (!selectedVoice) {
+      if (lang === 'hi') {
+        selectedVoice = voices.find(v => 
+          v.lang === 'hi-IN' || 
+          v.lang === 'hi_IN' || 
+          v.lang.startsWith('hi') ||
+          v.name.toLowerCase().includes('hindi') || 
+          v.name.toLowerCase().includes('lekha') || 
+          v.name.toLowerCase().includes('neerja')
+        );
+      } else if (lang === 'en') {
         selectedVoice = voices.find(v => 
           v.lang === 'en-IN' || 
           v.lang === 'en_IN' || 
           v.name.toLowerCase().includes('india') ||
           v.name.toLowerCase().includes('veena') ||
           v.name.toLowerCase().includes('rishi')
-        );
+        ) || voices.find(v => v.lang.startsWith('en'));
+      } else {
+        // Regional Indian language (e.g. bn, ta, te, mr, gu)
+        selectedVoice = voices.find(v => v.lang.toLowerCase().startsWith(lang));
+        if (!selectedVoice) {
+          selectedVoice = voices.find(v => v.lang.toLowerCase().includes('in'));
+        }
       }
 
       if (selectedVoice) {
         utterance.voice = selectedVoice;
         utterance.lang = selectedVoice.lang;
       } else {
-        utterance.lang = 'hi-IN';
+        utterance.lang = info.speechLocale || 'en-IN';
       }
 
       window.speechSynthesis.speak(utterance);
@@ -391,45 +442,51 @@ export default function AiAgentWidget() {
       moved: false
     };
 
+    setIsDragging(true);
+
     const handlePointerMove = (moveEvent: PointerEvent) => {
       const deltaX = moveEvent.clientX - dragRef.current.startX;
       const deltaY = moveEvent.clientY - dragRef.current.startY;
 
-      if (Math.hypot(deltaX, deltaY) > 5) {
+      if (Math.abs(deltaX) > 4 || Math.abs(deltaY) > 4) {
         dragRef.current.moved = true;
-        setIsDragging(true);
-        setIsOpen(false);
       }
 
-      if (dragRef.current.moved) {
-        const btnSize = 60;
-        const newX = Math.max(10, Math.min(window.innerWidth - btnSize - 10, dragRef.current.originX + deltaX));
-        const newY = Math.max(10, Math.min(window.innerHeight - btnSize - 10, dragRef.current.originY + deltaY));
-        setPosition({ x: newX, y: newY });
-      }
+      let newX = dragRef.current.originX + deltaX;
+      let newY = dragRef.current.originY + deltaY;
+
+      const minX = 16;
+      const maxX = window.innerWidth - 72;
+      const minY = 16;
+      const maxY = window.innerHeight - 72;
+
+      newX = Math.max(minX, Math.min(maxX, newX));
+      newY = Math.max(minY, Math.min(maxY, newY));
+
+      setPosition({ x: newX, y: newY });
     };
 
     const handlePointerUp = () => {
+      setIsDragging(false);
       window.removeEventListener('pointermove', handlePointerMove);
       window.removeEventListener('pointerup', handlePointerUp);
-      setTimeout(() => setIsDragging(false), 50);
     };
 
     window.addEventListener('pointermove', handlePointerMove);
     window.addEventListener('pointerup', handlePointerUp);
   };
 
-  // Live Groq AI / Local Shastra Submission
-  const submitMessage = async (textToSend: string) => {
-    const userText = textToSend.trim();
-    if (!userText || isAILoading) return;
+  // Chat message submit
+  const submitMessage = async (rawText: string) => {
+    if (!rawText.trim() || isAILoading) return;
 
-    setChatMessages((prev) => [...prev, { sender: 'user', text: userText }]);
+    const userText = sanitizeVedicSpeechInput(rawText.trim(), lang);
     setInputMessage('');
+    setChatMessages((prev) => [...prev, { sender: 'user', text: userText }]);
     setIsAILoading(true);
 
     try {
-      const history = chatMessages.map(m => ({
+      const history = chatMessages.map((m) => ({
         role: m.sender === 'user' ? 'user' : 'assistant',
         content: m.text
       }));
@@ -438,12 +495,17 @@ export default function AiAgentWidget() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          messages: [...history, { role: 'user', content: userText }]
+          messages: [...history, { role: 'user', content: userText }],
+          language: lang
         })
       });
 
       const data = await res.json();
-      const aiReply = data.reply || 'जय श्री विष्णु! 🙏 गया जी तीर्थ पुरोहित सहायता हेतु आप हमें सीधे कॉल (+91 7463055338) कर सकते हैं।';
+      const defaultReply = isHindi
+        ? 'जय श्री विष्णु! गया जी तीर्थ पुरोहित सहायता हेतु आप हमें सीधे कॉल (+91 7463055338) कर सकते हैं।'
+        : 'Jai Shree Vishnu! For Gaya Ji Teerth Purohit guidance, please call us directly at +91 7463055338.';
+
+      const aiReply = data.reply || defaultReply;
 
       setChatMessages((prev) => [...prev, { sender: 'ai', text: aiReply }]);
       speakText(aiReply);
@@ -452,7 +514,9 @@ export default function AiAgentWidget() {
         ...prev,
         {
           sender: 'ai',
-          text: 'जय श्री विष्णु! 🙏\nविष्णुपद मंदिर व पिंडदान पैकेज की त्वरित जानकारी हेतु आप हमें सीधे +91 7463055338 पर WhatsApp या कॉल कर सकते हैं।'
+          text: isHindi
+            ? 'जय श्री विष्णु!\nविष्णुपद मंदिर व पिंडदान पैकेज की त्वरित जानकारी हेतु आप हमें सीधे +91 7463055338 पर WhatsApp या कॉल कर सकते हैं।'
+            : 'Jai Shree Vishnu!\nFor immediate assistance with Vishnupad Temple rites and Pind Daan packages, please contact us on WhatsApp or call +91 7463055338.'
         }
       ]);
     } finally {
@@ -465,9 +529,11 @@ export default function AiAgentWidget() {
     submitMessage(inputMessage);
   };
 
-  // Intelligent Direction Calculation based on current dragged position
   const isLeftSide = position ? position.x < window.innerWidth / 2 : false;
   const isNearTop = position ? position.y < 350 : false;
+
+  const headerStrings = AI_HEADER_TEXT[lang] || AI_HEADER_TEXT.en;
+  const placeholderText = AI_PLACEHOLDERS[lang] || AI_PLACEHOLDERS.en;
 
   return (
     <>
@@ -479,23 +545,23 @@ export default function AiAgentWidget() {
                 position: 'fixed',
                 left: `${position.x}px`,
                 top: `${position.y}px`,
-                touchAction: 'none'
+                zIndex: 999
               }
-            : undefined
+            : {
+                position: 'fixed',
+                right: '24px',
+                bottom: '24px',
+                zIndex: 999
+              }
         }
-        className={`fixed z-50 transition-shadow ${isDragging ? 'cursor-grabbing opacity-90' : 'cursor-grab'}`}
-        onMouseEnter={() => {
-          if (!isDragging) {
-            setIsOpen(true);
-          }
-        }}
+        className="touch-none select-none transition-shadow"
       >
         <div className="relative">
 
-          {/* 1. Expanded Quick Action Stack (Hover Triggered, Symmetrically Oriented) */}
-          {isOpen && !isDragging && (
+          {/* 1. Expandable Floating Quick Menu Options */}
+          {isOpen && (
             <div
-              className={`absolute flex flex-col gap-2.5 z-50 animate-in fade-in zoom-in-95 duration-150 ${
+              className={`absolute flex flex-col gap-2.5 mb-3 transition-all duration-300 animate-in fade-in slide-in-from-bottom-3 ${
                 isNearTop ? 'top-16' : 'bottom-16'
               } ${isLeftSide ? 'left-0 items-start' : 'right-0 items-end'}`}
             >
@@ -509,7 +575,7 @@ export default function AiAgentWidget() {
                 className="flex items-center gap-2.5 px-4 py-2.5 rounded-full bg-gradient-to-r from-amber-600 via-amber-500 to-amber-600 text-slate-950 font-extrabold text-xs shadow-2xl hover:scale-105 transition-all border border-amber-300/80 shrink-0 whitespace-nowrap animate-pulse"
               >
                 <Sparkles className="w-4 h-4 fill-current text-slate-950" />
-                <span>AI पितृ दोष जांच (Vedic Diagnostic)</span>
+                <span>{isHindi ? 'AI पितृ दोष जांच (Vedic Diagnostic)' : 'AI Pitru Dosh Assessment'}</span>
               </button>
 
               <Link
@@ -518,7 +584,7 @@ export default function AiAgentWidget() {
                 className="flex items-center gap-2.5 px-4 py-2.5 rounded-full bg-[#C6922E] text-white font-bold text-xs shadow-2xl hover:scale-105 transition-all border border-amber-300/40 shrink-0 whitespace-nowrap"
               >
                 <FileCheck2 className="w-4 h-4 text-amber-200" />
-                <span>Pre-Book Pind Daan</span>
+                <span>{isHindi ? 'पिंडदान बुकिंग (Pre-Book)' : 'Pre-Book Pind Daan'}</span>
               </Link>
 
               <a
@@ -550,7 +616,7 @@ export default function AiAgentWidget() {
                 className="flex items-center gap-2.5 px-4 py-2.5 rounded-full bg-[#6f1d14] text-white font-bold text-xs shadow-2xl hover:scale-105 transition-all border border-amber-400/50 shrink-0 whitespace-nowrap"
               >
                 <Flame className="w-4 h-4 text-[#F48D08]" />
-                <span>पंडित जी AI से पूछें (Voice & Chat)</span>
+                <span>{isHindi ? 'पंडित जी AI से पूछें (Voice & Chat)' : 'Ask Pandit Ji AI (Voice & Chat)'}</span>
               </button>
             </div>
           )}
@@ -567,10 +633,9 @@ export default function AiAgentWidget() {
             className={`w-13 h-13 sm:w-14 sm:h-14 rounded-full bg-[#6f1d14] text-white flex items-center justify-center shadow-[0_10px_30px_rgba(111,29,20,0.35)] hover:shadow-[0_12px_36px_rgba(198,146,46,0.5)] border-2 border-amber-400 relative cursor-grab active:cursor-grabbing transition-transform select-none ${
               isDragging ? 'scale-105' : 'hover:scale-105'
             }`}
-            title="Drag me anywhere or click for Pandit Ji AI"
+            title={isHindi ? 'पंडित जी AI' : 'Pandit Ji AI'}
             aria-label="Pandit Ji AI & Divine Services Widget"
           >
-            {/* Active Online Indicator */}
             <span className="absolute -top-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-white animate-pulse" />
 
             {isOpen ? (
@@ -597,14 +662,16 @@ export default function AiAgentWidget() {
                   </div>
                   <div>
                     <div className="flex items-center gap-2">
-                      <h4 className="font-serif font-bold text-sm text-amber-300">पंडित जी AI (Pandit Ji)</h4>
+                      <h4 className="font-serif font-bold text-sm text-amber-300">
+                        {headerStrings.title}
+                      </h4>
                       <span className="text-[9px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-mono font-bold border border-emerald-500/30">
-                        ⚡ Groq LPU 70B
+                        ⚡ Groq LPU
                       </span>
                     </div>
                     <p className="text-[10px] text-slate-300 font-semibold flex items-center gap-1">
                       <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                      गया जी तीर्थ पुरोहित • 24/7 वैदिक मार्गदर्शन
+                      {headerStrings.subtitle}
                     </p>
                   </div>
                 </div>
@@ -649,31 +716,31 @@ export default function AiAgentWidget() {
                   className="px-2.5 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 text-[10px] font-bold shrink-0 flex items-center gap-1 hover:bg-amber-500/30 transition-colors"
                 >
                   <Sparkles className="w-3 h-3 text-amber-400" />
-                  <span>पितृ दोष जांच (Vedic Calculator)</span>
+                  <span>{isHindi ? 'पितृ दोष जांच' : 'Pitru Dosh Assessment'}</span>
                 </button>
 
                 <button
                   type="button"
-                  onClick={() => submitMessage('पिंडदान पैकेज और दक्षिणा की जानकारी दीजिए')}
+                  onClick={() => submitMessage(isHindi ? 'पिंडदान पैकेज और दक्षिणा की जानकारी दीजिए' : 'What are the Pind Daan packages and transparent dakshina?')}
                   className="px-2.5 py-1 rounded-full bg-slate-800 text-slate-300 hover:text-white text-[10px] font-medium shrink-0 border border-slate-700/60"
                 >
-                  पैकेज दक्षिणा
+                  {isHindi ? 'पैकेज दक्षिणा' : 'Packages & Rates'}
                 </button>
 
                 <button
                   type="button"
-                  onClick={() => submitMessage('क्या पुत्री या महिला पिंडदान कर सकती है?')}
+                  onClick={() => submitMessage(isHindi ? 'क्या पुत्री या महिला पिंडदान कर सकती है?' : 'Can a daughter or female perform Pind Daan in Gaya Ji?')}
                   className="px-2.5 py-1 rounded-full bg-slate-800 text-slate-300 hover:text-white text-[10px] font-medium shrink-0 border border-slate-700/60"
                 >
-                  महिला अधिकार
+                  {isHindi ? 'महिला अधिकार' : 'Women Ritual Rights'}
                 </button>
 
                 <button
                   type="button"
-                  onClick={() => submitMessage('गया जी की 45 वेदियों का क्या महत्व है?')}
+                  onClick={() => submitMessage(isHindi ? 'गया जी की 45 वेदियों का क्या महत्व है?' : 'What is the significance of the 45 sacred vedis in Gaya Ji?')}
                   className="px-2.5 py-1 rounded-full bg-slate-800 text-slate-300 hover:text-white text-[10px] font-medium shrink-0 border border-slate-700/60"
                 >
-                  45 वेदियाँ
+                  {isHindi ? '45 वेदियाँ' : '45 Sacred Vedis'}
                 </button>
               </div>
 
@@ -700,7 +767,7 @@ export default function AiAgentWidget() {
                   <div className="flex justify-start">
                     <div className="bg-[#141C2B] text-amber-300 border border-slate-800 p-3.5 rounded-2xl rounded-tl-none flex items-center gap-2 text-xs font-semibold">
                       <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                      <span>पंडित जी विचार कर रहे हैं...</span>
+                      <span>{isHindi ? 'पंडित जी विचार कर रहे हैं...' : 'Pandit Ji is contemplating...'}</span>
                     </div>
                   </div>
                 )}
@@ -718,14 +785,14 @@ export default function AiAgentWidget() {
                       ? 'bg-rose-500 text-white animate-pulse ring-4 ring-rose-500/30' 
                       : 'bg-slate-800 text-amber-400 hover:bg-slate-700'
                   }`}
-                  title={isListening ? 'सुन रहे हैं... (Listening)' : 'बोलकर पूछें (Tap to Speak)'}
+                  title={isListening ? (isHindi ? 'सुन रहे हैं...' : 'Listening...') : (isHindi ? 'बोलकर पूछें' : 'Click to Speak')}
                 >
                   {isListening ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
                 </button>
 
                 <input
                   type="text"
-                  placeholder={isListening ? 'बोलिए, सुन रहे हैं...' : 'पंडित जी से पूछें (गोत्र, तिथि, दक्षिणा)...'}
+                  placeholder={isListening ? (isHindi ? 'बोलिए, सुन रहे हैं...' : 'Listening, please speak...') : placeholderText}
                   value={inputMessage}
                   onChange={(e) => setInputMessage(e.target.value)}
                   className="flex-1 bg-[#0B0F19] border border-slate-700/80 rounded-full px-4 py-2.5 text-xs text-white placeholder-slate-400 focus:outline-none focus:border-amber-500"

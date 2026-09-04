@@ -161,8 +161,10 @@ export default function LanguageConverter() {
     setSelectedLang(lang);
     setIsOpen(false);
 
-    // Notify other components
     if (typeof window !== 'undefined') {
+      try {
+        localStorage.setItem('pinddaan_lang', lang.code);
+      } catch (e) {}
       window.dispatchEvent(new CustomEvent('app:language-change', { detail: lang }));
     }
 
