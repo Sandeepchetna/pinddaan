@@ -1,0 +1,171 @@
+/**
+ * Vedic Shastra Rules Engine for Gaya Ji Pind Daan & Pitru Dosha Assessment
+ * Based on Garuda Purana, Vayu Purana (Gaya Mahatmya), and Agni Purana guidelines.
+ */
+
+export interface DevoteeAnswers {
+  relation: 'father' | 'mother' | 'both_parents' | 'grandparents' | 'spouse' | 'extended_ancestors' | 'unmarried_relative';
+  circumstance: 'natural_old_age' | 'accidental_untimely' | 'lingering_illness' | 'unknown_circumstances';
+  symptoms: string[]; // e.g. ['career_obstacles', 'child_delay', 'frequent_illness', 'disturbed_dreams', 'family_discord']
+  priorRituals: 'first_time_gaya' | 'done_elsewhere' | 'annual_only' | 'never_done';
+  gotra?: string;
+  devoteeCity?: string;
+}
+
+export interface VedicDiagnosisReport {
+  doshaGrade: 'None / Peaceful Lineage' | 'Mild Pitru Rina' | 'Moderate Pitru Dosha' | 'Acute / Akaal Pitru Dosha';
+  doshaSeverity: 'low' | 'medium' | 'high' | 'critical';
+  recommendedPackage: {
+    id: string;
+    title: string;
+    hindiTitle: string;
+    slug: string;
+    estimatedDakshina: number;
+    durationDays: number;
+    primaryVedicRitual: string;
+    reasoning: string;
+  };
+  mandatoryVedis: Array<{
+    name: string;
+    hindiName: string;
+    significance: string;
+  }>;
+  recommendedTithis: Array<{
+    occasion: string;
+    date: string;
+    shastraMerit: string;
+  }>;
+  sankalpGuidance: string;
+  garudaPuranaCitation: string;
+}
+
+export function assessVedicMokshaPath(answers: DevoteeAnswers): VedicDiagnosisReport {
+  const isUntimely = answers.circumstance === 'accidental_untimely';
+  const hasSevereSymptoms = answers.symptoms.includes('child_delay') || answers.symptoms.includes('disturbed_dreams');
+  const symptomCount = answers.symptoms.length;
+
+  // 1. Determine Pitru Dosha Grade
+  let doshaGrade: VedicDiagnosisReport['doshaGrade'] = 'Mild Pitru Rina';
+  let doshaSeverity: VedicDiagnosisReport['doshaSeverity'] = 'low';
+
+  if (isUntimely) {
+    doshaGrade = 'Acute / Akaal Pitru Dosha';
+    doshaSeverity = 'critical';
+  } else if (symptomCount >= 3 || hasSevereSymptoms) {
+    doshaGrade = 'Moderate Pitru Dosha';
+    doshaSeverity = 'high';
+  } else if (symptomCount >= 1) {
+    doshaGrade = 'Mild Pitru Rina';
+    doshaSeverity = 'medium';
+  } else {
+    doshaGrade = 'None / Peaceful Lineage';
+    doshaSeverity = 'low';
+  }
+
+  // 2. Determine Package & Primary Ritual
+  let recommendedPackage: VedicDiagnosisReport['recommendedPackage'];
+
+  if (isUntimely) {
+    recommendedPackage = {
+      id: 'tripindi_narayan_bali',
+      title: 'Tripindi Shradh & Narayan Bali Vidhi',
+      hindiTitle: 'त्रिपिंडी श्राद्ध एवं नारायण बलि विधान',
+      slug: '3-day-complete-tri-sthali',
+      estimatedDakshina: 14500,
+      durationDays: 3,
+      primaryVedicRitual: 'Pretshila Pind Daan + Brahma Kund Snan + Tripindi Vidhi',
+      reasoning: 'गरुड़ पुराण के अनुसार अकाल या असमय मृत्यु होने पर आत्मा प्रेत योनि से मुक्ति पाने हेतु त्रिपिंडी और प्रेतशिला पिंडदान अनिवार्य रूप से मांगती है।'
+    };
+  } else if (answers.relation === 'both_parents' || answers.relation === 'grandparents' || answers.priorRituals === 'first_time_gaya') {
+    recommendedPackage = {
+      id: 'tri_sthali_complete',
+      title: '3-Day Complete Tri-Sthali Pilgrimage',
+      hindiTitle: '3-दिवसीय सम्पूर्ण त्रि-स्थली महातीर्थ पिंडदान',
+      slug: '3-day-complete-tri-sthali',
+      estimatedDakshina: 12500,
+      durationDays: 3,
+      primaryVedicRitual: 'Parvana Shradh at all 45 Sacred Vedis',
+      reasoning: 'वायु पुराण के अनुसार प्रथम बार गया तीर्थ आने वाले कुलवंशियों को 45 वेदियों पर त्रि-स्थली (फल्गु, विष्णुपद, अक्षयवट) सहित सम्पूर्ण पार्वण श्राद्ध करना चाहिए, जिससे 101 कुलों का उद्धार होता है।'
+    };
+  } else {
+    recommendedPackage = {
+      id: '1_day_essential',
+      title: '1-Day Essential Pind Daan',
+      hindiTitle: '1-दिवसीय आवश्यक पिंडदान (त्रि-स्थली)',
+      slug: '1-day-essential-pind-daan',
+      estimatedDakshina: 4500,
+      durationDays: 1,
+      primaryVedicRitual: 'Ekoddishta / Parvana Shradh at Vishnupad & Falgu',
+      reasoning: 'समय के अभाव अथवा नियमित वार्षिक तर्पण हेतु फल्गु तट, विष्णुपद चरण चिह्न एवं अक्षयवट के समक्ष एक-दिवसीय संकल्प पूर्णतः शास्त्रसम्मत है।'
+    };
+  }
+
+  // 3. Select Mandatory Sacred Vedis out of Gaya's 45 Vedis
+  const mandatoryVedis: VedicDiagnosisReport['mandatoryVedis'] = [
+    {
+      name: 'Falgu River (Adi Gaya Ghat)',
+      hindiName: 'फल्गु नदी (आदि गया घाट)',
+      significance: 'माता सीता द्वारा बालू से पिंडदान करने का शाश्वत स्थल। यहाँ पहला पिंडदान और आचमन संकल्प होता है।'
+    },
+    {
+      name: 'Vishnupad Temple (Sacred Lotus Footprints)',
+      hindiName: 'विष्णुपद मंदिर (श्रीहरि चरण चिह्न)',
+      significance: 'गयासुर की छाती पर स्थित भगवान विष्णु के 40 सेमी पावन चरण। यहाँ पिंडदान से सीधे वैकुंठ प्राप्ति मानी जाती है।'
+    },
+    {
+      name: 'Akshayavat (Undying Banyan Tree)',
+      hindiName: 'अक्षयवट (अमर वटवृक्ष)',
+      significance: 'यहाँ पिंडदान का फल अक्षय (कभी समाप्त न होने वाला) होता है। तीर्थ पंडा द्वारा सुफल (आशीर्वाद) यहीं प्राप्त होता है।'
+    }
+  ];
+
+  if (isUntimely || doshaSeverity === 'critical' || doshaSeverity === 'high') {
+    mandatoryVedis.push({
+      name: 'Pretshila Hill (Ghost Stone Vedi)',
+      hindiName: 'प्रेतशिला पहाड़ी (प्रेत योनि मुक्ति)',
+      significance: 'अकाल मृत्यु, अस्वाभाविक देहावसान अथवा अशांत आत्माओं को प्रेत योनि से तत्काल मुक्त कराने वाली सर्वोच्च वेदी।'
+    });
+    mandatoryVedis.push({
+      name: 'Brahma Kund & Ramgaya',
+      hindiName: 'ब्रह्म कुंड एवं रामगया वेदी',
+      significance: 'जहाँ भगवान श्री राम ने राजा दशरथ का पिंडदान किया था। कुलदोष एवं अज्ञात पापों के शमन की वेदी।'
+    });
+  }
+
+  // 4. Upcoming Shubh Tithis Calendar
+  const recommendedTithis = [
+    {
+      occasion: 'Upcoming Amavasya Tithi (दर्श अमावस्या)',
+      date: 'Monthly Pradosh / Amavasya Period',
+      shastraMerit: 'मासिक अमावस्या पर किया गया पिंडदान पितरों को एक माह तक तृप्ति प्रदान करता है।'
+    },
+    {
+      occasion: 'Somvati Amavasya (सोमवती अमावस्या महायोग)',
+      date: 'Most Auspicious 2026 Tithi',
+      shastraMerit: 'पीपल एवं अक्षयवट पूजन के साथ किया गया श्राद्ध 1000 गोदान के तुल्य पुण्यदायी है।'
+    },
+    {
+      occasion: 'Pitru Paksha Mahaparv 2026 (पितृपक्ष महामेला)',
+      date: 'Bhadrapada Purnima to Sarva Pitru Amavasya',
+      shastraMerit: 'सूर्य के कन्या राशि में प्रवेश पर सम्पूर्ण पितृलोक गया तीर्थ में वास करता है।'
+    }
+  ];
+
+  // 5. Sankalp Guidance text
+  const sankalpGuidance = `ॐ अद्य अमुक गोत्रस्य (गोत्र: ${answers.gotra || '[आपका गोत्र]'}), अमुक प्रेतस्य तृप्त्यर्थे, गया तीर्थे श्री विष्णुपद सान्निध्ये, पितृ उद्धार कामनार्थे, यथा विधि पिंडदान श्राद्ध कर्माहं करिष्ये।`;
+
+  // 6. Garuda Purana Citation
+  const garudaPuranaCitation = isUntimely
+    ? '“प्रेतलोके महादुःखे यः पतति मानुषः। प्रेतशिलायां पिण्डेन तस्य मुक्तिर्न संशयः॥” (गरुड़ पुराण)'
+    : '“गया श्राद्धं कृतं येन मुक्तिस्तस्य न संशयः। कुलमेकशतं चैव तारयेत् पितृसंयुतम्॥” (वायु पुराण - गया माहात्म्य)';
+
+  return {
+    doshaGrade,
+    doshaSeverity,
+    recommendedPackage,
+    mandatoryVedis,
+    recommendedTithis,
+    sankalpGuidance,
+    garudaPuranaCitation
+  };
+}

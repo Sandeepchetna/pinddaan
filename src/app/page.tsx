@@ -28,6 +28,7 @@ import HeroSlider from '@/components/home/HeroSlider';
 import VishnupadShowcase from '@/components/home/VishnupadShowcase';
 import PackageCard from '@/components/packages/PackageCard';
 import DevoteeVideoShowcase from '@/components/home/DevoteeVideoShowcase';
+import VedicDiagnosticBanner from '@/components/home/VedicDiagnosticBanner';
 
 const db = prisma as any;
 
@@ -131,6 +132,9 @@ export default async function HomePage() {
 
       {/* About Vishnupad Temple Showcase Section (Matching bihar.gov.in Screenshot) */}
       <VishnupadShowcase />
+
+      {/* AI Vedic Moksha & Pitru Dosha Diagnostic Showcase Banner */}
+      <VedicDiagnosticBanner />
 
       {/* Trust & Reassurance Ribbon */}
       <section className="bg-white border-y border-amber-900/10 py-8 px-4">

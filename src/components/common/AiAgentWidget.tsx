@@ -1,8 +1,22 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import { MessageCircle, Phone, Sparkles, X, Send, Flame, Move } from 'lucide-react';
+import { 
+  MessageCircle, 
+  Phone, 
+  Sparkles, 
+  X, 
+  Send, 
+  Flame, 
+  Mic, 
+  MicOff, 
+  Volume2, 
+  VolumeX, 
+  Loader2,
+  FileCheck2
+} from 'lucide-react';
 import Link from 'next/link';
+import VedicDiagnosticModal from '@/components/ai/VedicDiagnosticModal';
 
 // Animated Pandit Ji & Divine Vishnu Sudarshan Chakra Icon
 function AnimatedPanditJiIcon({ className = "w-10 h-10" }: { className?: string }) {
@@ -50,18 +64,27 @@ function AnimatedPanditJiIcon({ className = "w-10 h-10" }: { className?: string 
 export default function AiAgentWidget() {
   const [isOpen, setIsOpen] = useState(false);
   const [chatOpen, setChatOpen] = useState(false);
+  const [isDiagnosticOpen, setIsDiagnosticOpen] = useState(false);
   const [inputMessage, setInputMessage] = useState('');
+  const [isAILoading, setIsAILoading] = useState(false);
+  const [isListening, setIsListening] = useState(false);
+  const [ttsEnabled, setTtsEnabled] = useState(true);
+
   const [chatMessages, setChatMessages] = useState<Array<{ sender: 'user' | 'ai'; text: string }>>([
     {
       sender: 'ai',
-      text: 'जय श्री विष्णु! जय फल्गु माते! 🙏\nमैं गया जी का प्रामाणिक "पंडित जी AI" हूँ। गोत्र संकल्प, पिंडदान तिथि, विष्णुपद मंदिर व पैकेज से जुड़ा कोई भी प्रश्न पूछें।'
+      text: 'जय श्री विष्णु! जय फल्गु माते! 🙏\nमैं गया जी का प्रामाणिक "पंडित जी AI" हूँ। गोत्र संकल्प, पिंडदान तिथि, विष्णुपद मंदिर व पैकेज से जुड़ा कोई भी प्रश्न पूछें या माइक दबाकर बोलें।'
     }
   ]);
+
+  // Speech Recognition Reference
+  const recognitionRef = useRef<any>(null);
 
   // Movable Dragging Position State
   const [position, setPosition] = useState<{ x: number; y: number } | null>(null);
   const [isDragging, setIsDragging] = useState(false);
   const widgetRef = useRef<HTMLDivElement>(null);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
   const dragRef = useRef<{ startX: number; startY: number; originX: number; originY: number; moved: boolean }>({
     startX: 0,
     startY: 0,
@@ -86,12 +109,18 @@ export default function AiAgentWidget() {
     return () => window.removeEventListener('resize', updateDefaultPos);
   }, []);
 
+  // Auto-scroll to bottom of chat
+  useEffect(() => {
+    if (chatOpen) {
+      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [chatMessages, chatOpen]);
+
   // Close when clicking anywhere on the website
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (widgetRef.current && !widgetRef.current.contains(event.target as Node)) {
         setIsOpen(false);
-        setChatOpen(false);
       }
     };
 
@@ -99,6 +128,7 @@ export default function AiAgentWidget() {
       if (event.key === 'Escape') {
         setIsOpen(false);
         setChatOpen(false);
+        setIsDiagnosticOpen(false);
       }
     };
 
@@ -109,6 +139,74 @@ export default function AiAgentWidget() {
       document.removeEventListener('keydown', handleKeyDown);
     };
   }, []);
+
+  // Initialize Web Speech Recognition
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+      if (SpeechRecognition) {
+        const recognition = new SpeechRecognition();
+        recognition.continuous = false;
+        recognition.interimResults = false;
+        recognition.lang = 'hi-IN'; // Default to Hindi (India)
+
+        recognition.onresult = (event: any) => {
+          const transcript = event.results[0][0].transcript;
+          if (transcript) {
+            setInputMessage(transcript);
+            submitMessage(transcript);
+          }
+          setIsListening(false);
+        };
+
+        recognition.onerror = () => {
+          setIsListening(false);
+        };
+
+        recognition.onend = () => {
+          setIsListening(false);
+        };
+
+        recognitionRef.current = recognition;
+      }
+    }
+  }, []);
+
+  // Toggle Voice Input
+  const toggleListening = () => {
+    if (!recognitionRef.current) {
+      alert('आपके ब्राउज़र में वॉइस इनपुट सपोर्ट नहीं है। कृपया गूगल क्रोम या सफारी का उपयोग करें।');
+      return;
+    }
+
+    if (isListening) {
+      recognitionRef.current.stop();
+      setIsListening(false);
+    } else {
+      try {
+        recognitionRef.current.start();
+        setIsListening(true);
+      } catch (err) {
+        console.warn('Speech start error:', err);
+      }
+    }
+  };
+
+  // Text to Speech Readout
+  const speakText = (text: string) => {
+    if (!ttsEnabled || typeof window === 'undefined' || !window.speechSynthesis) return;
+    try {
+      window.speechSynthesis.cancel();
+      // Clean special characters and markdown stars
+      const cleaned = text.replace(/[*#_~]/g, '').slice(0, 300);
+      const utterance = new SpeechSynthesisUtterance(cleaned);
+      utterance.lang = 'hi-IN';
+      utterance.rate = 0.95;
+      window.speechSynthesis.speak(utterance);
+    } catch (e) {
+      console.warn('TTS error:', e);
+    }
+  };
 
   // Pointer Drag Handler (Mouse & Touch)
   const handlePointerDown = (e: React.PointerEvent) => {
@@ -128,7 +226,6 @@ export default function AiAgentWidget() {
       if (Math.hypot(deltaX, deltaY) > 5) {
         dragRef.current.moved = true;
         setIsDragging(true);
-        // Automatically close menus while dragging to keep view clean
         setIsOpen(false);
       }
 
@@ -150,31 +247,50 @@ export default function AiAgentWidget() {
     window.addEventListener('pointerup', handlePointerUp);
   };
 
-  // Chat Submission Handler
-  const handleSendMessage = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!inputMessage.trim()) return;
+  // Live Groq AI / Local Shastra Submission
+  const submitMessage = async (textToSend: string) => {
+    const userText = textToSend.trim();
+    if (!userText || isAILoading) return;
 
-    const userText = inputMessage.trim();
     setChatMessages((prev) => [...prev, { sender: 'user', text: userText }]);
     setInputMessage('');
+    setIsAILoading(true);
 
-    setTimeout(() => {
-      let reply = 'जय श्री विष्णु! गया जी तीर्थ में पिंडदान से पितरों को मोक्ष प्राप्त होता है। अपने गोत्र संकल्प और तीर्थ पंडा समन्वय के लिए आप हमें सीधे +91 7463055338 पर कॉल कर सकते हैं।';
-      const lower = userText.toLowerCase();
+    try {
+      const history = chatMessages.map(m => ({
+        role: m.sender === 'user' ? 'user' : 'assistant',
+        content: m.text
+      }));
 
-      if (lower.includes('price') || lower.includes('cost') || lower.includes('package') || lower.includes('rate') || lower.includes('पैकेज')) {
-        reply = 'प्रणाम! पिंडदान पैकेज की पूरी पारदर्शिता है:\n• 1-दिवसीय आवश्यक पिंडदान: ₹4,500\n• 3-दिवसीय सम्पूर्ण त्रि-स्थली यात्रा: ₹12,500\n• NRI लाइव स्ट्रीम पिंडदान: ₹8,500\nइनमें पंडा दक्षिणा, सम्पूर्ण सामग्री एवं वंश पंजीयन शामिल है।';
-      } else if (lower.includes('reach') || lower.includes('train') || lower.includes('flight') || lower.includes('station') || lower.includes('airport')) {
-        reply = 'गया जंक्शन (GAYA) रेलवे स्टेशन या गया/पटना एयरपोर्ट से हमारी एसी कैब आपको होटल और विष्णुपद मंदिर तक ले जाएगी।';
-      } else if (lower.includes('vishnupad') || lower.includes('temple') || lower.includes('timing') || lower.includes('विष्णुपद')) {
-        reply = 'विष्णुपद मंदिर प्रतिदिन प्रातः 5:00 बजे से रात्रि 9:00 बजे तक खुला रहता है। यहाँ भगवान विष्णु के 40 सेमी पवित्र चरण चिह्न विद्यमान हैं।';
-      } else if (lower.includes('vedis') || lower.includes('45') || lower.includes('falgu') || lower.includes('akshayavat') || lower.includes('वेदी')) {
-        reply = 'गया जी में कुल 45 पवित्र वेदियाँ हैं। मुख्य 3 वेदियाँ (त्रि-स्थली) हैं: 1. फल्गु नदी, 2. विष्णुपद मंदिर, 3. अक्षयवट वृक्ष।';
-      }
+      const res = await fetch('/api/ai/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          messages: [...history, { role: 'user', content: userText }]
+        })
+      });
 
-      setChatMessages((prev) => [...prev, { sender: 'ai', text: reply }]);
-    }, 600);
+      const data = await res.json();
+      const aiReply = data.reply || 'जय श्री विष्णु! 🙏 गया जी तीर्थ पुरोहित सहायता हेतु आप हमें सीधे कॉल (+91 7463055338) कर सकते हैं।';
+
+      setChatMessages((prev) => [...prev, { sender: 'ai', text: aiReply }]);
+      speakText(aiReply);
+    } catch (err) {
+      setChatMessages((prev) => [
+        ...prev,
+        {
+          sender: 'ai',
+          text: 'जय श्री विष्णु! 🙏\nविष्णुपद मंदिर व पिंडदान पैकेज की त्वरित जानकारी हेतु आप हमें सीधे +91 7463055338 पर WhatsApp या कॉल कर सकते हैं।'
+        }
+      ]);
+    } finally {
+      setIsAILoading(false);
+    }
+  };
+
+  const handleSendMessage = (e: React.FormEvent) => {
+    e.preventDefault();
+    submitMessage(inputMessage);
   };
 
   // Intelligent Direction Calculation based on current dragged position
@@ -182,171 +298,286 @@ export default function AiAgentWidget() {
   const isNearTop = position ? position.y < 350 : false;
 
   return (
-    <div
-      ref={widgetRef}
-      style={
-        position
-          ? {
-              position: 'fixed',
-              left: `${position.x}px`,
-              top: `${position.y}px`,
-              touchAction: 'none'
-            }
-          : undefined
-      }
-      className={`z-50 select-none notranslate ${!position ? 'fixed bottom-20 right-3 sm:bottom-6 sm:right-6' : ''}`}
-      onMouseEnter={() => {
-        if (!isDragging && !chatOpen) {
-          setIsOpen(true);
+    <>
+      <div
+        ref={widgetRef}
+        style={
+          position
+            ? {
+                position: 'fixed',
+                left: `${position.x}px`,
+                top: `${position.y}px`,
+                touchAction: 'none'
+              }
+            : undefined
         }
-      }}
-    >
-      <div className="relative">
+        className={`fixed z-50 transition-shadow ${isDragging ? 'cursor-grabbing opacity-90' : 'cursor-grab'}`}
+        onMouseEnter={() => {
+          if (!isDragging) {
+            setIsOpen(true);
+          }
+        }}
+      >
+        <div className="relative">
 
-        {/* 1. Expanded Quick Action Stack (Hover Triggered, Symmetrically Oriented) */}
-        {isOpen && !isDragging && (
-          <div
-            className={`absolute flex flex-col gap-2.5 z-50 animate-in fade-in zoom-in-95 duration-150 ${
-              isNearTop ? 'top-16' : 'bottom-16'
-            } ${isLeftSide ? 'left-0 items-start' : 'right-0 items-end'}`}
-          >
-            <Link
-              href="/pre-booking"
-              onClick={() => setIsOpen(false)}
-              className="flex items-center gap-2.5 px-4 py-2.5 rounded-full bg-[#C6922E] text-white font-bold text-xs shadow-2xl hover:scale-105 transition-all border border-amber-300/40 shrink-0 whitespace-nowrap"
+          {/* 1. Expanded Quick Action Stack (Hover Triggered, Symmetrically Oriented) */}
+          {isOpen && !isDragging && (
+            <div
+              className={`absolute flex flex-col gap-2.5 z-50 animate-in fade-in zoom-in-95 duration-150 ${
+                isNearTop ? 'top-16' : 'bottom-16'
+              } ${isLeftSide ? 'left-0 items-start' : 'right-0 items-end'}`}
             >
-              <Sparkles className="w-4 h-4 fill-current text-amber-200" />
-              <span>Pre-Book Pind Daan</span>
-            </Link>
-
-            <a
-              href="tel:+917463055338"
-              onClick={() => setIsOpen(false)}
-              className="flex items-center gap-2.5 px-4 py-2.5 rounded-full bg-[#0284C7] text-white font-bold text-xs shadow-2xl hover:scale-105 transition-all border border-sky-300/40 shrink-0 whitespace-nowrap"
-            >
-              <Phone className="w-4 h-4" />
-              <span>Call +91 7463055338</span>
-            </a>
-
-            <a
-              href="https://wa.me/917463055338?text=Pranam%21%20I%20want%20to%20know%20about%20Pind%20Daan%20Booking%20at%20Gaya%20Ji"
-              target="_blank"
-              rel="noreferrer"
-              onClick={() => setIsOpen(false)}
-              className="flex items-center gap-2.5 px-4 py-2.5 rounded-full bg-emerald-600 text-white font-bold text-xs shadow-2xl hover:scale-105 transition-all border border-emerald-300/40 shrink-0 whitespace-nowrap"
-            >
-              <MessageCircle className="w-4 h-4" />
-              <span>WhatsApp Instant Chat</span>
-            </a>
-
-            <button
-              type="button"
-              onClick={() => {
-                setChatOpen(true);
-                setIsOpen(false);
-              }}
-              className="flex items-center gap-2.5 px-4 py-2.5 rounded-full bg-[#6f1d14] text-white font-bold text-xs shadow-2xl hover:scale-105 transition-all border border-amber-400/50 shrink-0 whitespace-nowrap"
-            >
-              <Flame className="w-4 h-4 text-[#F48D08]" />
-              <span>पंडित जी AI से पूछें (Ask Pandit Ji)</span>
-            </button>
-          </div>
-        )}
-
-        {/* 2. Main Animated Movable Button */}
-        <button
-          type="button"
-          onPointerDown={handlePointerDown}
-          onClick={() => {
-            if (!dragRef.current.moved) {
-              setIsOpen(!isOpen);
-            }
-          }}
-          className={`w-13 h-13 sm:w-14 sm:h-14 rounded-full bg-[#6f1d14] text-white flex items-center justify-center shadow-[0_10px_30px_rgba(111,29,20,0.35)] hover:shadow-[0_12px_36px_rgba(198,146,46,0.5)] border-2 border-amber-400 relative cursor-grab active:cursor-grabbing transition-transform select-none ${
-            isDragging ? 'scale-105' : 'hover:scale-105'
-          }`}
-          title="Drag me anywhere or hover for quick services"
-          aria-label="Pandit Ji AI & Divine Services Widget"
-        >
-          {/* Active Online Indicator */}
-          <span className="absolute -top-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-white animate-pulse" />
-
-          {isOpen ? (
-            <X className="w-6 h-6 text-amber-200" />
-          ) : (
-            <div className="flex items-center justify-center p-1">
-              <AnimatedPanditJiIcon className="w-9 h-9 sm:w-10 sm:h-10 pointer-events-none" />
-            </div>
-          )}
-        </button>
-
-        {/* 3. Pandit Ji AI Chat Modal Window */}
-        {chatOpen && (
-          <div
-            className={`fixed w-[calc(100vw-2rem)] sm:w-96 bg-white rounded-3xl shadow-2xl border border-amber-900/20 overflow-hidden z-[60] flex flex-col h-[460px] sm:h-[500px] animate-in fade-in zoom-in-95 duration-200 ${
-              isNearTop ? 'top-20' : 'bottom-20'
-            } ${isLeftSide ? 'left-4 sm:left-10' : 'right-4 sm:right-10'}`}
-          >
-            <div className="bg-gradient-to-r from-[#6f1d14] to-[#1a1410] text-white p-4 flex justify-between items-center border-b border-amber-500/20">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-amber-100/10 border border-amber-400/40 flex items-center justify-center p-1">
-                  <AnimatedPanditJiIcon className="w-8 h-8" />
-                </div>
-                <div>
-                  <h4 className="font-serif font-bold text-sm text-amber-300">पंडित जी AI (Pandit Ji)</h4>
-                  <p className="text-[10px] text-emerald-400 font-semibold flex items-center gap-1">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                    गया जी तीर्थ गुरु • 24/7 वैदिक परामर्श
-                  </p>
-                </div>
-              </div>
+              {/* AI Vedic Diagnostic Launcher Button */}
               <button
                 type="button"
-                onClick={() => setChatOpen(false)}
-                className="text-gray-300 hover:text-white p-1"
+                onClick={() => {
+                  setIsDiagnosticOpen(true);
+                  setIsOpen(false);
+                }}
+                className="flex items-center gap-2.5 px-4 py-2.5 rounded-full bg-gradient-to-r from-amber-600 via-amber-500 to-amber-600 text-slate-950 font-extrabold text-xs shadow-2xl hover:scale-105 transition-all border border-amber-300/80 shrink-0 whitespace-nowrap animate-pulse"
               >
-                <X className="w-5 h-5" />
+                <Sparkles className="w-4 h-4 fill-current text-slate-950" />
+                <span>AI पितृ दोष जांच (Vedic Diagnostic)</span>
+              </button>
+
+              <Link
+                href="/pre-booking"
+                onClick={() => setIsOpen(false)}
+                className="flex items-center gap-2.5 px-4 py-2.5 rounded-full bg-[#C6922E] text-white font-bold text-xs shadow-2xl hover:scale-105 transition-all border border-amber-300/40 shrink-0 whitespace-nowrap"
+              >
+                <FileCheck2 className="w-4 h-4 text-amber-200" />
+                <span>Pre-Book Pind Daan</span>
+              </Link>
+
+              <a
+                href="tel:+917463055338"
+                onClick={() => setIsOpen(false)}
+                className="flex items-center gap-2.5 px-4 py-2.5 rounded-full bg-[#0284C7] text-white font-bold text-xs shadow-2xl hover:scale-105 transition-all border border-sky-300/40 shrink-0 whitespace-nowrap"
+              >
+                <Phone className="w-4 h-4" />
+                <span>Call +91 7463055338</span>
+              </a>
+
+              <a
+                href="https://wa.me/917463055338?text=Pranam%21%20I%20want%20to%20know%20about%20Pind%20Daan%20Booking%20at%20Gaya%20Ji"
+                target="_blank"
+                rel="noreferrer"
+                onClick={() => setIsOpen(false)}
+                className="flex items-center gap-2.5 px-4 py-2.5 rounded-full bg-emerald-600 text-white font-bold text-xs shadow-2xl hover:scale-105 transition-all border border-emerald-300/40 shrink-0 whitespace-nowrap"
+              >
+                <MessageCircle className="w-4 h-4" />
+                <span>WhatsApp Instant Chat</span>
+              </a>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setChatOpen(true);
+                  setIsOpen(false);
+                }}
+                className="flex items-center gap-2.5 px-4 py-2.5 rounded-full bg-[#6f1d14] text-white font-bold text-xs shadow-2xl hover:scale-105 transition-all border border-amber-400/50 shrink-0 whitespace-nowrap"
+              >
+                <Flame className="w-4 h-4 text-[#F48D08]" />
+                <span>पंडित जी AI से पूछें (Voice & Chat)</span>
               </button>
             </div>
+          )}
 
-            <div className="flex-1 p-4 overflow-y-auto space-y-3 bg-[#FAF7F2] text-xs">
-              {chatMessages.map((msg, index) => (
-                <div
-                  key={index}
-                  className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}
-                >
-                  <div
-                    className={`max-w-[85%] p-3.5 rounded-2xl leading-relaxed whitespace-pre-line ${
-                      msg.sender === 'user'
-                        ? 'bg-[#C6922E] text-white rounded-tr-none font-medium'
-                        : 'bg-white text-text-primary border border-amber-900/10 shadow-sm rounded-tl-none font-serif'
-                    }`}
-                  >
-                    {msg.text}
+          {/* 2. Main Animated Movable Button */}
+          <button
+            type="button"
+            onPointerDown={handlePointerDown}
+            onClick={() => {
+              if (!dragRef.current.moved) {
+                setIsOpen(!isOpen);
+              }
+            }}
+            className={`w-13 h-13 sm:w-14 sm:h-14 rounded-full bg-[#6f1d14] text-white flex items-center justify-center shadow-[0_10px_30px_rgba(111,29,20,0.35)] hover:shadow-[0_12px_36px_rgba(198,146,46,0.5)] border-2 border-amber-400 relative cursor-grab active:cursor-grabbing transition-transform select-none ${
+              isDragging ? 'scale-105' : 'hover:scale-105'
+            }`}
+            title="Drag me anywhere or click for Pandit Ji AI"
+            aria-label="Pandit Ji AI & Divine Services Widget"
+          >
+            {/* Active Online Indicator */}
+            <span className="absolute -top-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-white animate-pulse" />
+
+            {isOpen ? (
+              <X className="w-6 h-6 text-amber-200" />
+            ) : (
+              <div className="flex items-center justify-center p-1">
+                <AnimatedPanditJiIcon className="w-9 h-9 sm:w-10 sm:h-10 pointer-events-none" />
+              </div>
+            )}
+          </button>
+
+          {/* 3. Pandit Ji AI Chat Modal Window */}
+          {chatOpen && (
+            <div
+              className={`fixed w-[calc(100vw-2rem)] sm:w-[410px] bg-[#0E1626] text-slate-100 rounded-3xl shadow-2xl border border-amber-500/30 overflow-hidden z-[60] flex flex-col h-[520px] sm:h-[560px] animate-in fade-in zoom-in-95 duration-200 ${
+                isNearTop ? 'top-20' : 'bottom-20'
+              } ${isLeftSide ? 'left-4 sm:left-10' : 'right-4 sm:right-10'}`}
+            >
+              {/* Header */}
+              <div className="bg-gradient-to-r from-[#6f1d14] via-[#3d120d] to-[#0E1626] text-white p-4 flex justify-between items-center border-b border-amber-500/20">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-amber-100/10 border border-amber-400/40 flex items-center justify-center p-1">
+                    <AnimatedPanditJiIcon className="w-8 h-8" />
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <h4 className="font-serif font-bold text-sm text-amber-300">पंडित जी AI (Pandit Ji)</h4>
+                      <span className="text-[9px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-mono font-bold border border-emerald-500/30">
+                        ⚡ Groq LPU 70B
+                      </span>
+                    </div>
+                    <p className="text-[10px] text-slate-300 font-semibold flex items-center gap-1">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                      गया जी तीर्थ पुरोहित • 24/7 वैदिक मार्गदर्शन
+                    </p>
                   </div>
                 </div>
-              ))}
+
+                <div className="flex items-center gap-1">
+                  {/* TTS Toggle */}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (ttsEnabled && typeof window !== 'undefined') {
+                        window.speechSynthesis?.cancel();
+                      }
+                      setTtsEnabled(!ttsEnabled);
+                    }}
+                    className={`p-1.5 rounded-lg transition-colors ${
+                      ttsEnabled ? 'text-amber-300 bg-amber-500/15' : 'text-slate-500 hover:text-slate-300'
+                    }`}
+                    title={ttsEnabled ? 'Mute Voice' : 'Enable Voice'}
+                  >
+                    {ttsEnabled ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
+                  </button>
+
+                  {/* Close */}
+                  <button
+                    type="button"
+                    onClick={() => setChatOpen(false)}
+                    className="text-slate-400 hover:text-white p-1.5 rounded-lg hover:bg-slate-800/80 transition-colors"
+                  >
+                    <X className="w-5 h-5" />
+                  </button>
+                </div>
+              </div>
+
+              {/* Quick Suggestion Strip */}
+              <div className="px-3 py-2 bg-slate-900/90 border-b border-slate-800 flex items-center gap-2 overflow-x-auto no-scrollbar shrink-0">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsDiagnosticOpen(true);
+                    setChatOpen(false);
+                  }}
+                  className="px-2.5 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 text-[10px] font-bold shrink-0 flex items-center gap-1 hover:bg-amber-500/30 transition-colors"
+                >
+                  <Sparkles className="w-3 h-3 text-amber-400" />
+                  <span>पितृ दोष जांच (Vedic Calculator)</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => submitMessage('पिंडदान पैकेज और दक्षिणा की जानकारी दीजिए')}
+                  className="px-2.5 py-1 rounded-full bg-slate-800 text-slate-300 hover:text-white text-[10px] font-medium shrink-0 border border-slate-700/60"
+                >
+                  पैकेज दक्षिणा
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => submitMessage('क्या पुत्री या महिला पिंडदान कर सकती है?')}
+                  className="px-2.5 py-1 rounded-full bg-slate-800 text-slate-300 hover:text-white text-[10px] font-medium shrink-0 border border-slate-700/60"
+                >
+                  महिला अधिकार
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => submitMessage('गया जी की 45 वेदियों का क्या महत्व है?')}
+                  className="px-2.5 py-1 rounded-full bg-slate-800 text-slate-300 hover:text-white text-[10px] font-medium shrink-0 border border-slate-700/60"
+                >
+                  45 वेदियाँ
+                </button>
+              </div>
+
+              {/* Chat Message Stream */}
+              <div className="flex-1 p-4 overflow-y-auto space-y-3 bg-[#0B0F19] text-xs">
+                {chatMessages.map((msg, index) => (
+                  <div
+                    key={index}
+                    className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}
+                  >
+                    <div
+                      className={`max-w-[85%] p-3.5 rounded-2xl leading-relaxed whitespace-pre-line ${
+                        msg.sender === 'user'
+                          ? 'bg-gradient-to-r from-amber-600 to-amber-500 text-slate-950 font-bold rounded-tr-none shadow-md'
+                          : 'bg-[#141C2B] text-slate-200 border border-slate-800 shadow-sm rounded-tl-none font-sans'
+                      }`}
+                    >
+                      {msg.text}
+                    </div>
+                  </div>
+                ))}
+
+                {isAILoading && (
+                  <div className="flex justify-start">
+                    <div className="bg-[#141C2B] text-amber-300 border border-slate-800 p-3.5 rounded-2xl rounded-tl-none flex items-center gap-2 text-xs font-semibold">
+                      <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                      <span>पंडित जी विचार कर रहे हैं...</span>
+                    </div>
+                  </div>
+                )}
+                <div ref={messagesEndRef} />
+              </div>
+
+              {/* Input Form with Voice Mic */}
+              <form onSubmit={handleSendMessage} className="p-3 bg-[#0E1626] border-t border-slate-800 flex items-center gap-2">
+                {/* Voice Input Mic Button */}
+                <button
+                  type="button"
+                  onClick={toggleListening}
+                  className={`w-9 h-9 rounded-full flex items-center justify-center shrink-0 transition-all ${
+                    isListening 
+                      ? 'bg-rose-500 text-white animate-pulse ring-4 ring-rose-500/30' 
+                      : 'bg-slate-800 text-amber-400 hover:bg-slate-700'
+                  }`}
+                  title={isListening ? 'सुन रहे हैं... (Listening)' : 'बोलकर पूछें (Tap to Speak)'}
+                >
+                  {isListening ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
+                </button>
+
+                <input
+                  type="text"
+                  placeholder={isListening ? 'बोलिए, सुन रहे हैं...' : 'पंडित जी से पूछें (गोत्र, तिथि, दक्षिणा)...'}
+                  value={inputMessage}
+                  onChange={(e) => setInputMessage(e.target.value)}
+                  className="flex-1 bg-[#0B0F19] border border-slate-700/80 rounded-full px-4 py-2.5 text-xs text-white placeholder-slate-400 focus:outline-none focus:border-amber-500"
+                />
+
+                <button
+                  type="submit"
+                  disabled={!inputMessage.trim() || isAILoading}
+                  className="w-9 h-9 rounded-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 disabled:opacity-50 text-slate-950 font-bold flex items-center justify-center shrink-0 shadow transition-all"
+                >
+                  <Send className="w-4 h-4" />
+                </button>
+              </form>
             </div>
+          )}
 
-            <form onSubmit={handleSendMessage} className="p-3 bg-white border-t border-gray-100 flex items-center gap-2">
-              <input
-                type="text"
-                placeholder="पंडित जी से पूछें (गोत्र, तिथि, पैकेज)..."
-                value={inputMessage}
-                onChange={(e) => setInputMessage(e.target.value)}
-                className="flex-1 bg-amber-50/50 border border-amber-900/20 rounded-full px-4 py-2.5 text-xs text-text-primary focus:outline-none focus:border-[#C6922E]"
-              />
-              <button
-                type="submit"
-                className="w-9 h-9 rounded-full bg-[#6f1d14] hover:bg-[#C6922E] text-white flex items-center justify-center shrink-0 shadow transition-colors"
-              >
-                <Send className="w-4 h-4" />
-              </button>
-            </form>
-          </div>
-        )}
-
+        </div>
       </div>
-    </div>
+
+      {/* Global Interactive Vedic Diagnostic Modal */}
+      <VedicDiagnosticModal 
+        isOpen={isDiagnosticOpen} 
+        onClose={() => setIsDiagnosticOpen(false)} 
+      />
+    </>
   );
 }

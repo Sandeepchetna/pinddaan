@@ -23,6 +23,7 @@ import {
 import Logo from '@/components/common/Logo';
 import GlobalSearchModal from '@/components/common/GlobalSearchModal';
 import LanguageConverter from '@/components/common/LanguageConverter';
+import VedicDiagnosticModal from '@/components/ai/VedicDiagnosticModal';
 
 interface NavbarProps {
   packages?: any[];
@@ -33,6 +34,7 @@ export default function Navbar({ packages = [], sacredPlaces = [] }: NavbarProps
   const [activeMegaMenu, setActiveMegaMenu] = useState<string | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isDiagnosticOpen, setIsDiagnosticOpen] = useState(false);
   const [expandedMobileSection, setExpandedMobileSection] = useState<string | null>(null);
 
   const toggleMobileSection = (section: string) => {
@@ -194,6 +196,15 @@ export default function Navbar({ packages = [], sacredPlaces = [] }: NavbarProps
             >
               <Search className="w-4 h-4 text-[#F48D08]" />
               <span className="hidden xl:inline">Search</span>
+            </button>
+
+            <button
+              onClick={() => setIsDiagnosticOpen(true)}
+              className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-950 font-extrabold text-[11px] shadow-sm hover:shadow-md transition-all hover:scale-105"
+              title="AI वैदिक पितृ दोष एवं पिंडदान जांच"
+            >
+              <Sparkles className="w-3.5 h-3.5 fill-current text-slate-950" />
+              <span>AI पितृ दोष जांच</span>
             </button>
 
           </nav>
@@ -621,6 +632,18 @@ export default function Navbar({ packages = [], sacredPlaces = [] }: NavbarProps
             <LanguageConverter />
           </div>
 
+          {/* AI Vedic Diagnostic Mobile Button */}
+          <button
+            onClick={() => {
+              setMobileMenuOpen(false);
+              setIsDiagnosticOpen(true);
+            }}
+            className="w-full flex items-center justify-center gap-2 py-3 rounded-2xl bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-extrabold text-xs shadow-md active:scale-95 transition-transform"
+          >
+            <Sparkles className="w-4 h-4 fill-current text-slate-950" />
+            <span>AI पितृ दोष जांच (Vedic Diagnostic)</span>
+          </button>
+
           {/* Quick Call Helpline Button */}
           <a
             href="tel:+917463055338"
@@ -641,6 +664,12 @@ export default function Navbar({ packages = [], sacredPlaces = [] }: NavbarProps
           </Link>
         </div>
       )}
+
+      {/* Global Vedic Diagnostic Modal */}
+      <VedicDiagnosticModal 
+        isOpen={isDiagnosticOpen} 
+        onClose={() => setIsDiagnosticOpen(false)} 
+      />
 
     </header>
   );
