@@ -1,4 +1,5 @@
-import { Phone, Mail, MapPin, Clock, ShieldCheck, Send } from 'lucide-react';
+import { Phone, Mail, MapPin, Clock, ShieldCheck } from 'lucide-react';
+import ContactForm from './ContactForm';
 
 export const metadata = {
   title: 'Contact Us | Gaya Ji Pilgrimage Desk | PindDaanWale',
@@ -91,66 +92,7 @@ export default function ContactPage() {
           {/* Contact Form */}
           <div className="lg:col-span-2 bg-white p-8 sm:p-10 rounded-2xl border border-amber-900/10 shadow-sm space-y-6">
             <h2 className="text-2xl font-serif font-bold text-text-primary">Send an Inquiry</h2>
-            <form className="space-y-6">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-xs font-semibold text-text-primary mb-2">Full Name *</label>
-                  <input 
-                    type="text" 
-                    placeholder="Enter your name" 
-                    className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:outline-none focus:border-accent-gold text-sm"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs font-semibold text-text-primary mb-2">Phone Number / WhatsApp *</label>
-                  <input 
-                    type="tel" 
-                    placeholder="+91 98765 43210" 
-                    className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:outline-none focus:border-accent-gold text-sm"
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-xs font-semibold text-text-primary mb-2">City / Location</label>
-                  <input 
-                    type="text" 
-                    placeholder="e.g. Bengaluru / London" 
-                    className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:outline-none focus:border-accent-gold text-sm"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs font-semibold text-text-primary mb-2">Preferred Purpose</label>
-                  <select className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:outline-none focus:border-accent-gold text-sm bg-white">
-                    <option>Annual Shradh</option>
-                    <option>First Time Pind Daan</option>
-                    <option>Pitru Paksha Rites</option>
-                    <option>Pitru Dosh Nivaran</option>
-                    <option>Remote Live Pind Daan (NRI)</option>
-                  </select>
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-xs font-semibold text-text-primary mb-2">Your Message / Query</label>
-                <textarea 
-                  rows={4} 
-                  placeholder="Mention any specific dates, gotra queries, or senior citizen assistance required..." 
-                  className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:outline-none focus:border-accent-gold text-sm"
-                />
-              </div>
-
-              <button 
-                type="submit" 
-                className="bg-accent-gold hover:bg-accent-copper text-white px-8 py-3.5 rounded-full font-bold text-sm transition-colors flex items-center justify-center gap-2"
-              >
-                <span>Submit Pilgrimage Inquiry</span>
-                <Send className="w-4 h-4" />
-              </button>
-            </form>
+            <ContactForm />
           </div>
 
         </div>

@@ -3,7 +3,7 @@
 import prisma from '@/lib/prisma';
 import { revalidatePath } from 'next/cache';
 import { invalidateCache } from '@/lib/dbCache';
-import { GAYA_SACRED_STHALIS, RITUAL_PACKAGES, INITIAL_HOTELS, INITIAL_BOOKINGS, INITIAL_LEADS, INITIAL_HERO_SLIDES } from '@/data/mockData';
+import { GAYA_SACRED_STHALIS, RITUAL_PACKAGES, INITIAL_HOTELS, INITIAL_HERO_SLIDES } from '@/data/mockData';
 import { sendBookingConfirmationEmail } from '@/lib/email';
 import { syncLeadToAIWCRM } from '@/lib/aiwcrm';
 import { 
@@ -369,40 +369,8 @@ export async function getAdminERPData() {
       console.error('DB fetch error in getAdminERPData:', err);
     }
 
-    if (!preBookings || preBookings.length === 0) {
-      preBookings = INITIAL_BOOKINGS.map(b => ({
-        id: b.id,
-        bookingRef: b.referenceNo,
-        devoteeName: b.customerName,
-        phone: b.customerPhone,
-        email: b.customerEmail,
-        city: b.customerCity,
-        purpose: 'Tri-Sthali Pind Daan',
-        gotra: b.gotra,
-        preferredDate: b.targetDate,
-        packageSlug: 'gaya-tri-sthali-complete-3day',
-        packageName: b.packageName,
-        planTier: 'GOLD',
-        status: 'BOOKING_CONFIRMED',
-        workflowStatus: 'BOOKING_CONFIRMED',
-        estimatedCost: b.totalAmount
-      }));
-    }
-
-    if (!leads || leads.length === 0) {
-      leads = INITIAL_LEADS.map(ld => ({
-        id: ld.id,
-        leadNumber: `LEAD-2026-${ld.id.split('-')[1] || '001'}`,
-        devoteeName: ld.name,
-        phone: ld.phone,
-        email: ld.email,
-        city: ld.city,
-        purpose: ld.ritualType,
-        assignedTo: ld.assignedTo,
-        source: ld.source,
-        status: ld.stage === 'NEW' ? 'NEW_LEAD' : 'CONTACTED'
-      }));
-    }
+    preBookings = preBookings || [];
+    leads = leads || [];
 
     if (!packages || packages.length === 0) {
       packages = RITUAL_PACKAGES.map(pkg => ({
@@ -487,10 +455,7 @@ export async function getAdminERPData() {
       success: true,
       preBookings,
       leads,
-      customers: customers.length > 0 ? customers : [
-        { id: 'c-1', customerCode: 'CUST-2026-8941', name: 'Rajesh Sharma', phone: '+91 98101 23456', city: 'New Delhi / San Jose' },
-        { id: 'c-2', customerCode: 'CUST-2026-8942', name: 'Ananya Mukherjee', phone: '+91 98300 54321', city: 'Kolkata' }
-      ],
+      customers: customers || [],
       packages,
       hotels,
       articles,
@@ -538,26 +503,7 @@ export async function updateBookingWorkflowStatusAction(data: {
     let booking = await db.preBooking.findUnique({ where: { id: data.bookingId } });
 
     if (!booking) {
-      // Find in mock data if present
-      const mockMatch = INITIAL_BOOKINGS.find(b => b.id === data.bookingId);
-      booking = await db.preBooking.create({
-        data: {
-          id: data.bookingId,
-          bookingRef: mockMatch?.referenceNo || `PDW-2026-${Math.floor(100000 + Math.random() * 900000)}`,
-          devoteeName: mockMatch?.customerName || 'Devotee Pilgrim',
-          phone: mockMatch?.customerPhone || '+91 9999999999',
-          email: mockMatch?.customerEmail || null,
-          city: mockMatch?.customerCity || 'Gaya',
-          purpose: 'Tri-Sthali Pind Daan',
-          gotra: mockMatch?.gotra || 'Kashyap',
-          preferredDate: mockMatch?.targetDate || '2026-09-15',
-          packageName: mockMatch?.packageName || '1-Day Express Pind Daan',
-          planTier: 'GOLD',
-          status: data.status,
-          workflowStatus: data.status,
-          estimatedCost: mockMatch?.totalAmount || 4500
-        }
-      });
+      return { success: false, error: 'Booking record not found.' };
     }
 
     let timeline = [];
@@ -650,6 +596,73 @@ export async function deleteHotelAction(id: string) {
     return { success: true };
   } catch (error: any) {
     return { success: false, error: error.message };
+  }
+}
+
+export async function submitContactInquiryAction(data: {
+  name: string;
+  phone: string;
+  city?: string;
+  purpose?: string;
+  message?: string;
+}) {
+  try {
+    if (!data.name || !data.phone) {
+      return { success: false, error: 'Full name and phone number are required.' };
+    }
+
+    const leadNumber = `LEAD-2026-${Math.floor(1000 + Math.random() * 9000)}`;
+
+    const lead = await db.lead.create({
+      data: {
+        leadNumber,
+        devoteeName: data.name.trim(),
+        phone: data.phone.trim(),
+        city: data.city?.trim() || null,
+        purpose: data.purpose || 'Annual Shradh',
+        source: 'Website Contact Page',
+        status: 'NEW_LEAD',
+        notes: data.message?.trim() || null
+      }
+    });
+
+    // Auto-register or link to Devotees Directory
+    try {
+      const existingCustomer = await db.customer.findUnique({ where: { phone: data.phone.trim() } });
+      if (!existingCustomer) {
+        await db.customer.create({
+          data: {
+            customerCode: `CUST-2026-${Math.floor(1000 + Math.random() * 9000)}`,
+            name: data.name.trim(),
+            phone: data.phone.trim(),
+            city: data.city?.trim() || null,
+            notes: `Auto-registered via Contact Page (${data.purpose || 'Inquiry'})`
+          }
+        });
+      }
+    } catch (custErr) {
+      console.warn('Customer auto-create warning:', custErr);
+    }
+
+    // Auto-sync with AIWCRM WhatsApp
+    try {
+      syncLeadToAIWCRM({
+        name: data.name.trim(),
+        phone: data.phone.trim(),
+        city: data.city?.trim(),
+        source: 'Website Contact Page',
+        packageName: data.purpose || 'Contact Inquiry',
+        notes: data.message?.trim()
+      });
+    } catch (crmErr) {
+      console.warn('AIWCRM lead sync warning:', crmErr);
+    }
+
+    revalidatePath('/admin');
+    return { success: true, leadNumber: lead.leadNumber || lead.id };
+  } catch (error: any) {
+    console.error('Error submitting contact inquiry:', error);
+    return { success: false, error: error.message || 'Failed to submit inquiry' };
   }
 }
 

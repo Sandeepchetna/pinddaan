@@ -1346,46 +1346,56 @@ export default function AdminERPClient({ initialData, session }: AdminERPClientP
                   </span>
                 </div>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-                {leads.map(lead => (
-                  <div key={lead.id} className="bg-gradient-to-b from-[#141C2B] to-[#0D1424] p-5 rounded-2xl border border-slate-800/80 hover:border-slate-700 space-y-3 shadow-lg transition-all">
-                    <div className="flex justify-between items-start">
-                      <div>
-                        <h4 className="font-bold text-base text-white">{lead.name}</h4>
-                        <a href={`tel:${lead.phone}`} className="text-xs text-amber-400 font-bold block hover:underline mt-0.5">
-                          📱 {lead.phone}
-                        </a>
+              {leads.length === 0 ? (
+                <div className="bg-gradient-to-b from-[#141C2B] to-[#0D1424] p-12 rounded-3xl border border-slate-800/80 text-center space-y-3 shadow-lg">
+                  <UserCheck className="w-10 h-10 text-slate-500 mx-auto" />
+                  <h4 className="font-bold text-base text-white">No Active Leads</h4>
+                  <p className="text-xs text-slate-400 max-w-sm mx-auto">
+                    Inquiries received via Meta/Google Ads or website inquiry forms will automatically appear here in real-time.
+                  </p>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+                  {leads.map(lead => (
+                    <div key={lead.id} className="bg-gradient-to-b from-[#141C2B] to-[#0D1424] p-5 rounded-2xl border border-slate-800/80 hover:border-slate-700 space-y-3 shadow-lg transition-all">
+                      <div className="flex justify-between items-start">
+                        <div>
+                          <h4 className="font-bold text-base text-white">{lead.name}</h4>
+                          <a href={`tel:${lead.phone}`} className="text-xs text-amber-400 font-bold block hover:underline mt-0.5">
+                            📱 {lead.phone}
+                          </a>
+                        </div>
+                        <span className="text-[10px] font-extrabold uppercase px-2.5 py-1 rounded-lg bg-slate-800/80 text-slate-300 border border-slate-700/60">
+                          {lead.status || 'NEW'}
+                        </span>
                       </div>
-                      <span className="text-[10px] font-extrabold uppercase px-2.5 py-1 rounded-lg bg-slate-800/80 text-slate-300 border border-slate-700/60">
-                        {lead.status || 'NEW'}
-                      </span>
+                      <p className="text-xs text-slate-300 bg-slate-900/80 p-3 rounded-xl border border-slate-800/80 leading-relaxed">
+                        {lead.packageInterest || lead.notes || 'Inquired via Meta / Google Ads'}
+                      </p>
+                      <div className="pt-2 flex justify-between items-center text-xs border-t border-slate-800/60">
+                        <a
+                          href={`https://wa.me/${(lead.phone || '').replace(/[^0-9]/g, '')}?text=${encodeURIComponent(`Pranam ${lead.name} Ji, regarding your Gaya Ji Pind Daan inquiry...`)}`}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="text-[#25D366] hover:underline font-bold flex items-center gap-1 text-[11px]"
+                        >
+                          <MessageCircle className="w-3.5 h-3.5" /> WhatsApp Lead
+                        </a>
+                        <button 
+                          onClick={() => {
+                            if (confirm(`Delete lead for ${lead.name}?`)) {
+                              deleteLeadAction(lead.id).then(loadERPData);
+                            }
+                          }}
+                          className="text-slate-500 hover:text-rose-400 p-1 rounded transition-colors"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
                     </div>
-                    <p className="text-xs text-slate-300 bg-slate-900/80 p-3 rounded-xl border border-slate-800/80 leading-relaxed">
-                      {lead.packageInterest || lead.notes || 'Inquired via Meta / Google Ads'}
-                    </p>
-                    <div className="pt-2 flex justify-between items-center text-xs border-t border-slate-800/60">
-                      <a
-                        href={`https://wa.me/${(lead.phone || '').replace(/[^0-9]/g, '')}?text=${encodeURIComponent(`Pranam ${lead.name} Ji, regarding your Gaya Ji Pind Daan inquiry...`)}`}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="text-[#25D366] hover:underline font-bold flex items-center gap-1 text-[11px]"
-                      >
-                        <MessageCircle className="w-3.5 h-3.5" /> WhatsApp Lead
-                      </a>
-                      <button 
-                        onClick={() => {
-                          if (confirm(`Delete lead for ${lead.name}?`)) {
-                            deleteLeadAction(lead.id).then(loadERPData);
-                          }
-                        }}
-                        className="text-slate-500 hover:text-rose-400 p-1 rounded transition-colors"
-                      >
-                        <Trash2 className="w-3.5 h-3.5" />
-                      </button>
-                    </div>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              )}
             </div>
           )}
 
@@ -1400,33 +1410,56 @@ export default function AdminERPClient({ initialData, session }: AdminERPClientP
                   </span>
                 </div>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-                {customers.map(cust => (
-                  <div key={cust.id} className="bg-gradient-to-b from-[#141C2B] to-[#0D1424] p-5 rounded-2xl border border-slate-800/80 hover:border-slate-700 space-y-3 shadow-lg transition-all">
-                    <div>
-                      <span className="text-[10px] font-mono text-amber-400 font-bold bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20">
-                        {cust.customerCode || cust.id}
-                      </span>
-                      <h4 className="font-bold text-base text-white mt-2">{cust.name}</h4>
-                      <div className="space-y-1 mt-2 text-xs text-slate-300">
-                        <a href={`tel:${cust.phone}`} className="flex items-center gap-1.5 hover:text-amber-400">
-                          <Phone className="w-3 h-3 text-amber-400" /> {cust.phone}
-                        </a>
-                        {cust.email && (
-                          <div className="flex items-center gap-1.5 text-slate-400">
-                            <Mail className="w-3 h-3 text-slate-500" /> {cust.email}
-                          </div>
-                        )}
-                        {cust.city && (
-                          <div className="flex items-center gap-1.5 text-slate-400">
-                            <MapPin className="w-3 h-3 text-amber-500/70" /> {cust.city}, {cust.country || 'India'}
-                          </div>
-                        )}
+              {customers.length === 0 ? (
+                <div className="bg-gradient-to-b from-[#141C2B] to-[#0D1424] p-12 rounded-3xl border border-slate-800/80 text-center space-y-3 shadow-lg">
+                  <Users className="w-10 h-10 text-slate-500 mx-auto" />
+                  <h4 className="font-bold text-base text-white">No Devotees Registered Yet</h4>
+                  <p className="text-xs text-slate-400 max-w-sm mx-auto">
+                    Devotees will be recorded here automatically when they submit pilgrimage pre-bookings or registrations.
+                  </p>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+                  {customers.map(cust => (
+                    <div key={cust.id} className="bg-gradient-to-b from-[#141C2B] to-[#0D1424] p-5 rounded-2xl border border-slate-800/80 hover:border-slate-700 space-y-3 shadow-lg transition-all flex flex-col justify-between">
+                      <div>
+                        <div className="flex justify-between items-start">
+                          <span className="text-[10px] font-mono text-amber-400 font-bold bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20">
+                            {cust.customerCode || cust.id}
+                          </span>
+                          <button
+                            onClick={() => {
+                              if (confirm(`Delete devotee record for ${cust.name}?`)) {
+                                deleteCustomerAction(cust.id).then(loadERPData);
+                              }
+                            }}
+                            className="text-slate-500 hover:text-rose-400 p-1 rounded transition-colors"
+                            title="Delete Devotee"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                        <h4 className="font-bold text-base text-white mt-2">{cust.name}</h4>
+                        <div className="space-y-1 mt-2 text-xs text-slate-300">
+                          <a href={`tel:${cust.phone}`} className="flex items-center gap-1.5 hover:text-amber-400">
+                            <Phone className="w-3 h-3 text-amber-400" /> {cust.phone}
+                          </a>
+                          {cust.email && (
+                            <div className="flex items-center gap-1.5 text-slate-400">
+                              <Mail className="w-3 h-3 text-slate-500" /> {cust.email}
+                            </div>
+                          )}
+                          {cust.city && (
+                            <div className="flex items-center gap-1.5 text-slate-400">
+                              <MapPin className="w-3 h-3 text-amber-500/70" /> {cust.city}, {cust.country || 'India'}
+                            </div>
+                          )}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              )}
             </div>
           )}
 

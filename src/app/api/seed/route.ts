@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
-import { GAYA_SACRED_STHALIS, RITUAL_PACKAGES, INITIAL_HOTELS, INITIAL_LEADS } from '@/data/mockData';
+import { GAYA_SACRED_STHALIS, RITUAL_PACKAGES, INITIAL_HOTELS } from '@/data/mockData';
 import { SACRED_VEDIS_MASTER } from '@/data/sacredVedisData';
 
 const db = prisma as any;
@@ -149,41 +149,9 @@ export async function GET() {
       }
     }
 
-    // 6. Seed Sample Leads
-    if (db.lead) {
-      for (const ld of INITIAL_LEADS) {
-        await db.lead.upsert({
-          where: { id: ld.id },
-          update: {
-            leadNumber: `LEAD-2026-${ld.id.split('-')[1] || '001'}`,
-            devoteeName: ld.name,
-            phone: ld.phone,
-            email: ld.email,
-            city: ld.city,
-            purpose: ld.ritualType,
-            assignedTo: ld.assignedTo,
-            source: ld.source,
-            status: ld.stage === 'NEW' ? 'NEW_LEAD' : 'CONTACTED'
-          },
-          create: {
-            id: ld.id,
-            leadNumber: `LEAD-2026-${ld.id.split('-')[1] || '001'}`,
-            devoteeName: ld.name,
-            phone: ld.phone,
-            email: ld.email,
-            city: ld.city,
-            purpose: ld.ritualType,
-            assignedTo: ld.assignedTo,
-            source: ld.source,
-            status: ld.stage === 'NEW' ? 'NEW_LEAD' : 'CONTACTED'
-          }
-        });
-      }
-    }
-
     return NextResponse.json({
       success: true,
-      message: 'All Datasets (Sacred Places, Hotels, Packages, Leads, Articles) 100% Synced to Hostinger MySQL Database!',
+      message: 'All Datasets (Sacred Places, Hotels, Packages, Articles) 100% Synced to Hostinger MySQL Database!',
       timestamp: new Date().toISOString()
     });
 
