@@ -262,6 +262,16 @@ export default function PilgrimEmergencyModal({ isOpen, onClose, isHindi }: Pilg
             </div>
           </div>
 
+          {/* Statutory Disclaimer */}
+          <div className="p-3 rounded-2xl bg-black/40 border border-white/10 text-[10.5px] text-gray-400 leading-relaxed">
+            <strong className="text-amber-400 font-semibold block mb-0.5">
+              {isHindi ? 'अस्वीकरण (Disclaimer):' : 'Disclaimer:'}
+            </strong>
+            {isHindi
+              ? 'यहाँ सूचीबद्ध सभी हेल्पलाइन नंबर बिहार सरकार एवं जिला प्रशासन के सार्वजनिक रिकॉर्ड्स से श्रद्धालुओं की सुविधा हेतु लिए गए हैं। PindDaanWale किसी सरकारी तंत्र या आपातकालीन सेवा का संचालक नहीं है। कॉल कनेक्ट होने में देरी, नेटवर्क विफलता या सेवाओं की ऑन-ग्राउंड उपलब्धता के लिए PindDaanWale जिम्मेदार नहीं होगा।'
+              : 'All helplines listed above are curated from public Bihar Govt & District Administration records for pilgrim assistance. PindDaanWale is an independent pilgrimage service and does not operate emergency infrastructure, bearing no liability for call routing delays, network issues, or third-party response times.'}
+          </div>
+
         </div>
 
         {/* Footer */}

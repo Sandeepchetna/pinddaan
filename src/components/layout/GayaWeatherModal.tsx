@@ -249,6 +249,16 @@ export default function GayaWeatherModal({ isOpen, onClose, weather, isHindi }: 
               {isHindi ? 'समझ गया ✓' : 'Understood ✓'}
             </button>
           </div>
+
+          {/* Weather & Muhurat Disclaimer */}
+          <div className="text-[10px] text-gray-400 bg-black/40 p-2.5 rounded-xl border border-white/5 leading-relaxed">
+            <strong className="text-amber-400 font-semibold block mb-0.5">
+              {isHindi ? 'अस्वीकरण (Disclaimer):' : 'Weather & Muhurat Notice:'}
+            </strong>
+            {isHindi
+              ? 'मौसम डेटा Open-Meteo ओपन-सोर्स सैटेलाइट API पर आधारित है तथा मुहूर्त पारंपरिक पंचांग गणना पर आधारित है। स्थानीय मौसम अथवा समय में मामूली विचलन संभव है। PindDaanWale तीसरे पक्ष के डेटा की सटीकता के लिए कानूनी रूप से उत्तरदायी नहीं है।'
+              : 'Weather data is derived from Open-Meteo open satellite feed and muhurat timings from astronomical panchang calculations. PindDaanWale is not liable for third-party feed accuracy or local microclimate variations.'}
+          </div>
         </div>
       </div>
     </div>

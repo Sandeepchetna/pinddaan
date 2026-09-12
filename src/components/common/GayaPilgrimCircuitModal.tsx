@@ -15,7 +15,8 @@ import {
   ChevronRight,
   Accessibility,
   Footprints,
-  Phone
+  Phone,
+  AlertTriangle
 } from 'lucide-react';
 
 export interface RouteStop {
@@ -515,6 +516,19 @@ export default function GayaPilgrimCircuitModal({
                   <ExternalLink className="w-3.5 h-3.5 text-stone-600" />
                 </a>
               </div>
+            </div>
+
+            {/* Third-Party & Govt Information Disclaimer */}
+            <div className="bg-amber-950/20 border border-amber-500/30 rounded-2xl p-3.5 space-y-1.5 text-gray-300">
+              <div className="flex items-center gap-1.5 text-amber-400 font-bold text-xs">
+                <AlertTriangle className="w-3.5 h-3.5 text-amber-500 shrink-0" />
+                <span>{isHindi ? 'महत्वपूर्ण सूचना एवं अस्वीकरण (Important Disclaimer)' : 'Important Information Notice & Disclaimer'}</span>
+              </div>
+              <p className="leading-relaxed text-[10.5px] sm:text-[11px] text-gray-300">
+                {isHindi
+                  ? 'यह मार्गदर्शिका, वेदी सूची, सरकारी अनुमानित किराया व नक्शा विवरण केवल तीर्थ यात्रियों की सुविधा व मार्गदर्शन हेतु इंटरनेट, बिहार सरकार के पोर्टल (pinddaangaya.bihar.gov.in) तथा सार्वजनिक मुफ़्त API सेवाओं से संकलित किया गया है। PindDaanWale किसी परिवहन या तृतीय-पक्ष सेवा का संचालन नहीं करता है और न ही किराए में उतार-चढ़ाव, उपलब्धता अथवा ऑन-ग्राउंड सटीकता की पुष्टि के लिए कानूनी रूप से उत्तरदायी है। श्रद्धालु स्थानीय स्तर पर भी पुष्टि अवश्य करें।'
+                  : 'All circuit routes, indicative government fares, and map locations are compiled purely for pilgrim guidance and convenience from public internet resources, Bihar Govt portal (pinddaangaya.bihar.gov.in), and free open-source APIs. PindDaanWale does not operate public transport services and holds no legal liability or responsibility for fare fluctuations, route changes, or third-party service availability. Devotees are advised to verify locally.'}
+              </p>
             </div>
 
           </div>

@@ -203,6 +203,16 @@ export default function PilgrimAssistanceHub() {
 
         </div>
 
+        {/* Comprehensive Public Disclaimer */}
+        <div className="mt-8 pt-6 border-t border-white/10 text-center max-w-4xl mx-auto text-[10.5px] sm:text-[11px] text-gray-400 leading-relaxed px-2">
+          <p>
+            <strong className="text-amber-400 font-semibold">{isHindi ? 'सार्वजनिक सूचना व अस्वीकरण: ' : 'Public Notice & Disclaimer: '}</strong>
+            {isHindi
+              ? 'यहाँ प्रस्तुत तीर्थ परिपथ, अनुमानित सरकारी किराया तालिका, मौसम पूर्वानुमान व आपातकालीन हेल्पलाइन नंबर केवल श्रद्धालुओं के सामान्य मार्गदर्शन व सहायता हेतु सरकारी पोर्टलों (pinddaangaya.bihar.gov.in), सार्वजनिक इंटरनेट स्रोतों व ओपन-सोर्स APIs से संकलित किए गए हैं। PindDaanWale किसी परिवहन सेवा, वाहन चालक अथवा सरकारी हेल्पलाइन का प्रत्यक्ष संचालन नहीं करता है और न ही किसी तृतीय-पक्ष सेवा विफलता, समय विचलन या किराया भिन्नता के लिए कानूनी रूप से उत्तरदायी है।'
+              : 'All route maps, indicative fares, live weather forecasts, and emergency contacts are compiled for pilgrim guidance and convenience from public government portals (pinddaangaya.bihar.gov.in) and open-source APIs. PindDaanWale does not operate public transport or state emergency services and assumes no legal liability for fare fluctuations, service delays, or third-party variations.'}
+          </p>
+        </div>
+
       </div>
 
       {/* Modals */}
