@@ -29,9 +29,9 @@ export default function GayaJiDestinationPage() {
             <Award className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#F48D08]" />
             <span>Comprehensive Gaya Ji Destination & Pilgrimage Guide</span>
           </div>
-          <h1 className="text-3xl sm:text-5xl md:text-6xl font-display font-bold tracking-tight leading-[1.15]">
-            <span className="block text-[#2B2118]">Gaya Ji — The Holy Seat of</span>
-            <span className="block text-transparent bg-clip-text bg-gradient-to-r from-[#6f1d14] via-[#C6922E] to-[#F48D08]">
+          <h1 className="text-3xl sm:text-5xl md:text-6xl font-display font-bold tracking-tight leading-[1.25] py-1 overflow-visible">
+            <span className="block text-[#2B2118] pb-1">Gaya Ji — The Holy Seat of</span>
+            <span className="block text-transparent bg-clip-text bg-gradient-to-r from-[#6f1d14] via-[#C6922E] to-[#F48D08] py-1 overflow-visible">
               Ancestral Liberation & Moksha
             </span>
           </h1>

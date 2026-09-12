@@ -14,9 +14,9 @@ export default function ContactPage() {
         {/* Header */}
         <div className="text-center max-w-2xl mx-auto mb-16 space-y-3">
           <span className="text-xs font-bold uppercase tracking-widest text-accent-gold">Direct Pilgrim Facilitation Desk</span>
-          <h1 className="text-3xl sm:text-5xl font-display font-bold tracking-tight leading-[1.15]">
-            <span className="block text-[#2B2118]">Connect With Our</span>
-            <span className="block text-transparent bg-clip-text bg-gradient-to-r from-[#6f1d14] via-[#C6922E] to-[#F48D08]">
+          <h1 className="text-3xl sm:text-5xl font-display font-bold tracking-tight leading-[1.25] py-1 overflow-visible">
+            <span className="block text-[#2B2118] pb-1">Connect With Our</span>
+            <span className="block text-transparent bg-clip-text bg-gradient-to-r from-[#6f1d14] via-[#C6922E] to-[#F48D08] py-1 overflow-visible">
               Gaya Ji Pilgrimage Desk
             </span>
           </h1>

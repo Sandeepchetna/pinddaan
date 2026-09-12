@@ -220,7 +220,7 @@ export default async function HomePage() {
               <Compass className="w-3.5 h-3.5" />
               <span>Doorstep Sacred Assistance • चरणबद्ध यात्रा व्यवस्था</span>
             </span>
-            <h2 className="text-3xl sm:text-4xl md:text-[46px] font-display font-bold tracking-[-0.02em] text-[#2B2118] leading-[1.15]">
+            <h2 className="text-3xl sm:text-4xl md:text-[46px] font-display font-bold tracking-[-0.02em] text-[#2B2118] leading-[1.25] py-1 overflow-visible">
               How Your Sacred Journey Works
             </h2>
             <p className="text-[#5A5148] text-base sm:text-lg font-body leading-relaxed max-w-[680px] mx-auto">

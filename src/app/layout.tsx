@@ -111,6 +111,35 @@ export default async function RootLayout({
       className={`${plusJakarta.variable} ${cormorant.variable} ${notoSansDevanagari.variable} h-full antialiased`}
     >
       <head>
+        {/* Early Hindi Language Initialization for First-Time Visitors */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  var cookie = document.cookie;
+                  var hasGoogtrans = cookie.indexOf('googtrans=') !== -1;
+                  var storedLang = localStorage.getItem('pinddaan_lang');
+                  if (!hasGoogtrans && (!storedLang || storedLang === 'hi')) {
+                    var domain = window.location.hostname;
+                    var path = '; path=/;';
+                    document.cookie = 'googtrans=/en/hi' + path;
+                    if (domain && domain !== 'localhost' && domain.indexOf('127.0.0.1') === -1) {
+                      document.cookie = 'googtrans=/en/hi' + path + ' domain=' + domain + ';';
+                      document.cookie = 'googtrans=/en/hi' + path + ' domain=.' + domain + ';';
+                      var parts = domain.split('.');
+                      if (parts.length > 2) {
+                        var root = parts.slice(-2).join('.');
+                        document.cookie = 'googtrans=/en/hi' + path + ' domain=.' + root + ';';
+                      }
+                    }
+                    try { localStorage.setItem('pinddaan_lang', 'hi'); } catch(e){}
+                  }
+                } catch(e) {}
+              })();
+            `
+          }}
+        />
         <SchemaMarkup siteSettings={siteSettings} />
         {siteSettings?.searchConsoleTag && (
           <meta name="google-site-verification" content={siteSettings.searchConsoleTag.replace(/<meta.*content="|["\/>]/g, '').trim()} />

@@ -39,7 +39,7 @@ export const SUPPORTED_APP_LANGUAGES: Record<AppLangCode, LanguageInfo> = {
 };
 
 export function getActiveAppLanguage(): AppLangCode {
-  if (typeof document === 'undefined') return 'en';
+  if (typeof document === 'undefined') return 'hi';
   try {
     // 1. Check googtrans cookie: /en/xx or /xx
     const cookieMatch = document.cookie.match(/(?:^|;\s*)googtrans=(?:\/[a-zA-Z]+)?\/([a-zA-Z-]+)/);
@@ -53,11 +53,11 @@ export function getActiveAppLanguage(): AppLangCode {
   } catch (e) {
     // ignore
   }
-  return 'en';
+  return 'hi';
 }
 
 export function useAppLanguage() {
-  const [lang, setLang] = useState<AppLangCode>('en');
+  const [lang, setLang] = useState<AppLangCode>('hi');
 
   useEffect(() => {
     // Initial read
@@ -80,7 +80,7 @@ export function useAppLanguage() {
     };
   }, []);
 
-  const info = SUPPORTED_APP_LANGUAGES[lang] || SUPPORTED_APP_LANGUAGES.en;
+  const info = SUPPORTED_APP_LANGUAGES[lang] || SUPPORTED_APP_LANGUAGES.hi;
 
   return {
     lang,

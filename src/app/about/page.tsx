@@ -45,9 +45,9 @@ export default function AboutPage() {
             <span>Our Sacred Journey • Established 2025</span>
           </div>
 
-          <h1 className="text-3xl sm:text-5xl md:text-6xl font-display font-bold text-white tracking-tight leading-[1.12]">
+          <h1 className="text-3xl sm:text-5xl md:text-6xl font-display font-bold text-white tracking-tight leading-[1.25] py-1 overflow-visible">
             Guiding Sacred Journeys with <br className="hidden sm:inline" />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-[#F48D08] to-amber-300">
+            <span className="inline-block text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-[#F48D08] to-amber-300 py-1 overflow-visible">
               Faith, Trust & Technology
             </span>
           </h1>

@@ -95,7 +95,7 @@ export default function HeroSlider({ slides }: { slides: any[] }) {
           </div>
 
           {/* Hero H1 - Cormorant Garamond with Signature White + Gold Gradient Accent */}
-          <h1 className="text-[38px] sm:text-[52px] md:text-[64px] lg:text-[72px] font-display font-bold tracking-[-0.02em] leading-[1.08] drop-shadow-[0_2px_14px_rgba(0,0,0,0.85)]">
+          <h1 className="text-[38px] sm:text-[52px] md:text-[64px] lg:text-[72px] font-display font-bold tracking-[-0.02em] leading-[1.22] sm:leading-[1.25] md:leading-[1.28] py-1 overflow-visible drop-shadow-[0_2px_14px_rgba(0,0,0,0.85)]">
             {(() => {
               const title = currentSlide.title || '';
               const splitKeywords = [' At ', ' at ', ' In ', ' in ', ' & ', ' For ', ' for '];
@@ -106,8 +106,8 @@ export default function HeroSlider({ slides }: { slides: any[] }) {
                   const secondPart = title.substring(idx + kw.length).trim();
                   return (
                     <>
-                      <span className="block text-white">{firstPart}</span>
-                      <span className="block text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-[#F48D08] to-amber-300">
+                      <span className="block text-white pb-1">{firstPart}</span>
+                      <span className="block text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-[#F48D08] to-amber-300 py-1 overflow-visible">
                         {secondPart}
                       </span>
                     </>
@@ -119,15 +119,15 @@ export default function HeroSlider({ slides }: { slides: any[] }) {
                 const mid = Math.ceil(words.length / 2);
                 return (
                   <>
-                    <span className="block text-white">{words.slice(0, mid).join(' ')}</span>
-                    <span className="block text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-[#F48D08] to-amber-300">
+                    <span className="block text-white pb-1">{words.slice(0, mid).join(' ')}</span>
+                    <span className="block text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-[#F48D08] to-amber-300 py-1 overflow-visible">
                       {words.slice(mid).join(' ')}
                     </span>
                   </>
                 );
               }
               return (
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-[#F48D08] to-amber-300">
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-[#F48D08] to-amber-300 py-1 overflow-visible">
                   {title}
                 </span>
               );

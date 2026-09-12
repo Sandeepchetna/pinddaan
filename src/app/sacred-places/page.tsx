@@ -40,9 +40,9 @@ export default async function SacredPlacesPage() {
             <span>Panchakroshi Gaya Kshetra • 45 पावन वेदी महातीर्थ</span>
           </div>
 
-          <h1 className="text-3xl sm:text-4xl md:text-[50px] font-display font-bold tracking-[-0.02em] leading-[1.12]">
-            <span className="block text-[#2B2118]">Canonical Pilgrimage Shrines &</span>
-            <span className="block text-transparent bg-clip-text bg-gradient-to-r from-[#6f1d14] via-[#C6922E] to-[#F48D08]">
+          <h1 className="text-3xl sm:text-4xl md:text-[50px] font-display font-bold tracking-[-0.02em] leading-[1.25] py-1 overflow-visible">
+            <span className="block text-[#2B2118] pb-1">Canonical Pilgrimage Shrines &</span>
+            <span className="block text-transparent bg-clip-text bg-gradient-to-r from-[#6f1d14] via-[#C6922E] to-[#F48D08] py-1 overflow-visible">
               The 45 Sacred Vedis of Gaya Ji
             </span>
           </h1>

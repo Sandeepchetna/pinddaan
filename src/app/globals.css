@@ -81,10 +81,9 @@ h1,
   font-family: var(--font-display), 'Cormorant Garamond', Georgia, serif;
   font-weight: 700;
   font-size: var(--text-h1);
-  line-height: 1.15;
-  letter-spacing: -0.02em;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
   color: var(--color-primary-heading);
-  text-transform: capitalize;
 }
 
 h2,
@@ -93,8 +92,8 @@ h2,
   font-family: var(--font-display), 'Cormorant Garamond', Georgia, serif;
   font-weight: 600;
   font-size: var(--text-h2);
-  line-height: 1.15;
-  letter-spacing: -0.02em;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
   color: var(--color-primary-heading);
 }
 
@@ -104,7 +103,7 @@ h3,
   font-family: var(--font-display), 'Cormorant Garamond', Georgia, serif;
   font-weight: 600;
   font-size: var(--text-h3);
-  line-height: 1.25;
+  line-height: 1.3;
   letter-spacing: -0.01em;
   color: var(--color-primary-heading);
 }
@@ -148,17 +147,37 @@ p.prose-luxury {
 .font-hindi,
 :lang(hi),
 [lang="hi"],
-[lang="sa"] {
+[lang="sa"],
+.translated-ltr,
+.translated-rtl {
   font-family: var(--font-hindi), 'Noto Sans Devanagari', sans-serif !important;
 }
 
-/* Fix bg-clip-text clipping for letters with descenders (g, y, p, j, q) & Devanagari Hindi matras */
+/* Prevent Devanagari top matras (ि, ी, े, ै, ं, ँ) and sub-base matras (ु, ू, ृ) from clipping */
+:lang(hi) h1, :lang(hi) h2, :lang(hi) h3, :lang(hi) h4,
+[lang="hi"] h1, [lang="hi"] h2, [lang="hi"] h3, [lang="hi"] h4,
+.font-hindi h1, .font-hindi h2, .font-hindi h3, .font-hindi h4,
+.translated-ltr h1, .translated-ltr h2, .translated-ltr h3, .translated-ltr h4,
+.translated-ltr .font-display,
+.translated-ltr [class*="font-display"],
+html[lang="hi"] h1, html[lang="hi"] h2, html[lang="hi"] h3 {
+  line-height: 1.34 !important;
+  padding-top: 0.12em;
+  padding-bottom: 0.12em;
+  overflow: visible !important;
+}
+
+/* Fix bg-clip-text clipping for both top matras and bottom descenders */
 .bg-clip-text,
 [class*="bg-clip-text"] {
   -webkit-box-decoration-break: clone;
   box-decoration-break: clone;
-  padding-bottom: 0.15em;
+  padding-top: 0.22em !important;
+  padding-bottom: 0.22em !important;
+  margin-top: -0.22em !important;
+  margin-bottom: -0.22em !important;
   display: inline-block;
+  overflow: visible !important;
 }
 
 /* ==========================================================================

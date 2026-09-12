@@ -24,9 +24,10 @@ export const LANGUAGES: LanguageOption[] = [
   { code: 'ne', native: 'नेपाली', english: 'Nepali' }
 ];
 
-// Helper to safely extract language code from googtrans cookie
+// Helper to safely extract language code from googtrans cookie or localStorage (defaults to Hindi)
 function getActiveLanguageFromCookie(): LanguageOption {
-  if (typeof document === 'undefined') return LANGUAGES[0];
+  const hindiOption = LANGUAGES.find(l => l.code === 'hi') || LANGUAGES[1];
+  if (typeof document === 'undefined') return hindiOption;
   try {
     const match = document.cookie.match(/(?:^|;\s*)googtrans=(?:\/[a-zA-Z]+)?\/([a-zA-Z-]+)/);
     if (match && match[1]) {
@@ -34,10 +35,15 @@ function getActiveLanguageFromCookie(): LanguageOption {
       const found = LANGUAGES.find(l => l.code.toLowerCase() === code);
       if (found) return found;
     }
+    const saved = localStorage.getItem('pinddaan_lang')?.toLowerCase();
+    if (saved) {
+      const found = LANGUAGES.find(l => l.code.toLowerCase() === saved);
+      if (found) return found;
+    }
   } catch (e) {
     // ignore
   }
-  return LANGUAGES[0];
+  return hindiOption;
 }
 
 // Clear all Google Translate cookies thoroughly
@@ -85,14 +91,27 @@ function setGoogleTranslateCookie(langCode: string) {
 
 export default function LanguageConverter() {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedLang, setSelectedLang] = useState<LanguageOption>(LANGUAGES[0]);
+  const [selectedLang, setSelectedLang] = useState<LanguageOption>(
+    LANGUAGES.find(l => l.code === 'hi') || LANGUAGES[1]
+  );
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // 1. Sync state with active cookie
-    setSelectedLang(getActiveLanguageFromCookie());
+    // 1. Sync state with active cookie / preference (default Hindi)
+    const active = getActiveLanguageFromCookie();
+    setSelectedLang(active);
 
-    // 2. Ensure single #google_translate_element exists in body
+    // 2. If new visitor without cookie or preference, set Hindi default
+    const hasGoogtrans = document.cookie.includes('googtrans=');
+    const storedLang = localStorage.getItem('pinddaan_lang');
+    if (!hasGoogtrans && (!storedLang || storedLang === 'hi')) {
+      setGoogleTranslateCookie('hi');
+      try {
+        localStorage.setItem('pinddaan_lang', 'hi');
+      } catch (e) {}
+    }
+
+    // 3. Ensure single #google_translate_element exists in body
     if (!document.getElementById('google_translate_element')) {
       const div = document.createElement('div');
       div.id = 'google_translate_element';

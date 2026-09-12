@@ -80,7 +80,7 @@ export default function DevoteeVideoShowcase({ testimonials }: Props) {
             <span>SACRED DEVOTEE WITNESS • प्रत्यक्ष अनुभव</span>
           </div>
 
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-display font-bold text-[#2B2118] tracking-[-0.02em] leading-tight">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-display font-bold text-[#2B2118] tracking-[-0.02em] leading-[1.28] py-1 overflow-visible">
             Devotees Performing Pooja & Video Experiences
           </h2>
 

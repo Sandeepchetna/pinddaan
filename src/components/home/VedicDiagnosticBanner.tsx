@@ -26,7 +26,7 @@ export default function VedicDiagnosticBanner({ packages = [] }: { packages?: an
                 <span>AI VEDIC SHASTRA ENGINE 2.0</span>
               </div>
 
-              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-display font-bold text-white leading-tight">
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-display font-bold text-white leading-[1.28] py-1 overflow-visible">
                 {isHindi ? (
                   <>
                     पितरों के मोक्ष व कुल शांति हेतु{' '}
