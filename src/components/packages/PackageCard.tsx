@@ -36,18 +36,18 @@ export default function PackageCard({ pkg, defaultTier = 'GOLD' }: PackageCardPr
   const inclusionsText = isPlatinum && pkg.goldInclusions ? pkg.goldInclusions : pkg.inclusions;
   const inclusionsList = inclusionsText ? inclusionsText.split('\n').filter(Boolean) : [];
 
-  // Accurate, non-wrapping badge beside price
+  // Accurate, concise badge beside price
   const getPriceBadge = () => {
     const s = ((pkg.slug || '') + ' ' + (pkg.title || '')).toLowerCase();
     const is3Day = s.includes('3-day') || s.includes('3 day');
     const is1Day = s.includes('1-day') || s.includes('1 day');
 
     if (isPlatinum) {
-      if (is3Day || is1Day) return 'VIP Cab + Stay';
+      if (is3Day || is1Day) return 'VIP Cab + Hotel';
       return 'VIP Vidhi';
     } else {
-      if (is3Day || is1Day) return 'Auto + Stay';
-      return 'Essential Rites';
+      if (is3Day || is1Day) return 'Cab + Hotel';
+      return 'Essential Vidhi';
     }
   };
 
@@ -66,7 +66,7 @@ export default function PackageCard({ pkg, defaultTier = 'GOLD' }: PackageCardPr
 
   return (
     <div
-      className={`group bg-white rounded-[24px] p-5 sm:p-7 border transition-all duration-300 flex flex-col justify-between relative ${
+      className={`group bg-white rounded-[24px] p-5 sm:p-6 lg:p-5 xl:p-6.5 border transition-all duration-300 flex flex-col justify-between relative ${
         isPlatinum 
           ? 'border-2 border-[#C6922E] shadow-[0_12px_36px_rgba(198,146,46,0.14)] bg-gradient-to-b from-[#FAF7F2]/80 via-white to-[#FAF7F2]/40' 
           : 'border-[#EFE6D9] shadow-[0_4px_24px_rgba(43,33,24,0.05)] hover:shadow-[0_12px_32px_rgba(43,33,24,0.10)] hover:border-[#C6922E]/50 hover:-translate-y-1'
@@ -150,19 +150,19 @@ export default function PackageCard({ pkg, defaultTier = 'GOLD' }: PackageCardPr
           </button>
         </div>
 
-        {/* 4. Price Section */}
-        <div className="py-3 px-3.5 rounded-[16px] bg-[#FAF7F2]/80 border border-[#EFE6D9] flex items-center justify-between gap-2">
-          <div className="min-w-0">
-            <div className="text-2xl sm:text-[27px] font-body font-extrabold text-[#2B2118] tracking-tight leading-none mb-1">
-              ₹{price.toLocaleString('en-IN')}
-            </div>
-            <span className="text-[10px] font-body text-[#7A736A] font-medium block whitespace-nowrap">
+        {/* 4. Price Section - Zero-Overlap Multi-Row Luxury Layout */}
+        <div className="py-3 px-3.5 rounded-[18px] bg-[#FAF7F2]/90 border border-[#EFE6D9] space-y-1.5 shadow-sm">
+          <div className="flex items-center justify-between gap-2">
+            <span className="text-[11px] font-body text-[#7A736A] font-semibold tracking-wide">
               Fixed Vedic Dakshina
             </span>
+            <span className="text-[10.5px] font-body font-semibold text-[#C6922E] bg-white border border-[#EFE6D9] px-2.5 py-0.5 rounded-full shadow-sm whitespace-nowrap shrink-0">
+              {getPriceBadge()}
+            </span>
           </div>
-          <span className="text-[11px] font-body font-semibold text-[#C6922E] bg-white border border-[#EFE6D9] px-2.5 py-1 rounded-full shadow-sm whitespace-nowrap shrink-0">
-            {getPriceBadge()}
-          </span>
+          <div className="text-2xl sm:text-[28px] font-body font-extrabold text-[#2B2118] tracking-tight leading-none whitespace-nowrap">
+            ₹{price.toLocaleString('en-IN')}
+          </div>
         </div>
 
         {/* 5. Inclusions List (Even Height & Clear Checkmarks) */}
