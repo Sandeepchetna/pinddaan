@@ -9,6 +9,7 @@ import {
 } from 'lucide-react';
 import prisma from '@/lib/prisma';
 import PackageTierToggle from '@/components/packages/PackageTierToggle';
+import ZeroExtortionPledge from '@/components/common/ZeroExtortionPledge';
 
 const db = prisma as any;
 
@@ -142,6 +143,11 @@ export default async function PackagesPage() {
 
       {/* Client Component: Interactive GOLD vs PLATINUM Package Toggle Grid */}
       <PackageTierToggle initialPackages={packages} />
+
+      {/* Official Zero Extortion & Vedic Sanctity Pledge */}
+      <div className="max-w-7xl mx-auto">
+        <ZeroExtortionPledge />
+      </div>
 
       {/* Guarantees Ribbon */}
       <div className="max-w-7xl mx-auto bg-white p-8 rounded-3xl border border-amber-900/10 shadow-sm grid grid-cols-1 md:grid-cols-3 gap-6 text-center">

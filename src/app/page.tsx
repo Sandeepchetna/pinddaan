@@ -30,6 +30,7 @@ import PackageCard from '@/components/packages/PackageCard';
 import DevoteeVideoShowcase from '@/components/home/DevoteeVideoShowcase';
 import VedicDiagnosticBanner from '@/components/home/VedicDiagnosticBanner';
 import PilgrimAssistanceHub from '@/components/home/PilgrimAssistanceHub';
+import ZeroExtortionPledge from '@/components/common/ZeroExtortionPledge';
 
 const db = prisma as any;
 
@@ -256,6 +257,11 @@ export default async function HomePage() {
             <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
+      </section>
+
+      {/* Zero Extortion & Vedic Sanctity Guarantee Pledge */}
+      <section className="py-2 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        <ZeroExtortionPledge />
       </section>
 
       {/* AI Vedic Moksha & Pitru Dosha Diagnostic Showcase Banner */}
