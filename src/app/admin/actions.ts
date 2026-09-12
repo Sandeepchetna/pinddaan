@@ -313,7 +313,7 @@ export async function getPublicBookingData() {
         image: pkg.image || '/images/gaya_vishnupad.jpg',
         vedisCovered: pkg.vedisCovered?.join(', ') || 'Vishnupad, Falgu River, Akshayavat',
         panditType: pkg.panditType || 'Verified 4th-Gen Gaya Teerth Purohit',
-        foodIncluded: pkg.foodIncluded || 'Brahman Bhoj for Vedic Pandits'
+        foodIncluded: pkg.foodIncluded || 'Pure Satvik Meals'
       }));
     }
 

@@ -425,7 +425,7 @@ export const SACRED_VEDIS_MASTER: SacredVedi[] = [
     tagline: 'The Eternal Tree Blessed by Mother Sita for 21 Generations of Moksha',
     category: 'Akshayavat & Shakti',
     location: 'Akshayavat Complex, 1.5 km South of Vishnupad Temple',
-    description: 'The celebrated undying banyan tree that stood as the truthful witness when Mata Sita offered sand pinds for King Dasharatha. Blessed with immortality, performing the final Pind Daan, Tarpana, and Brahman Bhojan under its sprawling canopy bestows Akshaya (inexhaustible) peace upon 21 ancestral generations.',
+    description: 'The celebrated undying banyan tree that stood as the truthful witness when Mata Sita offered sand pinds for King Dasharatha. Blessed with immortality, performing the final Pind Daan, Tarpana, and ancestral Suphal blessings under its sprawling canopy bestows Akshaya (inexhaustible) peace upon 21 ancestral generations.',
     history: 'Padma Purana, Skanda Purana & Vayu Purana declare: "Pindam dattva vate chaiva pitrunam akshayam bhavet" — whatever is offered under Akshayavat never diminishes through cosmic dissolutions.',
     timings: '5:30 AM - 7:30 PM',
     visitorInfo: 'Surrounded by large marble pavilions where Gayawal Pandas grant the final Suphal (आशीर्वाद) certificate.',

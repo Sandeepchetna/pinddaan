@@ -135,7 +135,7 @@ model RitualPackage {
   exclusions             String?  @db.Text
   vedisCovered           String?  @db.Text
   panditType             String?  @default("Verified Gaya Panda")
-  foodIncluded           String?  @default("Brahman Bhoj Included")
+  foodIncluded           String?  @default("Pure Satvik Arrangements")
   image                  String?  @db.Text
   createdAt              DateTime @default(now())
 }

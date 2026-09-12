@@ -75,8 +75,8 @@ export default async function PackagesPage() {
         badge: 'MOST POPULAR',
         image: '/images/akshay_vat.jpg',
         shortDesc: 'Phalgu River are used to perform the early cleansing rites, tarpan, and the final immersion rituals required during the Tripindi Shradh process',
-        inclusions: 'Senior Jyotish & Vedic Karma-Kand Acharya in Gaya Ji\nAltar Rites with Wheat Sattu\nTripindi Homa with Ghee Ahutis on the Bank of Falgu River',
-        goldInclusions: 'Senior Jyotish & Vedic Karma-Kand Acharya in Gaya Ji\nAltar Rites with Wheat Sattu\nTripindi Homa with Ghee Ahutis on the Bank of Falgu River'
+        inclusions: 'Senior Jyotish & Vedic Karma-Kand Acharya in Gaya Ji\nAltar Rites with Wheat Sattu\nTripindi Homa with Ghee Ahutis on the Bank of Falgu River\nComplete Puja Samagri & Gotra Sankalp Included\nPure Vedic Ritual (No Pickup/Drop • No Food • No Stay)',
+        goldInclusions: 'Senior Jyotish & Vedic Karma-Kand Acharya in Gaya Ji\nAltar Rites with Wheat Sattu\nTripindi Homa with Ghee Ahutis on the Bank of Falgu River\nComplete Puja Samagri & Gotra Sankalp Included\nPure Vedic Ritual (No Pickup/Drop • No Food • No Stay)'
       },
       {
         id: 'p-4',
@@ -88,8 +88,8 @@ export default async function PackagesPage() {
         badge: 'SPECIALIZED REMEDY',
         image: '/images/gaya_drone.jpg',
         shortDesc: 'Specialized Vedic karma-kand performed at bank of falgu river near Vishnupad for souls who passed away unnaturally.',
-        inclusions: 'Senior Jyotish & Vedic Karma-Kand Acharya in Gaya Ji\nAltar Rites & Pind Daan with Wheat Sattu\nNarayan Bali Homa with Ghee Ahutis',
-        goldInclusions: 'Senior Jyotish & Vedic Karma-Kand Acharya in Gaya Ji\nAltar Rites & Pind Daan with Wheat Sattu\nNarayan Bali Homa with Ghee Ahutis'
+        inclusions: 'Senior Jyotish & Vedic Karma-Kand Acharya in Gaya Ji\nAltar Rites & Pind Daan with Wheat Sattu\nNarayan Bali Homa with Ghee Ahutis on Falgu Bank\nComplete Puja Samagri & Gotra Sankalp Included\nPure Vedic Ritual (No Pickup/Drop • No Food • No Stay)',
+        goldInclusions: 'Senior Jyotish & Vedic Karma-Kand Acharya in Gaya Ji\nAltar Rites & Pind Daan with Wheat Sattu\nNarayan Bali Homa with Ghee Ahutis on Falgu Bank\nComplete Puja Samagri & Gotra Sankalp Included\nPure Vedic Ritual (No Pickup/Drop • No Food • No Stay)'
       }
     ];
   }

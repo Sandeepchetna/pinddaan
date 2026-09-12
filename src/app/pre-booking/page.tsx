@@ -100,7 +100,7 @@ If the user specifies father/mother/navami/ekadashi/amavasya or an English date,
       badge: 'MOST POPULAR',
       shortDesc: 'Ideal for devotees visiting Gaya Ji for a single day to perform essential rites at Vishnupad Temple & Falgu River.',
       image: '/images/gaya_vishnupad.jpg',
-      inclusions: 'Verified Vishnupad Temple Teerth Panda\nComplete Vedic Samagri (Pind, Barley, Sesame, Milk, Honey)\nFalgu River & Vishnupad Temple Rites\nAkshayavat Thread Ceremony & Lineage Registration\nBrahman Bhoj for Vedic Brahmins',
+      inclusions: 'Verified Vishnupad Temple Teerth Panda\nComplete Vedic Samagri (Pind, Barley, Sesame, Milk, Honey)\nFalgu River & Vishnupad Temple Rites\nAkshayavat Thread Ceremony & Lineage Registration\nGau Seva & Gotra Sankalp Chanting',
       goldInclusions: 'VIP Senior Lineage Teerth Panda Assignment\nPrivate AC Cab Station Pickup & Drop\nComplete Vedic Samagri & Special Bhog Offerings\nFalgu River, Vishnupad Temple & Sita Kund Rites\nAkshayavat Thread Ceremony & Lineage Certificate\nPriority Temple Darshan Access'
     },
     {
@@ -124,8 +124,8 @@ If the user specifies father/mother/navami/ekadashi/amavasya or an English date,
       badge: 'MOST POPULAR',
       image: '/images/akshay_vat.jpg',
       shortDesc: 'Phalgu River are used to perform the early cleansing rites, tarpan, and the final immersion rituals required during the Tripindi Shradh process',
-      inclusions: 'Senior Jyotish & Vedic Karma-Kand Acharya in Gaya Ji\nAltar Rites with Wheat Sattu\nTripindi Homa with Ghee Ahutis on the Bank of Falgu River',
-      goldInclusions: 'Senior Jyotish & Vedic Karma-Kand Acharya in Gaya Ji\nAltar Rites with Wheat Sattu\nTripindi Homa with Ghee Ahutis on the Bank of Falgu River'
+      inclusions: 'Senior Jyotish & Vedic Karma-Kand Acharya in Gaya Ji\nAltar Rites with Wheat Sattu\nTripindi Homa with Ghee Ahutis on the Bank of Falgu River\nComplete Puja Samagri & Gotra Sankalp Included\nPure Vedic Ritual (No Pickup/Drop • No Food • No Stay)',
+      goldInclusions: 'Senior Jyotish & Vedic Karma-Kand Acharya in Gaya Ji\nAltar Rites with Wheat Sattu\nTripindi Homa with Ghee Ahutis on the Bank of Falgu River\nComplete Puja Samagri & Gotra Sankalp Included\nPure Vedic Ritual (No Pickup/Drop • No Food • No Stay)'
     },
     {
       slug: 'gaya-ji-narayan-bali-',
@@ -136,8 +136,8 @@ If the user specifies father/mother/navami/ekadashi/amavasya or an English date,
       badge: 'SPECIALIZED REMEDY',
       image: '/images/gaya_drone.jpg',
       shortDesc: 'Specialized Vedic karma-kand performed at bank of falgu river near Vishnupad for souls who passed away unnaturally.',
-      inclusions: 'Senior Jyotish & Vedic Karma-Kand Acharya in Gaya Ji\nAltar Rites & Pind Daan with Wheat Sattu\nNarayan Bali Homa with Ghee Ahutis',
-      goldInclusions: 'Senior Jyotish & Vedic Karma-Kand Acharya in Gaya Ji\nAltar Rites & Pind Daan with Wheat Sattu\nNarayan Bali Homa with Ghee Ahutis'
+      inclusions: 'Senior Jyotish & Vedic Karma-Kand Acharya in Gaya Ji\nAltar Rites & Pind Daan with Wheat Sattu\nNarayan Bali Homa with Ghee Ahutis on Falgu Bank\nComplete Puja Samagri & Gotra Sankalp Included\nPure Vedic Ritual (No Pickup/Drop • No Food • No Stay)',
+      goldInclusions: 'Senior Jyotish & Vedic Karma-Kand Acharya in Gaya Ji\nAltar Rites & Pind Daan with Wheat Sattu\nNarayan Bali Homa with Ghee Ahutis on Falgu Bank\nComplete Puja Samagri & Gotra Sankalp Included\nPure Vedic Ritual (No Pickup/Drop • No Food • No Stay)'
     }
   ]);
 
@@ -611,13 +611,41 @@ Dhanyawad! 🙏`;
                 }`}>
                   <div className="space-y-1">
                     <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider text-[#6f1d14] bg-white border border-amber-300">
-                      {isPlatinum ? <Crown className="w-3 h-3 text-amber-500" /> : <Award className="w-3 h-3 text-[#F48D08]" />}
-                      <span>{isPlatinum ? 'PLATINUM VIP RITUAL PLAN' : 'GOLD STANDARD RITUAL PLAN'}</span>
+                      {(() => {
+                        const s = ((activePackage?.slug || '') + ' ' + (activePackage?.title || '')).toLowerCase();
+                        const isNarayanOrTripindi = s.includes('narayan') || s.includes('tripindi') || s.includes('pitidosh') || s.includes('pitri');
+                        if (isNarayanOrTripindi) {
+                          return (
+                            <>
+                              <Sparkles className="w-3 h-3 text-[#C6922E]" />
+                              <span>VEDIC REMEDIAL RITUAL (विशुद्ध वैदिक अनुष्ठान)</span>
+                            </>
+                          );
+                        }
+                        return isPlatinum ? (
+                          <>
+                            <Crown className="w-3 h-3 text-amber-500" />
+                            <span>PLATINUM VIP RITUAL PLAN</span>
+                          </>
+                        ) : (
+                          <>
+                            <Award className="w-3 h-3 text-[#F48D08]" />
+                            <span>GOLD STANDARD RITUAL PLAN</span>
+                          </>
+                        );
+                      })()}
                     </div>
                     <p className="text-xs text-gray-600 font-medium">
-                      {isPlatinum 
-                        ? 'एसी कैब पिकअप, 3-स्टार होटल स्टे, वरिष्ठ तीर्थ पंडा व ब्राह्मण भोज शामिल।' 
-                        : 'विष्णुपद मंदिर व फल्गु नदी तट पर प्रामाणिक वैदिक पिंडदान सामग्री व पंडा दक्षिणा शामिल।'}
+                      {(() => {
+                        const s = ((activePackage?.slug || '') + ' ' + (activePackage?.title || '')).toLowerCase();
+                        const isNarayanOrTripindi = s.includes('narayan') || s.includes('tripindi') || s.includes('pitidosh') || s.includes('pitri');
+                        if (isNarayanOrTripindi) {
+                          return 'वरिष्ठ वैदिक कर्म-काण्ड आचार्य, संपूर्ण पूजा सामग्री, गोत्र संकल्प व फल्गु तट पर वैदिक हवन शामिल (नो पिकअप/ड्रॉप, नो भोजन, नो होटल स्टे)।';
+                        }
+                        return isPlatinum 
+                          ? 'एसी कैब पिकअप, होटल स्टे, वरिष्ठ तीर्थ पंडा व संपूर्ण प्रामाणिक सामग्री शामिल।' 
+                          : 'विष्णुपद मंदिर व फल्गु नदी तट पर प्रामाणिक वैदिक पिंडदान सामग्री व पंडा दक्षिणा शामिल।';
+                      })()}
                     </p>
                   </div>
 

@@ -32,12 +32,17 @@ export default function PackageCard({ pkg, defaultTier = 'GOLD' }: PackageCardPr
   }, [defaultTier]);
 
   const isPlatinum = tier === 'PLATINUM';
+  const isNarayanOrTripindi = (() => {
+    const s = ((pkg.slug || '') + ' ' + (pkg.title || '')).toLowerCase();
+    return s.includes('narayan') || s.includes('tripindi') || s.includes('pitidosh') || s.includes('pitri');
+  })();
   const price = isPlatinum && pkg.goldPriceINR ? pkg.goldPriceINR : pkg.priceINR;
   const inclusionsText = isPlatinum && pkg.goldInclusions ? pkg.goldInclusions : pkg.inclusions;
   const inclusionsList = inclusionsText ? inclusionsText.split('\n').filter(Boolean) : [];
 
   // Accurate, concise badge beside price
   const getPriceBadge = () => {
+    if (isNarayanOrTripindi) return 'Pure Puja (No Stay/Cab)';
     const s = ((pkg.slug || '') + ' ' + (pkg.title || '')).toLowerCase();
     const is3Day = s.includes('3-day') || s.includes('3 day');
     const is1Day = s.includes('1-day') || s.includes('1 day');
@@ -77,14 +82,14 @@ export default function PackageCard({ pkg, defaultTier = 'GOLD' }: PackageCardPr
       <div className="flex items-center justify-between gap-3 pb-3 border-b border-[#EFE6D9]/70">
         <span 
           title={pkg.badge || badgeLabel}
-          className="text-[10.5px] uppercase font-body font-bold px-3 py-1 rounded-full tracking-wider truncate max-w-[180px] sm:max-w-[200px] select-none bg-[#FAF7F2] text-[#C6922E] border border-[#EFE6D9]"
+          className="text-[10.5px] uppercase font-body font-bold px-3 py-1 rounded-full tracking-wider select-none bg-[#FAF7F2] text-[#C6922E] border border-[#EFE6D9]"
         >
           {badgeLabel}
         </span>
 
         <span className="text-[11px] font-body font-semibold text-[#7A736A] flex items-center gap-1 shrink-0">
           <Clock className="w-3.5 h-3.5 text-[#C6922E]" />
-          <span className="truncate max-w-[120px]">{pkg.duration}</span>
+          <span>{pkg.duration}</span>
         </span>
       </div>
 
@@ -108,16 +113,16 @@ export default function PackageCard({ pkg, defaultTier = 'GOLD' }: PackageCardPr
       {/* 3. Structured Content Body */}
       <div className="space-y-4 flex-1 flex flex-col justify-between">
         
-        {/* Title (Consistent 2-line min-height) */}
-        <div className="min-h-[52px] sm:min-h-[58px] flex items-center">
-          <h3 className="text-xl sm:text-[22px] font-display font-bold text-[#2B2118] group-hover:text-[#C6922E] transition-colors leading-[1.25] line-clamp-2">
+        {/* Title (Full Text, No Clamping) */}
+        <div className="flex items-center">
+          <h3 className="text-xl sm:text-[22px] font-display font-bold text-[#2B2118] group-hover:text-[#C6922E] transition-colors leading-[1.28]">
             {pkg.title}
           </h3>
         </div>
 
-        {/* Short Description (Consistent 3-line min-height) */}
-        <div className="min-h-[60px] sm:min-h-[66px] flex items-start">
-          <p className="text-[13px] sm:text-[13.5px] font-body text-[#5A5148] leading-relaxed line-clamp-3">
+        {/* Short Description (Full Text, No Clamping) */}
+        <div className="flex items-start">
+          <p className="text-[13px] sm:text-[13.5px] font-body text-[#5A5148] leading-relaxed">
             {pkg.shortDesc}
           </p>
         </div>
@@ -133,7 +138,7 @@ export default function PackageCard({ pkg, defaultTier = 'GOLD' }: PackageCardPr
                 : 'text-[#7A736A] hover:text-[#2B2118] hover:bg-white/60'
             }`}
           >
-            <span>Gold Plan</span>
+            <span>{isNarayanOrTripindi ? 'Vedic Vidhi' : 'Gold Plan'}</span>
           </button>
 
           <button
@@ -146,7 +151,7 @@ export default function PackageCard({ pkg, defaultTier = 'GOLD' }: PackageCardPr
             }`}
           >
             <Crown className="w-3.5 h-3.5 text-white shrink-0" />
-            <span>Platinum VIP</span>
+            <span>{isNarayanOrTripindi ? 'Complete Vidhi' : 'Platinum VIP'}</span>
           </button>
         </div>
 
@@ -165,21 +170,34 @@ export default function PackageCard({ pkg, defaultTier = 'GOLD' }: PackageCardPr
           </div>
         </div>
 
-        {/* 5. Inclusions List (Even Height & Clear Checkmarks) */}
+        {/* 5. Inclusions List (Full Text, No Clamping) */}
         <div className="space-y-2.5 pt-3 border-t border-[#EFE6D9]">
           <div className="flex items-center justify-between text-[11px] font-body font-bold text-[#7A736A] uppercase tracking-wider">
             <span>{isPlatinum ? '💎 Platinum Inclusions:' : '🌟 Key Inclusions:'}</span>
             <span className="text-[#C6922E]">{inclusionsList.length} Rites</span>
           </div>
 
-          <ul className="space-y-2 text-[12.5px] font-body text-[#5A5148] min-h-[140px]">
-            {inclusionsList.slice(0, 4).map((inc: string, idx: number) => (
+          <ul className="space-y-2.5 text-[12.5px] font-body text-[#5A5148]">
+            {inclusionsList.map((inc: string, idx: number) => (
               <li key={idx} className="flex items-start gap-2">
                 <CheckCircle2 className={`w-4 h-4 shrink-0 mt-0.5 ${isPlatinum ? 'text-[#C6922E]' : 'text-emerald-700'}`} />
-                <span className="leading-snug line-clamp-2">{inc}</span>
+                <span className="leading-snug">{inc}</span>
               </li>
             ))}
           </ul>
+
+          {/* Explicit Notice for Narayan Bali & Tripindi (No Pickup/Drop, No Food, No Stay) */}
+          {isNarayanOrTripindi && (
+            <div className="text-xs text-amber-900 bg-amber-50/90 border border-amber-300/80 rounded-xl p-2.5 font-medium flex items-start gap-2 mt-3 shadow-xs">
+              <span className="text-[#C6922E] font-bold text-sm shrink-0">ℹ️</span>
+              <div className="space-y-0.5">
+                <div className="font-bold text-amber-950">विशुद्ध वैदिक पूजा (Pure Ritual Only)</div>
+                <div className="text-[11px] text-amber-900/90 leading-tight">
+                  इस अनुष्ठान में पिकअप/ड्रॉप, भोजन और होटल स्टे शामिल नहीं है (No Pickup/Drop • No Food • No Hotel Stay)।
+                </div>
+              </div>
+            </div>
+          )}
         </div>
 
       </div>

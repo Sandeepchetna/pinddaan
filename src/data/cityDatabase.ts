@@ -362,7 +362,7 @@ export const CITY_DATABASE: Record<string, CityInfo> = {
     trainRoute: 'Sanghamitra Express (12295) and Anga Express connecting KSR Bengaluru (SBC) / Yesvantpur (YPR) directly to Gaya Junction.',
     travelTime: 'Flight: 2.5 hrs | Train: 34 hrs',
     popularRitual: '3-Day Complete Tri-Sthali & Gaya-Kashi Pilgrimage',
-    customNotes: 'Kannada and South Indian devotees observe sacred Bodhayana and Apastamba sutra traditions. Verified South Indian culinary arrangements (Brahmin Bhojan) provided.',
+    customNotes: 'Kannada and South Indian devotees observe sacred Bodhayana and Apastamba sutra traditions. Verified pure satvik culinary arrangements provided.',
     stationTips: 'Our driver meets you at Patna Airport or Gaya Jn with a personalized name placard and bottled mineral water.',
     nriSupport: false
   },
@@ -388,7 +388,7 @@ export const CITY_DATABASE: Record<string, CityInfo> = {
     trainRoute: 'Ganga Kaveri Express (12669) and Sanghamitra Express connecting Chennai Central (MAS) to Gaya corridor.',
     travelTime: 'Flight: 2.5 hrs | Train: 33 hrs',
     popularRitual: '3-Day Complete Tri-Sthali Pilgrimage',
-    customNotes: 'Tamil Vadama, Brahacharanam, and Vaishnava Iyengar/Iyer traditions observed with strict Madi protocol and authentic Brahmin bhojan.',
+    customNotes: 'Tamil Vadama, Brahacharanam, and Vaishnava Iyengar/Iyer traditions observed with strict Madi protocol and authentic satvik food arrangements.',
     stationTips: 'South Indian satvik meal protocol observed throughout the stay.',
     nriSupport: false
   },

@@ -49,7 +49,7 @@ export const GAYA_SACRED_STHALIS: GayaSacredSthali[] = [
     name: 'Akshayavat (The Immortal Banyan Tree)',
     hindiName: 'अक्षयवट (अमर वटवृक्ष)',
     tagline: 'The Eternal Tree Blessed by Mother Sita for 21 Generations',
-    description: 'The indestructible holy tree that witnessed Mother Sita’s sacred pind daan. Offering the final Pind and performing Brahman Bhojan here completes the Gaya pilgrimage, bestowing unbroken lineage peace.',
+    description: 'The indestructible holy tree that witnessed Mother Sita’s sacred pind daan. Offering the final Pind and receiving ancestral blessings here completes the Gaya pilgrimage, bestowing unbroken lineage peace.',
     image: '/images/akshay_vat.jpg',
     keySpots: ['Akshayavat Tree Altar', 'Gayawal Panda Mandap', 'Rukmini Kund', 'Prapitamaha Temple'],
     scripturalSignificance: 'Padma Purana: Rites concluded under the shade of Akshayavat remain inexhaustible (Akshaya) for cosmic eons.',
@@ -88,7 +88,6 @@ export const RITUAL_PACKAGES: RitualPackage[] = [
       'Dedicated 4th-Gen Vedic Teerth Purohit (Gaya Panda)',
       'All 3 Primary Sacred Sites (Falgu River, Vishnupad Mandir, Akshayavat)',
       '100% Pure Organic Samagri (Barley, Black Sesame, Desi Ghee, Gangotri Jal)',
-      'Brahman Bhoj for 5 Certified Vedic Brahmins',
       'Gau Seva (Cow feeding ceremony with Sankalp at Falgu bank)',
       'Private AC Transport from Hotel to all Gaya Ghats',
       'Live 4K Two-Way Stream for remote family members',
@@ -103,7 +102,7 @@ export const RITUAL_PACKAGES: RitualPackage[] = [
     image: 'https://images.unsplash.com/photo-1609766857041-ed402ea8069a?auto=format&fit=crop&w=800&q=80',
     gallery: [],
     templesCovered: ['Vishnupad Mandir', 'Akshayavat', 'Falgu Devghat', 'Sita Kund'],
-    foodIncluded: 'Brahman Bhoj for 5 Vedic Pandits',
+    foodIncluded: 'Satvik Arrangements',
     pickupIncluded: true,
     dropIncluded: true,
     panditType: '4th-Gen Vedic Teerth Purohit (Gaya Panda)',
@@ -135,7 +134,6 @@ export const RITUAL_PACKAGES: RitualPackage[] = [
       'Certified Gaya Teerth Purohit',
       'Ritual at Falgu Ghat & Vishnupad Temple',
       'Complete Organic Samagri Kit (Jau, Tila, Ghee)',
-      'Brahman Bhoj for 2 Vedic Pandits',
       'Gau Seva with Sankalp Chanting',
       'High-Resolution Photo/Video Proof',
       'Digital Completion Certificate'
@@ -148,7 +146,7 @@ export const RITUAL_PACKAGES: RitualPackage[] = [
     image: 'https://images.unsplash.com/photo-1548013146-72479768bada?auto=format&fit=crop&w=800&q=80',
     gallery: [],
     templesCovered: ['Vishnupad Mandir', 'Falgu Devghat'],
-    foodIncluded: 'Brahman Bhoj for 2 Vedic Pandits',
+    foodIncluded: 'Not Included',
     pickupIncluded: true,
     dropIncluded: false,
     panditType: 'Certified Gaya Teerth Purohit',
@@ -177,7 +175,7 @@ export const RITUAL_PACKAGES: RitualPackage[] = [
     inclusions: [
       'Senior Acharya & 2 Assisting Vedic Chanting Pandits',
       'All 48 Vedis in Gaya (Pretshila, Ramshila, Brahma Kund, Sita Kund, Akshayavat, Punpun)',
-      'Daily Brahman Bhoj (11 Brahmins daily)',
+      'Daily Gotra Sankalp & Panchabali Vidhi',
       'Daily Gau Seva & Fish/Crow feeding (Panchabali Vidhi)',
       'Daily 4K Live Broadcast & Recorded Family Video Vault',
       'VIP Temple Entry & Special Puja at Vishnupad Garbhagriha',
@@ -207,7 +205,7 @@ export const RITUAL_PACKAGES: RitualPackage[] = [
       'Senior Jyotish & Vedic Karma-Kand Acharya in Gaya Ji',
       'Pretshila Altar Rites & Pind Daan with Wheat Sattu',
       'Narayan Bali Homa with Ghee Ahutis',
-      'Brahman Bhoj for 3 Gaya Brahmins + Vastra Daan',
+      'Pure Vedic Ritual: No Pickup/Drop • No Food • No Hotel Stay',
       'Desi Gau Seva & Deep Daan at Falgu River',
       'Complete Video Recording & Verification Certificate'
     ],
@@ -234,7 +232,7 @@ export const RITUAL_PACKAGES: RitualPackage[] = [
       'Personalized Live Video Session (Two-Way Audio/Video over WebRTC)',
       'Direct Pandit chanting with live screen Devanagari Sanskrit translation',
       'Full Pind Daan at Vishnupad Temple & Falgu River',
-      'Brahman Bhoj for 3 Pandits & Gau Seva performed in your family name',
+      'Gau Seva & Special Gotra Sankalp performed in your family name',
       'Geo-Tagged Timestamped Proof Photos & Full Video Recording',
       'Cryptographically Verifiable Digital Certificate of Completion',
       'International Express Doorstep Delivery of Sacred Falgu Soil, Ganga Jal & Mahaprasad Kit'
@@ -687,7 +685,7 @@ export const FAQS = [
   },
   {
     question: 'What are the 3 Primary Sthalis (Tri-Sthali) in Gaya Ji?',
-    answer: 'The 3 essential sacred sthalis are: 1. Falgu River (Devghat & Sita Kund) for snana, tarpana, and sand pinds; 2. Lord Vishnupad Temple (Garbhagriha footprint) for main Pind Pradaan; and 3. Akshayavat (the eternal banyan tree blessed by Mother Sita) for concluding rites, Brahman Bhojan, and immortal blessings.'
+    answer: 'The 3 essential sacred sthalis are: 1. Falgu River (Devghat & Sita Kund) for snana, tarpana, and sand pinds; 2. Lord Vishnupad Temple (Garbhagriha footprint) for main Pind Pradaan; and 3. Akshayavat (the eternal banyan tree blessed by Mother Sita) for concluding rites and immortal blessings.'
   },
   {
     question: 'Can Pind Daan in Gaya Ji be performed remotely for NRIs and immobile devotees?',
@@ -695,7 +693,7 @@ export const FAQS = [
   },
   {
     question: 'How does PindDaanWale 2.0 prevent Panda extortion at Gaya Ghats?',
-    answer: 'We operate on a 100% pre-paid, all-inclusive pricing model in direct coordination with verified hereditary Gaya Pandas. Your package includes the Purohit Dakshina, Temple passes, organic Samagri, Brahman Bhoj, and Gau Seva. Devotees are strictly not required to pay any cash Dakshina at the altar.'
+    answer: 'We operate on a 100% pre-paid, all-inclusive pricing model in direct coordination with verified hereditary Gaya Pandas. Your package includes the Purohit Dakshina, Temple passes, organic Samagri, and Gau Seva. Devotees are strictly not required to pay any cash Dakshina at the altar.'
   },
   {
     question: 'What emergency and administration support is available during Pitru Paksha Mela in Gaya Ji?',
@@ -744,7 +742,7 @@ export const INITIAL_HERO_SLIDES: HeroSlide[] = [
     id: 'slide-3',
     badge: 'DISTRICT ADMIN & TEERTH PILGRIMAGE DESK GAYA',
     h1Title: 'Complete 3-Day Tri-Sthali Pilgrimage & VIP Temple Access',
-    description: 'Experience the complete Shradh parikrama across Falgu Devghat, Lord Vishnupad Mandir, and Akshayavat. Includes private AC transport, verified dharamshala/hotel stays, and 5-Brahmin bhoj.',
+    description: 'Experience the complete Shradh parikrama across Falgu Devghat, Lord Vishnupad Mandir, and Akshayavat. Includes private AC transport, verified dharamshala/hotel stays, and hereditary Purohit coordination.',
     ctaText: 'Explore Tri-Sthali Package',
     ctaLink: 'rituals',
     secondaryCtaText: 'Check Hotel Stays',
@@ -754,7 +752,7 @@ export const INITIAL_HERO_SLIDES: HeroSlide[] = [
     cards: [
       { title: '3-Day Parikrama', subtitle: 'All 3 Sacred Altars Covered' },
       { title: 'AC Hotel & Cab', subtitle: 'Private Ghat Transfers' },
-      { title: '5-Brahmin Bhoj', subtitle: 'Certified Vedic Pandits' }
+      { title: 'Verified Pandas', subtitle: 'Certified Vedic Pandits' }
     ],
     status: 'ACTIVE'
   }

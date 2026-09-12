@@ -189,7 +189,7 @@ const DEFAULT_PACKAGES = [
     title: '1-Day Essential Pind Daan',
     priceINR: 4500,
     shortDesc: 'Falgu River, Vishnupad & Akshayavat with verified hereditary panda.',
-    features: ['3 Sacred Vedis', 'Puja Samagri', 'Brahman Bhoj']
+    features: ['3 Sacred Vedis', 'Puja Samagri', 'Gotra Sankalp']
   },
   {
     slug: '3-day-complete-tri-sthali',
@@ -818,7 +818,7 @@ export default async function ArticleDetailPage({ params }: { params: Promise<{ 
                     </li>
                     <li className="flex items-center gap-1.5">
                       <CheckCircle2 className="w-3 h-3 text-emerald-600 shrink-0" />
-                      <span>Brahman Bhoj Included</span>
+                      <span>Gotra Sankalp & Dakshina</span>
                     </li>
                   </ul>
                 </div>
