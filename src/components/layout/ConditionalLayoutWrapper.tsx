@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { usePathname } from 'next/navigation';
+import WelcomeTrustModal from '@/components/common/WelcomeTrustModal';
 
 export default function ConditionalLayoutWrapper({
   navbar,
@@ -36,6 +37,8 @@ export default function ConditionalLayoutWrapper({
       {footer}
       {!isPreBooking && stickyMobileBar}
       {!isPreBooking && aiAgentWidget}
+      {!isPreBooking && <WelcomeTrustModal />}
     </div>
   );
 }
+
