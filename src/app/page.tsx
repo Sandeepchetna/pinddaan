@@ -173,6 +173,87 @@ export default async function HomePage() {
       {/* About Vishnupad Temple Showcase Section (Matching bihar.gov.in Screenshot) */}
       <VishnupadShowcase />
 
+      {/* Curated Ritual Packages Showcase with Inline GOLD & PLATINUM Switchers (Brought after Vishnupad section) */}
+      <section className="py-14 sm:py-20 px-4 sm:px-6 lg:px-8 max-w-[1400px] mx-auto space-y-12 sm:space-y-16">
+        <div className="text-center max-w-[720px] mx-auto space-y-4">
+          <span className="text-xs uppercase tracking-[0.2em] font-body font-semibold text-[#C6922E]">Transparent Sacred Dakshina • पारदर्शी दक्षिणा</span>
+          <h2 className="text-3xl sm:text-4xl md:text-[46px] font-display font-bold tracking-[-0.02em] text-[#2B2118] leading-[1.15]">
+            Curated Pind Daan Packages
+          </h2>
+          <p className="text-[#5A5148] text-base sm:text-lg font-body leading-relaxed max-w-[680px] mx-auto">
+            Choose between <strong className="text-[#2B2118]">GOLD PLAN</strong> for essential Vedic rites or <strong className="text-[#2B2118]">PLATINUM VIP PLAN</strong> for complete VIP chauffeur pickup, AC Deluxe to 4-Star Hotel & Resort stay & senior Teerth Panda care.
+          </p>
+        </div>
+
+        {/* Dynamic Package Cards (Live from Database) - All 4 in 1 single row on desktop! */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {(packages.length > 0 ? packages : [
+            {
+              slug: '1-day-essential-pind-daan',
+              title: '1-Day Essential Pind Daan',
+              duration: '1 Day (Approx 4-5 Hours)',
+              priceINR: 4500,
+              goldPriceINR: 7500,
+              badge: 'MOST POPULAR',
+              shortDesc: 'Ideal for devotees visiting Gaya Ji for a single day to perform essential rites at Vishnupad Temple & Falgu River.',
+              inclusions: 'Verified Vishnupad Temple Teerth Panda\nComplete Vedic Samagri\nFalgu River & Vishnupad Temple Rites\nAncestral Lineage Registration',
+              image: '/images/pind_daan_vidhi.jpg',
+              goldInclusions: 'VIP Senior Lineage Teerth Panda\nPrivate AC Cab Station/Hotel Pickup & Drop\nAC Deluxe to 4-Star Hotel & Resort Accommodations\nVIP Priority Temple Darshan Access'
+            },
+            {
+              slug: '3-day-complete-tri-sthali',
+              title: '3-Day Complete 45-Vedi Trail',
+              duration: '3 Days / 2 Nights',
+              priceINR: 12500,
+              goldPriceINR: 18500,
+              badge: 'RECOMMENDED',
+              image: '/images/gaya_vishnupad.jpg',
+              shortDesc: 'Comprehensive pilgrimage covering Vishnupad, Falgu River, Akshayavat Banyan, Pretshila, and Ramshila.',
+              inclusions: 'Dedicated Vishnupad Teerth Panda Escort\n2 Nights Hotel Accommodation\nPrivate AC Station Pickup & Drop\nAll 45-Vedi Sacred Site Visits',
+              goldInclusions: 'VIP Senior Lineage Teerth Panda Escort\n2 Nights AC Deluxe to 4-Star Hotel & Resort Stay + Meals\nPrivate Chauffeur AC SUV Transport\nOfficial Gold Lineage Certificate'
+            },
+            {
+              slug: 'pitidosh-puja-tripindi-shradh-',
+              title: 'PitiDosh Puja ( Tripindi Shradh)',
+              duration: '1 Day (4–5 Hours)',
+              priceINR: 10449,
+              goldPriceINR: 10433,
+              badge: 'MOST POPULAR',
+              image: '/images/akshay_vat.jpg',
+              shortDesc: 'Phalgu River are used to perform the early cleansing rites, tarpan, and the final immersion rituals required during the Tripindi Shradh process',
+              inclusions: 'Senior Jyotish & Vedic Karma-Kand Acharya in Gaya Ji\nAltar Rites with Wheat Sattu\nTripindi Homa with Ghee Ahutis on the Bank of Falgu River\nComplete Puja Samagri & Gotra Sankalp Included\nPure Vedic Ritual (No Pickup/Drop • No Food • No Stay)',
+              goldInclusions: 'Senior Jyotish & Vedic Karma-Kand Acharya in Gaya Ji\nAltar Rites with Wheat Sattu\nTripindi Homa with Ghee Ahutis on the Bank of Falgu River\nComplete Puja Samagri & Gotra Sankalp Included\nPure Vedic Ritual (No Pickup/Drop • No Food • No Stay)'
+            },
+            {
+              slug: 'gaya-ji-narayan-bali-',
+              title: 'Gaya Ji Narayan Bali',
+              duration: '1 Day (5–6 Hours)',
+              priceINR: 12499,
+              goldPriceINR: 12499,
+              badge: 'SPECIALIZED REMEDY',
+              image: '/images/gaya_drone.jpg',
+              shortDesc: 'Specialized Vedic karma-kand performed at bank of falgu river near Vishnupad for souls who passed away unnaturally.',
+              inclusions: 'Senior Jyotish & Vedic Karma-Kand Acharya in Gaya Ji\nAltar Rites & Pind Daan with Wheat Sattu\nNarayan Bali Homa with Ghee Ahutis on Falgu Bank\nComplete Puja Samagri & Gotra Sankalp Included\nPure Vedic Ritual (No Pickup/Drop • No Food • No Stay)',
+              goldInclusions: 'Senior Jyotish & Vedic Karma-Kand Acharya in Gaya Ji\nAltar Rites & Pind Daan with Wheat Sattu\nNarayan Bali Homa with Ghee Ahutis on Falgu Bank\nComplete Puja Samagri & Gotra Sankalp Included\nPure Vedic Ritual (No Pickup/Drop • No Food • No Stay)'
+            }
+          ]).map((pkg) => (
+            <PackageCard key={pkg.id || pkg.slug} pkg={pkg} defaultTier="GOLD" />
+          ))}
+        </div>
+
+        {/* PROMINENT BUTTON BELOW PACKAGES TO SEE ALL PACKAGES */}
+        <div className="pt-4 text-center">
+          <Link 
+            href="/packages"
+            className="inline-flex items-center gap-2 bg-[#F48D08] hover:bg-[#D97706] text-white px-8 py-4 rounded-full font-bold text-sm transition-all shadow-lg hover:shadow-xl hover:scale-105"
+          >
+            <Sparkles className="w-4 h-4 fill-current" />
+            <span>Explore All Pind Daan Packages ({packages.length > 0 ? packages.length : 4})</span>
+            <ArrowRight className="w-4 h-4" />
+          </Link>
+        </div>
+      </section>
+
       {/* AI Vedic Moksha & Pitru Dosha Diagnostic Showcase Banner */}
       <VedicDiagnosticBanner packages={packages} />
 
@@ -427,86 +508,7 @@ export default async function HomePage() {
 
       </section>
 
-      {/* Curated Ritual Packages Showcase with Inline GOLD & PLATINUM Switchers */}
-      <section className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 max-w-[1400px] mx-auto space-y-12 sm:space-y-16">
-        <div className="text-center max-w-[720px] mx-auto space-y-4">
-          <span className="text-xs uppercase tracking-[0.2em] font-body font-semibold text-[#C6922E]">Transparent Sacred Dakshina • पारदर्शी दक्षिणा</span>
-          <h2 className="text-3xl sm:text-4xl md:text-[46px] font-display font-bold tracking-[-0.02em] text-[#2B2118] leading-[1.15]">
-            Curated Pind Daan Packages
-          </h2>
-          <p className="text-[#5A5148] text-base sm:text-lg font-body leading-relaxed max-w-[680px] mx-auto">
-            Choose between <strong className="text-[#2B2118]">GOLD PLAN</strong> for essential Vedic rites or <strong className="text-[#2B2118]">PLATINUM VIP PLAN</strong> for complete VIP chauffeur pickup, AC Deluxe to 4-Star Hotel & Resort stay & senior Teerth Panda care.
-          </p>
-        </div>
 
-        {/* Dynamic Package Cards (Live from Database) - All 4 in 1 single row on desktop! */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {(packages.length > 0 ? packages : [
-            {
-              slug: '1-day-essential-pind-daan',
-              title: '1-Day Essential Pind Daan',
-              duration: '1 Day (Approx 4-5 Hours)',
-              priceINR: 4500,
-              goldPriceINR: 7500,
-              badge: 'MOST POPULAR',
-              shortDesc: 'Ideal for devotees visiting Gaya Ji for a single day to perform essential rites at Vishnupad Temple & Falgu River.',
-              inclusions: 'Verified Vishnupad Temple Teerth Panda\nComplete Vedic Samagri\nFalgu River & Vishnupad Temple Rites\nAncestral Lineage Registration',
-              image: '/images/pind_daan_vidhi.jpg',
-              goldInclusions: 'VIP Senior Lineage Teerth Panda\nPrivate AC Cab Station/Hotel Pickup & Drop\nAC Deluxe to 4-Star Hotel & Resort Accommodations\nVIP Priority Temple Darshan Access'
-            },
-            {
-              slug: '3-day-complete-tri-sthali',
-              title: '3-Day Complete 45-Vedi Trail',
-              duration: '3 Days / 2 Nights',
-              priceINR: 12500,
-              goldPriceINR: 18500,
-              badge: 'RECOMMENDED',
-              image: '/images/gaya_vishnupad.jpg',
-              shortDesc: 'Comprehensive pilgrimage covering Vishnupad, Falgu River, Akshayavat Banyan, Pretshila, and Ramshila.',
-              inclusions: 'Dedicated Vishnupad Teerth Panda Escort\n2 Nights Hotel Accommodation\nPrivate AC Station Pickup & Drop\nAll 45-Vedi Sacred Site Visits',
-              goldInclusions: 'VIP Senior Lineage Teerth Panda Escort\n2 Nights AC Deluxe to 4-Star Hotel & Resort Stay + Meals\nPrivate Chauffeur AC SUV Transport\nOfficial Gold Lineage Certificate'
-            },
-            {
-              slug: 'pitidosh-puja-tripindi-shradh-',
-              title: 'PitiDosh Puja ( Tripindi Shradh)',
-              duration: '1 Day (4–5 Hours)',
-              priceINR: 10449,
-              goldPriceINR: 10433,
-              badge: 'MOST POPULAR',
-              image: '/images/akshay_vat.jpg',
-              shortDesc: 'Phalgu River are used to perform the early cleansing rites, tarpan, and the final immersion rituals required during the Tripindi Shradh process',
-              inclusions: 'Senior Jyotish & Vedic Karma-Kand Acharya in Gaya Ji\nAltar Rites with Wheat Sattu\nTripindi Homa with Ghee Ahutis on the Bank of Falgu River\nComplete Puja Samagri & Gotra Sankalp Included\nPure Vedic Ritual (No Pickup/Drop • No Food • No Stay)',
-              goldInclusions: 'Senior Jyotish & Vedic Karma-Kand Acharya in Gaya Ji\nAltar Rites with Wheat Sattu\nTripindi Homa with Ghee Ahutis on the Bank of Falgu River\nComplete Puja Samagri & Gotra Sankalp Included\nPure Vedic Ritual (No Pickup/Drop • No Food • No Stay)'
-            },
-            {
-              slug: 'gaya-ji-narayan-bali-',
-              title: 'Gaya Ji Narayan Bali',
-              duration: '1 Day (5–6 Hours)',
-              priceINR: 12499,
-              goldPriceINR: 12499,
-              badge: 'SPECIALIZED REMEDY',
-              image: '/images/gaya_drone.jpg',
-              shortDesc: 'Specialized Vedic karma-kand performed at bank of falgu river near Vishnupad for souls who passed away unnaturally.',
-              inclusions: 'Senior Jyotish & Vedic Karma-Kand Acharya in Gaya Ji\nAltar Rites & Pind Daan with Wheat Sattu\nNarayan Bali Homa with Ghee Ahutis on Falgu Bank\nComplete Puja Samagri & Gotra Sankalp Included\nPure Vedic Ritual (No Pickup/Drop • No Food • No Stay)',
-              goldInclusions: 'Senior Jyotish & Vedic Karma-Kand Acharya in Gaya Ji\nAltar Rites & Pind Daan with Wheat Sattu\nNarayan Bali Homa with Ghee Ahutis on Falgu Bank\nComplete Puja Samagri & Gotra Sankalp Included\nPure Vedic Ritual (No Pickup/Drop • No Food • No Stay)'
-            }
-          ]).map((pkg) => (
-            <PackageCard key={pkg.id || pkg.slug} pkg={pkg} defaultTier="GOLD" />
-          ))}
-        </div>
-
-        {/* PROMINENT BUTTON BELOW PACKAGES TO SEE ALL PACKAGES */}
-        <div className="pt-4 text-center">
-          <Link 
-            href="/packages"
-            className="inline-flex items-center gap-2 bg-[#F48D08] hover:bg-[#D97706] text-white px-8 py-4 rounded-full font-bold text-sm transition-all shadow-lg hover:shadow-xl hover:scale-105"
-          >
-            <Sparkles className="w-4 h-4 fill-current" />
-            <span>Explore All Pind Daan Packages ({packages.length > 0 ? packages.length : 4})</span>
-            <ArrowRight className="w-4 h-4" />
-          </Link>
-        </div>
-      </section>
 
       {/* Devotee Video Testimonials & Pooja Showcase */}
       <DevoteeVideoShowcase testimonials={testimonials} />

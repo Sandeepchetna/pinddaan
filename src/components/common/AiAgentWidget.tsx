@@ -14,10 +14,13 @@ import {
   Phone, 
   Calendar, 
   Flame, 
-  FileCheck2 
+  FileCheck2,
+  Navigation
 } from 'lucide-react';
 import Link from 'next/link';
 import VedicDiagnosticModal from '@/components/ai/VedicDiagnosticModal';
+import GayaPilgrimCircuitModal from '@/components/common/GayaPilgrimCircuitModal';
+import { getPilgrimTranslation } from '@/data/multilingualPilgrimHub';
 import { 
   useAppLanguage, 
   AI_GREETINGS, 
@@ -206,10 +209,12 @@ function cleanTextForAudioSpeech(raw: string, lang: AppLangCode): string {
 
 export default function AiAgentWidget() {
   const { lang, info, isHindi, isEnglish } = useAppLanguage();
+  const t = getPilgrimTranslation(lang);
 
   const [isOpen, setIsOpen] = useState(false);
   const [chatOpen, setChatOpen] = useState(false);
   const [isDiagnosticOpen, setIsDiagnosticOpen] = useState(false);
+  const [isCircuitOpen, setIsCircuitOpen] = useState(false);
   const [inputMessage, setInputMessage] = useState('');
   const [isAILoading, setIsAILoading] = useState(false);
   const [isListening, setIsListening] = useState(false);
@@ -587,6 +592,19 @@ export default function AiAgentWidget() {
                 <span>{isHindi ? 'पिंडदान बुकिंग (Pre-Book)' : 'Pre-Book Pind Daan'}</span>
               </Link>
 
+              {/* Route & Govt Fare Guide Shortcut Button */}
+              <button
+                type="button"
+                onClick={() => {
+                  setIsCircuitOpen(true);
+                  setIsOpen(false);
+                }}
+                className="flex items-center gap-2.5 px-4 py-2.5 rounded-full bg-gradient-to-r from-amber-700 via-amber-600 to-amber-700 text-white font-bold text-xs shadow-2xl hover:scale-105 transition-all border border-amber-300/40 shrink-0 whitespace-nowrap active:scale-95 cursor-pointer"
+              >
+                <Navigation className="w-4 h-4 text-amber-200" />
+                <span>{t.routeAndFare}</span>
+              </button>
+
               <a
                 href="tel:+917463055338"
                 onClick={() => setIsOpen(false)}
@@ -816,6 +834,14 @@ export default function AiAgentWidget() {
       <VedicDiagnosticModal 
         isOpen={isDiagnosticOpen} 
         onClose={() => setIsDiagnosticOpen(false)} 
+      />
+
+      {/* Sacred Gaya Ji Circuit & Govt Fare Modal */}
+      <GayaPilgrimCircuitModal
+        isOpen={isCircuitOpen}
+        onClose={() => setIsCircuitOpen(false)}
+        isHindi={isHindi}
+        lang={lang}
       />
     </>
   );

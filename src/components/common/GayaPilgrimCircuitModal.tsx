@@ -11,13 +11,15 @@ import {
   ExternalLink, 
   ShieldCheck, 
   Info, 
-  Sparkles,
-  ChevronRight,
-  Accessibility,
-  Footprints,
-  Phone,
-  AlertTriangle
+  Sparkles, 
+  ChevronRight, 
+  Accessibility, 
+  Footprints, 
+  Phone, 
+  AlertTriangle 
 } from 'lucide-react';
+import { getPilgrimTranslation } from '@/data/multilingualPilgrimHub';
+import { useAppLanguage, AppLangCode } from '@/lib/useAppLanguage';
 
 export interface RouteStop {
   id: number;
@@ -246,7 +248,8 @@ export const GAYA_ROUTE_STOPS: RouteStop[] = [
 interface GayaPilgrimCircuitModalProps {
   isOpen: boolean;
   onClose: () => void;
-  isHindi: boolean;
+  isHindi?: boolean;
+  lang?: AppLangCode;
   initialStopId?: number;
 }
 
@@ -254,8 +257,12 @@ export default function GayaPilgrimCircuitModal({
   isOpen,
   onClose,
   isHindi,
+  lang,
   initialStopId = 1,
 }: GayaPilgrimCircuitModalProps) {
+  const { lang: appLang } = useAppLanguage();
+  const currentLang: AppLangCode = lang || appLang || (isHindi ? 'hi' : 'en');
+  const t = getPilgrimTranslation(currentLang);
   const [selectedStopId, setSelectedStopId] = useState<number>(initialStopId);
 
   if (!isOpen) return null;
@@ -279,10 +286,10 @@ export default function GayaPilgrimCircuitModal({
             </div>
             <div>
               <span className="text-[10px] sm:text-[11px] font-bold tracking-widest text-[#F48D08] uppercase block">
-                {isHindi ? 'पवित्र गया जी तीर्थ परिपथ' : 'SACRED GAYA JI CIRCUIT'}
+                {t.circuitTitle}
               </span>
               <h3 className="font-serif font-bold text-base sm:text-lg text-white">
-                {isHindi ? 'तीर्थ मार्ग, वेदी दर्शन व सरकारी किराया तालिका' : 'Pilgrimage Route Map & Official Fare Guide'}
+                {t.circuitSubtitle}
               </h3>
             </div>
           </div>
@@ -313,7 +320,7 @@ export default function GayaPilgrimCircuitModal({
                 <span className="w-4 h-4 rounded-full bg-black/20 text-[10px] flex items-center justify-center">
                   {stop.id}
                 </span>
-                <span>{isHindi ? stop.nameHi.split(' ')[0] : stop.nameEn.split(' ')[0]}</span>
+                <span>{currentLang === 'en' ? stop.nameEn.split(' ')[0] : stop.nameHi.split(' ')[0]}</span>
               </button>
             );
           })}
@@ -325,8 +332,8 @@ export default function GayaPilgrimCircuitModal({
           {/* Left Column: List of Route Stops (Desktop Only) */}
           <div className="hidden md:block md:col-span-4 border-r border-white/10 overflow-y-auto md:max-h-[calc(92vh-75px)] p-3 space-y-1.5 custom-scrollbar bg-black/20">
             <div className="px-2 py-1.5 text-[11px] font-bold text-gray-400 uppercase tracking-wider flex items-center justify-between">
-              <span>{isHindi ? 'तीर्थ पड़ाव सूची' : 'ROUTE STOPS'} ({GAYA_ROUTE_STOPS.length})</span>
-              <span className="text-[10px] text-[#F48D08]">क्लिक करें</span>
+              <span>{t.routeStops} ({GAYA_ROUTE_STOPS.length})</span>
+              <span className="text-[10px] text-[#F48D08]">{t.clickToSelect}</span>
             </div>
 
             {GAYA_ROUTE_STOPS.map((stop) => {
@@ -348,10 +355,10 @@ export default function GayaPilgrimCircuitModal({
                   </span>
                   <div className="flex-1 min-w-0">
                     <h4 className={`text-xs font-bold truncate ${isSelected ? 'text-amber-300' : 'text-gray-200'}`}>
-                      {isHindi ? stop.nameHi : stop.nameEn}
+                      {currentLang === 'en' ? stop.nameEn : stop.nameHi}
                     </h4>
                     <p className="text-[10px] text-gray-400 truncate mt-0.5">
-                      {isHindi ? stop.categoryHi : stop.categoryEn}
+                      {currentLang === 'en' ? stop.categoryEn : stop.categoryHi}
                     </p>
                   </div>
                   <ChevronRight className={`w-4 h-4 shrink-0 mt-1 transition-transform ${
@@ -370,15 +377,15 @@ export default function GayaPilgrimCircuitModal({
               <div>
                 <div className="flex items-center gap-2">
                   <span className="px-2.5 py-0.5 rounded-full bg-amber-500/20 border border-amber-500/40 text-[#F48D08] text-[10px] font-extrabold uppercase">
-                    Stop #{currentStop.id} • {isHindi ? currentStop.categoryHi : currentStop.categoryEn}
+                    Stop #{currentStop.id} • {currentLang === 'en' ? currentStop.categoryEn : currentStop.categoryHi}
                   </span>
                 </div>
                 <h3 className="font-serif font-extrabold text-lg sm:text-xl text-white mt-1">
-                  {isHindi ? currentStop.nameHi : currentStop.nameEn}
+                  {currentLang === 'en' ? currentStop.nameEn : currentStop.nameHi}
                 </h3>
                 <p className="text-xs text-gray-400 flex items-center gap-1 mt-0.5">
                   <MapPin className="w-3.5 h-3.5 text-[#F48D08] shrink-0" />
-                  <span>{isHindi ? currentStop.addressHi : currentStop.addressEn}</span>
+                  <span>{currentLang === 'en' ? currentStop.addressEn : currentStop.addressHi}</span>
                 </p>
               </div>
 
@@ -388,7 +395,7 @@ export default function GayaPilgrimCircuitModal({
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl bg-[#F48D08] hover:bg-[#D97706] text-white font-bold text-xs shadow-md active:scale-95 transition-all shrink-0"
               >
-                <span>{isHindi ? 'गूगल मैप्स पर देखें' : 'Open in Google Maps'}</span>
+                <span>{t.openGoogleMaps}</span>
                 <ExternalLink className="w-3.5 h-3.5" />
               </a>
             </div>
@@ -398,10 +405,10 @@ export default function GayaPilgrimCircuitModal({
               <div className="flex items-center justify-between">
                 <span className="text-[11px] font-extrabold tracking-wider text-amber-400 uppercase flex items-center gap-1.5">
                   <Car className="w-3.5 h-3.5 text-amber-500" />
-                  <span>{isHindi ? 'सरकारी मानक किराया दरें (ठगी से बचाव)' : 'GOVT APPROVED ONE-WAY FARE ESTIMATE'}</span>
+                  <span>{t.govtFareTitle}</span>
                 </span>
                 <span className="text-[10px] text-gray-400 bg-white/5 px-2 py-0.5 rounded-md">
-                  {isHindi ? 'ई-रिक्शा व ऑटो' : 'E-Rickshaw & Auto'}
+                  {t.erickshawAndAuto}
                 </span>
               </div>
 
@@ -414,18 +421,18 @@ export default function GayaPilgrimCircuitModal({
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between">
                       <span className="text-xs font-bold text-white">
-                        {isHindi ? 'गया रेलवे जंक्शन से' : 'Railway Station'}
+                        {t.fromRailwayStation}
                       </span>
                       <span className="text-[10px] text-amber-300 font-semibold">{currentStop.railwayDistance}</span>
                     </div>
                     <div className="flex items-center gap-3 mt-1.5 text-xs">
                       <div>
-                        <span className="text-[10px] text-gray-400 block">{isHindi ? 'शेयरिंग' : 'Shared'}</span>
+                        <span className="text-[10px] text-gray-400 block">{t.shared}</span>
                         <strong className="text-emerald-400 font-bold">{currentStop.railwayFareShared}</strong>
                       </div>
                       <div className="w-px h-6 bg-white/10" />
                       <div>
-                        <span className="text-[10px] text-gray-400 block">{isHindi ? 'निजी रिज़र्व' : 'Reserved Auto'}</span>
+                        <span className="text-[10px] text-gray-400 block">{t.reservedAuto}</span>
                         <strong className="text-amber-300 font-bold">{currentStop.railwayFareAuto}</strong>
                       </div>
                     </div>
@@ -440,18 +447,18 @@ export default function GayaPilgrimCircuitModal({
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between">
                       <span className="text-xs font-bold text-white">
-                        {isHindi ? 'सरकारी बस स्टैंड से' : 'Govt. Bus Stand'}
+                        {t.fromBusStand}
                       </span>
                       <span className="text-[10px] text-sky-300 font-semibold">{currentStop.busDistance}</span>
                     </div>
                     <div className="flex items-center gap-3 mt-1.5 text-xs">
                       <div>
-                        <span className="text-[10px] text-gray-400 block">{isHindi ? 'शेयरिंग' : 'Shared'}</span>
+                        <span className="text-[10px] text-gray-400 block">{t.shared}</span>
                         <strong className="text-emerald-400 font-bold">{currentStop.busFareShared}</strong>
                       </div>
                       <div className="w-px h-6 bg-white/10" />
                       <div>
-                        <span className="text-[10px] text-gray-400 block">{isHindi ? 'निजी रिज़र्व' : 'Reserved Auto'}</span>
+                        <span className="text-[10px] text-gray-400 block">{t.reservedAuto}</span>
                         <strong className="text-amber-300 font-bold">{currentStop.busFareAuto}</strong>
                       </div>
                     </div>
@@ -460,9 +467,7 @@ export default function GayaPilgrimCircuitModal({
               </div>
 
               <p className="text-[10px] text-amber-200/70 italic">
-                {isHindi 
-                  ? 'ℹ️ दरें जिला प्रशासन द्वारा निर्धारित मानक अनुसार हैं। रात्रि में अथवा अत्यधिक भीड़ में 10-20% अंतर संभव है।' 
-                  : 'ℹ️ Indicative fares as per district transport committee. Minor variation possible during peak rush hours.'}
+                {t.fareFootnote}
               </p>
             </div>
 
@@ -470,10 +475,10 @@ export default function GayaPilgrimCircuitModal({
             <div className="bg-white/[0.02] border border-white/10 rounded-2xl p-3.5 space-y-1.5">
               <h4 className="text-xs font-bold text-amber-400 flex items-center gap-1.5">
                 <Sparkles className="w-3.5 h-3.5 fill-current" />
-                <span>{isHindi ? 'धार्मिक महत्व व शास्त्र प्रमाण' : 'Religious Significance'}</span>
+                <span>{t.religiousSignificance}</span>
               </h4>
               <p className="text-xs text-gray-300 leading-relaxed">
-                {isHindi ? currentStop.significanceHi : currentStop.significanceEn}
+                {currentLang === 'en' ? currentStop.significanceEn : currentStop.significanceHi}
               </p>
             </div>
 
@@ -481,10 +486,10 @@ export default function GayaPilgrimCircuitModal({
             <div className="bg-white/[0.02] border border-white/10 rounded-2xl p-3.5 space-y-1.5">
               <h4 className="text-xs font-bold text-emerald-400 flex items-center gap-1.5">
                 <Accessibility className="w-3.5 h-3.5" />
-                <span>{isHindi ? 'वरिष्ठ नागरिक सुलभता व सीढ़ियों की जानकारी' : 'Senior Accessibility & Stepping Guide'}</span>
+                <span>{t.seniorAccessibility}</span>
               </h4>
               <p className="text-xs text-gray-300 leading-relaxed">
-                {isHindi ? currentStop.accessibilityHi : currentStop.accessibilityEn}
+                {currentLang === 'en' ? currentStop.accessibilityEn : currentStop.accessibilityHi}
               </p>
             </div>
 
@@ -493,7 +498,7 @@ export default function GayaPilgrimCircuitModal({
               <div className="bg-black/60 px-3.5 py-2 text-[11px] text-gray-400 flex items-center justify-between border-b border-white/10">
                 <span className="flex items-center gap-1.5">
                   <MapPin className="w-3.5 h-3.5 text-[#F48D08]" />
-                  <span>{isHindi ? 'लाइव उपग्रह नक्शा (सटीक लोकेशन)' : 'Live Satellite Map Location'}</span>
+                  <span>{t.liveSatelliteMap}</span>
                 </span>
                 <span className="text-[10px] text-amber-400 font-mono">{currentStop.lat.toFixed(4)}° N, {currentStop.lng.toFixed(4)}° E</span>
               </div>
@@ -512,7 +517,7 @@ export default function GayaPilgrimCircuitModal({
                   className="absolute bottom-3 right-3 inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white/95 hover:bg-white text-stone-950 font-extrabold text-xs shadow-2xl transition-all hover:scale-105 active:scale-95 border border-stone-200"
                 >
                   <Navigation className="w-3.5 h-3.5 text-blue-600 fill-blue-600" />
-                  <span>{isHindi ? 'गूगल मैप्स पर नेविगेट करें' : 'Open in Google Maps'}</span>
+                  <span>{t.navigateGoogleMaps}</span>
                   <ExternalLink className="w-3.5 h-3.5 text-stone-600" />
                 </a>
               </div>
@@ -522,12 +527,10 @@ export default function GayaPilgrimCircuitModal({
             <div className="bg-amber-950/20 border border-amber-500/30 rounded-2xl p-3.5 space-y-1.5 text-gray-300">
               <div className="flex items-center gap-1.5 text-amber-400 font-bold text-xs">
                 <AlertTriangle className="w-3.5 h-3.5 text-amber-500 shrink-0" />
-                <span>{isHindi ? 'महत्वपूर्ण सूचना एवं अस्वीकरण (Important Disclaimer)' : 'Important Information Notice & Disclaimer'}</span>
+                <span>{t.disclaimerTitle}</span>
               </div>
               <p className="leading-relaxed text-[10.5px] sm:text-[11px] text-gray-300">
-                {isHindi
-                  ? 'यह मार्गदर्शिका, वेदी सूची, सरकारी अनुमानित किराया व नक्शा विवरण केवल तीर्थ यात्रियों की सुविधा व मार्गदर्शन हेतु इंटरनेट, बिहार सरकार के पोर्टल (pinddaangaya.bihar.gov.in) तथा सार्वजनिक मुफ़्त API सेवाओं से संकलित किया गया है। PindDaanWale किसी परिवहन या तृतीय-पक्ष सेवा का संचालन नहीं करता है और न ही किराए में उतार-चढ़ाव, उपलब्धता अथवा ऑन-ग्राउंड सटीकता की पुष्टि के लिए कानूनी रूप से उत्तरदायी है। श्रद्धालु स्थानीय स्तर पर भी पुष्टि अवश्य करें।'
-                  : 'All circuit routes, indicative government fares, and map locations are compiled purely for pilgrim guidance and convenience from public internet resources, Bihar Govt portal (pinddaangaya.bihar.gov.in), and free open-source APIs. PindDaanWale does not operate public transport services and holds no legal liability or responsibility for fare fluctuations, route changes, or third-party service availability. Devotees are advised to verify locally.'}
+                {t.disclaimerBody}
               </p>
             </div>
 
@@ -539,7 +542,7 @@ export default function GayaPilgrimCircuitModal({
           <div className="flex items-center gap-2 text-gray-300 text-[11px] truncate w-full sm:w-auto">
             <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shrink-0" />
             <span className="truncate">
-              {isHindi ? 'वर्तमान पड़ाव:' : 'Viewing:'} <strong className="text-white">{isHindi ? currentStop.nameHi : currentStop.nameEn}</strong>
+              {t.viewing} <strong className="text-white">{currentLang === 'en' ? currentStop.nameEn : currentStop.nameHi}</strong>
             </span>
           </div>
 
@@ -551,7 +554,7 @@ export default function GayaPilgrimCircuitModal({
               className="flex-1 sm:flex-none inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-red-600 to-amber-600 hover:from-red-500 hover:to-amber-500 text-white font-extrabold text-xs shadow-lg transition-all active:scale-95"
             >
               <Navigation className="w-3.5 h-3.5 fill-current" />
-              <span>{isHindi ? 'गूगल मैप्स पर खोलें' : 'Open in Google Maps'}</span>
+              <span>{t.openGoogleMaps}</span>
               <ExternalLink className="w-3.5 h-3.5" />
             </a>
 
@@ -559,7 +562,7 @@ export default function GayaPilgrimCircuitModal({
               onClick={onClose}
               className="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-gray-300 hover:text-white font-semibold transition-colors shrink-0"
             >
-              {isHindi ? 'बंद करें' : 'Close Guide'}
+              {t.close}
             </button>
           </div>
         </div>

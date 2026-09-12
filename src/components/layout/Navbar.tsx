@@ -30,6 +30,7 @@ import GayaWeather from '@/components/layout/GayaWeather';
 import GayaPilgrimCircuitModal from '@/components/common/GayaPilgrimCircuitModal';
 import PilgrimEmergencyModal from '@/components/common/PilgrimEmergencyModal';
 import { useAppLanguage } from '@/lib/useAppLanguage';
+import { getPilgrimTranslation } from '@/data/multilingualPilgrimHub';
 
 interface NavbarProps {
   packages?: any[];
@@ -37,7 +38,8 @@ interface NavbarProps {
 }
 
 export default function Navbar({ packages = [], sacredPlaces = [] }: NavbarProps) {
-  const { isHindi } = useAppLanguage();
+  const { lang, isHindi } = useAppLanguage();
+  const t = getPilgrimTranslation(lang);
   const [activeMegaMenu, setActiveMegaMenu] = useState<string | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -98,7 +100,7 @@ export default function Navbar({ packages = [], sacredPlaces = [] }: NavbarProps
           
           <div className="flex items-center gap-1.5 sm:gap-2 text-[10px] sm:text-[11px] font-medium text-center sm:text-left">
             <span className="w-2 h-2 rounded-full bg-[#F48D08] animate-pulse shrink-0" />
-            <span>Pitripaksha Mela 2026: <strong>26 Sept – 10 Oct</strong> • Gaya Ji, Bihar</span>
+            <span>{t.melaHeader}: <strong>{t.melaDates}</strong></span>
           </div>
 
           <div className="flex items-center justify-center flex-wrap gap-2.5 sm:gap-3 text-[10px] sm:text-[11px]">
@@ -108,20 +110,20 @@ export default function Navbar({ packages = [], sacredPlaces = [] }: NavbarProps
               type="button"
               onClick={() => setIsCircuitModalOpen(true)}
               className="hidden md:inline-flex items-center gap-1 text-amber-300 hover:text-white transition-colors font-medium border-r border-white/20 pr-3 cursor-pointer"
-              title={isHindi ? 'तीर्थ परिपथ नक्शा व सरकारी किराया तालिका' : 'Pilgrim Route Map & Govt Fare Guide'}
+              title={t.circuitSubtitle}
             >
               <Navigation className="w-3 h-3 text-[#F48D08]" />
-              <span>{isHindi ? 'तीर्थ मार्ग व किराया' : 'Route & Fare'}</span>
+              <span>{t.routeAndFare}</span>
             </button>
 
             <button
               type="button"
               onClick={() => setIsEmergencyModalOpen(true)}
               className="inline-flex items-center gap-1 bg-red-600 hover:bg-red-700 text-white px-2.5 py-0.5 rounded-full font-bold transition-all text-[10px] shadow-sm cursor-pointer active:scale-95"
-              title={isHindi ? 'गया जिला प्रशासन आपातकालीन हेल्पलाइन' : '24x7 Gaya Emergency Helplines'}
+              title={t.emergencyTitle}
             >
               <ShieldAlert className="w-3 h-3 text-white" />
-              <span>{isHindi ? 'आपातकाल 24x7' : 'Emergency'}</span>
+              <span>{t.emergency}</span>
             </button>
 
             <a href="tel:+917463055338" className="hidden xl:flex items-center gap-1 hover:text-[#F48D08] transition-colors font-medium">
@@ -650,7 +652,7 @@ export default function Navbar({ packages = [], sacredPlaces = [] }: NavbarProps
           </div>
 
           <div className="flex items-center justify-between py-1 px-1">
-            <span className="text-[11px] text-gray-500 font-medium">{isHindi ? 'गया जी मौसम (लाइव):' : 'Gaya Live Weather:'}</span>
+            <span className="text-[11px] text-gray-500 font-medium">{t.gayaWeather}:</span>
             <GayaWeather className="flex items-center gap-1.5 text-xs text-stone-700 font-semibold bg-amber-50/80 px-2.5 py-1 rounded-lg border border-amber-200/60 cursor-pointer" />
           </div>
 
@@ -665,7 +667,7 @@ export default function Navbar({ packages = [], sacredPlaces = [] }: NavbarProps
               className="flex items-center justify-center gap-1.5 p-2.5 rounded-xl bg-amber-50 border border-amber-200/80 text-amber-900 font-bold text-[11px] shadow-sm active:scale-95 transition-transform"
             >
               <Navigation className="w-3.5 h-3.5 text-[#F48D08]" />
-              <span>{isHindi ? 'तीर्थ मार्ग व किराया' : 'Route & Fares'}</span>
+              <span>{t.routeAndFare}</span>
             </button>
 
             <button
@@ -677,7 +679,7 @@ export default function Navbar({ packages = [], sacredPlaces = [] }: NavbarProps
               className="flex items-center justify-center gap-1.5 p-2.5 rounded-xl bg-red-50 border border-red-200 text-red-700 font-bold text-[11px] shadow-sm active:scale-95 transition-transform"
             >
               <ShieldAlert className="w-3.5 h-3.5 text-red-600" />
-              <span>{isHindi ? 'आपातकाल 24x7' : 'Emergency SOS'}</span>
+              <span>{t.emergency}</span>
             </button>
           </div>
 
@@ -726,6 +728,7 @@ export default function Navbar({ packages = [], sacredPlaces = [] }: NavbarProps
         isOpen={isCircuitModalOpen}
         onClose={() => setIsCircuitModalOpen(false)}
         isHindi={isHindi}
+        lang={lang}
       />
 
       {/* Pilgrim Emergency & Safety Modal */}
@@ -733,6 +736,7 @@ export default function Navbar({ packages = [], sacredPlaces = [] }: NavbarProps
         isOpen={isEmergencyModalOpen}
         onClose={() => setIsEmergencyModalOpen(false)}
         isHindi={isHindi}
+        lang={lang}
       />
 
     </header>

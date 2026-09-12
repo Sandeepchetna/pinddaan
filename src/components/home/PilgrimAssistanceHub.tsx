@@ -17,18 +17,20 @@ import {
   LifeBuoy
 } from 'lucide-react';
 import { useAppLanguage } from '@/lib/useAppLanguage';
+import { getPilgrimTranslation } from '@/data/multilingualPilgrimHub';
 import GayaPilgrimCircuitModal from '@/components/common/GayaPilgrimCircuitModal';
 import PilgrimEmergencyModal from '@/components/common/PilgrimEmergencyModal';
 import GayaWeatherModal, { WeatherDetails } from '@/components/layout/GayaWeatherModal';
 
 export default function PilgrimAssistanceHub() {
-  const { isHindi } = useAppLanguage();
+  const { lang, isHindi } = useAppLanguage();
+  const t = getPilgrimTranslation(lang);
   const [isCircuitOpen, setIsCircuitOpen] = useState(false);
   const [isEmergencyOpen, setIsEmergencyOpen] = useState(false);
   const [isWeatherOpen, setIsWeatherOpen] = useState(false);
 
   const fallbackWeather: WeatherDetails = {
-    city: 'Gaya Ji',
+    city: t.cityName,
     temp: 32,
     feelsLike: 36,
     humidity: 68,
@@ -54,17 +56,13 @@ export default function PilgrimAssistanceHub() {
         <div className="text-center max-w-3xl mx-auto mb-8 sm:mb-12">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-[#F48D08] text-xs font-bold uppercase tracking-wider mb-3">
             <Compass className="w-3.5 h-3.5 animate-spin-slow" />
-            <span>{isHindi ? 'तीर्थ यात्री सुविधा व सुरक्षा हब' : 'PILGRIM ASSISTANCE & SAFETY HUB'}</span>
+            <span>{t.hubBadge}</span>
           </div>
           <h2 className="font-serif font-extrabold text-2xl sm:text-3xl md:text-4xl text-white tracking-tight">
-            {isHindi 
-              ? 'गया जी यात्रा मार्ग, तय सरकारी किराया व आपातकालीन सुरक्षा' 
-              : 'Gaya Ji Sacred Circuit, Govt Approved Fares & Pilgrim Safety'}
+            {t.hubTitle}
           </h2>
           <p className="text-xs sm:text-sm text-gray-300 mt-2.5 leading-relaxed">
-            {isHindi 
-              ? 'बाहर से आने वाले श्रद्धालुओं की सुविधा हेतु — किसी भी प्रकार की ठगी से बचें, सही समय पर पिंडदान करें और आपातकाल में तुरंत सहायता पाएं।' 
-              : 'Essential guidance for visiting devotees — avoid overcharging, perform rituals in scripture-prescribed muhurat, and get instant 24x7 emergency aid.'}
+            {t.hubSubtitle}
           </p>
         </div>
 
@@ -79,37 +77,33 @@ export default function PilgrimAssistanceHub() {
                   <Navigation className="w-6 h-6" />
                 </div>
                 <span className="text-[11px] font-bold text-amber-400 bg-amber-500/10 px-2.5 py-1 rounded-full border border-amber-500/30">
-                  9 प्रमुख तीर्थ वेदी
+                  {t.hubCard1Badge}
                 </span>
               </div>
 
               <h3 className="font-serif font-bold text-lg text-white mb-2 group-hover:text-[#F48D08] transition-colors">
-                {isHindi ? 'तीर्थ परिपथ व सरकारी किराया तालिका' : 'Sacred Circuit & Govt Fare Chart'}
+                {t.hubCard1Title}
               </h3>
               <p className="text-xs text-gray-300 leading-relaxed mb-4">
-                {isHindi 
-                  ? 'विष्णुपद, अक्षयवट, प्रेतशिला व सीताकुंड का सटीक नक्शा और गया जंक्शन से तय ई-रिक्शा/ऑटो किराया ताकि कोई आपसे मनमाना पैसा न ले।'
-                  : 'Interactive map of all 9 sacred sites with govt-approved shared & private auto fares from Gaya Railway Station & Bus Stand.'}
+                {t.hubCard1Desc}
               </p>
 
               {/* Quick Fare Snapshot */}
               <div className="bg-black/40 rounded-2xl p-3 border border-white/10 space-y-1.5 text-xs mb-4">
-                <div className="flex items-center justify-between text-gray-300 text-[11px]">
-                  <span>गया जंक्शन ➔ विष्णुपद मंदिर:</span>
-                  <strong className="text-emerald-400">₹25 शेयरिंग / ₹150 ऑटो</strong>
+                <div className="text-gray-300 text-[11px] leading-relaxed">
+                  <strong className="text-emerald-400">{t.hubCard1Snapshot1}</strong>
                 </div>
-                <div className="flex items-center justify-between text-gray-300 text-[11px]">
-                  <span>गया जंक्शन ➔ प्रेतशिला:</span>
-                  <strong className="text-emerald-400">₹50 शेयरिंग / ₹350 ऑटो</strong>
+                <div className="text-gray-300 text-[11px] leading-relaxed">
+                  <strong className="text-emerald-400">{t.hubCard1Snapshot2}</strong>
                 </div>
               </div>
             </div>
 
             <button
               onClick={() => setIsCircuitOpen(true)}
-              className="w-full flex items-center justify-center gap-2 py-3 rounded-2xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-stone-950 font-bold text-xs shadow-md transition-transform active:scale-95"
+              className="w-full flex items-center justify-center gap-2 py-3 rounded-2xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-stone-950 font-bold text-xs shadow-md transition-transform active:scale-95 cursor-pointer"
             >
-              <span>{isHindi ? 'नक्शा व किराया सूची खोलें' : 'View Interactive Map & Fares'}</span>
+              <span>{t.hubCard1Btn}</span>
               <ArrowRight className="w-4 h-4" />
             </button>
           </div>
@@ -123,27 +117,25 @@ export default function PilgrimAssistanceHub() {
                 </div>
                 <span className="text-[11px] font-bold text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded-full border border-emerald-500/30 flex items-center gap-1">
                   <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                  शास्त्रोक्त मुहूर्त
+                  {t.hubCard2Badge}
                 </span>
               </div>
 
               <h3 className="font-serif font-bold text-lg text-white mb-2 group-hover:text-amber-300 transition-colors">
-                {isHindi ? 'आज का पिंडदान शुभ मुहूर्त व मौसम' : 'Today\'s Sacred Vedic Muhurat'}
+                {t.hubCard2Title}
               </h3>
               <p className="text-xs text-gray-300 leading-relaxed mb-4">
-                {isHindi 
-                  ? 'गरुड़ पुराण अनुसार पिंडदान केवल अपराह्न काल में फलदायी होता है। गया जी के लाइव उपग्रह मौसम व आज के शास्त्रसम्मत मुहूर्त देखें।'
-                  : 'Pind Daan is most auspicious during Aparahna Kaal (afternoon). Check today\'s accurate Vedic time slots & live satellite weather.'}
+                {t.hubCard2Desc}
               </p>
 
               {/* Muhurat Badges */}
               <div className="bg-black/40 rounded-2xl p-3 border border-white/10 space-y-2 text-xs mb-4">
                 <div className="flex items-center justify-between">
-                  <span className="text-gray-400 text-[11px]">कुतुप काल (संकल्प):</span>
+                  <span className="text-gray-400 text-[11px]">{t.kutapMuhurat}:</span>
                   <strong className="text-amber-300 font-bold">11:36 AM – 12:24 PM</strong>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-gray-400 text-[11px]">अपराह्न काल (सर्वश्रेष्ठ):</span>
+                  <span className="text-gray-400 text-[11px]">{t.aparahnaKaal}:</span>
                   <strong className="text-emerald-400 font-extrabold">01:12 PM – 03:36 PM</strong>
                 </div>
               </div>
@@ -151,10 +143,10 @@ export default function PilgrimAssistanceHub() {
 
             <button
               onClick={() => setIsWeatherOpen(true)}
-              className="w-full flex items-center justify-center gap-2 py-3 rounded-2xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs border border-white/20 transition-transform active:scale-95"
+              className="w-full flex items-center justify-center gap-2 py-3 rounded-2xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs border border-white/20 transition-transform active:scale-95 cursor-pointer"
             >
               <Clock className="w-4 h-4 text-amber-400" />
-              <span>{isHindi ? 'मौसम व मुहूर्त विवरण देखें' : 'View Weather & Full Muhurat'}</span>
+              <span>{t.hubCard2Btn}</span>
             </button>
           </div>
 
@@ -166,27 +158,25 @@ export default function PilgrimAssistanceHub() {
                   <ShieldAlert className="w-6 h-6" />
                 </div>
                 <span className="text-[11px] font-bold text-red-400 bg-red-500/10 px-2.5 py-1 rounded-full border border-red-500/30">
-                  24x7 सरकारी नियंत्रण
+                  {t.hubCard3Badge}
                 </span>
               </div>
 
               <h3 className="font-serif font-bold text-lg text-white mb-2 group-hover:text-red-400 transition-colors">
-                {isHindi ? 'गया जिला प्रशासन हेल्पलाइन (SOS)' : 'District Administration SOS Hub'}
+                {t.hubCard3Title}
               </h3>
               <p className="text-xs text-gray-300 leading-relaxed mb-4">
-                {isHindi 
-                  ? 'खोए-पाए, मेडिकल इमरजेंसी (एम्बुलेंस 108), पुलिस सहायता (112) या ट्रेन जानकारी (139) हेतु 1-टैप सीधी कॉल सुविधा।'
-                  : 'One-tap verified emergency dialers for District Control Room, Free Ambulance (108), Police (112), and Railway Help (139).'}
+                {t.hubCard3Desc}
               </p>
 
               {/* Quick Contacts */}
               <div className="bg-black/40 rounded-2xl p-3 border border-white/10 space-y-1.5 text-xs mb-4">
                 <div className="flex items-center justify-between text-gray-300 text-[11px]">
-                  <span>जिला मेला नियंत्रण कक्ष:</span>
+                  <span>{t.districtControlRoom}:</span>
                   <strong className="text-amber-400">0631-2222500</strong>
                 </div>
                 <div className="flex items-center justify-between text-gray-300 text-[11px]">
-                  <span>निशुल्क एम्बुलेंस / पुलिस:</span>
+                  <span>{t.freeAmbulanceHospital} / {t.policeAndSecurity}:</span>
                   <strong className="text-red-400">108 / 112</strong>
                 </div>
               </div>
@@ -194,10 +184,10 @@ export default function PilgrimAssistanceHub() {
 
             <button
               onClick={() => setIsEmergencyOpen(true)}
-              className="w-full flex items-center justify-center gap-2 py-3 rounded-2xl bg-red-600 hover:bg-red-700 text-white font-bold text-xs shadow-md transition-transform active:scale-95"
+              className="w-full flex items-center justify-center gap-2 py-3 rounded-2xl bg-red-600 hover:bg-red-700 text-white font-bold text-xs shadow-md transition-transform active:scale-95 cursor-pointer"
             >
               <Phone className="w-4 h-4" />
-              <span>{isHindi ? 'सभी आपातकालीन नंबर देखें' : 'View All Emergency Contacts'}</span>
+              <span>{t.hubCard3Btn}</span>
             </button>
           </div>
 
@@ -206,10 +196,8 @@ export default function PilgrimAssistanceHub() {
         {/* Comprehensive Public Disclaimer */}
         <div className="mt-8 pt-6 border-t border-white/10 text-center max-w-4xl mx-auto text-[10.5px] sm:text-[11px] text-gray-400 leading-relaxed px-2">
           <p>
-            <strong className="text-amber-400 font-semibold">{isHindi ? 'सार्वजनिक सूचना व अस्वीकरण: ' : 'Public Notice & Disclaimer: '}</strong>
-            {isHindi
-              ? 'यहाँ प्रस्तुत तीर्थ परिपथ, अनुमानित सरकारी किराया तालिका, मौसम पूर्वानुमान व आपातकालीन हेल्पलाइन नंबर केवल श्रद्धालुओं के सामान्य मार्गदर्शन व सहायता हेतु सरकारी पोर्टलों (pinddaangaya.bihar.gov.in), सार्वजनिक इंटरनेट स्रोतों व ओपन-सोर्स APIs से संकलित किए गए हैं। PindDaanWale किसी परिवहन सेवा, वाहन चालक अथवा सरकारी हेल्पलाइन का प्रत्यक्ष संचालन नहीं करता है और न ही किसी तृतीय-पक्ष सेवा विफलता, समय विचलन या किराया भिन्नता के लिए कानूनी रूप से उत्तरदायी है।'
-              : 'All route maps, indicative fares, live weather forecasts, and emergency contacts are compiled for pilgrim guidance and convenience from public government portals (pinddaangaya.bihar.gov.in) and open-source APIs. PindDaanWale does not operate public transport or state emergency services and assumes no legal liability for fare fluctuations, service delays, or third-party variations.'}
+            <strong className="text-amber-400 font-semibold">{t.publicNoticeTitle}</strong>
+            {t.publicNoticeBody}
           </p>
         </div>
 
@@ -220,12 +208,14 @@ export default function PilgrimAssistanceHub() {
         isOpen={isCircuitOpen}
         onClose={() => setIsCircuitOpen(false)}
         isHindi={isHindi}
+        lang={lang}
       />
 
       <PilgrimEmergencyModal
         isOpen={isEmergencyOpen}
         onClose={() => setIsEmergencyOpen(false)}
         isHindi={isHindi}
+        lang={lang}
       />
 
       <GayaWeatherModal
@@ -233,6 +223,7 @@ export default function PilgrimAssistanceHub() {
         onClose={() => setIsWeatherOpen(false)}
         weather={fallbackWeather}
         isHindi={isHindi}
+        lang={lang}
       />
     </section>
   );

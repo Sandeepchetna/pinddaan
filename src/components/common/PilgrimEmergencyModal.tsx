@@ -15,14 +15,21 @@ import {
   MessageCircle,
   Clock
 } from 'lucide-react';
+import { getPilgrimTranslation } from '@/data/multilingualPilgrimHub';
+import { useAppLanguage, AppLangCode } from '@/lib/useAppLanguage';
 
 interface PilgrimEmergencyModalProps {
   isOpen: boolean;
   onClose: () => void;
-  isHindi: boolean;
+  isHindi?: boolean;
+  lang?: AppLangCode;
 }
 
-export default function PilgrimEmergencyModal({ isOpen, onClose, isHindi }: PilgrimEmergencyModalProps) {
+export default function PilgrimEmergencyModal({ isOpen, onClose, isHindi, lang }: PilgrimEmergencyModalProps) {
+  const { lang: appLang } = useAppLanguage();
+  const currentLang: AppLangCode = lang || appLang || (isHindi ? 'hi' : 'en');
+  const t = getPilgrimTranslation(currentLang);
+
   if (!isOpen) return null;
 
   return (
@@ -41,11 +48,11 @@ export default function PilgrimEmergencyModal({ isOpen, onClose, isHindi }: Pilg
               <div className="flex items-center gap-1.5">
                 <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
                 <span className="text-[10px] sm:text-[11px] font-bold tracking-widest text-red-400 uppercase">
-                  {isHindi ? '24x7 आपातकालीन सहायता हब' : '24x7 PILGRIM EMERGENCY & SOS'}
+                  {t.emergencyTitle}
                 </span>
               </div>
               <h3 className="font-serif font-bold text-sm sm:text-base md:text-lg text-white">
-                {isHindi ? 'गया जिला प्रशासन व श्रद्धालु सुरक्षा हेल्पलाइन' : 'Gaya District Administration & Safety Helplines'}
+                {t.emergencySubtitle}
               </h3>
             </div>
           </div>
@@ -66,9 +73,7 @@ export default function PilgrimEmergencyModal({ isOpen, onClose, isHindi }: Pilg
           <div className="flex items-start gap-2.5 p-3 rounded-2xl bg-red-950/40 border border-red-500/30 text-xs text-red-200">
             <AlertTriangle className="w-4 h-4 text-red-400 shrink-0 mt-0.5" />
             <p className="leading-relaxed text-[11px] sm:text-xs">
-              {isHindi 
-                ? 'यह सभी नंबर बिहार सरकार, गया जिला प्रशासन एवं मेला नियंत्रण कक्ष द्वारा आधिकारिक रूप से सत्यापित हैं। किसी भी संकट, खोए-पाए या मेडिकल इमरजेंसी में नीचे दिए गए नंबरों पर तुरंत सीधे कॉल करें।'
-                : 'All numbers are officially verified by Bihar Govt & Gaya District Administration. Tap any number to call immediately in case of emergency, medical need, or lost person.'}
+              {t.emergencyNotice}
             </p>
           </div>
 
@@ -81,10 +86,10 @@ export default function PilgrimEmergencyModal({ isOpen, onClose, isHindi }: Pilg
                 </span>
                 <div>
                   <h4 className="font-bold text-xs sm:text-sm text-white">
-                    {isHindi ? 'गया जिला प्रशासन मेला नियंत्रण कक्ष' : 'District Administration Control Room'}
+                    {t.districtControlRoom}
                   </h4>
                   <span className="text-[10px] sm:text-[11px] text-gray-400">
-                    {isHindi ? '24 घंटे केंद्रीय मेला प्रबंधन व सुरक्षा' : '24x7 Central Mela Command & Public Support'}
+                    {t.districtControlDesc}
                   </span>
                 </div>
               </div>
@@ -102,7 +107,7 @@ export default function PilgrimEmergencyModal({ isOpen, onClose, isHindi }: Pilg
                   <Phone className="w-3.5 h-3.5 text-amber-500 group-hover:scale-110 transition-transform" />
                   <span>0631-2222500</span>
                 </div>
-                <span className="text-[10px] text-amber-400 font-semibold">{isHindi ? 'कॉल करें' : 'Call'}</span>
+                <span className="text-[10px] text-amber-400 font-semibold">{t.callAction}</span>
               </a>
 
               <a
@@ -113,7 +118,7 @@ export default function PilgrimEmergencyModal({ isOpen, onClose, isHindi }: Pilg
                   <Phone className="w-3.5 h-3.5 text-amber-500 group-hover:scale-110 transition-transform" />
                   <span>9266628168</span>
                 </div>
-                <span className="text-[10px] text-amber-400 font-semibold">{isHindi ? 'कॉल करें' : 'Call'}</span>
+                <span className="text-[10px] text-amber-400 font-semibold">{t.callAction}</span>
               </a>
             </div>
           </div>
@@ -127,10 +132,10 @@ export default function PilgrimEmergencyModal({ isOpen, onClose, isHindi }: Pilg
                 </span>
                 <div>
                   <h4 className="font-bold text-xs sm:text-sm text-white">
-                    {isHindi ? 'निशुल्क एम्बुलेंस एवं अस्पताल' : 'Free Ambulance & Hospital Care'}
+                    {t.freeAmbulanceHospital}
                   </h4>
                   <span className="text-[10px] sm:text-[11px] text-gray-400">
-                    {isHindi ? 'सदर अस्पताल व ANMMCH मेडिकल कॉलेज गया' : 'Sadar Hospital & ANMMCH Medical College Gaya'}
+                    {t.freeAmbulanceDesc}
                   </span>
                 </div>
               </div>
@@ -143,7 +148,7 @@ export default function PilgrimEmergencyModal({ isOpen, onClose, isHindi }: Pilg
               >
                 <div className="flex items-center gap-2">
                   <Phone className="w-3.5 h-3.5 text-emerald-400 group-hover:scale-110 transition-transform" />
-                  <span>108 (निशुल्क एम्बुलेंस)</span>
+                  <span>108 ({t.freeAmbulanceHospital.split(' ')[0]})</span>
                 </div>
                 <span className="text-[10px] text-emerald-300 font-semibold">Toll Free</span>
               </a>
@@ -156,7 +161,7 @@ export default function PilgrimEmergencyModal({ isOpen, onClose, isHindi }: Pilg
                   <Phone className="w-3.5 h-3.5 text-emerald-400 group-hover:scale-110 transition-transform" />
                   <span>0631-2410339 (ANMMCH)</span>
                 </div>
-                <span className="text-[10px] text-emerald-300 font-semibold">{isHindi ? 'कॉल करें' : 'Call'}</span>
+                <span className="text-[10px] text-emerald-300 font-semibold">{t.callAction}</span>
               </a>
             </div>
           </div>
@@ -170,10 +175,10 @@ export default function PilgrimEmergencyModal({ isOpen, onClose, isHindi }: Pilg
                 </span>
                 <div>
                   <h4 className="font-bold text-xs sm:text-sm text-white">
-                    {isHindi ? 'पुलिस आपातकाल व विष्णुपद पर्यटक सहायता' : 'Police Emergency & Tourist Police'}
+                    {t.policeAndSecurity}
                   </h4>
                   <span className="text-[10px] sm:text-[11px] text-gray-400">
-                    {isHindi ? 'विष्णुपद थाना, सिविल लाइंस व मेला पुलिस कैंप' : 'Vishnupad Police Outpost & Mela Security'}
+                    {t.policeAndSecurityDesc}
                   </span>
                 </div>
               </div>
@@ -186,7 +191,7 @@ export default function PilgrimEmergencyModal({ isOpen, onClose, isHindi }: Pilg
               >
                 <div className="flex items-center gap-2">
                   <Phone className="w-3.5 h-3.5 text-sky-400 group-hover:scale-110 transition-transform" />
-                  <span>112 (अखिल भारतीय पुलिस)</span>
+                  <span>112 ({t.policeAndSecurity.split(' ')[0]})</span>
                 </div>
                 <span className="text-[10px] text-sky-300 font-semibold">Toll Free</span>
               </a>
@@ -197,7 +202,7 @@ export default function PilgrimEmergencyModal({ isOpen, onClose, isHindi }: Pilg
               >
                 <div className="flex items-center gap-2">
                   <Train className="w-3.5 h-3.5 text-sky-400 group-hover:scale-110 transition-transform" />
-                  <span>139 (रेलवे सुरक्षा व सहायता)</span>
+                  <span>139 (Railway Help)</span>
                 </div>
                 <span className="text-[10px] text-sky-300 font-semibold">Gaya Jn</span>
               </a>
@@ -210,12 +215,10 @@ export default function PilgrimEmergencyModal({ isOpen, onClose, isHindi }: Pilg
               <Users className="w-4 h-4 text-[#F48D08] shrink-0 mt-0.5" />
               <div>
                 <h5 className="text-xs font-bold text-white">
-                  {isHindi ? 'खोया-पाया सहायता केंद्र (Lost & Found Desk)' : 'Lost & Found Pilgrim Desk'}
+                  {t.lostAndFound}
                 </h5>
                 <p className="text-[11px] text-gray-300">
-                  {isHindi 
-                    ? 'गांधी मैदान व विष्णुपद मंदिर नियंत्रण कक्ष में लाउडस्पीकर उद्घोषणा की निशुल्क सुविधा उपलब्ध है।' 
-                    : 'Free public announcement available at Gandhi Maidan & Vishnupad Control Booths.'}
+                  {t.lostAndFoundDesc}
                 </p>
               </div>
             </div>
@@ -224,7 +227,7 @@ export default function PilgrimEmergencyModal({ isOpen, onClose, isHindi }: Pilg
               className="inline-flex items-center justify-center gap-1 px-3 py-1.5 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 font-bold text-xs shrink-0 border border-amber-500/40"
             >
               <Phone className="w-3 h-3" />
-              <span>{isHindi ? 'उद्घोषणा हेतु कॉल करें' : 'Call Desk'}</span>
+              <span>{t.lostAndFoundAction}</span>
             </a>
           </div>
 
@@ -235,10 +238,10 @@ export default function PilgrimEmergencyModal({ isOpen, onClose, isHindi }: Pilg
                 PinddaanWale Care
               </span>
               <h4 className="font-serif font-bold text-xs sm:text-sm text-white mt-1">
-                {isHindi ? 'पिंडदानवाले तीर्थ यात्री 24x7 ऑन-ग्राउंड सहायता' : 'PinddaanWale 24x7 Pilgrim Assistance'}
+                PinddaanWale 24x7 Pilgrim Assistance
               </h4>
               <p className="text-[11px] text-gray-300 mt-0.5">
-                {isHindi ? 'पंडित समन्वय, वेदी मार्गदर्शन या वाहन सहायता में सीधी सहायता।' : 'Direct help with purohit coordination, vedi navigation or cab support.'}
+                Direct purohit coordination, vedi navigation, and devotee care in Gaya Ji.
               </p>
             </div>
 
@@ -248,7 +251,7 @@ export default function PilgrimEmergencyModal({ isOpen, onClose, isHindi }: Pilg
                 className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#F48D08] hover:bg-[#D97706] text-white font-bold text-xs shadow-md transition-transform active:scale-95"
               >
                 <Phone className="w-3.5 h-3.5" />
-                <span>Call +91 7463055338</span>
+                <span>+91 7463055338</span>
               </a>
               <a
                 href="https://wa.me/917463055338?text=Namaste%21%20I%20am%20at%20Gaya%20Ji%20and%20need%20assistance."
@@ -263,13 +266,11 @@ export default function PilgrimEmergencyModal({ isOpen, onClose, isHindi }: Pilg
           </div>
 
           {/* Statutory Disclaimer */}
-          <div className="p-3 rounded-2xl bg-black/40 border border-white/10 text-[10.5px] text-gray-400 leading-relaxed">
+          <div className="p-3.5 rounded-2xl bg-black/40 border border-white/10 text-[10.5px] text-gray-400 leading-relaxed">
             <strong className="text-amber-400 font-semibold block mb-0.5">
-              {isHindi ? 'अस्वीकरण (Disclaimer):' : 'Disclaimer:'}
+              {t.disclaimerTitle}
             </strong>
-            {isHindi
-              ? 'यहाँ सूचीबद्ध सभी हेल्पलाइन नंबर बिहार सरकार एवं जिला प्रशासन के सार्वजनिक रिकॉर्ड्स से श्रद्धालुओं की सुविधा हेतु लिए गए हैं। PindDaanWale किसी सरकारी तंत्र या आपातकालीन सेवा का संचालक नहीं है। कॉल कनेक्ट होने में देरी, नेटवर्क विफलता या सेवाओं की ऑन-ग्राउंड उपलब्धता के लिए PindDaanWale जिम्मेदार नहीं होगा।'
-              : 'All helplines listed above are curated from public Bihar Govt & District Administration records for pilgrim assistance. PindDaanWale is an independent pilgrimage service and does not operate emergency infrastructure, bearing no liability for call routing delays, network issues, or third-party response times.'}
+            {t.emergencyDisclaimer}
           </div>
 
         </div>
@@ -277,13 +278,13 @@ export default function PilgrimEmergencyModal({ isOpen, onClose, isHindi }: Pilg
         {/* Footer */}
         <div className="px-4 sm:px-6 py-3 border-t border-white/10 bg-black/40 flex items-center justify-between shrink-0 text-xs">
           <span className="text-[10px] sm:text-[11px] text-gray-400">
-            {isHindi ? 'स्रोत: pinddaangaya.bihar.gov.in (बिहार सरकार)' : 'Source: pinddaangaya.bihar.gov.in (Govt of Bihar)'}
+            Source: pinddaangaya.bihar.gov.in (Govt of Bihar)
           </span>
           <button
             onClick={onClose}
             className="px-4 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-semibold transition-colors"
           >
-            {isHindi ? 'बंद करें' : 'Close'}
+            {t.close}
           </button>
         </div>
 

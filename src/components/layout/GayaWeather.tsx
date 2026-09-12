@@ -2,30 +2,31 @@
 
 import React, { useEffect, useState } from 'react';
 import { CloudSun, Sun, Cloud, CloudRain, CloudLightning, CloudFog } from 'lucide-react';
-import { useAppLanguage } from '@/lib/useAppLanguage';
+import { useAppLanguage, AppLangCode } from '@/lib/useAppLanguage';
+import { getPilgrimTranslation } from '@/data/multilingualPilgrimHub';
 import GayaWeatherModal, { WeatherDetails } from '@/components/layout/GayaWeatherModal';
 
-function getWeatherInfo(code: number, isHindi: boolean) {
+function getWeatherInfo(code: number, t: ReturnType<typeof getPilgrimTranslation>) {
   if (code === 0) {
-    return { label: isHindi ? 'साफ़' : 'Clear', Icon: Sun };
+    return { label: t.weatherClear, Icon: Sun };
   }
   if (code === 1 || code === 2) {
-    return { label: isHindi ? 'धूप/हल्के बादल' : 'Partly Clear', Icon: CloudSun };
+    return { label: t.weatherPartlyCloudy, Icon: CloudSun };
   }
   if (code === 3) {
-    return { label: isHindi ? 'बादल' : 'Cloudy', Icon: Cloud };
+    return { label: t.weatherOvercast, Icon: Cloud };
   }
   if (code === 45 || code === 48) {
-    return { label: isHindi ? 'कोहरा' : 'Foggy', Icon: CloudFog };
+    return { label: t.weatherFog, Icon: CloudFog };
   }
   if ((code >= 51 && code <= 67) || (code >= 80 && code <= 82)) {
-    return { label: isHindi ? 'बारिश' : 'Rain', Icon: CloudRain };
+    return { label: t.weatherRain, Icon: CloudRain };
   }
   if (code >= 95) {
-    return { label: isHindi ? 'तूफान' : 'Storm', Icon: CloudLightning };
+    return { label: t.weatherStorm, Icon: CloudLightning };
   }
 
-  return { label: isHindi ? 'साफ़' : 'Clear', Icon: CloudSun };
+  return { label: t.weatherClear, Icon: Sun };
 }
 
 interface GayaWeatherProps {
@@ -37,7 +38,8 @@ export default function GayaWeather({
   className = "hidden lg:flex items-center gap-1.5 text-gray-300 border-r border-white/20 pr-4 select-none cursor-pointer hover:text-white transition-colors",
   showDot = true
 }: GayaWeatherProps) {
-  const { isHindi } = useAppLanguage();
+  const { lang, isHindi } = useAppLanguage();
+  const t = getPilgrimTranslation(lang);
   const [weatherData, setWeatherData] = useState<WeatherDetails>({
     city: 'Gaya Ji',
     temp: 32,
@@ -88,9 +90,9 @@ export default function GayaWeather({
     };
   }, []);
 
-  const info = getWeatherInfo(weatherData.code, isHindi);
+  const info = getWeatherInfo(weatherData.code, t);
   const IconComponent = info.Icon;
-  const cityName = isHindi ? 'गया जी' : 'Gaya Ji';
+  const cityName = t.cityName;
 
   return (
     <>
@@ -100,7 +102,7 @@ export default function GayaWeather({
         role="button"
         tabIndex={0}
         onKeyDown={(e) => e.key === 'Enter' && setIsModalOpen(true)}
-        title={isHindi ? 'विस्तृत मौसम व आज का पिंडदान मुहूर्त देखने के लिए क्लिक करें' : 'Click to view detailed weather & Vedic Pind Daan Muhurat'}
+        title={t.vedicMuhuratTitle}
       >
         <IconComponent className="w-3.5 h-3.5 text-[#F48D08] shrink-0 group-hover:scale-110 transition-transform" />
         <span className="tabular-nums group-hover:underline underline-offset-2">
@@ -119,6 +121,7 @@ export default function GayaWeather({
         onClose={() => setIsModalOpen(false)}
         weather={weatherData}
         isHindi={isHindi}
+        lang={lang}
       />
     </>
   );
