@@ -77,9 +77,10 @@ The devotee is using the website in ENGLISH.
 
     // 2. DYNAMIC LIVE PACKAGES FROM HOSTINGER DATABASE
     let packageInfoText = `
-• 1-दिवसीय आवश्यक पिंडदान (1 Day): ₹4,500 — फल्गु नदी, विष्णुपद चरण एवं अक्षयवट (सम्पूर्ण पूजन सामग्री व पंडा दक्षिणा सहित)
-• 3-दिवसीय सम्पूर्ण त्रि-स्थली (3 Days): ₹12,500 — 45 वेदियाँ, सम्पूर्ण पार्वण श्राद्ध, एसी वाहन, होटल समन्वय
-• NRI रिमोट लाइव स्ट्रीम पिंडदान: ₹8,500 — विदेश में रहने वाले श्रद्धालुओं हेतु 4K लाइव संकल्प व डाक द्वारा प्रसाद
+• 1-दिवसीय पिंडदान (1 Day): ₹9,449 — फल्गु नदी, विष्णुपद चरण एवं अक्षयवट (कमरा, भोजन, ऑटो पिकअप व सम्पूर्ण पूजन सामग्री सहित)
+• 3-दिवसीय सम्पूर्ण त्रि-स्थली (3 Days / 3 Nights): ₹21,449 — 45 वेदियाँ, सम्पूर्ण पार्वण श्राद्ध, 3 रात एसी कमरा, ऑटो पिकअप, भोजन
+• पितृ दोष पूजा (त्रिपिंडी श्राद्ध): ₹10,449 — फल्गु नदी तट पर विशिष्ट त्रिपिंडी होम
+• गया जी नारायण बलि: ₹12,499 — अप्राकृतिक मृत्यु शांति हेतु वैदिक विधान
 `;
 
     try {
@@ -94,7 +95,7 @@ The devotee is using the website in ENGLISH.
 
         if (livePackages && livePackages.length > 0) {
           packageInfoText = livePackages.map((pkg: any) => {
-            return `• ${pkg.title} (${pkg.duration || 'तीर्थ विधि'}): ₹${pkg.priceINR?.toLocaleString('en-IN') || '4,500'} — ${pkg.shortDesc || ''}`;
+            return `• ${pkg.title} (${pkg.duration || 'तीर्थ विधि'}): ₹${pkg.priceINR?.toLocaleString('en-IN') || '9,449'} — ${pkg.shortDesc || ''}`;
           }).join('\n');
         }
       }

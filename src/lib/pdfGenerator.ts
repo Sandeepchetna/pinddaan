@@ -273,7 +273,7 @@ export function getBookingReceiptHTML(data: BookingPDFData): string {
               <div class="field"><span class="label">Visit Date:</span><span class="value">${data.preferredDate || 'To be confirmed'}</span></div>
               <div class="field"><span class="label">Hotel Stay Choice:</span><span class="value">${data.selectedHotelName || (isPlatinum ? 'AC Deluxe to 4-Star Hotel & Resort' : 'Standard Stay / Self')}</span></div>
               <div class="field"><span class="label">Station/Airport Pickup:</span><span class="value">${data.pickupFrom || (isPlatinum ? 'Private AC Cab Station Pickup (Car)' : 'Auto/Tempo Transfer')}</span></div>
-              <div class="field"><span class="label">Estimated Total Cost:</span><span class="value" style="color: #6f1d14; font-size: 13px;">₹${(data.estimatedCost || 4500).toLocaleString('en-IN')}</span></div>
+              <div class="field"><span class="label">Estimated Total Cost:</span><span class="value" style="color: #6f1d14; font-size: 13px;">₹${(data.estimatedCost || 9449).toLocaleString('en-IN')}</span></div>
             </div>
           </div>
 

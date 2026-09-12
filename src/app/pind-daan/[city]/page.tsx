@@ -118,7 +118,7 @@ export default async function CityPindDaanPage({ params }: { params: Promise<{ c
         postalCode: '823001',
         addressCountry: 'IN'
       },
-      priceRange: '₹4,500 - ₹14,500'
+      priceRange: '₹9,449 - ₹34,999'
     },
     areaServed: cityData.name,
     serviceType: 'Vedic Pind Daan & Ancestral Liberation Rites'
@@ -174,7 +174,7 @@ export default async function CityPindDaanPage({ params }: { params: Promise<{ c
         name: 'Are there hidden charges or extra demands at the ghats in Gaya Ji?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'No. With PindDaanWale, your dakshina is 100% fixed at booking (₹4,500 for 1-Day Essential, ₹12,500 for 3-Day Complete). All Vedic samagri, purohit honorarium, sacred vedi rituals, and boat seva are included. Not a single extra rupee will ever be demanded at the holy riverbank.'
+          text: 'No. With PindDaanWale, your dakshina is 100% fixed at booking (₹9,449 for 1-Day, ₹21,449 for 3-Day Complete with 3 nights stay). All Vedic samagri, purohit honorarium, sacred vedi rituals, and boat seva are included. No unexpected hidden charges or forced demands at the holy riverbank.'
         }
       },
       {

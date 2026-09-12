@@ -185,18 +185,18 @@ const DEFAULT_SACRED_PLACES = [
 
 const DEFAULT_PACKAGES = [
   {
-    slug: '1-day-essential-pind-daan',
+    slug: 'gaya-ji-1-day-pind-daan',
     title: '1-Day Essential Pind Daan',
-    priceINR: 4500,
-    shortDesc: 'Falgu River, Vishnupad & Akshayavat with verified hereditary panda.',
+    priceINR: 9449,
+    shortDesc: 'Falgu River, Vishnupad & Akshayavat with verified hereditary panda, room & auto pickup.',
     features: ['3 Sacred Vedis', 'Puja Samagri', 'Gotra Sankalp']
   },
   {
-    slug: '3-day-complete-tri-sthali',
-    title: '3-Day Tri-Sthali Pilgrimage',
-    priceINR: 12500,
-    shortDesc: 'Prayagraj Sangam, Kashi Manikarnika & all Gaya 45-Vedis with AC cab.',
-    features: ['Prayag + Kashi + Gaya', 'AC Cab & Hotel', 'All 45 Vedis']
+    slug: 'gaya-ji-complete-3-day-pind-daan-3-days-',
+    title: '3-Day Complete Pilgrimage',
+    priceINR: 21449,
+    shortDesc: 'All Gaya 45-Vedis with Auto/Tempo pickup, 3 nights AC stay & satvik food.',
+    features: ['All 45 Vedis', '3 Nights AC Stay', 'Auto/Tempo Transfers']
   },
   {
     slug: 'nri-remote-live-stream',

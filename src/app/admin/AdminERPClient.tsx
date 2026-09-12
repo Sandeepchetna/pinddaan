@@ -1193,7 +1193,7 @@ export default function AdminERPClient({ initialData, session }: AdminERPClientP
                                 Estimated Dakshina
                               </span>
                               <span className="text-xl sm:text-2xl font-bold font-mono text-amber-300 tracking-tight">
-                                ₹{(booking.estimatedCost || (booking.planTier === 'PLATINUM' ? 7500 : 4500)).toLocaleString('en-IN')}
+                                ₹{(booking.estimatedCost || (booking.planTier === 'PLATINUM' ? 13999 : 9449)).toLocaleString('en-IN')}
                               </span>
                             </div>
                           </div>

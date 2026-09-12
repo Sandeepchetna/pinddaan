@@ -91,7 +91,7 @@ export async function sendBookingConfirmationEmail(bookingData: {
               </tr>
               <tr>
                 <td style="padding: 10px 0; color: #6b7280;">Estimated Total Dakshina:</td>
-                <td style="padding: 10px 0; font-weight: bold; color: #059669; font-size: 16px;">₹${(bookingData.estimatedCost || 4500).toLocaleString('en-IN')}</td>
+                <td style="padding: 10px 0; font-weight: bold; color: #059669; font-size: 16px;">₹${(bookingData.estimatedCost || 9449).toLocaleString('en-IN')}</td>
               </tr>
             </table>
 

@@ -76,7 +76,7 @@ export const RITUAL_PACKAGES: RitualPackage[] = [
     slug: 'gaya-tri-sthali-complete-3day',
     title: 'Gaya Ji Complete Tri-Sthali Pind Daan (3 Days)',
     hindiTitle: 'गया जी संपूर्ण त्रि-स्थली महापिंड दान (3 दिवसीय)',
-    duration: '3 Days / 2 Nights',
+    duration: '3 Days / 3 Nights',
     mode: ['IN_PERSON', 'REMOTE_LIVE'],
     badge: 'Bihar Govt & Shastra Prescribed Vidhi',
     priceINR: 21000,

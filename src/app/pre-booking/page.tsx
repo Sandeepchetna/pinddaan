@@ -92,42 +92,46 @@ If the user specifies father/mother/navami/ekadashi/amavasya or an English date,
   // Packages & Settings from Public Database
   const [packagesList, setPackagesList] = useState<any[]>([
     {
-      slug: '1-day-essential-pind-daan',
-      title: '1-Day Essential Pind Daan',
-      priceINR: 4500,
-      goldPriceINR: 7500,
+      id: 'cmtk2km8j0014d9g3kfc9n6hf',
+      slug: 'gaya-ji-1-day-pind-daan',
+      title: 'Gaya Ji 1-Day Pind Daan',
+      priceINR: 9449,
+      goldPriceINR: 13999,
       duration: '1 Day (Approx 4-5 Hours)',
       badge: 'MOST POPULAR',
       shortDesc: 'Ideal for devotees visiting Gaya Ji for a single day to perform essential rites at Vishnupad Temple & Falgu River.',
       image: '/images/gaya_vishnupad.jpg',
-      inclusions: 'Verified Vishnupad Temple Teerth Panda\nComplete Vedic Samagri (Pind, Barley, Sesame, Milk, Honey)\nFalgu River & Vishnupad Temple Rites\nAkshayavat Thread Ceremony & Lineage Registration\nGau Seva & Gotra Sankalp Chanting',
-      goldInclusions: 'VIP Senior Lineage Teerth Panda Assignment\nPrivate AC Cab Station Pickup & Drop\nComplete Vedic Samagri & Special Bhog Offerings\nFalgu River, Vishnupad Temple & Sita Kund Rites\nAkshayavat Thread Ceremony & Lineage Certificate'
+      inclusions: 'Certified Gaya Teerth Purohit\nRitual at Falgu Ghat & Vishnupad Temple\nComplete Organic Samagri Kit (Jau, Tila, Ghee)\nAC 2 person private Room /stay & pure Satvik food\nGaya Ji Railway station | Airport pickup & drop (AUTO)\nPuja Samagri and Dakshina Included',
+      goldInclusions: 'Certified Gaya Teerth Purohit\nRitual at Falgu Ghat & Vishnupad Temple\nComplete Organic Samagri Kit (Jau, Tila, Ghee)\nAC Deluxe to 4-Star Hotel & Resort 2-Person Private Room Stay & Pure Satvik Food\nGaya Ji Railway station | Airport pickup & drop (CAB)\nPuja Samagri and Dakshina Included'
     },
     {
-      slug: '3-day-complete-tri-sthali',
-      title: '3-Day Complete Tri-Sthali Pilgrimage',
-      priceINR: 12500,
-      goldPriceINR: 18500,
-      duration: '3 Days / 2 Nights',
+      id: 'cmtk2km1f0012d9g3z6pb4w7k',
+      slug: 'gaya-ji-complete-3-day-pind-daan-3-days-',
+      title: 'Gaya Ji Complete 3-Day Pind Daan (3 Days)',
+      priceINR: 21449,
+      goldPriceINR: 34999,
+      duration: '3 Days / 3 Nights',
       badge: 'RECOMMENDED',
       shortDesc: 'Comprehensive pilgrimage covering Vishnupad, Falgu River, Akshayavat Banyan, Pretshila Hill, Ramshila, and Mangla Gauri Temple.',
       image: '/images/hero_cinematic.jpg',
-      inclusions: 'Dedicated Vishnupad Teerth Panda Escort\n2 Nights Hotel Accommodation in Gaya Ji\nStation Pickup & Drop Assistance\nAll Sacred Vedi Visits (Falgu, Vishnupad, Akshayavat)\nFull Ritual Samagri & Dakshina Included',
-      goldInclusions: 'VIP Senior Lineage Teerth Panda Escort\n2 Nights AC Deluxe to 4-Star Hotel & Resort Stay with Pure Veg Meals\nPrivate Chauffeur AC SUV Transport for Entire Pilgrimage\nVIP Escort across All 45 Sacred Vedis & Pretshila Hill\nOfficial Gotra Sankalp & Traditional Bhog Offering\nOfficial Teerth Lineage Certificate'
+      inclusions: 'Certified Gaya Teerth Purohit\nRitual at Falgu Ghat & Vishnupad Temple\nComplete Organic Samagri Kit (Jau, Tila, Ghee)\n3 Night AC 2 person private Room /stay & pure Satvik food\nGaya Ji Railway station | Airport pickup & drop (AUTO)\nPuja Samagri and Dakshina Included',
+      goldInclusions: 'Certified Gaya Teerth Purohit\nRitual at Falgu Ghat & Vishnupad Temple\nComplete Organic Samagri Kit (Jau, Tila, Ghee)\n3-Night AC Deluxe to 4-Star Hotel & Resort 2-Person Private Room Stay & Pure Satvik Food\nGaya Ji Railway station | Airport pickup & drop (CAB)\nPuja Samagri and Dakshina Included'
     },
     {
-      slug: 'pitidosh-puja-tripindi-shradh-',
-      title: 'PitiDosh Puja ( Tripindi Shradh)',
+      id: 'cmtjwg94x0005q63sj94zy7hx',
+      slug: 'pitra-dosh-puja-tripindi-shradh-',
+      title: 'Pitra Dosh Puja ( Tripindi Shradh)',
       priceINR: 10449,
-      goldPriceINR: 10433,
+      goldPriceINR: 10449,
       duration: '1 Day (4–5 Hours)',
       badge: 'MOST POPULAR',
       image: '/images/akshay_vat.jpg',
       shortDesc: 'Phalgu River are used to perform the early cleansing rites, tarpan, and the final immersion rituals required during the Tripindi Shradh process',
-      inclusions: 'Senior Jyotish & Vedic Karma-Kand Acharya in Gaya Ji\nAltar Rites with Wheat Sattu\nTripindi Homa with Ghee Ahutis on the Bank of Falgu River\nComplete Puja Samagri & Gotra Sankalp Included\nPure Vedic Ritual (No Pickup/Drop • No Food • No Stay)',
-      goldInclusions: 'Senior Jyotish & Vedic Karma-Kand Acharya in Gaya Ji\nAltar Rites with Wheat Sattu\nTripindi Homa with Ghee Ahutis on the Bank of Falgu River\nComplete Puja Samagri & Gotra Sankalp Included\nPure Vedic Ritual (No Pickup/Drop • No Food • No Stay)'
+      inclusions: 'Senior Jyotish & Vedic Karma-Kand Acharya in Gaya Ji\nAltar Rites with Wheat Sattu\nTripindi Homa with Ghee Ahutis on Bank of Falgu River\nComplete Puja Samagri & Gotra Sankalp Included\nPure Vedic Ritual (No Pickup/Drop • No Food • No Stay)',
+      goldInclusions: 'Senior Jyotish & Vedic Karma-Kand Acharya in Gaya Ji\nAltar Rites with Wheat Sattu\nTripindi Homa with Ghee Ahutis on Bank of Falgu River\nComplete Puja Samagri & Gotra Sankalp Included\nPure Vedic Ritual (No Pickup/Drop • No Food • No Stay)'
     },
     {
+      id: 'cmtk2kmmi0017d9g349fazyjq',
       slug: 'gaya-ji-narayan-bali-',
       title: 'Gaya Ji Narayan Bali',
       priceINR: 12499,
@@ -136,8 +140,8 @@ If the user specifies father/mother/navami/ekadashi/amavasya or an English date,
       badge: 'SPECIALIZED REMEDY',
       image: '/images/gaya_drone.jpg',
       shortDesc: 'Specialized Vedic karma-kand performed at bank of falgu river near Vishnupad for souls who passed away unnaturally.',
-      inclusions: 'Senior Jyotish & Vedic Karma-Kand Acharya in Gaya Ji\nAltar Rites & Pind Daan with Wheat Sattu\nNarayan Bali Homa with Ghee Ahutis on Falgu Bank\nComplete Puja Samagri & Gotra Sankalp Included\nPure Vedic Ritual (No Pickup/Drop • No Food • No Stay)',
-      goldInclusions: 'Senior Jyotish & Vedic Karma-Kand Acharya in Gaya Ji\nAltar Rites & Pind Daan with Wheat Sattu\nNarayan Bali Homa with Ghee Ahutis on Falgu Bank\nComplete Puja Samagri & Gotra Sankalp Included\nPure Vedic Ritual (No Pickup/Drop • No Food • No Stay)'
+      inclusions: 'Senior Jyotish & Vedic Karma-Kand Acharya in Gaya Ji\nAltar Rites & Pind Daan with Wheat Sattu\nNarayan Bali Homa with Ghee Ahutis on Falgu River Bank\nComplete Puja Samagri & Gotra Sankalp Included\nPure Vedic Ritual (No Pickup/Drop • No Food • No Stay)',
+      goldInclusions: 'Senior Jyotish & Vedic Karma-Kand Acharya in Gaya Ji\nAltar Rites & Pind Daan with Wheat Sattu\nNarayan Bali Homa with Ghee Ahutis on Falgu River Bank\nComplete Puja Samagri & Gotra Sankalp Included\nPure Vedic Ritual (No Pickup/Drop • No Food • No Stay)'
     }
   ]);
 
@@ -201,8 +205,8 @@ If the user specifies father/mother/navami/ekadashi/amavasya or an English date,
   const activePackage = packagesList.find(p => p.slug === selectedPackageSlug) || packagesList[0];
   const isPlatinum = selectedTier === 'PLATINUM';
   const price = isPlatinum 
-    ? (activePackage?.goldPriceINR || Math.round((activePackage?.priceINR || 4500) * 1.45)) 
-    : (activePackage?.priceINR || 4500);
+    ? (activePackage?.goldPriceINR || Math.round((activePackage?.priceINR || 9449) * 1.45)) 
+    : (activePackage?.priceINR || 9449);
 
   // Dynamic Inclusions list
   const activeInclusions = (isPlatinum && activePackage?.goldInclusions 

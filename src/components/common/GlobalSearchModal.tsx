@@ -60,10 +60,10 @@ export default function GlobalSearchModal({ isOpen, onClose }: GlobalSearchModal
     }
 
     const samplePackages = [
-      { slug: '1-day-essential-pind-daan', title: '1-Day Essential Pind Daan (₹4,500)', desc: 'Falgu River, Vishnupad Sanctum, & Akshayavat with verified Purohit & all samagri.' },
-      { slug: '3-day-complete-tri-sthali', title: '3-Day Complete Tri-Sthali (₹12,500)', desc: 'All 45 Sacred Vedis, AC transport, hotel coordination, and lineage bahi-khata.' },
-      { slug: '1-day-express-pind-daan', title: '1-Day Express VIP Pind Daan (₹7,500)', desc: 'Dedicated express panda escort, gotra sankalp, and complete Vedic samagri.' },
-      { slug: 'nri-remote-live-stream', title: 'NRI Remote Live Stream Pind Daan (₹8,500)', desc: 'Live 4K Zoom stream with personalized Gotra sankalp and worldwide prasadam shipping.' }
+      { slug: 'gaya-ji-1-day-pind-daan', title: '1-Day Pind Daan (₹9,449)', desc: 'Falgu River, Vishnupad Sanctum, & Akshayavat with verified Purohit, Auto pickup & AC room.' },
+      { slug: 'gaya-ji-complete-3-day-pind-daan-3-days-', title: '3-Day Complete Tri-Sthali (₹21,449)', desc: 'All 45 Sacred Vedis, Auto pickup, 3-Night AC stay, and lineage registration.' },
+      { slug: 'pitra-dosh-puja-tripindi-shradh-', title: 'Pitra Dosh Tripindi Shradh (₹10,449)', desc: 'Senior Jyotish & Vedic Karma-Kand Acharya on bank of Falgu River.' },
+      { slug: 'gaya-ji-narayan-bali-', title: 'Narayan Bali Puja (₹12,499)', desc: 'Specialized Vedic karma-kand on the bank of Falgu River near Vishnupad.' }
     ];
 
     const samplePlaces = [
@@ -80,7 +80,7 @@ export default function GlobalSearchModal({ isOpen, onClose }: GlobalSearchModal
     ];
 
     const sampleFaqs = [
-      { question: 'What is the cost of Pind Daan in Gaya Ji?', answer: '100% fixed transparent packages start from ₹4,500 (1-Day Essential) to ₹12,500 (3-Day Complete). Zero surprise charges.' },
+      { question: 'What is the cost of Pind Daan in Gaya Ji?', answer: '100% fixed transparent packages start from ₹9,449 (1-Day with room/auto) to ₹21,449 (3-Day / 3-Night Complete). Zero surprise charges.' },
       { question: 'Can daughters or women perform Pind Daan?', answer: 'Yes! Garuda Purana and Valmiki Ramayana (Mother Sita at Sita Kund) affirm women have full scriptural rights if there is no son.' },
       { question: 'What are the dates for Pitru Paksha 2026?', answer: 'Pitru Paksha 2026 begins on 26 September (Bhadrapada Purnima) and ends on 10 October 2026 (Sarva Pitru Amavasya).' }
     ];

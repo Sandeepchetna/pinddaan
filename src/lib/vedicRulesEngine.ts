@@ -96,12 +96,12 @@ export function assessVedicMokshaPath(
       englishReasoning: 'According to Garuda Purana (Pretakalpa), in cases of untimely demise or lingering ancestral afflictions, the departed soul attains complete liberation through PitiDosh Puja ( Tripindi Shradh) and Pretshila rites.'
     };
   } else if (answers.relation === 'both_parents' || answers.relation === 'grandparents' || answers.priorRituals === 'first_time_gaya') {
-    const livePkg = findLivePackage('tri-sthali', 12500, '3-Day Complete Tri-Sthali Pilgrimage');
+    const livePkg = findLivePackage('3-day', 21449, '3-Day Complete Tri-Sthali Pilgrimage');
     recommendedPackage = {
       id: 'tri_sthali_complete',
       title: livePkg.title,
       hindiTitle: '3-दिवसीय सम्पूर्ण त्रि-स्थली महातीर्थ पिंडदान',
-      slug: '3-day-complete-tri-sthali',
+      slug: 'gaya-ji-complete-3-day-pind-daan-3-days-',
       estimatedDakshina: livePkg.price,
       durationDays: 3,
       primaryVedicRitual: 'Parvana Shradh at all 45 Sacred Vedis',
@@ -109,12 +109,12 @@ export function assessVedicMokshaPath(
       englishReasoning: 'According to Vayu Purana (Gaya Mahatmya), first-time pilgrims should perform comprehensive Parvana Shradh across the 45-Vedi trail including the core Tri-Sthali (Falgu, Vishnupad, Akshayavat), liberating 101 generations of ancestors.'
     };
   } else {
-    const livePkg = findLivePackage('essential', 4500, '1-Day Essential Pind Daan');
+    const livePkg = findLivePackage('1-day', 9449, '1-Day Essential Pind Daan');
     recommendedPackage = {
       id: '1_day_essential',
       title: livePkg.title,
       hindiTitle: '1-दिवसीय आवश्यक पिंडदान (त्रि-स्थली)',
-      slug: '1-day-essential-pind-daan',
+      slug: 'gaya-ji-1-day-pind-daan',
       estimatedDakshina: livePkg.price,
       durationDays: 1,
       primaryVedicRitual: 'Ekoddishta / Parvana Shradh at Vishnupad & Falgu',

@@ -47,8 +47,8 @@ export default function ZeroExtortionPledge({ cityName }: { cityName?: string })
 
             <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
               {isHindi 
-                ? 'गया जी तीर्थ में श्रद्धालुओं के साथ होने वाले अनुचित मोलभाव, अतिरिक्त दक्षिणा की मांग और स्टेशन के बिचौलियों से हम आपकी पूर्ण रक्षा करते हैं। बुकिंग के समय तय राशि में सम्पूर्ण वैदिक पूजन सामग्री, प्रमाणित पुरोहित दक्षिणा, विष्णुपद मंदिर दर्शन व नौका सेवा सम्मिलित है। घाट पर ₹1 भी अतिरिक्त नहीं देना होगा।'
-                : 'We strictly protect pilgrims traveling to Gaya Ji from aggressive touts, unexpected price inflation at the ghats, and high-pressure bargaining. Your pre-booked package includes complete Vedic samagri, verified Vishnupad teerth purohit honorarium, sacred vedi rituals, and boat seva. Not a single extra rupee will ever be demanded at the holy riverbank.'}
+                ? 'गया जी तीर्थ में श्रद्धालुओं के साथ होने वाले अनुचित मोलभाव, अतिरिक्त दक्षिणा के दबाव और स्टेशन के बिचौलियों से हम आपकी पूर्ण रक्षा करते हैं। बुकिंग के समय तय राशि में सम्पूर्ण वैदिक पूजन सामग्री, प्रमाणित पुरोहित दक्षिणा, विष्णुपद मंदिर दर्शन व नौका सेवा सम्मिलित है। घाट पर कोई अप्रत्याशित या अनुचित मांग नहीं होगी।'
+                : 'We strictly protect pilgrims traveling to Gaya Ji from aggressive touts, unexpected price inflation at the ghats, and high-pressure bargaining. Your pre-booked package includes complete Vedic samagri, verified Vishnupad teerth purohit honorarium, sacred vedi rituals, and boat seva. No unexpected charges or forced demands at the holy riverbank.'}
             </p>
 
             <div className="pt-1 flex flex-wrap items-center gap-3 sm:gap-6 text-xs text-slate-400 font-medium">
@@ -121,7 +121,7 @@ export default function ZeroExtortionPledge({ cityName }: { cityName?: string })
                   {isHindi ? 'स्टेशन पर बहुत कम बताकर आकर्षित करना, फिर घाट पर "संकल्प दक्षिणा" के नाम पर ₹15,000–₹25,000 तक का दबाव बनाना।' : 'Lures with unrealistically cheap quotes at station, followed by high-pressure demands of ₹15,000–₹25,000 mid-ritual.'}
                 </td>
                 <td className="py-4 px-4 text-emerald-300 font-semibold bg-emerald-950/10">
-                  {isHindi ? '100% निश्चित एवं पारदर्शी मूल्य (₹4,500 आवश्यक / ₹12,500 त्रि-स्थली)। घाट पर ₹1 भी अतिरिक्त नहीं।' : '100% Fixed & Transparent (₹4,500 Essential / ₹12,500 Complete). Not a single extra rupee demanded at the riverbank.'}
+                  {isHindi ? '100% निश्चित एवं पारदर्शी मूल्य (₹9,449 1-दिवसीय / ₹21,449 3-दिवसीय)। कोई छिपा शुल्क या अनुचित मांग नहीं।' : '100% Fixed & Transparent (₹9,449 1-Day / ₹21,449 3-Day). No hidden charges or forced demands.'}
                 </td>
               </tr>
               <tr>

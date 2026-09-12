@@ -55,28 +55,28 @@ export default function Navbar({ packages = [], sacredPlaces = [] }: NavbarProps
   // Fallback packages if none provided
   const displayPackages = packages.length > 0 ? packages : [
     {
-      slug: '1-day-essential-pind-daan',
-      title: '1-Day Essential Pind Daan',
-      priceINR: 4500,
-      shortDesc: 'Single day package at Vishnupad & Falgu River. Fixed dakshina ₹4,500.'
+      slug: 'gaya-ji-1-day-pind-daan',
+      title: 'Gaya Ji 1-Day Pind Daan',
+      priceINR: 9449,
+      shortDesc: 'Single day package at Vishnupad & Falgu River with Auto/Tempo pickup & room. Fixed dakshina ₹9,449.'
     },
     {
-      slug: '3-day-complete-tri-sthali',
-      title: '3-Day Complete 45-Vedi Pilgrimage',
-      priceINR: 12500,
-      shortDesc: 'Complete 45-Vedi trail with Auto/Tempo and hotel stay. Fixed dakshina ₹12,500.'
+      slug: 'gaya-ji-complete-3-day-pind-daan-3-days-',
+      title: 'Gaya Ji Complete 3-Day Pind Daan (3 Days)',
+      priceINR: 21449,
+      shortDesc: 'Complete 45-Vedi trail with Auto/Tempo pickup and 3-night AC stay. Fixed dakshina ₹21,449.'
     },
     {
-      slug: 'pitidosh-puja-tripindi-shradh-',
-      title: 'PitiDosh Puja ( Tripindi Shradh)',
+      slug: 'pitra-dosh-puja-tripindi-shradh-',
+      title: 'Pitra Dosh Puja ( Tripindi Shradh)',
       priceINR: 10449,
-      shortDesc: 'Phalgu River early cleansing rites, tarpan, and Tripindi Homa with Ghee Ahutis.'
+      shortDesc: 'Phalgu River early cleansing rites, tarpan, and Tripindi Homa with Ghee Ahutis. Fixed dakshina ₹10,449.'
     },
     {
       slug: 'gaya-ji-narayan-bali-',
       title: 'Gaya Ji Narayan Bali',
       priceINR: 12499,
-      shortDesc: 'Specialized Vedic karma-kand on the bank of Falgu River near Vishnupad.'
+      shortDesc: 'Specialized Vedic karma-kand on the bank of Falgu River near Vishnupad. Fixed dakshina ₹12,499.'
     }
   ];
 
@@ -593,7 +593,7 @@ export default function Navbar({ packages = [], sacredPlaces = [] }: NavbarProps
                     >
                       <div className="font-bold flex items-center justify-between">
                         <span>{pkg.title}</span>
-                        <span className="text-[#6f1d14] font-mono font-bold">₹{pkg.priceINR?.toLocaleString('en-IN') || '4,500'}</span>
+                        <span className="text-[#6f1d14] font-mono font-bold">₹{pkg.priceINR?.toLocaleString('en-IN') || '9,449'}</span>
                       </div>
                       <div className="text-[11px] text-text-secondary font-normal line-clamp-1">{pkg.shortDesc}</div>
                     </Link>
