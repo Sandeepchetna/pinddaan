@@ -64,7 +64,7 @@ export default function Navbar({ packages = [], sacredPlaces = [] }: NavbarProps
       slug: '3-day-complete-tri-sthali',
       title: '3-Day Complete 45-Vedi Pilgrimage',
       priceINR: 12500,
-      shortDesc: 'Complete 45-Vedi trail with AC cab and hotel stay. Fixed dakshina ₹12,500.'
+      shortDesc: 'Complete 45-Vedi trail with Auto/Tempo and hotel stay. Fixed dakshina ₹12,500.'
     },
     {
       slug: 'pitidosh-puja-tripindi-shradh-',

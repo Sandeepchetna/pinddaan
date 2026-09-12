@@ -101,7 +101,7 @@ If the user specifies father/mother/navami/ekadashi/amavasya or an English date,
       shortDesc: 'Ideal for devotees visiting Gaya Ji for a single day to perform essential rites at Vishnupad Temple & Falgu River.',
       image: '/images/gaya_vishnupad.jpg',
       inclusions: 'Verified Vishnupad Temple Teerth Panda\nComplete Vedic Samagri (Pind, Barley, Sesame, Milk, Honey)\nFalgu River & Vishnupad Temple Rites\nAkshayavat Thread Ceremony & Lineage Registration\nGau Seva & Gotra Sankalp Chanting',
-      goldInclusions: 'VIP Senior Lineage Teerth Panda Assignment\nPrivate AC Cab Station Pickup & Drop\nComplete Vedic Samagri & Special Bhog Offerings\nFalgu River, Vishnupad Temple & Sita Kund Rites\nAkshayavat Thread Ceremony & Lineage Certificate\nPriority Temple Darshan Access'
+      goldInclusions: 'VIP Senior Lineage Teerth Panda Assignment\nPrivate AC Cab Station Pickup & Drop\nComplete Vedic Samagri & Special Bhog Offerings\nFalgu River, Vishnupad Temple & Sita Kund Rites\nAkshayavat Thread Ceremony & Lineage Certificate'
     },
     {
       slug: '3-day-complete-tri-sthali',
@@ -113,7 +113,7 @@ If the user specifies father/mother/navami/ekadashi/amavasya or an English date,
       shortDesc: 'Comprehensive pilgrimage covering Vishnupad, Falgu River, Akshayavat Banyan, Pretshila Hill, Ramshila, and Mangla Gauri Temple.',
       image: '/images/hero_cinematic.jpg',
       inclusions: 'Dedicated Vishnupad Teerth Panda Escort\n2 Nights Hotel Accommodation in Gaya Ji\nStation Pickup & Drop Assistance\nAll Sacred Vedi Visits (Falgu, Vishnupad, Akshayavat)\nFull Ritual Samagri & Dakshina Included',
-      goldInclusions: 'VIP Senior Lineage Teerth Panda Escort\n2 Nights AC Deluxe to 4-Star Hotel & Resort Stay with Pure Veg Meals\nPrivate Chauffeur AC SUV Transport for Entire Pilgrimage\nVIP Escort across All 45 Sacred Vedis & Pretshila Hill\nSpecial Vishnupad Temple Aarti Access & Bhog Prasadam\nOfficial Teerth Lineage Certificate'
+      goldInclusions: 'VIP Senior Lineage Teerth Panda Escort\n2 Nights AC Deluxe to 4-Star Hotel & Resort Stay with Pure Veg Meals\nPrivate Chauffeur AC SUV Transport for Entire Pilgrimage\nVIP Escort across All 45 Sacred Vedis & Pretshila Hill\nOfficial Gotra Sankalp & Traditional Bhog Offering\nOfficial Teerth Lineage Certificate'
     },
     {
       slug: 'pitidosh-puja-tripindi-shradh-',
@@ -448,11 +448,11 @@ If the user specifies father/mother/navami/ekadashi/amavasya or an English date,
                   </div>
                   <div className="flex justify-between items-start py-1 gap-2">
                     <span className="text-gray-500 shrink-0">Hotel Stay Choice:</span>
-                    <strong className="text-text-primary text-right break-words min-w-0">{isPlatinum ? 'AC Deluxe to 4-Star Hotel & Resort' : 'Not Required / Self'}</strong>
+                    <strong className="text-text-primary text-right break-words min-w-0">{isPlatinum ? 'AC Deluxe to 4-Star Hotel & Resort' : (activePackage?.inclusions?.toLowerCase().includes('room') || activePackage?.inclusions?.toLowerCase().includes('hotel') ? 'AC 2-Person Private Room' : 'Not Required / Self')}</strong>
                   </div>
                   <div className="flex justify-between items-start py-1 gap-2">
                     <span className="text-gray-500 shrink-0">Station/Airport Pickup:</span>
-                    <strong className="text-text-primary text-right break-words min-w-0">{isPlatinum ? 'Private AC Cab Pickup' : 'Not Required / Self'}</strong>
+                    <strong className="text-text-primary text-right break-words min-w-0">{isPlatinum ? 'Private AC Cab Pickup (Car)' : (activePackage?.inclusions?.toLowerCase().includes('pickup') || activePackage?.inclusions?.toLowerCase().includes('auto') ? 'Auto / Tempo Pickup' : 'Not Required / Self')}</strong>
                   </div>
                   <div className="flex justify-between py-1 border-t border-[#eee5d8] pt-2 items-baseline">
                     <span className="text-xs font-bold text-gray-700">Estimated Total Cost:</span>

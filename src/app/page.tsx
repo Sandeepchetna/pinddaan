@@ -181,7 +181,7 @@ export default async function HomePage() {
             Curated Pind Daan Packages
           </h2>
           <p className="text-[#5A5148] text-base sm:text-lg font-body leading-relaxed max-w-[680px] mx-auto">
-            Choose between <strong className="text-[#2B2118]">GOLD PLAN</strong> for essential Vedic rites or <strong className="text-[#2B2118]">PLATINUM VIP PLAN</strong> for complete VIP chauffeur pickup, AC Deluxe to 4-Star Hotel & Resort stay & senior Teerth Panda care.
+            Choose between <strong className="text-[#2B2118]">GOLD PLAN</strong> (local Auto/Tempo transfers & essential rites) or <strong className="text-[#2B2118]">PLATINUM VIP PLAN</strong> (private AC Cab/Car chauffeur pickup, AC Deluxe to 4-Star Hotel & Resort stay & senior Teerth Panda care).
           </p>
         </div>
 
@@ -198,7 +198,7 @@ export default async function HomePage() {
               shortDesc: 'Ideal for devotees visiting Gaya Ji for a single day to perform essential rites at Vishnupad Temple & Falgu River.',
               inclusions: 'Verified Vishnupad Temple Teerth Panda\nComplete Vedic Samagri\nFalgu River & Vishnupad Temple Rites\nAncestral Lineage Registration',
               image: '/images/pind_daan_vidhi.jpg',
-              goldInclusions: 'VIP Senior Lineage Teerth Panda\nPrivate AC Cab Station/Hotel Pickup & Drop\nAC Deluxe to 4-Star Hotel & Resort Accommodations\nVIP Priority Temple Darshan Access'
+              goldInclusions: 'VIP Senior Lineage Teerth Panda\nPrivate AC Cab Station/Hotel Pickup & Drop\nAC Deluxe to 4-Star Hotel & Resort Accommodations\nAncestral Lineage Registration & Gotra Sankalp'
             },
             {
               slug: '3-day-complete-tri-sthali',
@@ -209,7 +209,7 @@ export default async function HomePage() {
               badge: 'RECOMMENDED',
               image: '/images/gaya_vishnupad.jpg',
               shortDesc: 'Comprehensive pilgrimage covering Vishnupad, Falgu River, Akshayavat Banyan, Pretshila, and Ramshila.',
-              inclusions: 'Dedicated Vishnupad Teerth Panda Escort\n2 Nights Hotel Accommodation\nPrivate AC Station Pickup & Drop\nAll 45-Vedi Sacred Site Visits',
+              inclusions: 'Dedicated Vishnupad Teerth Panda Escort\n2 Nights Hotel Accommodation\nAuto/Tempo Station Pickup & Drop\nAll 45-Vedi Sacred Site Visits',
               goldInclusions: 'VIP Senior Lineage Teerth Panda Escort\n2 Nights AC Deluxe to 4-Star Hotel & Resort Stay + Meals\nPrivate Chauffeur AC SUV Transport\nOfficial Gold Lineage Certificate'
             },
             {

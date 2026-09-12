@@ -48,7 +48,7 @@ export default function ZeroExtortionPledge({ cityName }: { cityName?: string })
             <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
               {isHindi 
                 ? 'गया जी तीर्थ में श्रद्धालुओं के साथ होने वाले अनुचित मोलभाव, अतिरिक्त दक्षिणा की मांग और स्टेशन के बिचौलियों से हम आपकी पूर्ण रक्षा करते हैं। बुकिंग के समय तय राशि में सम्पूर्ण वैदिक पूजन सामग्री, प्रमाणित पुरोहित दक्षिणा, विष्णुपद मंदिर दर्शन व नौका सेवा सम्मिलित है। घाट पर ₹1 भी अतिरिक्त नहीं देना होगा।'
-                : 'We strictly protect pilgrims traveling to Gaya Ji from aggressive touts, unexpected price inflation at the ghats, and high-pressure bargaining. Your pre-booked package includes complete Vedic samagri, verified Vishnupad teerth purohit honorarium, temple access, and boat seva. Not a single extra rupee will ever be demanded at the holy riverbank.'}
+                : 'We strictly protect pilgrims traveling to Gaya Ji from aggressive touts, unexpected price inflation at the ghats, and high-pressure bargaining. Your pre-booked package includes complete Vedic samagri, verified Vishnupad teerth purohit honorarium, sacred vedi rituals, and boat seva. Not a single extra rupee will ever be demanded at the holy riverbank.'}
             </p>
 
             <div className="pt-1 flex flex-wrap items-center gap-3 sm:gap-6 text-xs text-slate-400 font-medium">

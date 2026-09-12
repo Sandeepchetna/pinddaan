@@ -309,7 +309,7 @@ export async function getPublicBookingData() {
         badge: pkg.badge,
         shortDesc: pkg.shortDesc,
         inclusions: pkg.inclusions?.join('\n') || 'Vedic Rites Included',
-        goldInclusions: (pkg as any).goldInclusions || 'VIP Senior Teerth Panda Assignment\nPrivate AC Cab Station Pickup & Drop\nComplete Vedic Samagri & Special Bhog\nPriority Darshan Access',
+        goldInclusions: (pkg as any).goldInclusions || 'VIP Senior Teerth Panda Assignment\nPrivate AC Cab Station Pickup & Drop\nComplete Vedic Samagri & Special Bhog\nDedicated Teerth Panda Care',
         image: pkg.image || '/images/gaya_vishnupad.jpg',
         vedisCovered: pkg.vedisCovered?.join(', ') || 'Vishnupad, Falgu River, Akshayavat',
         panditType: pkg.panditType || 'Verified 4th-Gen Gaya Teerth Purohit',

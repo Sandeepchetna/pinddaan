@@ -50,7 +50,7 @@ export default async function PackagesPage() {
         image: '/images/pind_daan_vidhi.jpg',
         shortDesc: 'Ideal for devotees visiting Gaya Ji for a single day to perform essential rites at Vishnupad Temple & Falgu River.',
         inclusions: 'Verified Vishnupad Temple Teerth Panda\nComplete Vedic Samagri (Pind, Barley, Sesame, Milk, Honey)\nFalgu River & Vishnupad Temple Rites\nAkshayavat Thread Ceremony\nAncestral Dam Register & Lineage Registration',
-        goldInclusions: 'VIP Senior Lineage Teerth Panda Assignment\nPrivate AC Cab Station/Hotel Pickup & Drop\nComplete Vedic Samagri & Special Bhog Offerings\nFalgu River, Vishnupad Temple & Sita Kund Rites\nAkshayavat Thread Ceremony & Lineage Certificate\nPriority Temple Darshan Access'
+        goldInclusions: 'VIP Senior Lineage Teerth Panda Assignment\nPrivate AC Cab Station/Hotel Pickup & Drop\nComplete Vedic Samagri & Special Bhog Offerings\nFalgu River, Vishnupad Temple & Sita Kund Rites\nAkshayavat Thread Ceremony & Lineage Certificate'
       },
       {
         id: 'p-2',
@@ -62,8 +62,8 @@ export default async function PackagesPage() {
         badge: 'RECOMMENDED',
         image: '/images/gaya_vishnupad.jpg',
         shortDesc: 'Comprehensive pilgrimage covering Vishnupad, Falgu River, Akshayavat Banyan, Pretshila Hill, Ramshila, and Mangla Gauri Temple.',
-        inclusions: 'Dedicated Vishnupad Teerth Panda Escort\n2 Nights Comfortable Hotel Accommodation\nPrivate AC Station Pickup from Gaya Station / Airport\nAll 45-Vedi Sacred Site Visits\nFull Ritual Samagri & Dakshina Included',
-        goldInclusions: 'VIP Senior Lineage Teerth Panda Escort\n2 Nights AC Deluxe to 4-Star Hotel & Resort Stay with Pure Veg Meals\nPrivate Chauffeur AC SUV Transport for Entire Trip\nVIP Escort across All 45 Sacred Vedis & Pretshila Hill\nSpecial Vishnupad Temple Aarti Access & Bhog Prasadam\nOfficial Teerth Lineage Certificate & Gold Blessing Kit'
+        inclusions: 'Dedicated Vishnupad Teerth Panda Escort\n2 Nights Comfortable Hotel Accommodation\nAuto/Tempo Station Pickup from Gaya Station / Airport\nAll 45-Vedi Sacred Site Visits\nFull Ritual Samagri & Dakshina Included',
+        goldInclusions: 'VIP Senior Lineage Teerth Panda Escort\n2 Nights AC Deluxe to 4-Star Hotel & Resort Stay with Pure Veg Meals\nPrivate Chauffeur AC SUV Transport for Entire Trip\nVIP Escort across All 45 Sacred Vedis & Pretshila Hill\nOfficial Gotra Sankalp & Traditional Bhog Offering\nOfficial Teerth Lineage Certificate & Gold Blessing Kit'
       },
       {
         id: 'p-3',
@@ -109,7 +109,7 @@ export default async function PackagesPage() {
           </span>
         </h1>
         <p className="text-text-secondary text-sm sm:text-base leading-relaxed max-w-2xl mx-auto">
-          Choose between our <strong>GOLD PLAN</strong> for essential rites or <strong>PLATINUM VIP PLAN</strong> for complete VIP chauffeur pickup, AC Deluxe to 4-Star Hotel & Resort stay & senior Teerth Panda care.
+          Choose between our <strong>GOLD PLAN</strong> for essential rites with local Auto/Tempo transfers or <strong>PLATINUM VIP PLAN</strong> for private AC Cab (Car) chauffeur pickup, AC Deluxe to 4-Star Hotel & Resort stay & senior Teerth Panda care.
         </p>
       </div>
 
@@ -122,7 +122,7 @@ export default async function PackagesPage() {
           <div className="space-y-1">
             <h4 className="font-serif font-bold text-sm text-text-primary">GOLD PLAN TIER</h4>
             <p className="text-xs text-text-secondary leading-relaxed">
-              Essential Pind Daan rites, verified Vishnupad panda, full puja samagri, and gotra sankalp.
+              Essential Pind Daan rites, verified Vishnupad panda, local Auto/Tempo pickup, full puja samagri, and gotra sankalp.
             </p>
           </div>
         </div>
@@ -134,7 +134,7 @@ export default async function PackagesPage() {
           <div className="space-y-1">
             <h4 className="font-serif font-bold text-sm text-[#6f1d14]">PLATINUM VIP PLAN TIER</h4>
             <p className="text-xs text-text-secondary leading-relaxed">
-              Includes Senior Panda, Private AC SUV Pickup/Drop, AC Deluxe to 4-Star Hotel & Resort Stay, VIP Temple Access & Prasadam Box.
+              Includes Senior Panda, Private AC Cab/Car (SUV/Sedan) Chauffeur Pickup/Drop, AC Deluxe to 4-Star Hotel & Resort Stay, and Dedicated Teerth Panda Care.
             </p>
           </div>
         </div>

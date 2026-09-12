@@ -62,7 +62,7 @@ export default function GlobalSearchModal({ isOpen, onClose }: GlobalSearchModal
     const samplePackages = [
       { slug: '1-day-essential-pind-daan', title: '1-Day Essential Pind Daan (₹4,500)', desc: 'Falgu River, Vishnupad Sanctum, & Akshayavat with verified Purohit & all samagri.' },
       { slug: '3-day-complete-tri-sthali', title: '3-Day Complete Tri-Sthali (₹12,500)', desc: 'All 45 Sacred Vedis, AC transport, hotel coordination, and lineage bahi-khata.' },
-      { slug: '1-day-express-pind-daan', title: '1-Day Express VIP Pind Daan (₹7,500)', desc: 'Priority temple darshan, express panda escort, and complete Vedic samagri.' },
+      { slug: '1-day-express-pind-daan', title: '1-Day Express VIP Pind Daan (₹7,500)', desc: 'Dedicated express panda escort, gotra sankalp, and complete Vedic samagri.' },
       { slug: 'nri-remote-live-stream', title: 'NRI Remote Live Stream Pind Daan (₹8,500)', desc: 'Live 4K Zoom stream with personalized Gotra sankalp and worldwide prasadam shipping.' }
     ];
 

@@ -174,7 +174,7 @@ export default async function CityPindDaanPage({ params }: { params: Promise<{ c
         name: 'Are there hidden charges or extra demands at the ghats in Gaya Ji?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'No. With PindDaanWale, your dakshina is 100% fixed at booking (₹4,500 for 1-Day Essential, ₹12,500 for 3-Day Complete). All Vedic samagri, purohit honorarium, temple access, and boat seva are included. Not a single extra rupee will ever be demanded at the holy riverbank.'
+          text: 'No. With PindDaanWale, your dakshina is 100% fixed at booking (₹4,500 for 1-Day Essential, ₹12,500 for 3-Day Complete). All Vedic samagri, purohit honorarium, sacred vedi rituals, and boat seva are included. Not a single extra rupee will ever be demanded at the holy riverbank.'
         }
       },
       {

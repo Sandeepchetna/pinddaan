@@ -178,7 +178,7 @@ export const RITUAL_PACKAGES: RitualPackage[] = [
       'Daily Gotra Sankalp & Panchabali Vidhi',
       'Daily Gau Seva & Fish/Crow feeding (Panchabali Vidhi)',
       'Daily 4K Live Broadcast & Recorded Family Video Vault',
-      'VIP Temple Entry & Special Puja at Vishnupad Garbhagriha',
+      'Ancestral Gotra Sankalp at Sacred Falgu River & Vishnupad',
       'Exclusive Handcrafted Copper Urn with Sanctified Sacred Relics',
       'Doorstep Delivery of Ganga Jal & Mahaprasad'
     ],
@@ -741,7 +741,7 @@ export const INITIAL_HERO_SLIDES: HeroSlide[] = [
   {
     id: 'slide-3',
     badge: 'DISTRICT ADMIN & TEERTH PILGRIMAGE DESK GAYA',
-    h1Title: 'Complete 3-Day Tri-Sthali Pilgrimage & VIP Temple Access',
+    h1Title: 'Complete 3-Day Tri-Sthali Sacred Pilgrimage',
     description: 'Experience the complete Shradh parikrama across Falgu Devghat, Lord Vishnupad Mandir, and Akshayavat. Includes private AC transport, verified dharamshala/hotel stays, and hereditary Purohit coordination.',
     ctaText: 'Explore Tri-Sthali Package',
     ctaLink: 'rituals',

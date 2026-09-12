@@ -42,7 +42,7 @@ export default function PackageCard({ pkg, defaultTier = 'GOLD' }: PackageCardPr
 
   // Accurate, concise badge beside price
   const getPriceBadge = () => {
-    if (isNarayanOrTripindi) return 'Pure Puja (No Stay/Cab)';
+    if (isNarayanOrTripindi) return 'Pure Puja (No Stay/Vehicle)';
     const s = ((pkg.slug || '') + ' ' + (pkg.title || '')).toLowerCase();
     const is3Day = s.includes('3-day') || s.includes('3 day');
     const is1Day = s.includes('1-day') || s.includes('1 day');
@@ -51,7 +51,7 @@ export default function PackageCard({ pkg, defaultTier = 'GOLD' }: PackageCardPr
       if (is3Day || is1Day) return 'VIP Cab + Hotel';
       return 'VIP Vidhi';
     } else {
-      if (is3Day || is1Day) return 'Cab + Hotel';
+      if (is3Day || is1Day) return 'Auto/Tempo + Hotel';
       return 'Essential Vidhi';
     }
   };
