@@ -24,6 +24,7 @@ import Logo from '@/components/common/Logo';
 import GlobalSearchModal from '@/components/common/GlobalSearchModal';
 import LanguageConverter from '@/components/common/LanguageConverter';
 import VedicDiagnosticModal from '@/components/ai/VedicDiagnosticModal';
+import GayaWeather from '@/components/layout/GayaWeather';
 import { useAppLanguage } from '@/lib/useAppLanguage';
 
 interface NavbarProps {
@@ -95,10 +96,7 @@ export default function Navbar({ packages = [], sacredPlaces = [] }: NavbarProps
           </div>
 
           <div className="flex items-center justify-center gap-3 sm:gap-4 text-[10px] sm:text-[11px]">
-            <div className="hidden lg:flex items-center gap-1.5 text-gray-300 border-r border-white/20 pr-4">
-              <CloudSun className="w-3.5 h-3.5 text-[#F48D08]" />
-              <span>Gaya Ji · 30°C Clear</span>
-            </div>
+            <GayaWeather />
 
             <a href="tel:+917463055338" className="flex items-center gap-1 hover:text-[#F48D08] transition-colors font-medium">
               <Phone className="w-3 h-3 text-[#F48D08]" />
@@ -623,6 +621,11 @@ export default function Navbar({ packages = [], sacredPlaces = [] }: NavbarProps
           <div className="pt-3 border-t border-gray-100 flex items-center justify-between">
             <span className="text-[11px] text-gray-500 font-bold">Select Language / भाषा:</span>
             <LanguageConverter />
+          </div>
+
+          <div className="flex items-center justify-between py-1 px-1">
+            <span className="text-[11px] text-gray-500 font-medium">गया जी मौसम (Live):</span>
+            <GayaWeather className="flex items-center gap-1.5 text-xs text-stone-700 font-semibold bg-amber-50/80 px-2.5 py-1 rounded-lg border border-amber-200/60" />
           </div>
 
           {/* AI Vedic Diagnostic Mobile Button */}
