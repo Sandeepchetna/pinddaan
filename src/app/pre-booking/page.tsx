@@ -116,28 +116,28 @@ If the user specifies father/mother/navami/ekadashi/amavasya or an English date,
       goldInclusions: 'VIP Senior Lineage Teerth Panda Escort\n2 Nights AC Deluxe to 4-Star Hotel & Resort Stay with Pure Veg Meals\nPrivate Chauffeur AC SUV Transport for Entire Pilgrimage\nVIP Escort across All 45 Sacred Vedis & Pretshila Hill\nSpecial Vishnupad Temple Aarti Access & Bhog Prasadam\nOfficial Teerth Lineage Certificate'
     },
     {
-      slug: '1-day-express-pind-daan',
-      title: '1-Day Express VIP Pind Daan',
-      priceINR: 7500,
-      goldPriceINR: 11500,
-      duration: '1 Day (Full Assistance)',
-      badge: 'EXPRESS DARSHAN',
-      shortDesc: 'Expedited rituals with dedicated Panda, priority temple darshan, and pure satvik bhoj.',
-      image: '/images/pind_daan_vidhi.jpg',
-      inclusions: 'Priority Vishnupad Temple Panda Escort\nComplete Pure Vedic Samagri\nFalgu Ghat & Vishnupad Sanctum Rites\nAkshayavat Pind Daan Rites\nPure Satvik Bhoj Arrangement',
-      goldInclusions: 'VIP Express Darshan Escort at Vishnupad\nPrivate Chauffeur AC Sedan Pickup from Gaya Station\nSpecial Sankalp at Sita Kund & Falgu\nDeluxe Brahman Bhoj & Prasad Kit'
+      slug: 'pitidosh-puja-tripindi-shradh-',
+      title: 'PitiDosh Puja ( Tripindi Shradh)',
+      priceINR: 10449,
+      goldPriceINR: 10433,
+      duration: '1 Day (4–5 Hours)',
+      badge: 'MOST POPULAR',
+      image: '/images/akshay_vat.jpg',
+      shortDesc: 'Phalgu River are used to perform the early cleansing rites, tarpan, and the final immersion rituals required during the Tripindi Shradh process',
+      inclusions: 'Senior Jyotish & Vedic Karma-Kand Acharya in Gaya Ji\nAltar Rites with Wheat Sattu\nTripindi Homa with Ghee Ahutis on the Bank of Falgu River',
+      goldInclusions: 'Senior Jyotish & Vedic Karma-Kand Acharya in Gaya Ji\nAltar Rites with Wheat Sattu\nTripindi Homa with Ghee Ahutis on the Bank of Falgu River'
     },
     {
-      slug: 'nri-remote-live-stream',
-      title: 'NRI Remote Live Stream Pind Daan',
-      priceINR: 8500,
-      goldPriceINR: 14500,
-      duration: 'Remote 4K Live Stream (2 Hours)',
-      badge: 'WORLDWIDE SERVICE',
-      shortDesc: 'For devotees abroad unable to travel. Live 4K two-way video stream from Falgu River with sanctified prasadam shipped globally.',
-      image: '/images/akshay_vat.jpg',
-      inclusions: 'Dedicated 4K HD Live Stream on Zoom / YouTube\nName & Gotra Recitation during Live Sankalp\nPandit Ji Interactive Family Participation\nHigh-Definition Recording Provided\nSacred Pind Prasadam Shipped Worldwide',
-      goldInclusions: 'Exclusive 1-on-1 Private 4K Live Stream from Falgu & Vishnupad\nFull Ancestral Recitation of 3 Generations (Paternal & Maternal)\nPersonalized Sankalp Video Recording & Digital Certificate\nVIP Prasadam Box Shipped via Express Courier Worldwide'
+      slug: 'gaya-ji-narayan-bali-',
+      title: 'Gaya Ji Narayan Bali',
+      priceINR: 12499,
+      goldPriceINR: 12499,
+      duration: '1 Day (5–6 Hours)',
+      badge: 'SPECIALIZED REMEDY',
+      image: '/images/gaya_drone.jpg',
+      shortDesc: 'Specialized Vedic karma-kand performed at bank of falgu river near Vishnupad for souls who passed away unnaturally.',
+      inclusions: 'Senior Jyotish & Vedic Karma-Kand Acharya in Gaya Ji\nAltar Rites & Pind Daan with Wheat Sattu\nNarayan Bali Homa with Ghee Ahutis',
+      goldInclusions: 'Senior Jyotish & Vedic Karma-Kand Acharya in Gaya Ji\nAltar Rites & Pind Daan with Wheat Sattu\nNarayan Bali Homa with Ghee Ahutis'
     }
   ]);
 

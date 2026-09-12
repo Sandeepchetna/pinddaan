@@ -150,23 +150,23 @@ export default async function Footer() {
             </div>
             <ul className="space-y-2.5 text-xs text-gray-300 font-medium">
               <li>
-                <Link href="/packages/1-day-essential-pind-daan" className="hover:text-[#F48D08] transition-colors">
+                <Link href="/packages" className="hover:text-[#F48D08] transition-colors">
                   1-Day Essential Pind Daan
                 </Link>
               </li>
               <li>
-                <Link href="/packages/3-day-complete-tri-sthali" className="hover:text-[#F48D08] transition-colors">
-                  3-Day Tri-Sthali Pilgrimage
+                <Link href="/packages" className="hover:text-[#F48D08] transition-colors">
+                  3-Day Complete 45-Vedi Pilgrimage
                 </Link>
               </li>
               <li>
-                <Link href="/packages/nri-remote-live-stream" className="hover:text-[#F48D08] transition-colors">
-                  NRI Remote Live Stream
+                <Link href="/packages" className="hover:text-[#F48D08] transition-colors">
+                  PitiDosh Puja ( Tripindi Shradh)
                 </Link>
               </li>
               <li>
-                <Link href="/packages/compare" className="hover:text-[#F48D08] transition-colors">
-                  Compare Gold vs. Platinum
+                <Link href="/packages" className="hover:text-[#F48D08] transition-colors">
+                  Gaya Ji Narayan Bali
                 </Link>
               </li>
               <li>

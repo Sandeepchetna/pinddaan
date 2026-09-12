@@ -83,17 +83,17 @@ export function assessVedicMokshaPath(
   let recommendedPackage: VedicDiagnosisReport['recommendedPackage'];
 
   if (isUntimely) {
-    const livePkg = findLivePackage('tri-sthali', 14500, 'Tripindi Shradh & Narayan Bali Vidhi');
+    const livePkg = findLivePackage('pitidosh', 10449, 'PitiDosh Puja ( Tripindi Shradh)');
     recommendedPackage = {
-      id: 'tripindi_narayan_bali',
-      title: livePkg.title || 'Tripindi Shradh & Narayan Bali Vidhi',
-      hindiTitle: 'त्रिपिंडी श्राद्ध एवं नारायण बलि विधान',
-      slug: '3-day-complete-tri-sthali',
-      estimatedDakshina: livePkg.price > 12500 ? livePkg.price + 2000 : 14500,
-      durationDays: 3,
-      primaryVedicRitual: 'Pretshila Pind Daan + Brahma Kund Snan + Tripindi Vidhi',
-      reasoning: 'गरुड़ पुराण के अनुसार अकाल या असमय मृत्यु होने पर आत्मा प्रेत योनि से मुक्ति पाने हेतु त्रिपिंडी और प्रेतशिला पिंडदान अनिवार्य रूप से मांगती है।',
-      englishReasoning: 'According to Garuda Purana (Pretakalpa), in cases of untimely, accidental, or unnatural demise, the departed soul requires Tripindi Shradh and Pretshila Pind Daan to attain complete liberation from the ghostly realm (Preta Yoni).'
+      id: 'pitidosh_tripindi_shradh',
+      title: livePkg.title || 'PitiDosh Puja ( Tripindi Shradh)',
+      hindiTitle: 'पितृ दोष पूजा (त्रिपिंडी श्राद्ध)',
+      slug: 'pitidosh-puja-tripindi-shradh-',
+      estimatedDakshina: livePkg.price || 10449,
+      durationDays: 1,
+      primaryVedicRitual: 'Pretshila Pind Daan + Falgu River Snan + Tripindi Homa',
+      reasoning: 'गरुड़ पुराण के अनुसार अकाल या असमय मृत्यु अथवा कुल में पितृ दोष निवारण हेतु त्रिपिंडी और प्रेतशिला पिंडदान अनिवार्य रूप से किया जाता है।',
+      englishReasoning: 'According to Garuda Purana (Pretakalpa), in cases of untimely demise or lingering ancestral afflictions, the departed soul attains complete liberation through PitiDosh Puja ( Tripindi Shradh) and Pretshila rites.'
     };
   } else if (answers.relation === 'both_parents' || answers.relation === 'grandparents' || answers.priorRituals === 'first_time_gaya') {
     const livePkg = findLivePackage('tri-sthali', 12500, '3-Day Complete Tri-Sthali Pilgrimage');

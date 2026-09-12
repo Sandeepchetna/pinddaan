@@ -154,7 +154,7 @@ export default function ContactForm() {
             <option value="Annual Shradh">Annual Shradh</option>
             <option value="First Time Pind Daan">First Time Pind Daan</option>
             <option value="Pitru Paksha Rites">Pitru Paksha Rites</option>
-            <option value="Pitru Dosh Nivaran">Pitru Dosh Nivaran</option>
+            <option value="PitiDosh Puja ( Tripindi Shradh)">PitiDosh Puja ( Tripindi Shradh)</option>
             <option value="Remote Live Pind Daan (NRI)">Remote Live Pind Daan (NRI)</option>
           </select>
         </div>

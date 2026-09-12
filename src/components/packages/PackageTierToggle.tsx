@@ -1,8 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import Link from 'next/link';
-import { Crown, Scale } from 'lucide-react';
+import { Crown } from 'lucide-react';
 import PackageCard from '@/components/packages/PackageCard';
 
 export default function PackageTierToggle({ initialPackages }: { initialPackages: any[] }) {
@@ -51,16 +50,6 @@ export default function PackageTierToggle({ initialPackages }: { initialPackages
             <span>SHOW ALL PLATINUM VIP PLANS</span>
           </button>
         </div>
-
-        {/* Dedicated Comparison Page Link */}
-        <Link
-          href="/packages/compare"
-          className="bg-amber-100 hover:bg-amber-200 text-[#F48D08] font-bold text-xs px-6 py-2.5 rounded-full transition-all flex items-center gap-2 border border-amber-300/60 shadow-sm"
-        >
-          <Scale className="w-4 h-4" />
-          <span>Full Side-by-Side Comparison Table →</span>
-        </Link>
-
       </div>
 
       {/* Package Cards Grid - All 4 packages in 1 single row on desktop! */}

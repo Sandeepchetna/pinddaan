@@ -14,6 +14,20 @@ const nextConfig = {
       },
     ],
   },
+  async redirects() {
+    return [
+      {
+        source: '/packages/compare',
+        destination: '/packages',
+        permanent: true,
+      },
+      {
+        source: '/packages/:slug/compare',
+        destination: '/packages',
+        permanent: true,
+      },
+    ];
+  },
 };
 
 module.exports = nextConfig;

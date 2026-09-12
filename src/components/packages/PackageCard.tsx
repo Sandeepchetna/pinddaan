@@ -18,11 +18,10 @@ interface PackageCardProps {
     goldInclusions?: string;
     image?: string | null;
   };
-  showCompareLink?: boolean;
   defaultTier?: 'GOLD' | 'PLATINUM';
 }
 
-export default function PackageCard({ pkg, showCompareLink = true, defaultTier = 'GOLD' }: PackageCardProps) {
+export default function PackageCard({ pkg, defaultTier = 'GOLD' }: PackageCardProps) {
   // Tier state: 'GOLD' (Standard) or 'PLATINUM' (VIP) - Defaults to GOLD as requested
   const [tier, setTier] = useState<'GOLD' | 'PLATINUM'>(defaultTier);
 
@@ -195,23 +194,14 @@ export default function PackageCard({ pkg, showCompareLink = true, defaultTier =
           <ArrowRight className="w-4 h-4" />
         </Link>
 
-        <div className="flex justify-between items-center text-xs font-body text-[#7A736A] font-medium px-1">
+        <div className="flex justify-center items-center text-xs font-body text-[#7A736A] font-medium px-1">
           <a 
             href="tel:+917463055338" 
-            className="hover:text-[#C6922E] flex items-center gap-1.5 font-semibold transition-colors"
+            className="hover:text-[#C6922E] flex items-center gap-1.5 font-semibold transition-colors py-1"
           >
             <Phone className="w-3.5 h-3.5 text-[#C6922E]" />
-            <span>Call <span translate="no" className="notranslate">PindDaanWale</span></span>
+            <span>Call Helpline: +91 7463055338</span>
           </a>
-          
-          {showCompareLink && (
-            <Link 
-              href={`/packages/${pkg.slug}/compare`} 
-              className="hover:text-[#C6922E] font-semibold transition-colors text-[11px] flex items-center gap-1"
-            >
-              <span>Full Comparison →</span>
-            </Link>
-          )}
         </div>
       </div>
 

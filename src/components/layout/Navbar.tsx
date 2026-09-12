@@ -53,15 +53,21 @@ export default function Navbar({ packages = [], sacredPlaces = [] }: NavbarProps
     },
     {
       slug: '3-day-complete-tri-sthali',
-      title: '3-Day Tri-Sthali Pilgrimage',
+      title: '3-Day Complete 45-Vedi Pilgrimage',
       priceINR: 12500,
       shortDesc: 'Complete 45-Vedi trail with AC cab and hotel stay. Fixed dakshina ₹12,500.'
     },
     {
-      slug: 'nri-remote-live-stream',
-      title: 'NRI Remote Live Stream Rites',
-      priceINR: 8500,
-      shortDesc: 'Live 4K Zoom stream for devotees abroad with global prasadam delivery.'
+      slug: 'pitidosh-puja-tripindi-shradh-',
+      title: 'PitiDosh Puja ( Tripindi Shradh)',
+      priceINR: 10449,
+      shortDesc: 'Phalgu River early cleansing rites, tarpan, and Tripindi Homa with Ghee Ahutis.'
+    },
+    {
+      slug: 'gaya-ji-narayan-bali-',
+      title: 'Gaya Ji Narayan Bali',
+      priceINR: 12499,
+      shortDesc: 'Specialized Vedic karma-kand on the bank of Falgu River near Vishnupad.'
     }
   ];
 
@@ -555,7 +561,7 @@ export default function Navbar({ packages = [], sacredPlaces = [] }: NavbarProps
                   {displayPackages.map((pkg: any) => (
                     <Link
                       key={pkg.slug}
-                      href={`/packages/${pkg.slug}/compare`}
+                      href={`/packages`}
                       onClick={() => setMobileMenuOpen(false)}
                       className="block p-2 rounded-lg hover:bg-white text-xs text-text-primary"
                     >
@@ -566,20 +572,13 @@ export default function Navbar({ packages = [], sacredPlaces = [] }: NavbarProps
                       <div className="text-[11px] text-text-secondary font-normal line-clamp-1">{pkg.shortDesc}</div>
                     </Link>
                   ))}
-                  <div className="pt-2 border-t border-amber-900/10 flex items-center justify-between">
-                    <Link 
-                      href="/packages/compare"
-                      onClick={() => setMobileMenuOpen(false)}
-                      className="text-xs text-[#6f1d14] font-bold hover:underline"
-                    >
-                      Compare Plans
-                    </Link>
+                  <div className="pt-2 border-t border-amber-900/10 text-center">
                     <Link 
                       href="/packages"
                       onClick={() => setMobileMenuOpen(false)}
-                      className="text-xs text-[#F48D08] font-bold hover:underline"
+                      className="text-xs text-[#F48D08] font-bold hover:underline inline-block"
                     >
-                      All Packages ({displayPackages.length}) →
+                      View All Packages ({displayPackages.length}) →
                     </Link>
                   </div>
                 </div>
