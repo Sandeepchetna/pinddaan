@@ -13,6 +13,8 @@ import {
   Sparkles, 
   ArrowRight,
   ShieldCheck,
+  ShieldAlert,
+  Navigation,
   Flower2,
   Landmark,
   FileText,
@@ -25,6 +27,8 @@ import GlobalSearchModal from '@/components/common/GlobalSearchModal';
 import LanguageConverter from '@/components/common/LanguageConverter';
 import VedicDiagnosticModal from '@/components/ai/VedicDiagnosticModal';
 import GayaWeather from '@/components/layout/GayaWeather';
+import GayaPilgrimCircuitModal from '@/components/common/GayaPilgrimCircuitModal';
+import PilgrimEmergencyModal from '@/components/common/PilgrimEmergencyModal';
 import { useAppLanguage } from '@/lib/useAppLanguage';
 
 interface NavbarProps {
@@ -38,6 +42,8 @@ export default function Navbar({ packages = [], sacredPlaces = [] }: NavbarProps
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isDiagnosticOpen, setIsDiagnosticOpen] = useState(false);
+  const [isCircuitModalOpen, setIsCircuitModalOpen] = useState(false);
+  const [isEmergencyModalOpen, setIsEmergencyModalOpen] = useState(false);
   const [expandedMobileSection, setExpandedMobileSection] = useState<string | null>(null);
 
   const toggleMobileSection = (section: string) => {
@@ -95,10 +101,30 @@ export default function Navbar({ packages = [], sacredPlaces = [] }: NavbarProps
             <span>Pitripaksha Mela 2026: <strong>26 Sept – 10 Oct</strong> • Gaya Ji, Bihar</span>
           </div>
 
-          <div className="flex items-center justify-center gap-3 sm:gap-4 text-[10px] sm:text-[11px]">
+          <div className="flex items-center justify-center flex-wrap gap-2.5 sm:gap-3 text-[10px] sm:text-[11px]">
             <GayaWeather />
 
-            <a href="tel:+917463055338" className="flex items-center gap-1 hover:text-[#F48D08] transition-colors font-medium">
+            <button
+              type="button"
+              onClick={() => setIsCircuitModalOpen(true)}
+              className="hidden md:inline-flex items-center gap-1 text-amber-300 hover:text-white transition-colors font-medium border-r border-white/20 pr-3 cursor-pointer"
+              title={isHindi ? 'तीर्थ परिपथ नक्शा व सरकारी किराया तालिका' : 'Pilgrim Route Map & Govt Fare Guide'}
+            >
+              <Navigation className="w-3 h-3 text-[#F48D08]" />
+              <span>{isHindi ? 'तीर्थ मार्ग व किराया' : 'Route & Fare'}</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setIsEmergencyModalOpen(true)}
+              className="inline-flex items-center gap-1 bg-red-600 hover:bg-red-700 text-white px-2.5 py-0.5 rounded-full font-bold transition-all text-[10px] shadow-sm cursor-pointer active:scale-95"
+              title={isHindi ? 'गया जिला प्रशासन आपातकालीन हेल्पलाइन' : '24x7 Gaya Emergency Helplines'}
+            >
+              <ShieldAlert className="w-3 h-3 text-white" />
+              <span>{isHindi ? 'आपातकाल 24x7' : 'Emergency'}</span>
+            </button>
+
+            <a href="tel:+917463055338" className="hidden xl:flex items-center gap-1 hover:text-[#F48D08] transition-colors font-medium">
               <Phone className="w-3 h-3 text-[#F48D08]" />
               <span>Pooja Helpline: <strong>+91 7463055338</strong></span>
             </a>
@@ -624,8 +650,35 @@ export default function Navbar({ packages = [], sacredPlaces = [] }: NavbarProps
           </div>
 
           <div className="flex items-center justify-between py-1 px-1">
-            <span className="text-[11px] text-gray-500 font-medium">गया जी मौसम (Live):</span>
-            <GayaWeather className="flex items-center gap-1.5 text-xs text-stone-700 font-semibold bg-amber-50/80 px-2.5 py-1 rounded-lg border border-amber-200/60" />
+            <span className="text-[11px] text-gray-500 font-medium">{isHindi ? 'गया जी मौसम (लाइव):' : 'Gaya Live Weather:'}</span>
+            <GayaWeather className="flex items-center gap-1.5 text-xs text-stone-700 font-semibold bg-amber-50/80 px-2.5 py-1 rounded-lg border border-amber-200/60 cursor-pointer" />
+          </div>
+
+          {/* Mobile Buttons for Route & Emergency */}
+          <div className="grid grid-cols-2 gap-2 pt-1">
+            <button
+              type="button"
+              onClick={() => {
+                setMobileMenuOpen(false);
+                setIsCircuitModalOpen(true);
+              }}
+              className="flex items-center justify-center gap-1.5 p-2.5 rounded-xl bg-amber-50 border border-amber-200/80 text-amber-900 font-bold text-[11px] shadow-sm active:scale-95 transition-transform"
+            >
+              <Navigation className="w-3.5 h-3.5 text-[#F48D08]" />
+              <span>{isHindi ? 'तीर्थ मार्ग व किराया' : 'Route & Fares'}</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => {
+                setMobileMenuOpen(false);
+                setIsEmergencyModalOpen(true);
+              }}
+              className="flex items-center justify-center gap-1.5 p-2.5 rounded-xl bg-red-50 border border-red-200 text-red-700 font-bold text-[11px] shadow-sm active:scale-95 transition-transform"
+            >
+              <ShieldAlert className="w-3.5 h-3.5 text-red-600" />
+              <span>{isHindi ? 'आपातकाल 24x7' : 'Emergency SOS'}</span>
+            </button>
           </div>
 
           {/* AI Vedic Diagnostic Mobile Button */}
@@ -666,6 +719,20 @@ export default function Navbar({ packages = [], sacredPlaces = [] }: NavbarProps
         isOpen={isDiagnosticOpen} 
         onClose={() => setIsDiagnosticOpen(false)} 
         packages={displayPackages}
+      />
+
+      {/* Sacred Gaya Ji Circuit & Fare Modal */}
+      <GayaPilgrimCircuitModal
+        isOpen={isCircuitModalOpen}
+        onClose={() => setIsCircuitModalOpen(false)}
+        isHindi={isHindi}
+      />
+
+      {/* Pilgrim Emergency & Safety Modal */}
+      <PilgrimEmergencyModal
+        isOpen={isEmergencyModalOpen}
+        onClose={() => setIsEmergencyModalOpen(false)}
+        isHindi={isHindi}
       />
 
     </header>

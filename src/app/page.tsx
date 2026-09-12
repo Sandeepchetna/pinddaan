@@ -29,6 +29,7 @@ import VishnupadShowcase from '@/components/home/VishnupadShowcase';
 import PackageCard from '@/components/packages/PackageCard';
 import DevoteeVideoShowcase from '@/components/home/DevoteeVideoShowcase';
 import VedicDiagnosticBanner from '@/components/home/VedicDiagnosticBanner';
+import PilgrimAssistanceHub from '@/components/home/PilgrimAssistanceHub';
 
 const db = prisma as any;
 
@@ -370,6 +371,9 @@ export default async function HomePage() {
 
         </div>
       </section>
+
+      {/* Pilgrim Assistance, Sacred Circuit & Safety Hub */}
+      <PilgrimAssistanceHub />
 
       {/* 45-Vedi Sacred Shrines Showcase Section */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 space-y-10">
