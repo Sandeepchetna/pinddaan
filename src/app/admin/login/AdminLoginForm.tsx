@@ -1,8 +1,9 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Lock, Mail, Eye, EyeOff, ShieldCheck, ArrowRight, AlertCircle, Sparkles } from 'lucide-react';
+import { Lock, Mail, Eye, EyeOff, ShieldCheck, ArrowRight, AlertCircle, Sparkles, CheckSquare, Square } from 'lucide-react';
 import { loginAdminAction } from '../actions';
 
 export default function AdminLoginForm() {
@@ -10,8 +11,24 @@ export default function AdminLoginForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [rememberPassword, setRememberPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+
+  // Auto-restore remembered credentials on mount
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem('pinddaan_admin_remember');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (parsed.email) setEmail(parsed.email);
+        if (parsed.password) setPassword(parsed.password);
+        setRememberPassword(true);
+      }
+    } catch {
+      // Graceful storage fallback
+    }
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -19,7 +36,26 @@ export default function AdminLoginForm() {
     setLoading(true);
 
     try {
-      const res = await loginAdminAction({ email, password });
+      // Persist or clear remembered credentials based on checkbox state
+      if (rememberPassword) {
+        try {
+          localStorage.setItem(
+            'pinddaan_admin_remember',
+            JSON.stringify({ email: email.trim(), password: password.trim() })
+          );
+        } catch {}
+      } else {
+        try {
+          localStorage.removeItem('pinddaan_admin_remember');
+        } catch {}
+      }
+
+      const res = await loginAdminAction({ 
+        email: email.trim(), 
+        password: password.trim(),
+        rememberMe: rememberPassword
+      });
+
       if (!res.success) {
         setErrorMessage(res.error || 'अमान्य क्रेडेंशियल / Invalid email or password');
         setLoading(false);
@@ -42,18 +78,29 @@ export default function AdminLoginForm() {
       <div className="absolute -bottom-40 -right-40 w-96 h-96 bg-[#6f1d14]/30 rounded-full blur-3xl pointer-events-none" />
 
       <div className="w-full max-w-md relative z-10">
-        {/* Brand Header */}
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-tr from-[#6f1d14] via-[#F48D08] to-[#C6922E] shadow-2xl shadow-amber-500/20 mb-4 ring-1 ring-white/20">
-            <span className="font-serif font-bold text-2xl text-white tracking-wider">PD</span>
-          </div>
-          <h1 className="text-2xl sm:text-3xl font-serif font-bold text-white tracking-tight flex items-center justify-center gap-2">
-            PindDaanWale
-            <span className="text-xs uppercase px-2.5 py-0.5 rounded-full bg-[#F48D08]/20 border border-[#F48D08]/40 text-[#F48D08] font-mono font-bold tracking-normal">
-              ERP 2.0
+        {/* Brand Header with Official Sacred Logo */}
+        <div className="text-center mb-8 flex flex-col items-center">
+          <Link href="/" className="group inline-flex flex-col items-center mb-3">
+            <div className="relative w-20 h-20 sm:w-24 sm:h-24 mb-2.5 drop-shadow-[0_10px_25px_rgba(244,141,8,0.35)] group-hover:scale-105 transition-transform duration-300">
+              <img 
+                src="/Pind-Daan-Wale.svg" 
+                alt="PindDaanWale Official Sacred Logo" 
+                className="w-full h-full object-contain"
+              />
+            </div>
+            <div className="flex items-center justify-center gap-2">
+              <h1 className="text-2xl sm:text-3xl font-serif font-bold text-white tracking-tight">
+                Pind<span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-amber-300 to-amber-500">DaanWale</span>
+              </h1>
+              <span className="text-xs uppercase px-2.5 py-0.5 rounded-full bg-[#F48D08]/20 border border-[#F48D08]/40 text-[#F48D08] font-mono font-bold tracking-normal">
+                ERP 2.0
+              </span>
+            </div>
+            <span className="text-[10px] tracking-[0.2em] uppercase text-amber-400/90 font-mono font-semibold mt-1">
+              Sacred • Trusted • Complete
             </span>
-          </h1>
-          <p className="text-slate-400 text-xs sm:text-sm mt-1">
+          </Link>
+          <p className="text-slate-400 text-xs sm:text-sm mt-0.5">
             Administrative Pilgrimage Control Center • Authorized Access Only
           </p>
         </div>
@@ -74,23 +121,26 @@ export default function AdminLoginForm() {
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-5">
+          <form onSubmit={handleSubmit} className="space-y-5" autoComplete="on">
             {/* Email Field */}
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-2">
+              <label htmlFor="admin-email" className="block text-xs font-semibold text-slate-300 mb-2">
                 एडमिन ईमेल / Admin Email or ID
               </label>
               <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
-                  <Mail className="w-4 h-4" />
+                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400 z-10">
+                  <Mail className="w-4 h-4 text-slate-400" />
                 </div>
                 <input
+                  id="admin-email"
+                  name="email"
                   type="email"
                   required
+                  autoComplete="username"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="admin@pinddaanwale.com"
-                  className="w-full bg-[#0F172A] border border-slate-700 rounded-xl pl-10 pr-4 py-3 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-[#F48D08] focus:ring-1 focus:ring-[#F48D08] transition-all"
+                  className="admin-login-input w-full focus:outline-none transition-all"
                 />
               </div>
             </div>
@@ -98,26 +148,29 @@ export default function AdminLoginForm() {
             {/* Password Field */}
             <div>
               <div className="flex items-center justify-between mb-2">
-                <label className="block text-xs font-semibold text-slate-300">
+                <label htmlFor="admin-password" className="block text-xs font-semibold text-slate-300">
                   पासवर्ड / Master Password
                 </label>
               </div>
               <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
-                  <Lock className="w-4 h-4" />
+                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400 z-10">
+                  <Lock className="w-4 h-4 text-slate-400" />
                 </div>
                 <input
+                  id="admin-password"
+                  name="password"
                   type={showPassword ? 'text' : 'password'}
                   required
+                  autoComplete="current-password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••••••"
-                  className="w-full bg-[#0F172A] border border-slate-700 rounded-xl pl-10 pr-11 py-3 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-[#F48D08] focus:ring-1 focus:ring-[#F48D08] transition-all"
+                  className="admin-login-input w-full focus:outline-none transition-all"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-200 transition-colors"
+                  className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-200 transition-colors z-10 cursor-pointer"
                   aria-label={showPassword ? 'Hide password' : 'Show password'}
                 >
                   {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -125,11 +178,31 @@ export default function AdminLoginForm() {
               </div>
             </div>
 
+            {/* Remember Password Checkbox */}
+            <div className="flex items-center justify-between pt-0.5">
+              <label 
+                htmlFor="remember-password" 
+                className="inline-flex items-center gap-2.5 cursor-pointer select-none group text-xs text-slate-300 hover:text-white transition-colors"
+              >
+                <input
+                  id="remember-password"
+                  name="rememberPassword"
+                  type="checkbox"
+                  checked={rememberPassword}
+                  onChange={(e) => setRememberPassword(e.target.checked)}
+                  className="w-4 h-4 rounded border-slate-600 bg-slate-900 text-[#F48D08] focus:ring-[#F48D08] focus:ring-offset-0 cursor-pointer accent-[#F48D08]"
+                />
+                <span className="font-medium group-hover:text-amber-300 transition-colors">
+                  पासवर्ड याद रखें / Remember Password
+                </span>
+              </label>
+            </div>
+
             {/* Submit Button */}
             <button
               type="submit"
               disabled={loading}
-              className="w-full mt-2 bg-gradient-to-r from-[#F48D08] to-[#D97706] hover:from-[#e07d03] hover:to-[#c66a02] text-white font-bold py-3.5 px-5 rounded-xl shadow-lg shadow-amber-500/20 flex items-center justify-center gap-2 transition-all disabled:opacity-60 disabled:cursor-not-allowed group text-sm"
+              className="w-full mt-2 bg-gradient-to-r from-[#F48D08] to-[#D97706] hover:from-[#e07d03] hover:to-[#c66a02] text-white font-bold py-3.5 px-5 rounded-xl shadow-lg shadow-amber-500/20 flex items-center justify-center gap-2 transition-all disabled:opacity-60 disabled:cursor-not-allowed group text-sm cursor-pointer"
             >
               {loading ? (
                 <>

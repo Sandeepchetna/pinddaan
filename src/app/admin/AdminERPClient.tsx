@@ -759,8 +759,8 @@ export default function AdminERPClient({ initialData, session }: AdminERPClientP
             <div className="space-y-6">
               <div className="flex items-center justify-between pb-4 border-b border-slate-800/80">
                 <div className="flex items-center gap-2.5">
-                  <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-[#8B2516] via-[#B45309] to-[#F59E0B] p-0.5 ring-1 ring-amber-500/30 flex items-center justify-center font-bold text-white text-xs shadow-md">
-                    PD
+                  <div className="w-8 h-8 rounded-xl bg-slate-900/80 p-1 ring-1 ring-amber-500/30 flex items-center justify-center shrink-0 shadow-md">
+                    <img src="/Pind-Daan-Wale.svg" alt="PindDaanWale Logo" className="w-full h-full object-contain" />
                   </div>
                   <div>
                     <span className="font-bold text-sm text-white block leading-tight">PindDaanWale</span>
@@ -831,8 +831,8 @@ export default function AdminERPClient({ initialData, session }: AdminERPClientP
           
           {/* BRAND LOGO & SYSTEM STATUS */}
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-[#8B2516] via-[#B45309] to-[#F59E0B] p-0.5 ring-1 ring-amber-500/30 flex items-center justify-center font-bold text-white shadow-lg text-sm">
-              PD
+            <div className="w-9 h-9 rounded-xl bg-slate-900/80 p-1 ring-1 ring-amber-500/30 flex items-center justify-center shrink-0 shadow-lg">
+              <img src="/Pind-Daan-Wale.svg" alt="PindDaanWale Logo" className="w-full h-full object-contain" />
             </div>
             <div>
               <div className="flex items-center gap-1.5">

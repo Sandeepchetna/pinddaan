@@ -58,12 +58,18 @@ export interface PilgrimHubTranslations {
   weatherDisclaimer: string;
   cityName: string;
   weatherClear: string;
+  weatherClearNight?: string;
   weatherPartlyCloudy: string;
   weatherOvercast: string;
   weatherFog: string;
   weatherRain: string;
   weatherStorm: string;
   today: string;
+  weatherDrizzle?: string;
+  muhuratStatusConcluded?: string;
+  muhuratStatusActive?: string;
+  muhuratStatusUpcoming?: string;
+  muhuratResumesTomorrow?: string;
   hubBadge: string;
   hubTitle: string;
   hubSubtitle: string;
@@ -143,7 +149,7 @@ export const PILGRIM_TRANSLATIONS: Record<AppLangCode, PilgrimHubTranslations> =
     kutapMuhuratDesc: "Ideal for Gotra Sankalp & Falgu Tarpan.",
     aparahnaKaal: "Aparahna Kaal (Prime Period)",
     aparahnaKaalDesc: "Prime time for Vishnupad & Akshayavat pind daan offerings.",
-    garudaPuranaRule: "Garuda Purana Advisory: Pind Daan after sunset is prohibited. Please conclude rituals before 03:30 PM.",
+    garudaPuranaRule: "Garuda Purana Advisory: Pind Daan after sunset or during Sayahna is prohibited. Please conclude rituals before 03:36 PM (end of Aparahna Kaal).",
     seniorHealthAdvice: "💧 Elderly pilgrims are advised to carry water, umbrella, and light cotton clothes.",
     weatherDisclaimer: "Weather data is derived from Open-Meteo open satellite feed and muhurat timings from astronomical panchang calculations. PindDaanWale is not liable for third-party feed accuracy or local microclimate variations.",
     cityName: "Gaya Ji",
@@ -232,7 +238,7 @@ export const PILGRIM_TRANSLATIONS: Record<AppLangCode, PilgrimHubTranslations> =
     kutapMuhuratDesc: "संकल्प व फल्गु नदी तर्पण हेतु अति-उत्तम।",
     aparahnaKaal: "अपराह्न काल (सर्वश्रेष्ठ)",
     aparahnaKaalDesc: "विष्णुपद व अक्षयवट पर मुख्य पिंडदान काल।",
-    garudaPuranaRule: "गरुड़ पुराण निर्देश: सूर्यास्त के बाद पिंडदान वर्जित है। कृपया दोपहर 3:30 बजे से पूर्व अपना अनुष्ठान संपन्न करें।",
+    garudaPuranaRule: "गरुड़ पुराण निर्देश: सूर्यास्त व सायाह्न काल में पिंडदान वर्जित है। कृपया दोपहर 03:36 बजे (अपराह्न काल समाप्ति) से पूर्व अनुष्ठान संपन्न करें।",
     seniorHealthAdvice: "💧 वरिष्ठ तीर्थयात्री धूप से बचाव हेतु छाता व जल अवश्य साथ रखें।",
     weatherDisclaimer: "मौसम डेटा Open-Meteo ओपन-सोर्स सैटेलाइट API पर आधारित है तथा मुहूर्त पारंपरिक पंचांग गणना पर आधारित है। स्थानीय मौसम अथवा समय में मामूली विचलन संभव है। PindDaanWale तीसरे पक्ष के डेटा की सटीकता के लिए कानूनी रूप से उत्तरदायी नहीं है।",
     cityName: "गया जी",
@@ -321,7 +327,7 @@ export const PILGRIM_TRANSLATIONS: Record<AppLangCode, PilgrimHubTranslations> =
     kutapMuhuratDesc: "সংকল্প ও ফল্গু তর্পণের জন্য প্রশস্ত।",
     aparahnaKaal: "অপরাহ্ন কাল (সর্বোত্তম সময়)",
     aparahnaKaalDesc: "বিষ্ণুপদ ও অক্ষয়বটে প্রধান পিণ্ডদানের সময়।",
-    garudaPuranaRule: "গরুড় পুরাণ নির্দেশ: সূর্যাস্তের পর পিণ্ডদান নিষিদ্ধ। দুপুর ৩:৩০-এর মধ্যে সম্পন্ন করুন।",
+    garudaPuranaRule: "গরুড় পুরাণ নির্দেশ: সূর্যাস্তের পর বা সায়াহ্ন কালে পিণ্ডদান নিষিদ্ধ। অনুগ্রহ করে অপরাহ্ন কাল সমাপ্তির পূর্বে (০৩:৩৬ অপরাহ্ন) সম্পন্ন করুন।",
     seniorHealthAdvice: "💧 বয়স্ক তীর্থযাত্রীরা জল ও ছাতা সাথে রাখুন।",
     weatherDisclaimer: "আবহাওয়া ডেটা Open-Meteo ওপেন-সোর্স স্যাটেলাইট API ভিত্তিক। প্রাকৃতিক কারণে সামান্য পরিবর্তন হতে পারে।",
     cityName: "গয়া জী",
@@ -410,7 +416,7 @@ export const PILGRIM_TRANSLATIONS: Record<AppLangCode, PilgrimHubTranslations> =
     kutapMuhuratDesc: "संकल्प व फल्गु नदी तर्पणासाठी सर्वोत्तम.",
     aparahnaKaal: "अपराह्न काळ (सर्वोत्तम वेळ)",
     aparahnaKaalDesc: "विष्णुपद व अक्षयवट मुख्य पिंडदान काळ.",
-    garudaPuranaRule: "गरुड पुराण नियम: सूर्यास्तानंतर पिंडदान निषिद्ध आहे. कृपया दुपारी ३:३० पूर्वी विधी पूर्ण करा.",
+    garudaPuranaRule: "गरुड पुराण नियम: सूर्यास्तानंतर किंवा सायाह्न काळात पिंडदान निषिद्ध आहे. कृपया अपराह्न काळ संपण्यापूर्वी (दुपारी ०३:३६) विधी पूर्ण करा.",
     seniorHealthAdvice: "💧 ज्येष्ठ भाविकांनी छत्री व पिण्याचे पाणी सोबत ठेवावे.",
     weatherDisclaimer: "हवामान माहिती Open-Meteo उपग्रह API वर आधारित आहे. स्थानिक पातळीवर किरकोळ बदल शक्य आहे.",
     cityName: "गया जी",
@@ -499,7 +505,7 @@ export const PILGRIM_TRANSLATIONS: Record<AppLangCode, PilgrimHubTranslations> =
     kutapMuhuratDesc: "સંકલ્પ અને ફલ્ગુ તર્પણ માટે ઉત્તમ.",
     aparahnaKaal: "અપરાહ્ન કાળ (શ્રેષ્ઠ સમય)",
     aparahnaKaalDesc: "વિષ્ણુપદ અને અક્ષયવટ પિંડદાનનો મુખ્ય સમય.",
-    garudaPuranaRule: "ગરુડ પુરાણ આદેશ: સૂર્યાસ્ત પછી પિંડદાન વર્જિત છે. બપોરે ૩:૩૦ પહેલા પૂર્ણ કરો.",
+    garudaPuranaRule: "ગરુડ પુરાણ આદેશ: સૂર્યાસ્ત પછી કે સાયાહ્ન કાળમાં પિંડદાન વર્જિત છે. કૃપા કરીને અપરાહ્ન કાળ સમાપ્ત થતાં પહેલાં (બપોરે ૦૩:૩૬) પૂર્ણ કરો.",
     seniorHealthAdvice: "💧 વરિષ્ઠ યાત્રાળુઓએ છત્રી અને પીવાનું પાણી સાથે રાખવું.",
     weatherDisclaimer: "હવામાન માહિતી Open-Meteo API પર આધારિત છે. સ્થાનિક સ્તરે નજીવો તફાવત શક્ય છે.",
     cityName: "ગયા જી",
@@ -588,7 +594,7 @@ export const PILGRIM_TRANSLATIONS: Record<AppLangCode, PilgrimHubTranslations> =
     kutapMuhuratDesc: "ਸੰਕਲਪ ਅਤੇ ਫਲਗੂ ਤਰਪਣ ਲਈ ਉੱਤਮ।",
     aparahnaKaal: "ਅਪਰਾਹਨ ਕਾਲ (ਸਭ ਤੋਂ ਉੱਤਮ ਸਮਾਂ)",
     aparahnaKaalDesc: "ਵਿਸ਼ਨੂੰਪਦ ਅਤੇ ਅਕਸ਼ੈਵਟ ਮੁੱਖ ਪਿੰਡ ਦਾਨ ਸਮਾਂ।",
-    garudaPuranaRule: "ਗਰੁੜ ਪੁਰਾਣ ਨਿਯਮ: ਸੂਰਜ ਡੁੱਬਣ ਤੋਂ ਬਾਅਦ ਪਿੰਡ ਦਾਨ ਮਨ੍ਹਾ ਹੈ। ਦੁਪਹਿਰ ੩:੩੦ ਤੋਂ ਪਹਿਲਾਂ ਪੂਰਾ ਕਰੋ।",
+    garudaPuranaRule: "ਗਰੁੜ ਪੁਰਾਣ ਨਿਯਮ: ਸੂਰਜ ਡੁੱਬਣ ਤੋਂ ਬਾਅਦ ਪਿੰਡ ਦਾਨ ਮਨ੍ਹਾ ਹੈ। ਕਿਰਪਾ ਕਰਕੇ ਅਪਰਾਹਨ ਕਾਲ ਸਮਾਪਤ ਹੋਣ ਤੋਂ ਪਹਿਲਾਂ (ਦੁਪਹਿਰ ੦੩:੩੬) ਪੂਰਾ ਕਰੋ।",
     seniorHealthAdvice: "💧 ਬਜ਼ੁਰਗ ਸ਼ਰਧਾਲੂ ਛੱਤਰੀ ਅਤੇ ਪੀਣ ਵਾਲਾ ਪਾਣੀ ਨਾਲ ਰੱਖਣ।",
     weatherDisclaimer: "ਮੌਸਮ ਜਾਣਕਾਰੀ Open-Meteo ਸੈਟੇਲਾਈਟ API 'ਤੇ ਆਧਾਰਿਤ ਹੈ।",
     cityName: "ਗਯਾ ਜੀ",
@@ -677,7 +683,7 @@ export const PILGRIM_TRANSLATIONS: Record<AppLangCode, PilgrimHubTranslations> =
     kutapMuhuratDesc: "சங்கல்பம் மற்றும் பல்கு தர்பணத்திற்கு உகந்தது.",
     aparahnaKaal: "அபராஹ்ண காலம் (சிறந்த நேரம்)",
     aparahnaKaalDesc: "விஷ்ணுபதம் மற்றும் அக்ஷயவடம் முதன்மை பிண்ட தான நேரம்.",
-    garudaPuranaRule: "கருட புராண விதி: சூரிய அஸ்தமனத்திற்குப் பிறகு பிண்ட தானம் செய்யக்கூடாது. பிற்பகல் 3:30க்குள் முடிக்கவும்.",
+    garudaPuranaRule: "கருட புராண விதி: சூரிய அஸ்தமனத்திற்குப் பிறகு பிண்ட தானம் செய்யக்கூடாது. அபராஹ்ன காலம் முடிவதற்குள் (பிற்பகல் 03:36) முடிக்கவும்.",
     seniorHealthAdvice: "💧 முதியவர்கள் குடை மற்றும் குடிநீர் எடுத்துச் செல்லவும்.",
     weatherDisclaimer: "வானிலை தகவல்கள் Open-Meteo செயற்கைக்கோள் API அடிப்படையிலானது.",
     cityName: "கயா ஜீ",
@@ -766,7 +772,7 @@ export const PILGRIM_TRANSLATIONS: Record<AppLangCode, PilgrimHubTranslations> =
     kutapMuhuratDesc: "సంకల్పం మరియు ఫల్గు తర్పణానికి శ్రేష్టం.",
     aparahnaKaal: "అపరాహ్ణ కాలం (అత్యుత్తమ సమయం)",
     aparahnaKaalDesc: "విష్ణుపాదం & అక్షయవటం వద్ద ప్రధాన పిండ ప్రదాన సమయం.",
-    garudaPuranaRule: "గరుడ పురాణ నియమం: సూర్యాస్తమయం తర్వాత పిండ ప్రదానం నిషిద్ధం. మధ్యాహ్నం 3:30 లోపు పూర్తి చేయండి.",
+    garudaPuranaRule: "గరుడ పురాణ నియమం: సూర్యాస్తమయం తర్వాత పిండ ప్రదానం నిషిద్ధం. అపరాహ్న కాలం ముగిసేలోపు (మధ్యాహ్నం 03:36) పూర్తి చేయండి.",
     seniorHealthAdvice: "💧 వృద్ధ భక్తులు గొడుగు మరియు తాగునీరు వెంట ఉంచుకోవాలి.",
     weatherDisclaimer: "వాతావరణ సమాచారం Open-Meteo శాటిలైట్ API పై ఆధారపడి ఉంటుంది.",
     cityName: "గయా జీ",
@@ -855,7 +861,7 @@ export const PILGRIM_TRANSLATIONS: Record<AppLangCode, PilgrimHubTranslations> =
     kutapMuhuratDesc: "ಸಂಕಲ್ಪ ಮತ್ತು ಫಲ್ಗು ತರ್ಪಣಕ್ಕೆ ಶ್ರೇಷ್ಠ.",
     aparahnaKaal: "ಅಪರಾಹ್ನ ಕಾಲ (ಅತ್ಯುತ್ತಮ ಸಮಯ)",
     aparahnaKaalDesc: "ವಿಷ್ಣುಪಾದ & ಅಕ್ಷಯವಟ ಮುಖ್ಯ ಪಿಂಡ ದಾನ ಸಮಯ.",
-    garudaPuranaRule: "ಗರುಡ ಪುರಾಣ ನಿಯಮ: ಸೂರ್ಯಾಸ್ತದ ನಂತರ ಪಿಂಡ ದಾನ ನಿಷೇಧಿಸಲಾಗಿದೆ. ಮಧ್ಯಾಹ್ನ 3:30 ರೊಳಗೆ ಪೂರ್ಣಗೊಳಿಸಿ.",
+    garudaPuranaRule: "ಗರುಡ ಪುರಾಣ ನಿಯಮ: ಸೂರ್ಯಾಸ್ತದ ನಂತರ ಪಿಂಡ ದಾನ ನಿಷೇಧಿಸಲಾಗಿದೆ. ಅಪರಾಹ್ನ ಕಾಲ ಮುಗಿಯುವ ಮುನ್ನ (ಮಧ್ಯಾಹ್ನ 03:36) ಪೂರ್ಣಗೊಳಿಸಿ.",
     seniorHealthAdvice: "💧 ಹಿರಿಯ ಭಕ್ತರು ಛತ್ರಿ ಮತ್ತು ಕುಡಿಯುವ ನೀರನ್ನು ಜೊತೆಯಲ್ಲಿಟ್ಟುಕೊಳ್ಳಿ.",
     weatherDisclaimer: "ಹವಾಮಾನ ಮಾಹಿತಿಯು Open-Meteo ಉಪಗ್ರಹ API ಆಧಾರಿತವಾಗಿದೆ.",
     cityName: "ಗಯಾ ಜೀ",
@@ -944,7 +950,7 @@ export const PILGRIM_TRANSLATIONS: Record<AppLangCode, PilgrimHubTranslations> =
     kutapMuhuratDesc: "സങ്കൽപ്പത്തിനും ഫൽഗു തർപ്പണത്തിനും ഉത്തമം.",
     aparahnaKaal: "അപരാഹ്ന കാലം (ഏറ്റവും നല്ല സമയം)",
     aparahnaKaalDesc: "വിഷ്ണുപാദത്തിലും അക്ഷയവടത്തിലും പ്രധാന പിണ്ഡദാന സമയം.",
-    garudaPuranaRule: "ഗരുഡ പുരാണ വിധി: സൂര്യാസ്തമയത്തിനു ശേഷം പിണ്ഡദാനം പാടില്ല. ഉച്ചതിരിഞ്ഞ് 3:30-ന് മുമ്പ് പൂർത്തിയാക്കുക.",
+    garudaPuranaRule: "ഗരുഡ പുരാണ വിധി: സൂര്യാസ്തമയത്തിനു ശേഷം പിണ്ഡദാനം പാടില്ല. അപരാഹ്ന കാലം അവസാനിക്കുന്നതിന് മുൻപ് (ഉച്ചതിരിഞ്ഞ് 03:36) പൂർത്തിയാക്കുക.",
     seniorHealthAdvice: "💧 മുതിർന്ന തീർത്ഥാടകർ കുടയും കുടിവെള്ളവും കരുതുക.",
     weatherDisclaimer: "കാലാവസ്ഥ വിവരങ്ങൾ Open-Meteo സാറ്റലൈറ്റ് API അടിസ്ഥാനമാക്കിയുള്ളതാണ്.",
     cityName: "ഗയാ ജീ",
@@ -1033,7 +1039,7 @@ export const PILGRIM_TRANSLATIONS: Record<AppLangCode, PilgrimHubTranslations> =
     kutapMuhuratDesc: "ସଂକଳ୍ପ ଏବଂ ଫଲ୍ଗୁ ତର୍ପଣ ପାଇଁ ଉତ୍ତମ।",
     aparahnaKaal: "ଅପରାହ୍ନ କାଳ (ସର୍ବୋତ୍ତମ ସମୟ)",
     aparahnaKaalDesc: "ବିଷ୍ଣୁପାଦ ଏବଂ ଅକ୍ଷୟବଟ ମୁଖ୍ୟ ପିଣ୍ଡଦାନ ସମୟ।",
-    garudaPuranaRule: "ଗରୁଡ଼ ପୁରାଣ ନିୟମ: ସୂର୍ଯ୍ୟାସ୍ତ ପରେ ପିଣ୍ଡଦାନ ନିଷେଧ। ଅପରାହ୍ନ ୩:୩୦ ପୂର୍ବରୁ ସମାପ୍ତ କରନ୍ତୁ।",
+    garudaPuranaRule: "ଗରୁଡ଼ ପୁରାଣ ନିୟମ: ସୂର୍ଯ୍ୟାସ୍ତ ପରେ ପିଣ୍ଡଦାନ ନିଷେଧ। ଅପରାହ୍ନ କାଳ ସମାପ୍ତ ହେବା ପୂର୍ବରୁ (୦୩:୩୬) ସମାପ୍ତ କରନ୍ତୁ।",
     seniorHealthAdvice: "💧 ବରିଷ୍ଠ ତୀର୍ଥଯାତ୍ରୀ ଛତା ଏବଂ ପିଇବା ପାଣି ସାଙ୍ଗରେ ରଖନ୍ତୁ।",
     weatherDisclaimer: "ପାଣିପାଗ ତଥ୍ୟ Open-Meteo ଉପଗ୍ରହ API ଉପରେ ଆଧାରିତ।",
     cityName: "ଗୟା ଜୀ",
@@ -1122,7 +1128,7 @@ export const PILGRIM_TRANSLATIONS: Record<AppLangCode, PilgrimHubTranslations> =
     kutapMuhuratDesc: "संकल्प र फल्गु तर्पणका लागि उत्तम।",
     aparahnaKaal: "अपराह्न काल (सर्वश्रेष्ठ समय)",
     aparahnaKaalDesc: "विष्णुपद र अक्षयवट मुख्य पिण्डदान समय।",
-    garudaPuranaRule: "गरुड पुराण नियम: सूर्यास्तपछि पिण्डदान निषेध छ। दिउँसो ३:३० भन्दा अगाडि सम्पन्न गर्नुहोस्।",
+    garudaPuranaRule: "गरुड पुराण नियम: सूर्यास्तपछि पिण्डदान निषेध छ। कृपया अपराह्न काल समाप्त हुनु अगाडि (दिउँसो ०३:३६) सम्पन्न गर्नुहोस्।",
     seniorHealthAdvice: "💧 ज्येष्ठ नागरिक तीर्थयात्रीहरूले छाता र पिउने पानी साथमा राख्नुहोला।",
     weatherDisclaimer: "मौसम विवरण Open-Meteo उपग्रह API मा आधारित छ।",
     cityName: "गया जी",
@@ -1160,5 +1166,17 @@ export const PILGRIM_TRANSLATIONS: Record<AppLangCode, PilgrimHubTranslations> =
 };
 
 export function getPilgrimTranslation(lang: AppLangCode): PilgrimHubTranslations {
-  return PILGRIM_TRANSLATIONS[lang] || PILGRIM_TRANSLATIONS.hi;
+  const trans = PILGRIM_TRANSLATIONS[lang] || PILGRIM_TRANSLATIONS.hi;
+  const isHi = lang === 'hi';
+  return {
+    weatherClearNight: isHi ? 'साफ़ रात' : 'Clear Sky',
+    weatherDrizzle: isHi ? 'हल्की बूंदाबांदी' : 'Light Drizzle',
+    muhuratStatusConcluded: isHi ? 'आज संपन्न' : 'Concluded for Today',
+    muhuratStatusActive: isHi ? 'अभी मान्य (शुभ)' : 'Active Now',
+    muhuratStatusUpcoming: isHi ? 'आगामी' : 'Upcoming',
+    muhuratResumesTomorrow: isHi 
+      ? 'आज का मुहूर्त संपन्न। कल प्रातः 11:36 AM (कुतुप काल) से पुनः प्रारंभ होगा।' 
+      : 'Rituals concluded for today. Resumes tomorrow at 11:36 AM (Kutap Kaal).',
+    ...trans,
+  };
 }

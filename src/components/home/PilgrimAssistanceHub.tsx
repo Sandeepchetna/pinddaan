@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Navigation, 
   ShieldAlert, 
@@ -18,6 +18,7 @@ import {
 } from 'lucide-react';
 import { useAppLanguage } from '@/lib/useAppLanguage';
 import { getPilgrimTranslation } from '@/data/multilingualPilgrimHub';
+import { evaluateMuhuratTiming } from '@/lib/vedicMuhurat';
 import GayaPilgrimCircuitModal from '@/components/common/GayaPilgrimCircuitModal';
 import PilgrimEmergencyModal from '@/components/common/PilgrimEmergencyModal';
 import GayaWeatherModal, { WeatherDetails } from '@/components/layout/GayaWeatherModal';
@@ -29,23 +30,86 @@ export default function PilgrimAssistanceHub() {
   const [isEmergencyOpen, setIsEmergencyOpen] = useState(false);
   const [isWeatherOpen, setIsWeatherOpen] = useState(false);
 
-  const fallbackWeather: WeatherDetails = {
+  const [weatherData, setWeatherData] = useState<WeatherDetails>({
     city: t.cityName,
-    temp: 32,
-    feelsLike: 36,
-    humidity: 68,
-    windSpeed: 16,
-    pressure: 994,
-    code: 1,
+    temp: 23,
+    feelsLike: 23,
+    humidity: 70,
+    windSpeed: 10,
+    pressure: 1005,
+    code: 0,
+    isDay: true,
     forecast: [
-      { date: '2026-09-12', day: 'Today', dayHi: 'आज', maxTemp: 32, minTemp: 26, code: 53 },
-      { date: '2026-09-13', day: 'Sun', dayHi: 'रवि', maxTemp: 33, minTemp: 25, code: 51 },
-      { date: '2026-09-14', day: 'Mon', dayHi: 'सोम', maxTemp: 32, minTemp: 26, code: 96 },
+      { date: '2026-10-08', day: 'Today', dayHi: 'आज', maxTemp: 28, minTemp: 22, code: 0 },
+      { date: '2026-10-09', day: 'Fri', dayHi: 'शुक्र', maxTemp: 28, minTemp: 22, code: 1 },
+      { date: '2026-10-10', day: 'Sat', dayHi: 'शनि', maxTemp: 29, minTemp: 23, code: 2 },
     ],
-  };
+  });
+
+  useEffect(() => {
+    let isMounted = true;
+    async function fetchLiveWeather() {
+      try {
+        const res = await fetch('/api/weather');
+        if (!res.ok) return;
+        const data = await res.json();
+        if (isMounted && typeof data.temp === 'number') {
+          setWeatherData({
+            city: data.city || 'Gaya Ji',
+            temp: data.temp,
+            feelsLike: typeof data.feelsLike === 'number' ? data.feelsLike : data.temp,
+            humidity: data.humidity ?? 65,
+            windSpeed: data.windSpeed ?? 10,
+            pressure: data.pressure ?? 1005,
+            code: typeof data.code === 'number' ? data.code : 0,
+            isDay: typeof data.isDay === 'boolean' ? data.isDay : true,
+            solarRadiation: data.solarRadiation,
+            forecast: Array.isArray(data.forecast) ? data.forecast : weatherData.forecast,
+            timestamp: data.timestamp,
+          });
+        }
+      } catch {
+        // Fallback gracefully
+      }
+    }
+    fetchLiveWeather();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  const muhurat = evaluateMuhuratTiming();
+  const isConcluded = muhurat.isConcludedForToday;
 
   return (
-    <section className="py-10 sm:py-14 bg-gradient-to-b from-stone-900 via-[#181412] to-stone-900 text-white relative overflow-hidden border-y border-amber-900/30">
+    <section 
+      id="pilgrim-assistance-hub" 
+      aria-label={t.hubTitle} 
+      className="py-10 sm:py-14 bg-gradient-to-b from-stone-900 via-[#181412] to-stone-900 text-white relative overflow-hidden border-y border-amber-900/30"
+    >
+      {/* Search Engine Rich Snippet for Pilgrimage Assistance Hub */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'TouristInformationCenter',
+            'name': 'Gaya Ji Pilgrim Assistance & Safety Hub',
+            'description': t.hubSubtitle,
+            'url': 'https://www.pinddaanwale.com/#pilgrim-assistance-hub',
+            'telephone': '+91 7463055338',
+            'address': {
+              '@type': 'PostalAddress',
+              'addressLocality': 'Gaya',
+              'addressRegion': 'Bihar',
+              'postalCode': '823001',
+              'addressCountry': 'IN'
+            },
+            'hasMap': 'https://maps.google.com/?q=Vishnupad+Temple+Gaya',
+            'openingHours': 'Mo-Su 00:00-23:59'
+          })
+        }}
+      />
       {/* Decorative background glow */}
       <div className="absolute top-0 right-1/4 w-96 h-96 bg-amber-600/10 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-red-600/5 rounded-full blur-3xl pointer-events-none" />
@@ -109,16 +173,27 @@ export default function PilgrimAssistanceHub() {
           </div>
 
           {/* Card 2: Today's Vedic Pind Daan Muhurat */}
-          <div className="bg-gradient-to-b from-white/[0.06] to-white/[0.02] border border-amber-500/30 rounded-3xl p-5 sm:p-6 flex flex-col justify-between hover:border-amber-500/60 transition-all group shadow-xl">
+          <div className={`bg-gradient-to-b from-white/[0.06] to-white/[0.02] border rounded-3xl p-5 sm:p-6 flex flex-col justify-between transition-all group shadow-xl ${
+            isConcluded ? 'border-stone-700/60 opacity-85' : 'border-amber-500/30 hover:border-amber-500/60'
+          }`}>
             <div>
               <div className="flex items-center justify-between mb-4">
-                <div className="w-12 h-12 rounded-2xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400 group-hover:scale-110 transition-transform">
+                <div className={`w-12 h-12 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform ${
+                  isConcluded ? 'bg-stone-800 border border-stone-700 text-stone-400' : 'bg-amber-500/20 border border-amber-500/40 text-amber-400'
+                }`}>
                   <Sparkles className="w-6 h-6 fill-current" />
                 </div>
-                <span className="text-[11px] font-bold text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded-full border border-emerald-500/30 flex items-center gap-1">
-                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                  {t.hubCard2Badge}
-                </span>
+                {isConcluded ? (
+                  <span className="text-[11px] font-bold text-stone-300 bg-stone-800/90 px-2.5 py-1 rounded-full border border-stone-700 flex items-center gap-1">
+                    <Clock className="w-3 h-3 text-stone-400" />
+                    {t.muhuratStatusConcluded}
+                  </span>
+                ) : (
+                  <span className="text-[11px] font-bold text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded-full border border-emerald-500/30 flex items-center gap-1">
+                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                    {t.hubCard2Badge}
+                  </span>
+                )}
               </div>
 
               <h3 className="font-serif font-bold text-lg text-white mb-2 group-hover:text-amber-300 transition-colors">
@@ -132,11 +207,15 @@ export default function PilgrimAssistanceHub() {
               <div className="bg-black/40 rounded-2xl p-3 border border-white/10 space-y-2 text-xs mb-4">
                 <div className="flex items-center justify-between">
                   <span className="text-gray-400 text-[11px]">{t.kutapMuhurat}:</span>
-                  <strong className="text-amber-300 font-bold">11:36 AM – 12:24 PM</strong>
+                  <strong className={isConcluded ? "text-stone-400 font-medium" : "text-amber-300 font-bold"}>
+                    11:36 AM – 01:12 PM
+                  </strong>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-gray-400 text-[11px]">{t.aparahnaKaal}:</span>
-                  <strong className="text-emerald-400 font-extrabold">01:12 PM – 03:36 PM</strong>
+                  <strong className={isConcluded ? "text-stone-400 font-medium" : "text-emerald-400 font-extrabold"}>
+                    01:12 PM – 03:36 PM
+                  </strong>
                 </div>
               </div>
             </div>
@@ -221,7 +300,7 @@ export default function PilgrimAssistanceHub() {
       <GayaWeatherModal
         isOpen={isWeatherOpen}
         onClose={() => setIsWeatherOpen(false)}
-        weather={fallbackWeather}
+        weather={weatherData}
         isHindi={isHindi}
         lang={lang}
       />

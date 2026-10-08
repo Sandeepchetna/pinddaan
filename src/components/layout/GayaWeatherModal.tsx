@@ -1,27 +1,31 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { 
   X, 
   Sun, 
+  Moon,
   CloudSun, 
+  CloudMoon,
   Cloud, 
   CloudRain, 
+  CloudDrizzle,
   CloudLightning, 
   CloudFog, 
   Wind, 
   Droplets, 
   Thermometer, 
   Gauge, 
-  Compass, 
   Clock, 
   Info,
   Sparkles,
-  MapPin
+  MapPin,
+  CheckCircle2
 } from 'lucide-react';
 
 import { getPilgrimTranslation } from '@/data/multilingualPilgrimHub';
 import { useAppLanguage, AppLangCode } from '@/lib/useAppLanguage';
+import { evaluateMuhuratTiming, EvaluatedMuhuratState } from '@/lib/vedicMuhurat';
 
 export interface WeatherDetails {
   city: string;
@@ -31,6 +35,8 @@ export interface WeatherDetails {
   windSpeed: number;
   pressure: number;
   code: number;
+  isDay?: boolean;
+  solarRadiation?: number;
   forecast: Array<{
     date: string;
     day: string;
@@ -50,8 +56,19 @@ interface GayaWeatherModalProps {
   lang?: AppLangCode;
 }
 
-function getWeatherIconAndLabel(code: number, t: ReturnType<typeof getPilgrimTranslation>) {
+function getWeatherIconAndLabel(
+  code: number, 
+  isDay: boolean = true, 
+  t: ReturnType<typeof getPilgrimTranslation>
+) {
   if (code === 0) {
+    if (!isDay) {
+      return {
+        label: t.weatherClearNight || t.weatherClear,
+        Icon: Moon,
+        color: 'text-amber-200'
+      };
+    }
     return {
       label: t.weatherClear,
       Icon: Sun,
@@ -59,6 +76,13 @@ function getWeatherIconAndLabel(code: number, t: ReturnType<typeof getPilgrimTra
     };
   }
   if (code === 1 || code === 2) {
+    if (!isDay) {
+      return {
+        label: t.weatherPartlyCloudy,
+        Icon: CloudMoon,
+        color: 'text-amber-200'
+      };
+    }
     return {
       label: t.weatherPartlyCloudy,
       Icon: CloudSun,
@@ -79,7 +103,21 @@ function getWeatherIconAndLabel(code: number, t: ReturnType<typeof getPilgrimTra
       color: 'text-blue-300'
     };
   }
-  if ((code >= 51 && code <= 67) || (code >= 80 && code <= 82)) {
+  if (code === 51 || code === 53 || code === 55) {
+    return {
+      label: t.weatherDrizzle || 'Light Drizzle',
+      Icon: CloudDrizzle,
+      color: 'text-sky-300'
+    };
+  }
+  if (code >= 61 && code <= 67) {
+    return {
+      label: t.weatherRain,
+      Icon: CloudRain,
+      color: 'text-sky-400'
+    };
+  }
+  if (code >= 80 && code <= 82) {
     return {
       label: t.weatherRain,
       Icon: CloudRain,
@@ -94,11 +132,9 @@ function getWeatherIconAndLabel(code: number, t: ReturnType<typeof getPilgrimTra
     };
   }
 
-  return {
-    label: t.weatherClear,
-    Icon: Sun,
-    color: 'text-amber-500'
-  };
+  return !isDay
+    ? { label: t.weatherClear, Icon: Moon, color: 'text-amber-200' }
+    : { label: t.weatherClear, Icon: Sun, color: 'text-amber-500' };
 }
 
 export default function GayaWeatherModal({ isOpen, onClose, weather, isHindi, lang }: GayaWeatherModalProps) {
@@ -106,10 +142,28 @@ export default function GayaWeatherModal({ isOpen, onClose, weather, isHindi, la
   const currentLang: AppLangCode = lang || appLang || (isHindi ? 'hi' : 'en');
   const t = getPilgrimTranslation(currentLang);
 
+  // Real-time Muhurat state evaluation
+  const [muhuratState, setMuhuratState] = useState<EvaluatedMuhuratState>(() => evaluateMuhuratTiming());
+
+  useEffect(() => {
+    // Re-evaluate on open and every 60 seconds
+    const updateTiming = () => {
+      setMuhuratState(evaluateMuhuratTiming());
+    };
+    updateTiming();
+    const timer = setInterval(updateTiming, 60000);
+    return () => clearInterval(timer);
+  }, [isOpen]);
+
   if (!isOpen) return null;
 
-  const currentInfo = getWeatherIconAndLabel(weather.code, t);
+  const isDay = weather.isDay ?? true;
+  const currentInfo = getWeatherIconAndLabel(weather.code, isDay, t);
   const CurrentIcon = currentInfo.Icon;
+
+  const isConcluded = muhuratState.isConcludedForToday;
+  const kutapSlot = muhuratState.slots[0];
+  const aparahnaSlot = muhuratState.slots[1];
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
@@ -149,7 +203,11 @@ export default function GayaWeatherModal({ isOpen, onClose, weather, isHindi, la
                 {t.feelsLike} <strong className="text-white">{weather.feelsLike}°C</strong>
               </p>
             </div>
-            <div className="p-3 bg-amber-500/10 rounded-2xl border border-amber-500/20">
+            <div className={`p-3 rounded-2xl border ${
+              isDay 
+                ? 'bg-amber-500/10 border-amber-500/20' 
+                : 'bg-indigo-950/40 border-indigo-500/30'
+            }`}>
               <CurrentIcon className={`w-12 h-12 ${currentInfo.color}`} />
             </div>
           </div>
@@ -186,7 +244,8 @@ export default function GayaWeatherModal({ isOpen, onClose, weather, isHindi, la
             </h4>
             <div className="grid grid-cols-3 gap-2">
               {weather.forecast.map((fc, i) => {
-                const fcInfo = getWeatherIconAndLabel(fc.code, t);
+                // Ensure Today (i === 0) icon matches day/night appropriately while preserving condition cohesion
+                const fcInfo = getWeatherIconAndLabel(fc.code, i === 0 ? isDay : true, t);
                 const FcIcon = fcInfo.Icon;
                 const displayDay = i === 0 ? t.today : (currentLang === 'hi' ? fc.dayHi : fc.day);
                 return (
@@ -198,7 +257,7 @@ export default function GayaWeatherModal({ isOpen, onClose, weather, isHindi, la
                     <div className="text-xs font-semibold text-white">
                       {fc.maxTemp}° / <span className="text-gray-400 font-normal">{fc.minTemp}°</span>
                     </div>
-                    <span className="text-[10px] text-gray-400 block mt-0.5 truncate">
+                    <span className="text-[10px] text-gray-400 block mt-0.5 truncate" title={fcInfo.label}>
                       {fcInfo.label}
                     </span>
                   </div>
@@ -207,40 +266,119 @@ export default function GayaWeatherModal({ isOpen, onClose, weather, isHindi, la
             </div>
           </div>
 
-          {/* VEDIC PIND DAAN MUHURAT (Unique High-Value Section) */}
-          <div className="bg-gradient-to-br from-amber-500/10 via-amber-900/15 to-amber-950/20 border border-amber-500/30 rounded-2xl p-3.5 space-y-2.5">
-            <div className="flex items-center gap-2 text-amber-400 font-bold text-xs">
-              <Sparkles className="w-4 h-4 text-amber-400 fill-current" />
-              <span>{t.vedicMuhuratTitle}</span>
+          {/* VEDIC PIND DAAN MUHURAT (Scriptural Timing & Dynamic State) */}
+          <div className={`transition-all duration-300 rounded-2xl p-3.5 space-y-2.5 border ${
+            isConcluded
+              ? 'bg-stone-900/60 border-stone-800/80 opacity-70 grayscale-[25%]'
+              : 'bg-gradient-to-br from-amber-500/10 via-amber-900/15 to-amber-950/20 border-amber-500/30'
+          }`}>
+            <div className="flex items-center justify-between text-xs">
+              <div className="flex items-center gap-2 font-bold text-amber-400">
+                <Sparkles className="w-4 h-4 text-amber-400 fill-current" />
+                <span>{t.vedicMuhuratTitle}</span>
+              </div>
+              {isConcluded ? (
+                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-stone-800 text-stone-300 border border-stone-700">
+                  <Clock className="w-3 h-3 text-stone-400" />
+                  <span>{t.muhuratStatusConcluded}</span>
+                </span>
+              ) : muhuratState.activeSlot ? (
+                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 animate-pulse">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                  <span>{t.muhuratStatusActive}</span>
+                </span>
+              ) : (
+                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/15 text-amber-300 border border-amber-500/30">
+                  <span>{t.muhuratStatusUpcoming}</span>
+                </span>
+              )}
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
-              <div className="bg-black/30 p-2.5 rounded-xl border border-amber-500/20">
-                <span className="text-[10px] text-amber-300/80 font-bold uppercase tracking-wider block">
-                  {t.kutapMuhurat}
+              {/* Kutap & Rohin Slot */}
+              <div className={`p-2.5 rounded-xl border transition-all ${
+                isConcluded || kutapSlot?.status === 'CONCLUDED'
+                  ? 'bg-black/20 border-white/5 opacity-60'
+                  : kutapSlot?.status === 'ACTIVE'
+                  ? 'bg-amber-950/40 border-amber-500/50 ring-1 ring-amber-500/30'
+                  : 'bg-black/30 border-amber-500/20'
+              }`}>
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] text-amber-300/80 font-bold uppercase tracking-wider block">
+                    {t.kutapMuhurat}
+                  </span>
+                  {kutapSlot?.status === 'CONCLUDED' && (
+                    <span className="text-[9px] font-medium px-1.5 py-0.5 rounded bg-stone-800 text-stone-400">
+                      {t.muhuratStatusConcluded?.replace(/ for Today| समाप्त/, '') || 'Concluded'}
+                    </span>
+                  )}
+                  {kutapSlot?.status === 'ACTIVE' && (
+                    <span className="text-[9px] font-bold px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 animate-pulse">
+                      Active
+                    </span>
+                  )}
+                </div>
+                <span className={`text-sm font-extrabold block mt-0.5 ${
+                  kutapSlot?.status === 'CONCLUDED' ? 'text-stone-400' : 'text-white'
+                }`}>
+                  11:36 AM – 01:12 PM
                 </span>
-                <span className="text-sm font-extrabold text-white">11:36 AM – 01:12 PM</span>
-                <p className="text-[10px] text-gray-300 mt-0.5">
+                <p className="text-[10px] text-gray-400 mt-0.5">
                   {t.kutapMuhuratDesc}
                 </p>
               </div>
 
-              <div className="bg-black/30 p-2.5 rounded-xl border border-amber-500/20">
-                <span className="text-[10px] text-amber-300/80 font-bold uppercase tracking-wider block">
-                  {t.aparahnaKaal}
+              {/* Aparahna Kaal Slot */}
+              <div className={`p-2.5 rounded-xl border transition-all ${
+                isConcluded || aparahnaSlot?.status === 'CONCLUDED'
+                  ? 'bg-black/20 border-white/5 opacity-60'
+                  : aparahnaSlot?.status === 'ACTIVE'
+                  ? 'bg-emerald-950/40 border-emerald-500/50 ring-1 ring-emerald-500/40'
+                  : 'bg-black/30 border-amber-500/20'
+              }`}>
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] text-amber-300/80 font-bold uppercase tracking-wider block">
+                    {t.aparahnaKaal}
+                  </span>
+                  {aparahnaSlot?.status === 'CONCLUDED' && (
+                    <span className="text-[9px] font-medium px-1.5 py-0.5 rounded bg-stone-800 text-stone-400">
+                      {t.muhuratStatusConcluded?.replace(/ for Today| समाप्त/, '') || 'Concluded'}
+                    </span>
+                  )}
+                  {aparahnaSlot?.status === 'ACTIVE' && (
+                    <span className="text-[9px] font-bold px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 animate-pulse">
+                      Active (Prime)
+                    </span>
+                  )}
+                </div>
+                <span className={`text-sm font-extrabold block mt-0.5 ${
+                  aparahnaSlot?.status === 'CONCLUDED' ? 'text-stone-400' : 'text-emerald-400'
+                }`}>
+                  01:12 PM – 03:36 PM
                 </span>
-                <span className="text-sm font-extrabold text-emerald-400">01:12 PM – 03:36 PM</span>
-                <p className="text-[10px] text-gray-300 mt-0.5">
+                <p className="text-[10px] text-gray-400 mt-0.5">
                   {t.aparahnaKaalDesc}
                 </p>
               </div>
             </div>
 
-            <div className="flex items-start gap-1.5 text-[11px] text-amber-200/80 bg-amber-950/40 p-2 rounded-xl border border-amber-500/20">
-              <Info className="w-3.5 h-3.5 text-amber-400 shrink-0 mt-0.5" />
-              <span>
-                {t.garudaPuranaRule}
-              </span>
+            {/* Scriptural Advisory & Cutoff Notice */}
+            <div className={`flex items-start gap-1.5 text-[11px] p-2.5 rounded-xl border transition-colors ${
+              isConcluded
+                ? 'bg-stone-900/80 border-stone-700/60 text-stone-300'
+                : 'bg-amber-950/40 border-amber-500/20 text-amber-200/90'
+            }`}>
+              <Info className={`w-3.5 h-3.5 shrink-0 mt-0.5 ${isConcluded ? 'text-stone-400' : 'text-amber-400'}`} />
+              <div>
+                <span>
+                  {t.garudaPuranaRule}
+                </span>
+                {isConcluded && (
+                  <span className="block mt-1 font-semibold text-amber-400/90 text-[10.5px]">
+                    {t.muhuratResumesTomorrow}
+                  </span>
+                )}
+              </div>
             </div>
           </div>
 

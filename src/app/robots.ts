@@ -11,15 +11,11 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ['/admin/', '/api/private/', '/internal/']
       },
       {
-        userAgent: 'GPTBot',
+        userAgent: ['Googlebot', 'Bingbot', 'Applebot'],
         allow: '/'
       },
       {
-        userAgent: 'PerplexityBot',
-        allow: '/'
-      },
-      {
-        userAgent: 'ClaudeBot',
+        userAgent: ['GPTBot', 'PerplexityBot', 'ClaudeBot', 'Google-Extended'],
         allow: '/'
       }
     ],

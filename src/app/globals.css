@@ -284,6 +284,43 @@ textarea:focus {
   min-height: unset;
 }
 
+/* Specific styling for Admin Login inputs to prevent global light-theme padding & background override */
+.admin-login-input {
+  background-color: #0F172A !important;
+  color: #FFFFFF !important;
+  padding-left: 2.75rem !important; /* 44px: leaves clear space past 14px+16px icon */
+  padding-right: 2.75rem !important; /* 44px: leaves clear space past eye toggle */
+  padding-top: 0.75rem !important;
+  padding-bottom: 0.75rem !important;
+  min-height: 48px !important;
+  border: 1px solid #334155 !important;
+  border-radius: 0.75rem !important;
+  font-size: 0.875rem !important;
+  line-height: 1.25rem !important;
+}
+
+.admin-login-input:focus {
+  border-color: #F48D08 !important;
+  box-shadow: 0 0 0 2px rgba(244, 141, 8, 0.25) !important;
+  background-color: #0F172A !important;
+  color: #FFFFFF !important;
+}
+
+.admin-login-input::placeholder {
+  color: #64748B !important;
+}
+
+/* Prevent WebKit/Chrome autofill from forcing white background and black text */
+.admin-login-input:-webkit-autofill,
+.admin-login-input:-webkit-autofill:hover,
+.admin-login-input:-webkit-autofill:focus,
+.admin-login-input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 1000px #0F172A inset !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  transition: background-color 5000s ease-in-out 0s;
+  caret-color: #FFFFFF !important;
+}
+
 /* ==========================================================================
    RESPONSIVE LUXURY CONTAINERS (1280px / 1400px / 1600px)
    ========================================================================== */

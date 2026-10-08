@@ -240,7 +240,7 @@ export async function createPreBookingAction(data: {
   }
 }
 
-export async function loginAdminAction(data: { email: string; password: string }) {
+export async function loginAdminAction(data: { email: string; password: string; rememberMe?: boolean }) {
   try {
     const result = await verifyAdminCredentials(data.email, data.password);
     if (!result.success || !result.user) {
@@ -254,7 +254,7 @@ export async function loginAdminAction(data: { email: string; password: string }
       role: result.user.role || 'ADMIN'
     });
 
-    await setAdminSessionCookie(token);
+    await setAdminSessionCookie(token, !!data.rememberMe);
 
     return { 
       success: true, 

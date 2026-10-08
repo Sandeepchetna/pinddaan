@@ -257,14 +257,15 @@ export async function verifyAdminCredentials(
 /**
  * Set HTTP-Only Secure Cookie
  */
-export async function setAdminSessionCookie(token: string) {
+export async function setAdminSessionCookie(token: string, rememberMe: boolean = false) {
   const cookieStore = await cookies();
+  const maxAge = rememberMe ? (60 * 60 * 24 * 30) : SESSION_MAX_AGE; // 30 days if rememberMe, else 7 days
   cookieStore.set(ADMIN_COOKIE_NAME, token, {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
     sameSite: 'lax',
     path: '/',
-    maxAge: SESSION_MAX_AGE,
+    maxAge,
   });
 }
 

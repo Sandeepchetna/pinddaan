@@ -19,7 +19,42 @@ export default function ZeroExtortionPledge({ cityName }: { cityName?: string })
   const { isHindi } = useAppLanguage();
 
   return (
-    <div className="my-10 space-y-6">
+    <section 
+      id="zero-extortion-guarantee" 
+      aria-label="100% Fixed Dakshina & Zero Extortion Guarantee" 
+      className="my-10 space-y-6"
+    >
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'FAQPage',
+            'mainEntity': [
+              {
+                '@type': 'Question',
+                'name': isHindi ? 'क्या गया जी में तय दक्षिणा के अलावा कोई अतिरिक्त खर्च देना पड़ता है?' : 'Is there any hidden or extra cost beyond the pre-booked dakshina in Gaya Ji?',
+                'acceptedAnswer': {
+                  '@type': 'Answer',
+                  'text': isHindi 
+                    ? 'नहीं, PindDaanWale की पवित्र प्रतिज्ञा है कि बुकिंग के समय तय दक्षिणा ही अंतिम है। इसमें समस्त वैदिक पूजन सामग्री, प्रमाणित पुरोहित दक्षिणा, विष्णुपद मंदिर दर्शन व नौका सेवा सम्मिलित है।'
+                    : 'No, the PindDaanWale sacred pledge guarantees that what you book is all you pay. All Vedic samagri, verified Purohit dakshina, and sacred offerings are 100% included with zero surprise demands.'
+                }
+              },
+              {
+                '@type': 'Question',
+                'name': isHindi ? 'गया रेलवे स्टेशन पर मिलने वाले बिचौलियों से कैसे बचें?' : 'How to avoid touts and middlemen at Gaya Railway Station?',
+                'acceptedAnswer': {
+                  '@type': 'Answer',
+                  'text': isHindi
+                    ? 'गया रेलवे स्टेशन के बाहर कम दर का झांसा देकर घाट पर अत्यधिक दक्षिणा मांगने वाले अनधिकृत एजेंटों से बचें। PindDaanWale का अधिकृत प्रतिनिधि नेम-बोर्ड के साथ आपको स्टेशन से सीधे रिसीव करता है।'
+                    : 'Avoid unauthorized station agents quoting unrealistically low rates to trap pilgrims. PindDaanWale assigns a dedicated representative with a personalized name-board for direct, secure pickup.'
+                }
+              }
+            ]
+          })
+        }}
+      />
       {/* 1. Gold-Stamped Official Sacred Pledge Banner */}
       <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#1C160C] via-[#141218] to-[#0D1527] border-2 border-amber-500/40 p-6 sm:p-8 shadow-2xl">
         {/* Background Decorative Seals */}
@@ -33,7 +68,7 @@ export default function ZeroExtortionPledge({ cityName }: { cityName?: string })
               <span>{isHindi ? '100% निर्धारित दक्षिणा • शून्य बिचौलिया गारंटी' : '100% FIXED DAKSHINA • ZERO EXTORTION GUARANTEE'}</span>
             </div>
 
-            <h3 className="text-xl sm:text-2xl lg:text-3xl font-serif font-bold text-white leading-snug">
+            <h3 id="pledge-heading" className="text-xl sm:text-2xl lg:text-3xl font-serif font-bold text-white leading-snug">
               {isHindi ? (
                 <>
                   PindDaanWale की पवित्र प्रतिज्ञा: <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-amber-100 to-amber-400">जो बुक किया, वही अंतिम है</span>
@@ -164,6 +199,6 @@ export default function ZeroExtortionPledge({ cityName }: { cityName?: string })
           </table>
         </div>
       </div>
-    </div>
+    </section>
   );
 }

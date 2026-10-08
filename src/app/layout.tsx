@@ -39,17 +39,57 @@ const notoSansDevanagari = Noto_Sans_Devanagari({
 
 export const metadata: Metadata = {
   title: {
-    default: "PindDaanWale | Sacred & Authentic Gaya Ji Pind Daan",
+    default: "PindDaanWale | Sacred & Authentic Gaya Ji Pind Daan | Pitru Paksha 2026",
     template: "%s | PindDaanWale Gaya Ji"
   },
-  description: "The premier digital pilgrimage platform for authentic Vedic rites, Pind Daan, Shradh, and Pitru Paksha at Vishnupad Temple & Falgu River in Gaya Ji with transparent dakshina.",
+  description: "Official pilgrimage authority for authentic Vedic Pind Daan, Shradh, and Gotra Tarpan at Vishnupad Temple & Falgu River in Gaya Ji. 100% fixed dakshina, zero extortion guarantee, verified hereditary Purohits.",
+  keywords: [
+    "Pind Daan Gaya Ji",
+    "Gaya Pind Daan",
+    "Pitru Paksha 2026",
+    "Vishnupad Temple Gaya",
+    "Gaya Ji Shradh Pooja",
+    "Pind Daan Cost Gaya",
+    "Falgu River Tarpan",
+    "Akshayavat Pind Daan",
+    "Pretshila Gaya Ji",
+    "Tripindi Shradh Gaya",
+    "Narayan Bali Gaya Ji",
+    "NRI Pind Daan Live",
+    "Gaya Panda Contact",
+    "Pind Daan Packages",
+    "गया जी पिंडदान",
+    "पितृपक्ष 2026",
+    "विष्णुपद मंदिर श्राद्ध"
+  ],
+  authors: [{ name: "PindDaanWale Teerth Seva", url: "https://www.pinddaanwale.com" }],
+  creator: "PindDaanWale",
+  publisher: "PindDaanWale Teerth Authority",
+  category: "Religion & Spirituality",
   metadataBase: new URL("https://www.pinddaanwale.com"),
   alternates: {
-    canonical: "/"
+    canonical: "/",
+    languages: {
+      "en-IN": "https://www.pinddaanwale.com",
+      "hi-IN": "https://www.pinddaanwale.com",
+      "x-default": "https://www.pinddaanwale.com"
+    }
+  },
+  robots: {
+    index: true,
+    follow: true,
+    nocache: false,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
   },
   openGraph: {
     title: "PindDaanWale | Sacred & Authentic Gaya Ji Pind Daan",
-    description: "Plan authentic Shradh, Tarpan, and Pind Daan rites under hereditary Gaya Purohits at Vishnupad Temple.",
+    description: "Plan authentic Shradh, Tarpan, and Pind Daan rites under hereditary Gaya Purohits at Vishnupad Temple. 100% fixed dakshina & zero middlemen.",
     url: "https://www.pinddaanwale.com",
     siteName: "PindDaanWale",
     images: [
@@ -57,7 +97,7 @@ export const metadata: Metadata = {
         url: "/images/gaya_vishnupad.jpg",
         width: 1200,
         height: 630,
-        alt: "Vishnupad Temple Gaya Ji - PindDaanWale"
+        alt: "Vishnupad Temple Gaya Ji - Sacred Pind Daan Rituals"
       }
     ],
     locale: "en_IN",
@@ -66,8 +106,9 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "PindDaanWale | Trusted Gaya Ji Pilgrimage",
-    description: "Sacred Pind Daan and Shradh rites at Vishnupad Gaya Ji with hereditary Purohits.",
-    images: ["/images/gaya_vishnupad.jpg"]
+    description: "Sacred Pind Daan and Shradh rites at Vishnupad Gaya Ji with hereditary Purohits. 100% Fixed Dakshina Guarantee.",
+    images: ["/images/gaya_vishnupad.jpg"],
+    creator: "@PindDaanWale"
   },
   other: {
     "geo.position": "24.7788;85.0084",
