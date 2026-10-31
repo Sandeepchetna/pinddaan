@@ -109,7 +109,7 @@ export function assessVedicMokshaPath(
       englishReasoning: 'According to Vayu Purana (Gaya Mahatmya), first-time pilgrims should perform comprehensive Parvana Shradh across the 45-Vedi trail including the core Tri-Sthali (Falgu, Vishnupad, Akshayavat), liberating 101 generations of ancestors.'
     };
   } else {
-    const livePkg = findLivePackage('1-day', 9449, '1-Day Essential Pind Daan');
+    const livePkg = findLivePackage('1-day', 7499, '1-Day Essential Pind Daan');
     recommendedPackage = {
       id: '1_day_essential',
       title: livePkg.title,

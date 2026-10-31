@@ -92,16 +92,68 @@ If the user specifies father/mother/navami/ekadashi/amavasya or an English date,
   // Packages & Settings from Public Database
   const [packagesList, setPackagesList] = useState<any[]>([
     {
+      id: 'pkg-uttam',
+      slug: 'uttam-pind-daan',
+      title: 'Uttam Pind Daan',
+      priceINR: 11000,
+      goldPriceINR: 11000,
+      duration: '3–3.5 Hours',
+      badge: 'SARVA SHRESTHA VIDHI',
+      shortDesc: 'The most comprehensive Vedic ritual featuring Kalash Puja, 7 Kul Ka Pind Daan, and 5 Vastra & Patra Daan at Vishnupad & Falgu River.',
+      image: '/images/gaya_vishnupad.jpg',
+      inclusions: 'Kalash Puja\n7 Kul Ka Pind Daan\n5 Vastra and Patra Daan\nRequired Puja Samagri Included\nPandit Ji\'s Charges (Dakshina) Included',
+      goldInclusions: 'Kalash Puja\n7 Kul Ka Pind Daan\n5 Vastra and Patra Daan\nRequired Puja Samagri Included\nPandit Ji\'s Charges (Dakshina) Included'
+    },
+    {
+      id: 'pkg-madhyam',
+      slug: 'madhyam-pind-daan',
+      title: 'Madhyam Pind Daan',
+      priceINR: 7500,
+      goldPriceINR: 7500,
+      duration: '2–2.5 Hours',
+      badge: 'MOST POPULAR VIDHI',
+      shortDesc: 'Traditional Vedic Gaya Ji Pind Daan with Kalash Puja, complete Pind Daan Vidhi, and 3 Vastra & Patra Daan for ancestral peace.',
+      image: '/images/pind_daan_vidhi.jpg',
+      inclusions: 'Kalash Puja\nPind Daan Vidhi\n3 Vastra and Patra Daan\nRequired Puja Samagri Included\nPandit Ji\'s Charges (Dakshina) Included',
+      goldInclusions: 'Kalash Puja\nPind Daan Vidhi\n3 Vastra and Patra Daan\nRequired Puja Samagri Included\nPandit Ji\'s Charges (Dakshina) Included'
+    },
+    {
+      id: 'pkg-kanishtha',
+      slug: 'kanishtha-pind-daan',
+      title: 'Kanishtha Pind Daan',
+      priceINR: 4500,
+      goldPriceINR: 4500,
+      duration: '2 Hours',
+      badge: 'SARAL VEDIC VIDHI',
+      shortDesc: 'Essential Vedic Pind Daan Vidhi with 2 Thali Daan performed under authentic Gaya Panda guidance at Vishnupad & Falgu.',
+      image: '/images/akshay_vat.jpg',
+      inclusions: 'Pind Daan Vidhi\n2 Thali Daan\nRequired Puja Samagri Included\nPandit Ji\'s Charges (Dakshina) Included',
+      goldInclusions: 'Pind Daan Vidhi\n2 Thali Daan\nRequired Puja Samagri Included\nPandit Ji\'s Charges (Dakshina) Included'
+    },
+    {
+      id: 'pkg-shradh',
+      slug: 'shradh-pind-daan',
+      title: 'Shradh Pind Daan',
+      priceINR: 3100,
+      goldPriceINR: 3100,
+      duration: '1–1.5 Hours',
+      badge: 'CORE SHRADDHA VIDHI',
+      shortDesc: 'Focused Vedic Pind Daan Vidhi only at holy Falgu River and Vishnupad with authentic gotra sankalp.',
+      image: '/images/gaya_drone.jpg',
+      inclusions: 'Pind Daan Vidhi Only\nRequired Puja Samagri Included\nPandit Ji\'s Charges (Dakshina) Included',
+      goldInclusions: 'Pind Daan Vidhi Only\nRequired Puja Samagri Included\nPandit Ji\'s Charges (Dakshina) Included'
+    },
+    {
       id: 'cmtk2km8j0014d9g3kfc9n6hf',
       slug: 'gaya-ji-1-day-pind-daan',
       title: 'Gaya Ji 1-Day Pind Daan',
-      priceINR: 9449,
-      goldPriceINR: 13999,
-      duration: '1 Day (Approx 4-5 Hours)',
-      badge: 'MOST POPULAR',
-      shortDesc: 'Ideal for devotees visiting Gaya Ji for a single day to perform essential rites at Vishnupad Temple & Falgu River.',
-      image: '/images/gaya_vishnupad.jpg',
-      inclusions: 'Certified Gaya Teerth Purohit\nRitual at Falgu Ghat & Vishnupad Temple\nComplete Organic Samagri Kit (Jau, Tila, Ghee)\nAC 2 person private Room /stay & pure Satvik food\nGaya Ji Railway station | Airport pickup & drop (AUTO)\nPuja Samagri and Dakshina Included',
+      priceINR: 7499,
+      goldPriceINR: 12499,
+      duration: '1 Day (4 to 6 Hours)',
+      badge: 'NEW REDUCED RATE',
+      shortDesc: 'Single-day layover rites at Falgu River & Vishnupad. Gold Plan: Non-AC Room ₹7,499 / AC Room ₹8,499. Platinum VIP: Deluxe Hotel & AC Cab ₹12,499.',
+      image: '/images/pind_daan_vidhi.jpg',
+      inclusions: 'Certified Gaya Teerth Purohit\nRitual at Falgu Ghat & Vishnupad Temple\nComplete Organic Samagri Kit (Jau, Tila, Ghee)\n2-Person Private Room Stay (Non-AC ₹7,499 / AC Room ₹8,499) & Pure Satvik Food\nGaya Ji Railway Station | Airport Pickup & Drop (Auto)\nPuja Samagri and Pandit Dakshina Included',
       goldInclusions: 'Certified Gaya Teerth Purohit\nRitual at Falgu Ghat & Vishnupad Temple\nComplete Organic Samagri Kit (Jau, Tila, Ghee)\nAC Deluxe to 4-Star Hotel & Resort 2-Person Private Room Stay & Pure Satvik Food\nGaya Ji Railway station | Airport pickup & drop (CAB)\nPuja Samagri and Dakshina Included'
     },
     {
@@ -202,11 +254,24 @@ If the user specifies father/mother/navami/ekadashi/amavasya or an English date,
       .catch(() => {});
   }, [packageParam]);
 
+  const [roomPreference, setRoomPreference] = useState<'NON_AC' | 'AC'>('NON_AC');
+
   const activePackage = packagesList.find(p => p.slug === selectedPackageSlug) || packagesList[0];
   const isPlatinum = selectedTier === 'PLATINUM';
-  const price = isPlatinum 
-    ? (activePackage?.goldPriceINR || Math.round((activePackage?.priceINR || 9449) * 1.45)) 
-    : (activePackage?.priceINR || 9449);
+  const is1DayPkg = (activePackage?.slug || '').includes('1-day');
+  const isOnlyPindDaan = (() => {
+    const s = ((activePackage?.slug || '') + ' ' + (activePackage?.title || '')).toLowerCase();
+    return s.includes('uttam') || s.includes('madhyam') || s.includes('kanishtha') || (s.includes('shradh') && !s.includes('tripindi'));
+  })();
+
+  const basePrice = isPlatinum 
+    ? (activePackage?.goldPriceINR || Math.round((activePackage?.priceINR || 7499) * 1.45)) 
+    : (activePackage?.priceINR || 7499);
+
+  // If 1-Day Pind Daan with Gold tier: AC Room is 8499, Non-AC is 7499
+  const price = (is1DayPkg && !isPlatinum)
+    ? (roomPreference === 'AC' ? 8499 : 7499)
+    : basePrice;
 
   // Dynamic Inclusions list
   const activeInclusions = (isPlatinum && activePackage?.goldInclusions 
@@ -225,7 +290,10 @@ If the user specifies father/mother/navami/ekadashi/amavasya or an English date,
 
     setIsSubmitting(true);
 
-    const fullPackageTitle = `${activePackage?.title || 'Pind Daan Ritual'} (${selectedTier} Tier)`;
+    const roomSuffix = is1DayPkg && !isPlatinum 
+      ? ` - ${roomPreference === 'AC' ? 'AC Room' : 'Non-AC Room'}` 
+      : '';
+    const fullPackageTitle = `${activePackage?.title || 'Pind Daan Ritual'}${roomSuffix} (${selectedTier} Tier)`;
 
     try {
       const res = await createPreBookingAction({
@@ -794,17 +862,82 @@ Dhanyawad! 🙏`;
                     onChange={(e) => setSelectedPackageSlug(e.target.value)}
                     className="w-full bg-gray-50 border border-gray-300 rounded-2xl p-3 text-base sm:text-sm font-semibold text-text-primary focus:outline-none focus:border-[#F48D08] focus:bg-white transition-all shadow-sm min-h-[48px]"
                   >
-                    {packagesList.map((pkg) => {
-                      const pkgPrice = isPlatinum 
-                        ? (pkg.goldPriceINR || Math.round(pkg.priceINR * 1.45)) 
-                        : pkg.priceINR;
-                      return (
+                    <optgroup label="── ONLY PIND DAAN (PUJA ONLY) ──">
+                      {packagesList.filter(p => {
+                        const s = ((p.slug || '') + ' ' + (p.title || '')).toLowerCase();
+                        return s.includes('uttam') || s.includes('madhyam') || s.includes('kanishtha') || (s.includes('shradh') && !s.includes('tripindi'));
+                      }).map((pkg) => (
                         <option key={pkg.slug} value={pkg.slug}>
-                          {pkg.title} — ₹{pkgPrice?.toLocaleString('en-IN')}
+                          {pkg.title} — ₹{(isPlatinum && pkg.goldPriceINR ? pkg.goldPriceINR : pkg.priceINR)?.toLocaleString('en-IN')} (Pure Puja)
                         </option>
-                      );
-                    })}
+                      ))}
+                    </optgroup>
+                    <optgroup label="── PACKAGES WITH STAY & SPECIAL PUJAS ──">
+                      {packagesList.filter(p => {
+                        const s = ((p.slug || '') + ' ' + (p.title || '')).toLowerCase();
+                        return !(s.includes('uttam') || s.includes('madhyam') || s.includes('kanishtha') || (s.includes('shradh') && !s.includes('tripindi')));
+                      }).map((pkg) => {
+                        const pkgPrice = isPlatinum 
+                          ? (pkg.goldPriceINR || Math.round(pkg.priceINR * 1.45)) 
+                          : pkg.priceINR;
+                        return (
+                          <option key={pkg.slug} value={pkg.slug}>
+                            {pkg.title} — ₹{pkgPrice?.toLocaleString('en-IN')}
+                          </option>
+                        );
+                      })}
+                    </optgroup>
                   </select>
+
+                  {/* 1-Day Pind Daan Room Preference Option (Non-AC vs AC Room) */}
+                  {is1DayPkg && !isPlatinum && (
+                    <div className="p-3.5 bg-amber-50/80 rounded-2xl border border-amber-200 space-y-2 mt-2">
+                      <label className="font-bold text-xs uppercase tracking-wider block text-text-primary">
+                        Room Preference (कमरे का चयन):
+                      </label>
+                      <div className="grid grid-cols-2 gap-2">
+                        <button
+                          type="button"
+                          onClick={() => setRoomPreference('NON_AC')}
+                          className={`p-2.5 rounded-xl border text-xs font-bold transition-all text-left flex flex-col justify-between ${
+                            roomPreference === 'NON_AC'
+                              ? 'bg-[#C6922E] text-white border-[#C6922E] shadow-sm'
+                              : 'bg-white text-gray-700 border-gray-300 hover:border-[#C6922E]'
+                          }`}
+                        >
+                          <span>Non-AC Room</span>
+                          <span className="text-[11px] opacity-90 font-mono mt-0.5">₹7,499 Total</span>
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={() => setRoomPreference('AC')}
+                          className={`p-2.5 rounded-xl border text-xs font-bold transition-all text-left flex flex-col justify-between ${
+                            roomPreference === 'AC'
+                              ? 'bg-[#C6922E] text-white border-[#C6922E] shadow-sm'
+                              : 'bg-white text-gray-700 border-gray-300 hover:border-[#C6922E]'
+                          }`}
+                        >
+                          <span>AC Room (Air-Cooled)</span>
+                          <span className="text-[11px] opacity-90 font-mono mt-0.5">₹8,499 Total</span>
+                        </button>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Only Pind Daan (Pure Ritual Notice) */}
+                  {isOnlyPindDaan && (
+                    <div className="p-3.5 bg-amber-50/90 rounded-2xl border border-amber-300/80 text-xs text-amber-950 space-y-1.5 mt-2">
+                      <div className="font-bold flex items-center gap-1.5 text-amber-950">
+                        <span>ℹ️</span>
+                        <span>Only Pind Daan (विशुद्ध पिंडदान विधि)</span>
+                      </div>
+                      <div className="text-[11px] text-amber-900 leading-relaxed space-y-0.5">
+                        <div>• शामिल है: पूजन सामग्री एवं प्रमाणित पंडित जी दक्षिणा।</div>
+                        <div>• अतिरिक्त व्यय: ब्राह्मण भोजन, अतिरिक्त दक्षिणा एवं अन्य अनुष्ठान पृथक देय होंगे।</div>
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 {/* 2. DEVOTEE NAME */}

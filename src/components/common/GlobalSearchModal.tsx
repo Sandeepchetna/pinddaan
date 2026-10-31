@@ -60,7 +60,11 @@ export default function GlobalSearchModal({ isOpen, onClose }: GlobalSearchModal
     }
 
     const samplePackages = [
-      { slug: 'gaya-ji-1-day-pind-daan', title: '1-Day Pind Daan (₹9,449)', desc: 'Falgu River, Vishnupad Sanctum, & Akshayavat with verified Purohit, Auto pickup & AC room.' },
+      { slug: 'uttam-pind-daan', title: 'Uttam Pind Daan (₹11,000)', desc: '7 Kul Ka Pind Daan, Kalash Puja, 5 Vastra & Patra Daan at Vishnupad & Falgu.' },
+      { slug: 'madhyam-pind-daan', title: 'Madhyam Pind Daan (₹7,500)', desc: 'Kalash Puja, full Pind Daan Vidhi, and 3 Vastra & Patra Daan.' },
+      { slug: 'kanishtha-pind-daan', title: 'Kanishtha Pind Daan (₹4,500)', desc: 'Pind Daan Vidhi with 2 Thali Daan under verified Gaya Panda.' },
+      { slug: 'shradh-pind-daan', title: 'Shradh Pind Daan (₹3,100)', desc: 'Core Vedic Pind Daan Vidhi only at Falgu River & Vishnupad.' },
+      { slug: 'gaya-ji-1-day-pind-daan', title: '1-Day Pind Daan (from ₹7,499)', desc: 'Falgu River, Vishnupad Sanctum with room (Non-AC ₹7,499 / AC ₹8,499) & auto.' },
       { slug: 'gaya-ji-complete-3-day-pind-daan-3-days-', title: '3-Day Complete Tri-Sthali (₹21,449)', desc: 'All 45 Sacred Vedis, Auto pickup, 3-Night AC stay, and lineage registration.' },
       { slug: 'pitra-dosh-puja-tripindi-shradh-', title: 'Pitra Dosh Tripindi Shradh (₹10,449)', desc: 'Senior Jyotish & Vedic Karma-Kand Acharya on bank of Falgu River.' },
       { slug: 'gaya-ji-narayan-bali-', title: 'Narayan Bali Puja (₹12,499)', desc: 'Specialized Vedic karma-kand on the bank of Falgu River near Vishnupad.' }

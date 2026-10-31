@@ -287,7 +287,20 @@ export async function getPublicBookingData() {
 
     try {
       if (db.ritualPackage) {
-        packages = await db.ritualPackage.findMany({ orderBy: { createdAt: 'desc' } });
+        packages = await db.ritualPackage.findMany();
+        const getPkgRank = (pkg: any) => {
+          const s = ((pkg.slug || '') + ' ' + (pkg.title || '')).toLowerCase();
+          if (s.includes('uttam')) return 1;
+          if (s.includes('madhyam')) return 2;
+          if (s.includes('kanishtha')) return 3;
+          if (s.includes('shradh') && !s.includes('tripindi')) return 4;
+          if (s.includes('1-day') || s.includes('1 day')) return 5;
+          if (s.includes('3-day') || s.includes('3 day')) return 6;
+          if (s.includes('tripindi') || s.includes('pitidosh')) return 7;
+          if (s.includes('narayan')) return 8;
+          return 9;
+        };
+        packages.sort((a: any, b: any) => getPkgRank(a) - getPkgRank(b));
       }
       if (db.siteSettings) {
         siteSettings = await db.siteSettings.findUnique({ where: { id: 'default' } });
@@ -357,7 +370,22 @@ export async function getAdminERPData() {
       if (db.preBooking) preBookings = await db.preBooking.findMany({ orderBy: { createdAt: 'desc' } });
       if (db.lead) leads = await db.lead.findMany({ orderBy: { createdAt: 'desc' } });
       if (db.customer) customers = await db.customer.findMany({ orderBy: { createdAt: 'desc' } });
-      if (db.ritualPackage) packages = await db.ritualPackage.findMany({ orderBy: { createdAt: 'desc' } });
+      if (db.ritualPackage) {
+        packages = await db.ritualPackage.findMany();
+        const getPkgRank = (pkg: any) => {
+          const s = ((pkg.slug || '') + ' ' + (pkg.title || '')).toLowerCase();
+          if (s.includes('uttam')) return 1;
+          if (s.includes('madhyam')) return 2;
+          if (s.includes('kanishtha')) return 3;
+          if (s.includes('shradh') && !s.includes('tripindi')) return 4;
+          if (s.includes('1-day') || s.includes('1 day')) return 5;
+          if (s.includes('3-day') || s.includes('3 day')) return 6;
+          if (s.includes('tripindi') || s.includes('pitidosh')) return 7;
+          if (s.includes('narayan')) return 8;
+          return 9;
+        };
+        packages.sort((a: any, b: any) => getPkgRank(a) - getPkgRank(b));
+      }
       if (db.hotel) hotels = await db.hotel.findMany({ orderBy: { createdAt: 'desc' } });
       if (db.article) articles = await db.article.findMany({ orderBy: { createdAt: 'desc' } });
       if (db.sacredPlace) sacredPlaces = await db.sacredPlace.findMany({ orderBy: { createdAt: 'desc' } });

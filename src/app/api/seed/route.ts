@@ -87,31 +87,44 @@ export async function GET() {
       }
     }
 
-    // 4. Seed Ritual Packages with GOLD & PLATINUM Tiers
+    // 4. Seed Ritual Packages (Only Pind Daan + Packages with Stay & Special Pujas)
     if (db.ritualPackage) {
       for (const pkg of RITUAL_PACKAGES) {
+        const isPureRitual = (pkg.inclusions?.join('\n') || '').toLowerCase().includes('pure ritual') || 
+                             pkg.slug.includes('pind-daan') && !pkg.slug.includes('1-day') && !pkg.slug.includes('3-day');
+        const defaultGoldPrice = pkg.slug.includes('1-day') ? 12499 : (isPureRitual ? pkg.priceINR : Math.round(pkg.priceINR * 1.5));
+        const defaultGoldInclusions = isPureRitual
+          ? `${pkg.inclusions?.join('\n')}\nVIP Senior Lineage Gaya Panda Guidance`
+          : `${pkg.inclusions?.join('\n')}\nVIP Senior Lineage Panda\nPrivate AC Chauffeur SUV Pickup & Drop\n3-Star AC Deluxe Hotel Stay & Sattvic Meal`;
+
         await db.ritualPackage.upsert({
           where: { slug: pkg.slug },
           update: {
             title: pkg.title,
+            hindiTitle: pkg.hindiTitle,
             duration: pkg.duration,
             priceINR: pkg.priceINR,
-            goldPriceINR: Math.round(pkg.priceINR * 1.5),
+            goldPriceINR: defaultGoldPrice,
             badge: pkg.badge,
             shortDesc: pkg.shortDesc,
             inclusions: pkg.inclusions?.join('\n') || 'Vedic Rites Included',
-            goldInclusions: `${pkg.inclusions?.join('\n')}\nVIP Senior Lineage Panda\nPrivate AC Chauffeur SUV Pickup & Drop\n3-Star AC Deluxe Hotel Stay & Sattvic Meal`
+            goldInclusions: defaultGoldInclusions,
+            exclusions: pkg.exclusions?.join('\n') || '',
+            image: pkg.image || '/images/gaya_vishnupad.jpg'
           },
           create: {
             slug: pkg.slug,
             title: pkg.title,
+            hindiTitle: pkg.hindiTitle,
             duration: pkg.duration,
             priceINR: pkg.priceINR,
-            goldPriceINR: Math.round(pkg.priceINR * 1.5),
+            goldPriceINR: defaultGoldPrice,
             badge: pkg.badge,
             shortDesc: pkg.shortDesc,
             inclusions: pkg.inclusions?.join('\n') || 'Vedic Rites Included',
-            goldInclusions: `${pkg.inclusions?.join('\n')}\nVIP Senior Lineage Panda\nPrivate AC Chauffeur SUV Pickup & Drop\n3-Star AC Deluxe Hotel Stay & Sattvic Meal`
+            goldInclusions: defaultGoldInclusions,
+            exclusions: pkg.exclusions?.join('\n') || '',
+            image: pkg.image || '/images/gaya_vishnupad.jpg'
           }
         });
       }

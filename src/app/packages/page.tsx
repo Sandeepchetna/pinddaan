@@ -22,16 +22,6 @@ export default async function PackagesPage() {
   try {
     if (db.ritualPackage) {
       packages = await db.ritualPackage.findMany();
-      // Explicit custom sort: 1-Day, 3-Day, Tripindi, then Narayan Bali
-      const getPkgRank = (pkg: any) => {
-        const s = ((pkg.slug || '') + ' ' + (pkg.title || '')).toLowerCase();
-        if (s.includes('1-day') || s.includes('1 day')) return 1;
-        if (s.includes('3-day') || s.includes('3 day')) return 2;
-        if (s.includes('tripindi') || s.includes('pitidosh')) return 3;
-        if (s.includes('narayan')) return 4;
-        return 5;
-      };
-      packages = [...packages].sort((a, b) => getPkgRank(a) - getPkgRank(b));
     }
   } catch (err) {
     // fallback
@@ -41,16 +31,68 @@ export default async function PackagesPage() {
   if (packages.length === 0) {
     packages = [
       {
+        id: 'pkg-uttam',
+        slug: 'uttam-pind-daan',
+        title: 'Uttam Pind Daan',
+        duration: '3–3.5 Hours',
+        priceINR: 11000,
+        goldPriceINR: 11000,
+        badge: 'SARVA SHRESTHA VIDHI',
+        image: '/images/gaya_vishnupad.jpg',
+        shortDesc: 'The most comprehensive Vedic ritual featuring Kalash Puja, 7 Kul Ka Pind Daan, and 5 Vastra & Patra Daan at Vishnupad & Falgu River.',
+        inclusions: 'Kalash Puja\n7 Kul Ka Pind Daan\n5 Vastra and Patra Daan\nRequired Puja Samagri Included\nPandit Ji\'s Charges (Dakshina) Included',
+        goldInclusions: 'Kalash Puja\n7 Kul Ka Pind Daan\n5 Vastra and Patra Daan\nRequired Puja Samagri Included\nPandit Ji\'s Charges (Dakshina) Included\nSenior Lineage Gaya Panda Guidance'
+      },
+      {
+        id: 'pkg-madhyam',
+        slug: 'madhyam-pind-daan',
+        title: 'Madhyam Pind Daan',
+        duration: '2–2.5 Hours',
+        priceINR: 7500,
+        goldPriceINR: 7500,
+        badge: 'MOST POPULAR VIDHI',
+        image: '/images/pind_daan_vidhi.jpg',
+        shortDesc: 'Traditional Vedic Gaya Ji Pind Daan with Kalash Puja, complete Pind Daan Vidhi, and 3 Vastra & Patra Daan for ancestral peace.',
+        inclusions: 'Kalash Puja\nPind Daan Vidhi\n3 Vastra and Patra Daan\nRequired Puja Samagri Included\nPandit Ji\'s Charges (Dakshina) Included',
+        goldInclusions: 'Kalash Puja\nPind Daan Vidhi\n3 Vastra and Patra Daan\nRequired Puja Samagri Included\nPandit Ji\'s Charges (Dakshina) Included'
+      },
+      {
+        id: 'pkg-kanishtha',
+        slug: 'kanishtha-pind-daan',
+        title: 'Kanishtha Pind Daan',
+        duration: '2 Hours',
+        priceINR: 4500,
+        goldPriceINR: 4500,
+        badge: 'SARAL VEDIC VIDHI',
+        image: '/images/akshay_vat.jpg',
+        shortDesc: 'Essential Vedic Pind Daan Vidhi with 2 Thali Daan performed under authentic Gaya Panda guidance at Vishnupad & Falgu.',
+        inclusions: 'Pind Daan Vidhi\n2 Thali Daan\nRequired Puja Samagri Included\nPandit Ji\'s Charges (Dakshina) Included',
+        goldInclusions: 'Pind Daan Vidhi\n2 Thali Daan\nRequired Puja Samagri Included\nPandit Ji\'s Charges (Dakshina) Included'
+      },
+      {
+        id: 'pkg-shradh',
+        slug: 'shradh-pind-daan',
+        title: 'Shradh Pind Daan',
+        duration: '1–1.5 Hours',
+        priceINR: 3100,
+        goldPriceINR: 3100,
+        badge: 'CORE SHRADDHA VIDHI',
+        image: '/images/gaya_drone.jpg',
+        shortDesc: 'Focused Vedic Pind Daan Vidhi only at holy Falgu River and Vishnupad with authentic gotra sankalp.',
+        inclusions: 'Pind Daan Vidhi Only\nRequired Puja Samagri Included\nPandit Ji\'s Charges (Dakshina) Included',
+        goldInclusions: 'Pind Daan Vidhi Only\nRequired Puja Samagri Included\nPandit Ji\'s Charges (Dakshina) Included'
+      },
+      {
         id: 'cmtk2km8j0014d9g3kfc9n6hf',
         slug: 'gaya-ji-1-day-pind-daan',
         title: 'Gaya Ji 1-Day Pind Daan',
-        duration: '1 Day (Approx 4-5 Hours)',
-        priceINR: 9449,
-        goldPriceINR: 13999,
-        badge: 'MOST POPULAR',
+        duration: '1 Day (4 to 6 Hours)',
+        priceINR: 7499,
+        goldPriceINR: 12499,
+        badge: 'NEW REDUCED RATE',
         image: '/images/pind_daan_vidhi.jpg',
-        shortDesc: 'Ideal for devotees visiting Gaya Ji for a single day to perform essential rites at Vishnupad Temple & Falgu River.',
-        inclusions: 'Certified Gaya Teerth Purohit\nRitual at Falgu Ghat & Vishnupad Temple\nComplete Organic Samagri Kit (Jau, Tila, Ghee)\nAC 2 person private Room /stay & pure Satvik food\nGaya Ji Railway station | Airport pickup & drop (AUTO)\nPuja Samagri and Dakshina Included',
+        shortDesc: 'Single-day layover rites at Falgu River & Vishnupad. Gold Plan: Non-AC Room ₹7,499 / AC Room ₹8,499. Platinum VIP: Deluxe Hotel & AC Cab ₹12,499.',
+        inclusions: 'Certified Gaya Teerth Purohit\nRitual at Falgu Ghat & Vishnupad Temple\nComplete Organic Samagri Kit (Jau, Tila, Ghee)\n2-Person Private Room Stay (Non-AC ₹7,499 / AC Room ₹8,499) & Pure Satvik Food\nGaya Ji Railway Station | Airport Pickup & Drop (Auto)\nPuja Samagri and Pandit Dakshina Included',
         goldInclusions: 'Certified Gaya Teerth Purohit\nRitual at Falgu Ghat & Vishnupad Temple\nComplete Organic Samagri Kit (Jau, Tila, Ghee)\nAC Deluxe to 4-Star Hotel & Resort 2-Person Private Room Stay & Pure Satvik Food\nGaya Ji Railway station | Airport pickup & drop (CAB)\nPuja Samagri and Dakshina Included'
       },
       {

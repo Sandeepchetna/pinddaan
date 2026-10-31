@@ -187,7 +187,7 @@ const DEFAULT_PACKAGES = [
   {
     slug: 'gaya-ji-1-day-pind-daan',
     title: '1-Day Essential Pind Daan',
-    priceINR: 9449,
+    priceINR: 7499,
     shortDesc: 'Falgu River, Vishnupad & Akshayavat with verified hereditary panda, room & auto pickup.',
     features: ['3 Sacred Vedis', 'Puja Samagri', 'Gotra Sankalp']
   },

@@ -32,26 +32,36 @@ export default function PackageCard({ pkg, defaultTier = 'GOLD' }: PackageCardPr
   }, [defaultTier]);
 
   const isPlatinum = tier === 'PLATINUM';
+  const isOnlyPindDaan = (() => {
+    const s = ((pkg.slug || '') + ' ' + (pkg.title || '')).toLowerCase();
+    return s.includes('uttam') || s.includes('madhyam') || s.includes('kanishtha') || (s.includes('shradh') && !s.includes('tripindi'));
+  })();
   const isNarayanOrTripindi = (() => {
     const s = ((pkg.slug || '') + ' ' + (pkg.title || '')).toLowerCase();
     return s.includes('narayan') || s.includes('tripindi') || s.includes('pitidosh') || s.includes('pitri');
   })();
+  const is1Day = (() => {
+    const s = ((pkg.slug || '') + ' ' + (pkg.title || '')).toLowerCase();
+    return s.includes('1-day') || s.includes('1 day');
+  })();
+
   const price = isPlatinum && pkg.goldPriceINR ? pkg.goldPriceINR : pkg.priceINR;
   const inclusionsText = isPlatinum && pkg.goldInclusions ? pkg.goldInclusions : pkg.inclusions;
   const inclusionsList = inclusionsText ? inclusionsText.split('\n').filter(Boolean) : [];
 
   // Accurate, concise badge beside price
   const getPriceBadge = () => {
+    if (isOnlyPindDaan) return 'Pure Vedic Ritual';
     if (isNarayanOrTripindi) return 'Pure Puja (No Stay/Vehicle)';
     const s = ((pkg.slug || '') + ' ' + (pkg.title || '')).toLowerCase();
     const is3Day = s.includes('3-day') || s.includes('3 day');
-    const is1Day = s.includes('1-day') || s.includes('1 day');
 
     if (isPlatinum) {
       if (is3Day || is1Day) return 'VIP Cab + Hotel';
       return 'VIP Vidhi';
     } else {
-      if (is3Day || is1Day) return 'Auto/Tempo + Hotel';
+      if (is1Day) return 'Non-AC Room (AC ₹8,499)';
+      if (is3Day) return 'Auto/Tempo + Hotel';
       return 'Essential Vidhi';
     }
   };
@@ -59,6 +69,11 @@ export default function PackageCard({ pkg, defaultTier = 'GOLD' }: PackageCardPr
   // Shorten lengthy badges for a sleek single-line header
   const getCleanBadge = (b?: string) => {
     if (!b) return 'Sacred Pilgrimage Plan';
+    if (b.includes('SARVA')) return 'Uttam • 7 Kul Pind Daan';
+    if (b.includes('MOST POPULAR VIDHI')) return 'Madhyam • Vedic Vidhi';
+    if (b.includes('SARAL')) return 'Kanishtha • 2 Thali Daan';
+    if (b.includes('CORE SHRADDHA')) return 'Shradh • Pind Daan Vidhi';
+    if (b.includes('REDUCED')) return 'Reduced Rate • 1-Day Plan';
     if (b.includes('NRI')) return 'NRI Live Video Plan';
     if (b.includes('UNTIMELY')) return 'Narayan Bali Shanti';
     if (b.includes('48-VEDI') || b.includes('45-VEDI') || b.includes('PARIKRAMA')) return 'Complete 45-Vedi Parikrama';
@@ -127,39 +142,41 @@ export default function PackageCard({ pkg, defaultTier = 'GOLD' }: PackageCardPr
           </p>
         </div>
 
-        {/* 3. Luxury Segmented Tier Switcher */}
-        <div className="bg-[#FAF7F2] p-1.5 rounded-[16px] border border-[#EFE6D9] grid grid-cols-2 gap-1.5 shadow-inner">
-          <button
-            type="button"
-            onClick={() => setTier('GOLD')}
-            className={`py-2 px-2.5 rounded-[12px] text-xs font-body font-semibold transition-all flex items-center justify-center text-center leading-tight select-none ${
-              !isPlatinum 
-                ? 'bg-[#C6922E] text-white shadow-sm' 
-                : 'text-[#7A736A] hover:text-[#2B2118] hover:bg-white/60'
-            }`}
-          >
-            <span>{isNarayanOrTripindi ? 'Vedic Vidhi' : 'Gold Plan'}</span>
-          </button>
+        {/* 3. Luxury Segmented Tier Switcher (Only for Packages with Stay / Multi-tier) */}
+        {!isOnlyPindDaan && (
+          <div className="bg-[#FAF7F2] p-1.5 rounded-[16px] border border-[#EFE6D9] grid grid-cols-2 gap-1.5 shadow-inner">
+            <button
+              type="button"
+              onClick={() => setTier('GOLD')}
+              className={`py-2 px-2.5 rounded-[12px] text-xs font-body font-semibold transition-all flex items-center justify-center text-center leading-tight select-none ${
+                !isPlatinum 
+                  ? 'bg-[#C6922E] text-white shadow-sm' 
+                  : 'text-[#7A736A] hover:text-[#2B2118] hover:bg-white/60'
+              }`}
+            >
+              <span>{isNarayanOrTripindi ? 'Vedic Vidhi' : 'Gold Plan'}</span>
+            </button>
 
-          <button
-            type="button"
-            onClick={() => setTier('PLATINUM')}
-            className={`py-2 px-2.5 rounded-[12px] text-xs font-body font-semibold transition-all flex items-center justify-center text-center leading-tight gap-1 select-none ${
-              isPlatinum 
-                ? 'bg-[#C6922E] text-white shadow-sm' 
-                : 'text-[#7A736A] hover:text-[#2B2118] hover:bg-white/60'
-            }`}
-          >
-            <Crown className="w-3.5 h-3.5 text-white shrink-0" />
-            <span>{isNarayanOrTripindi ? 'Complete Vidhi' : 'Platinum VIP'}</span>
-          </button>
-        </div>
+            <button
+              type="button"
+              onClick={() => setTier('PLATINUM')}
+              className={`py-2 px-2.5 rounded-[12px] text-xs font-body font-semibold transition-all flex items-center justify-center text-center leading-tight gap-1 select-none ${
+                isPlatinum 
+                  ? 'bg-[#C6922E] text-white shadow-sm' 
+                  : 'text-[#7A736A] hover:text-[#2B2118] hover:bg-white/60'
+              }`}
+            >
+              <Crown className="w-3.5 h-3.5 text-white shrink-0" />
+              <span>{isNarayanOrTripindi ? 'Complete Vidhi' : 'Platinum VIP'}</span>
+            </button>
+          </div>
+        )}
 
         {/* 4. Price Section - Zero-Overlap Multi-Row Luxury Layout */}
         <div className="py-3 px-3.5 rounded-[18px] bg-[#FAF7F2]/90 border border-[#EFE6D9] space-y-1.5 shadow-sm">
           <div className="flex items-center justify-between gap-2">
             <span className="text-[11px] font-body text-[#7A736A] font-semibold tracking-wide">
-              Fixed Vedic Dakshina
+              {isOnlyPindDaan ? 'Fixed Ritual Dakshina' : 'Fixed Vedic Dakshina'}
             </span>
             <span className="text-[10.5px] font-body font-semibold text-[#C6922E] bg-white border border-[#EFE6D9] px-2.5 py-0.5 rounded-full shadow-sm whitespace-nowrap shrink-0">
               {getPriceBadge()}
@@ -168,13 +185,18 @@ export default function PackageCard({ pkg, defaultTier = 'GOLD' }: PackageCardPr
           <div className="text-2xl sm:text-[28px] font-body font-extrabold text-[#2B2118] tracking-tight leading-none whitespace-nowrap">
             ₹{price.toLocaleString('en-IN')}
           </div>
+          {is1Day && !isPlatinum && (
+            <div className="text-[11px] font-medium text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+              Non-AC Room: ₹7,499 • AC Room Option: ₹8,499
+            </div>
+          )}
         </div>
 
         {/* 5. Inclusions List (Full Text, No Clamping) */}
         <div className="space-y-2.5 pt-3 border-t border-[#EFE6D9]">
           <div className="flex items-center justify-between text-[11px] font-body font-bold text-[#7A736A] uppercase tracking-wider">
             <span>{isPlatinum ? '💎 Platinum Inclusions:' : '🌟 Key Inclusions:'}</span>
-            <span className="text-[#C6922E]">{inclusionsList.length} Rites</span>
+            <span className="text-[#C6922E]">{inclusionsList.length} Items</span>
           </div>
 
           <ul className="space-y-2.5 text-[12.5px] font-body text-[#5A5148]">
@@ -185,6 +207,26 @@ export default function PackageCard({ pkg, defaultTier = 'GOLD' }: PackageCardPr
               </li>
             ))}
           </ul>
+
+          {/* Explicit Notice for Only Pind Daan (Separate Charges: Brahmin Bhojan, Additional Dakshina, Extra Rituals) */}
+          {isOnlyPindDaan && (
+            <div className="text-xs text-amber-950 bg-amber-50/95 border border-amber-300/80 rounded-xl p-3 font-medium flex items-start gap-2.5 mt-3 shadow-xs">
+              <span className="text-[#C6922E] font-bold text-base shrink-0 leading-none mt-0.5">ℹ️</span>
+              <div className="space-y-1">
+                <div className="font-bold text-amber-950 text-[11.5px] uppercase tracking-wide">
+                  अतिरिक्त व्यय (Charged Separately):
+                </div>
+                <ul className="text-[11px] text-amber-900/90 list-disc list-inside space-y-0.5">
+                  <li>Brahmin Bhojan (ब्राह्मण भोजन)</li>
+                  <li>Additional Brahmin Dakshina (अतिरिक्त दक्षिणा)</li>
+                  <li>Any extra rituals not mentioned in this package</li>
+                </ul>
+                <div className="text-[10.5px] text-amber-800/90 font-semibold pt-0.5">
+                  *ये पैकेज मूल्य में शामिल नहीं हैं एवं पृथक देय होंगे।
+                </div>
+              </div>
+            </div>
+          )}
 
           {/* Explicit Notice for Narayan Bali & Tripindi (No Pickup/Drop, No Food, No Stay) */}
           {isNarayanOrTripindi && (
@@ -208,7 +250,7 @@ export default function PackageCard({ pkg, defaultTier = 'GOLD' }: PackageCardPr
           href={`/pre-booking?package=${pkg.slug}&tier=${tier}`}
           className="w-full text-center py-3.5 rounded-[16px] font-body font-semibold text-sm transition-all shadow-sm flex items-center justify-center gap-2 bg-[#C6922E] hover:bg-[#A97718] text-white active:scale-95"
         >
-          <span>Book {tier === 'PLATINUM' ? 'Platinum VIP' : 'Gold'} Plan Now</span>
+          <span>Book {isOnlyPindDaan ? pkg.title : (tier === 'PLATINUM' ? 'Platinum VIP' : 'Gold Plan')} Now</span>
           <ArrowRight className="w-4 h-4" />
         </Link>
 

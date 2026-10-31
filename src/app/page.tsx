@@ -27,6 +27,7 @@ import { getCachedData } from '@/lib/dbCache';
 import HeroSlider from '@/components/home/HeroSlider';
 import VishnupadShowcase from '@/components/home/VishnupadShowcase';
 import PackageCard from '@/components/packages/PackageCard';
+import PackageTierToggle from '@/components/packages/PackageTierToggle';
 import DevoteeVideoShowcase from '@/components/home/DevoteeVideoShowcase';
 import VedicDiagnosticBanner from '@/components/home/VedicDiagnosticBanner';
 import PilgrimAssistanceHub from '@/components/home/PilgrimAssistanceHub';
@@ -186,65 +187,8 @@ export default async function HomePage() {
           </p>
         </div>
 
-        {/* Dynamic Package Cards (Live from Database) - All 4 in 1 single row on desktop! */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {(packages.length > 0 ? packages : [
-            {
-              id: 'cmtk2km8j0014d9g3kfc9n6hf',
-              slug: 'gaya-ji-1-day-pind-daan',
-              title: 'Gaya Ji 1-Day Pind Daan',
-              duration: '1 Day (Approx 4-5 Hours)',
-              priceINR: 9449,
-              goldPriceINR: 13999,
-              badge: 'MOST POPULAR',
-              image: '/images/pind_daan_vidhi.jpg',
-              shortDesc: 'Ideal for devotees visiting Gaya Ji for a single day to perform essential rites at Vishnupad Temple & Falgu River.',
-              inclusions: 'Certified Gaya Teerth Purohit\nRitual at Falgu Ghat & Vishnupad Temple\nComplete Organic Samagri Kit (Jau, Tila, Ghee)\nAC 2 person private Room /stay & pure Satvik food\nGaya Ji Railway station | Airport pickup & drop (AUTO)\nPuja Samagri and Dakshina Included',
-              goldInclusions: 'Certified Gaya Teerth Purohit\nRitual at Falgu Ghat & Vishnupad Temple\nComplete Organic Samagri Kit (Jau, Tila, Ghee)\nAC Deluxe to 4-Star Hotel & Resort 2-Person Private Room Stay & Pure Satvik Food\nGaya Ji Railway station | Airport pickup & drop (CAB)\nPuja Samagri and Dakshina Included'
-            },
-            {
-              id: 'cmtk2km1f0012d9g3z6pb4w7k',
-              slug: 'gaya-ji-complete-3-day-pind-daan-3-days-',
-              title: 'Gaya Ji Complete 3-Day Pind Daan (3 Days)',
-              duration: '3 Days / 3 Nights',
-              priceINR: 21449,
-              goldPriceINR: 34999,
-              badge: 'RECOMMENDED',
-              image: '/images/gaya_vishnupad.jpg',
-              shortDesc: 'Comprehensive pilgrimage covering Vishnupad, Falgu River, Akshayavat Banyan, Pretshila, and Ramshila.',
-              inclusions: 'Certified Gaya Teerth Purohit\nRitual at Falgu Ghat & Vishnupad Temple\nComplete Organic Samagri Kit (Jau, Tila, Ghee)\n3 Night AC 2 person private Room /stay & pure Satvik food\nGaya Ji Railway station | Airport pickup & drop (AUTO)\nPuja Samagri and Dakshina Included',
-              goldInclusions: 'Certified Gaya Teerth Purohit\nRitual at Falgu Ghat & Vishnupad Temple\nComplete Organic Samagri Kit (Jau, Tila, Ghee)\n3-Night AC Deluxe to 4-Star Hotel & Resort 2-Person Private Room Stay & Pure Satvik Food\nGaya Ji Railway station | Airport pickup & drop (CAB)\nPuja Samagri and Dakshina Included'
-            },
-            {
-              id: 'cmtjwg94x0005q63sj94zy7hx',
-              slug: 'pitra-dosh-puja-tripindi-shradh-',
-              title: 'Pitra Dosh Puja ( Tripindi Shradh)',
-              duration: '1 Day (4–5 Hours)',
-              priceINR: 10449,
-              goldPriceINR: 10449,
-              badge: 'MOST POPULAR',
-              image: '/images/akshay_vat.jpg',
-              shortDesc: 'Phalgu River are used to perform the early cleansing rites, tarpan, and the final immersion rituals required during the Tripindi Shradh process',
-              inclusions: 'Senior Jyotish & Vedic Karma-Kand Acharya in Gaya Ji\nAltar Rites with Wheat Sattu\nTripindi Homa with Ghee Ahutis on Bank of Falgu River\nComplete Puja Samagri & Gotra Sankalp Included\nPure Vedic Ritual (No Pickup/Drop • No Food • No Stay)',
-              goldInclusions: 'Senior Jyotish & Vedic Karma-Kand Acharya in Gaya Ji\nAltar Rites with Wheat Sattu\nTripindi Homa with Ghee Ahutis on Bank of Falgu River\nComplete Puja Samagri & Gotra Sankalp Included\nPure Vedic Ritual (No Pickup/Drop • No Food • No Stay)'
-            },
-            {
-              id: 'cmtk2kmmi0017d9g349fazyjq',
-              slug: 'gaya-ji-narayan-bali-',
-              title: 'Gaya Ji Narayan Bali',
-              duration: '1 Day (5–6 Hours)',
-              priceINR: 12499,
-              goldPriceINR: 12499,
-              badge: 'SPECIALIZED REMEDY',
-              image: '/images/gaya_drone.jpg',
-              shortDesc: 'Specialized Vedic karma-kand performed at bank of falgu river near Vishnupad for souls who passed away unnaturally.',
-              inclusions: 'Senior Jyotish & Vedic Karma-Kand Acharya in Gaya Ji\nAltar Rites & Pind Daan with Wheat Sattu\nNarayan Bali Homa with Ghee Ahutis on Falgu River Bank\nComplete Puja Samagri & Gotra Sankalp Included\nPure Vedic Ritual (No Pickup/Drop • No Food • No Stay)',
-              goldInclusions: 'Senior Jyotish & Vedic Karma-Kand Acharya in Gaya Ji\nAltar Rites & Pind Daan with Wheat Sattu\nNarayan Bali Homa with Ghee Ahutis on Falgu River Bank\nComplete Puja Samagri & Gotra Sankalp Included\nPure Vedic Ritual (No Pickup/Drop • No Food • No Stay)'
-            }
-          ]).map((pkg) => (
-            <PackageCard key={pkg.id || pkg.slug} pkg={pkg} defaultTier="GOLD" />
-          ))}
-        </div>
+        {/* Interactive Package Explorer (Only Pind Daan vs With Stay) */}
+        <PackageTierToggle initialPackages={packages} />
 
         {/* PROMINENT BUTTON BELOW PACKAGES TO SEE ALL PACKAGES */}
         <div className="pt-4 text-center">

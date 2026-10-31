@@ -55,28 +55,28 @@ export default function Navbar({ packages = [], sacredPlaces = [] }: NavbarProps
   // Fallback packages if none provided
   const displayPackages = packages.length > 0 ? packages : [
     {
+      slug: 'uttam-pind-daan',
+      title: 'Uttam Pind Daan',
+      priceINR: 11000,
+      shortDesc: '7 Kul Ka Pind Daan, Kalash Puja, 5 Vastra & Patra Daan at Vishnupad. Fixed dakshina ₹11,000.'
+    },
+    {
+      slug: 'madhyam-pind-daan',
+      title: 'Madhyam Pind Daan',
+      priceINR: 7500,
+      shortDesc: 'Kalash Puja, full Pind Daan Vidhi, and 3 Vastra & Patra Daan. Fixed dakshina ₹7,500.'
+    },
+    {
       slug: 'gaya-ji-1-day-pind-daan',
       title: 'Gaya Ji 1-Day Pind Daan',
-      priceINR: 9449,
-      shortDesc: 'Single day package at Vishnupad & Falgu River with Auto/Tempo pickup & room. Fixed dakshina ₹9,449.'
+      priceINR: 7499,
+      shortDesc: 'Single day package at Vishnupad & Falgu with Auto pickup & room. Fixed dakshina from ₹7,499.'
     },
     {
       slug: 'gaya-ji-complete-3-day-pind-daan-3-days-',
       title: 'Gaya Ji Complete 3-Day Pind Daan (3 Days)',
       priceINR: 21449,
       shortDesc: 'Complete 45-Vedi trail with Auto/Tempo pickup and 3-night AC stay. Fixed dakshina ₹21,449.'
-    },
-    {
-      slug: 'pitra-dosh-puja-tripindi-shradh-',
-      title: 'Pitra Dosh Puja ( Tripindi Shradh)',
-      priceINR: 10449,
-      shortDesc: 'Phalgu River early cleansing rites, tarpan, and Tripindi Homa with Ghee Ahutis. Fixed dakshina ₹10,449.'
-    },
-    {
-      slug: 'gaya-ji-narayan-bali-',
-      title: 'Gaya Ji Narayan Bali',
-      priceINR: 12499,
-      shortDesc: 'Specialized Vedic karma-kand on the bank of Falgu River near Vishnupad. Fixed dakshina ₹12,499.'
     }
   ];
 
