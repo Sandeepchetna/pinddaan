@@ -331,6 +331,7 @@ export default function AdminERPClient({ initialData, session }: AdminERPClientP
   const [heroSlides, setHeroSlides] = useState<any[]>(initialData.heroSlides || []);
   const [siteSettings, setSiteSettings] = useState<any>(initialData.siteSettings || {});
   const [sacredPlaceSearch, setSacredPlaceSearch] = useState<string>('');
+  const [bookingNriFilter, setBookingNriFilter] = useState<'ALL' | 'NRI'>('ALL');
 
   // Copy Feedback Toast
   const [copyToast, setCopyToast] = useState('');
@@ -1126,6 +1127,36 @@ export default function AdminERPClient({ initialData, session }: AdminERPClientP
                 </div>
               </div>
 
+              {/* NRI vs ALL BOOKINGS FILTER PILLS */}
+              <div className="flex items-center gap-2 pt-1 pb-1">
+                <button
+                  onClick={() => setBookingNriFilter('ALL')}
+                  className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all ${
+                    bookingNriFilter === 'ALL'
+                      ? 'bg-amber-500 text-slate-950 shadow-md'
+                      : 'bg-slate-900 border border-slate-800 text-slate-400 hover:text-white'
+                  }`}
+                >
+                  All Bookings ({activeTab === 'confirmed_bookings' ? confirmedBookings.length : pendingBookingRequests.length})
+                </button>
+                <button
+                  onClick={() => setBookingNriFilter('NRI')}
+                  className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
+                    bookingNriFilter === 'NRI'
+                      ? 'bg-indigo-600 text-white shadow-md'
+                      : 'bg-slate-900 border border-slate-800 text-indigo-300 hover:text-white'
+                  }`}
+                >
+                  <Globe className="w-3.5 h-3.5 text-indigo-400" />
+                  <span>
+                    NRI & Remote Seva ({
+                      (activeTab === 'confirmed_bookings' ? confirmedBookings : pendingBookingRequests)
+                        .filter(b => b.ritualMode === 'REMOTE_LIVE' || (b.country && b.country !== 'India')).length
+                    })
+                  </span>
+                </button>
+              </div>
+
               {((activeTab === 'confirmed_bookings' ? confirmedBookings : pendingBookingRequests).length === 0) ? (
                 <div className="bg-gradient-to-b from-[#141C2B] to-[#0D1424] p-12 rounded-3xl border border-slate-800/80 text-center space-y-3 shadow-lg">
                   <CalendarCheck className="w-10 h-10 text-slate-500 mx-auto" />
@@ -1138,13 +1169,18 @@ export default function AdminERPClient({ initialData, session }: AdminERPClientP
                 <div className="space-y-4">
                   {(activeTab === 'confirmed_bookings' ? confirmedBookings : pendingBookingRequests)
                     .filter(b => {
+                      if (bookingNriFilter === 'NRI') {
+                        const isNri = b.ritualMode === 'REMOTE_LIVE' || (b.country && b.country !== 'India');
+                        if (!isNri) return false;
+                      }
                       if (!searchQuery.trim()) return true;
                       const q = searchQuery.toLowerCase();
                       return (
                         (b.devoteeName || '').toLowerCase().includes(q) ||
                         (b.phone || '').includes(q) ||
                         (b.bookingRef || b.id || '').toLowerCase().includes(q) ||
-                        (b.packageName || '').toLowerCase().includes(q)
+                        (b.packageName || '').toLowerCase().includes(q) ||
+                        (b.country || '').toLowerCase().includes(q)
                       );
                     })
                     .map((booking) => (
@@ -1172,6 +1208,14 @@ export default function AdminERPClient({ initialData, session }: AdminERPClientP
                               {booking.planTier === 'PLATINUM' ? <Crown className="w-3 h-3 text-yellow-400" /> : <Star className="w-3 h-3 text-amber-400" />}
                               <span>{booking.planTier || 'GOLD'} VIP</span>
                             </span>
+
+                            {/* NRI REMOTE SEVA BADGE */}
+                            {(booking.ritualMode === 'REMOTE_LIVE' || (booking.country && booking.country !== 'India')) && (
+                              <span className="inline-flex items-center gap-1 text-[10px] font-extrabold uppercase px-2.5 py-1 rounded-lg tracking-wider bg-indigo-500/20 text-indigo-300 border border-indigo-500/40">
+                                <Globe className="w-3 h-3 text-indigo-400" />
+                                <span>NRI Remote Seva ({booking.country || 'Global'})</span>
+                              </span>
+                            )}
 
                             {/* WORKFLOW STATUS BADGE */}
                             <span className={`text-[10px] font-bold uppercase px-2.5 py-1 rounded-lg border ${

@@ -19,6 +19,12 @@ import {
 } from 'lucide-react';
 import ZeroExtortionPledge from '@/components/common/ZeroExtortionPledge';
 import DevoteeStoriesClient from '@/components/testimonials/DevoteeStoriesClient';
+import prisma from '@/lib/prisma';
+
+const db = prisma as any;
+
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 export const metadata: Metadata = {
   title: 'Devotee Experiences & Real Video Testimonials | Gaya Ji Pind Daan Reviews',
@@ -43,7 +49,16 @@ export const metadata: Metadata = {
   }
 };
 
-export default function DevoteeStoriesPage() {
+export default async function DevoteeStoriesPage() {
+  let dbTestimonials: any[] = [];
+  try {
+    if (db.testimonial) {
+      dbTestimonials = await db.testimonial.findMany({
+        where: { status: 'APPROVED' },
+        orderBy: { createdAt: 'desc' }
+      });
+    }
+  } catch (e) {}
   const reviewSchema = {
     '@context': 'https://schema.org',
     '@type': 'Product',
@@ -125,7 +140,7 @@ export default function DevoteeStoriesPage() {
         </div>
 
         {/* Interactive Client Component for Filtering and Videos */}
-        <DevoteeStoriesClient />
+        <DevoteeStoriesClient initialDbTestimonials={dbTestimonials} />
 
         {/* Zero Extortion Guarantee */}
         <ZeroExtortionPledge />

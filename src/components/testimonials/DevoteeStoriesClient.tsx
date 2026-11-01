@@ -14,7 +14,8 @@ import {
   Award,
   ShieldCheck,
   User,
-  X
+  X,
+  ExternalLink
 } from 'lucide-react';
 
 interface DevoteeReview {
@@ -22,13 +23,15 @@ interface DevoteeReview {
   name: string;
   city: string;
   stateOrRegion: string;
-  zone: 'Delhi NCR' | 'Gujarat' | 'Maharashtra' | 'South India' | 'NRI' | 'Other';
+  zone: string;
   rating: number;
   packageName: string;
   date: string;
   feedback: string;
   priestLineage: string;
   verified: boolean;
+  videoUrl?: string | null;
+  poojaImage?: string | null;
 }
 
 interface VideoHighlight {
@@ -40,9 +43,34 @@ interface VideoHighlight {
   vedis: string;
   thumbnail: string;
   summary: string;
+  videoUrl?: string | null;
 }
 
-const VIDEO_HIGHLIGHTS: VideoHighlight[] = [
+function getYouTubeEmbedUrl(url?: string | null): string | null {
+  if (!url) return null;
+  const trimmed = url.trim();
+  try {
+    if (trimmed.includes('youtube.com/watch')) {
+      const match = trimmed.match(/[?&]v=([^&]+)/);
+      const v = match ? match[1] : null;
+      return v ? `https://www.youtube.com/embed/${v}?autoplay=1` : null;
+    }
+    if (trimmed.includes('youtu.be/')) {
+      const id = trimmed.split('youtu.be/')[1]?.split('?')[0];
+      return id ? `https://www.youtube.com/embed/${id}?autoplay=1` : null;
+    }
+    if (trimmed.includes('youtube.com/shorts/')) {
+      const id = trimmed.split('shorts/')[1]?.split('?')[0];
+      return id ? `https://www.youtube.com/embed/${id}?autoplay=1` : null;
+    }
+    if (trimmed.includes('youtube.com/embed/')) {
+      return `${trimmed}?autoplay=1`;
+    }
+  } catch (e) {}
+  return null;
+}
+
+const FALLBACK_VIDEOS: VideoHighlight[] = [
   {
     id: 'vid-1',
     title: 'Falgu River Devghat Ritual & Tarpan Experience',
@@ -51,7 +79,8 @@ const VIDEO_HIGHLIGHTS: VideoHighlight[] = [
     duration: '2:45 min',
     vedis: 'Falgu Devghat & Sita Kund',
     thumbnail: '/images/pind_daan_vidhi.jpg',
-    summary: 'Watch the Sharma family performing the sacred gotra sankalp with Gangotri water and barley pinda under senior Gaya Panda guidance.'
+    summary: 'Watch the Sharma family performing the sacred gotra sankalp with Gangotri water and barley pinda under senior Gaya Panda guidance.',
+    videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ'
   },
   {
     id: 'vid-2',
@@ -61,7 +90,8 @@ const VIDEO_HIGHLIGHTS: VideoHighlight[] = [
     duration: '3:15 min',
     vedis: 'Vishnupad Footprint (चरण कमल)',
     thumbnail: '/images/gaya_vishnupad.jpg',
-    summary: 'The Patel family shares how peaceful and transparent the 7-Kul ritual was, with zero additional demand at the sanctum sanctorum.'
+    summary: 'The Patel family shares how peaceful and transparent the 7-Kul ritual was, with zero additional demand at the sanctum sanctorum.',
+    videoUrl: null
   },
   {
     id: 'vid-3',
@@ -71,7 +101,8 @@ const VIDEO_HIGHLIGHTS: VideoHighlight[] = [
     duration: '2:10 min',
     vedis: 'Akshayavat Altar (अक्षयवट)',
     thumbnail: '/images/akshay_vat.jpg',
-    summary: 'Concluding rituals under the shade of Akshayavat with traditional Vastra and Patra Daan, receiving the auspicious Suphal blessing.'
+    summary: 'Concluding rituals under the shade of Akshayavat with traditional Vastra and Patra Daan, receiving the auspicious Suphal blessing.',
+    videoUrl: null
   },
   {
     id: 'vid-4',
@@ -81,11 +112,12 @@ const VIDEO_HIGHLIGHTS: VideoHighlight[] = [
     duration: '4:00 min',
     vedis: 'Live Vishnupad Sanctum Stream',
     thumbnail: '/images/gaya_drone.jpg',
-    summary: 'Overseas devotees participating live from the US while our hereditary Purohit recites their Gotra and lineage at the lotus feet of Lord Vishnu.'
+    summary: 'Overseas devotees participating live from the US while our hereditary Purohit recites their Gotra and lineage at the lotus feet of Lord Vishnu.',
+    videoUrl: null
   }
 ];
 
-const REVIEWS_DATA: DevoteeReview[] = [
+const FALLBACK_REVIEWS: DevoteeReview[] = [
   {
     id: 'rev-1',
     name: 'Rajesh Kumar Sharma',
@@ -192,16 +224,70 @@ const REVIEWS_DATA: DevoteeReview[] = [
   }
 ];
 
-export default function DevoteeStoriesClient() {
+export default function DevoteeStoriesClient({ initialDbTestimonials = [] }: { initialDbTestimonials?: any[] }) {
   const [selectedZone, setSelectedZone] = useState<string>('All');
   const [activeVideo, setActiveVideo] = useState<VideoHighlight | null>(null);
+
+  // Merge DB Testimonials with fallbacks
+  const combinedReviews: DevoteeReview[] = useMemo(() => {
+    if (!initialDbTestimonials || initialDbTestimonials.length === 0) {
+      return FALLBACK_REVIEWS;
+    }
+
+    const formattedDbReviews: DevoteeReview[] = initialDbTestimonials.map((t: any) => ({
+      id: t.id,
+      name: t.author || 'Devotee',
+      city: t.city || 'Gaya Ji',
+      stateOrRegion: t.country && t.country !== 'India' ? t.country : (t.city || 'India'),
+      zone: t.country && t.country !== 'India' ? 'NRI' : 'Other',
+      rating: t.rating || 5,
+      packageName: t.ritual || 'Pind Daan Ritual',
+      date: new Date(t.createdAt).toLocaleDateString('en-IN', { month: 'short', year: 'numeric' }),
+      feedback: t.content,
+      priestLineage: 'Verified Gayawal Panda Lineage',
+      verified: true,
+      videoUrl: t.videoUrl,
+      poojaImage: t.poojaImage
+    }));
+
+    return [...formattedDbReviews, ...FALLBACK_REVIEWS];
+  }, [initialDbTestimonials]);
+
+  // Merge DB Videos with fallbacks
+  const combinedVideos: VideoHighlight[] = useMemo(() => {
+    const dbVideos: VideoHighlight[] = (initialDbTestimonials || [])
+      .filter((t: any) => t.videoUrl && t.videoUrl.trim() !== '')
+      .map((t: any) => ({
+        id: t.id,
+        title: `${t.ritual || 'Gaya Pind Daan'} - ${t.author}`,
+        family: t.author,
+        city: t.city,
+        duration: 'Verified Video',
+        vedis: t.ritual || 'Falgu River & Vishnupad',
+        thumbnail: t.poojaImage || '/images/pind_daan_vidhi.jpg',
+        summary: t.content ? (t.content.slice(0, 140) + '...') : 'Devotee live ritual recording from Vishnupad Temple.',
+        videoUrl: t.videoUrl
+      }));
+
+    return dbVideos.length > 0 ? [...dbVideos, ...FALLBACK_VIDEOS] : FALLBACK_VIDEOS;
+  }, [initialDbTestimonials]);
 
   const zones = ['All', 'Delhi NCR', 'Gujarat', 'Maharashtra', 'South India', 'NRI'];
 
   const filteredReviews = useMemo(() => {
-    if (selectedZone === 'All') return REVIEWS_DATA;
-    return REVIEWS_DATA.filter(rev => rev.zone === selectedZone);
-  }, [selectedZone]);
+    if (selectedZone === 'All') return combinedReviews;
+    return combinedReviews.filter(rev => {
+      if (selectedZone === 'NRI') return rev.zone === 'NRI';
+      return rev.zone === selectedZone || rev.city.toLowerCase().includes(selectedZone.toLowerCase());
+    });
+  }, [combinedReviews, selectedZone]);
+
+  const activeEmbedUrl = activeVideo ? getYouTubeEmbedUrl(activeVideo.videoUrl) : null;
+  const isDirectVideo = activeVideo?.videoUrl && !activeEmbedUrl && (
+    activeVideo.videoUrl.endsWith('.mp4') || 
+    activeVideo.videoUrl.endsWith('.webm') || 
+    activeVideo.videoUrl.includes('/uploads/')
+  );
 
   return (
     <div className="space-y-12">
@@ -221,7 +307,7 @@ export default function DevoteeStoriesClient() {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {VIDEO_HIGHLIGHTS.map((vid) => (
+          {combinedVideos.map((vid) => (
             <div
               key={vid.id}
               onClick={() => setActiveVideo(vid)}
@@ -264,13 +350,13 @@ export default function DevoteeStoriesClient() {
         </div>
       </div>
 
-      {/* Video Modal Player Preview */}
+      {/* Video Modal Player (Supports YouTube Embeds & Direct Uploaded Videos) */}
       {activeVideo && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-fadeIn">
           <div className="relative w-full max-w-2xl rounded-3xl bg-[#0E1626] border border-amber-500/40 p-6 shadow-2xl space-y-4">
             <button
               onClick={() => setActiveVideo(null)}
-              className="absolute top-4 right-4 p-2 rounded-full bg-slate-800 text-slate-400 hover:text-white transition-colors"
+              className="absolute top-4 right-4 p-2 rounded-full bg-slate-800 text-slate-400 hover:text-white transition-colors z-10"
             >
               <X className="w-4 h-4" />
             </button>
@@ -284,26 +370,39 @@ export default function DevoteeStoriesClient() {
               </h3>
             </div>
 
-            {/* Video Player Mockup / Image Preview */}
-            <div className="relative aspect-video w-full rounded-2xl bg-slate-900 overflow-hidden border border-slate-800 flex items-center justify-center">
-              <img
-                src={activeVideo.thumbnail}
-                alt={activeVideo.title}
-                className="w-full h-full object-cover opacity-60"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex flex-col items-center justify-center p-6 text-center space-y-3">
-                <div className="w-16 h-16 rounded-full bg-amber-500 text-slate-950 flex items-center justify-center shadow-2xl">
-                  <Play className="w-7 h-7 fill-slate-950 ml-1" />
+            {/* Video Player Display */}
+            <div className="relative aspect-video w-full rounded-2xl bg-black overflow-hidden border border-slate-800 flex items-center justify-center">
+              {activeEmbedUrl ? (
+                <iframe
+                  src={activeEmbedUrl}
+                  title={activeVideo.title}
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                  className="w-full h-full rounded-2xl"
+                />
+              ) : isDirectVideo && activeVideo.videoUrl ? (
+                <video
+                  src={activeVideo.videoUrl}
+                  controls
+                  autoPlay
+                  className="w-full h-full rounded-2xl object-cover"
+                />
+              ) : (
+                <div className="relative w-full h-full flex flex-col items-center justify-center p-6 text-center space-y-3">
+                  <img
+                    src={activeVideo.thumbnail}
+                    alt={activeVideo.title}
+                    className="absolute inset-0 w-full h-full object-cover opacity-60"
+                  />
+                  <div className="relative z-10 space-y-2">
+                    <div className="w-14 h-14 rounded-full bg-amber-500 text-slate-950 flex items-center justify-center mx-auto shadow-xl">
+                      <Play className="w-6 h-6 fill-slate-950 ml-0.5" />
+                    </div>
+                    <p className="text-xs font-bold text-white uppercase font-mono">{activeVideo.vedis}</p>
+                    <p className="text-xs text-slate-300 max-w-md mx-auto">{activeVideo.summary}</p>
+                  </div>
                 </div>
-                <div className="space-y-1">
-                  <p className="text-xs font-bold text-white font-mono uppercase">
-                    Sacred Spot: {activeVideo.vedis}
-                  </p>
-                  <p className="text-xs text-slate-300 max-w-md">
-                    {activeVideo.summary}
-                  </p>
-                </div>
-              </div>
+              )}
             </div>
 
             <div className="flex items-center justify-between text-xs text-slate-400 pt-2 border-t border-slate-800">
@@ -327,10 +426,10 @@ export default function DevoteeStoriesClient() {
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div className="space-y-1">
             <h2 className="text-xl sm:text-2xl font-serif font-bold text-white">
-              Written Testimonials by Region
+              Written Testimonials ({combinedReviews.length}+ Devotees)
             </h2>
             <p className="text-xs text-slate-400">
-              Filter reviews from pilgrims traveling from your region.
+              Filter reviews from pilgrims traveling from your region or international NRI devotees.
             </p>
           </div>
 
@@ -346,7 +445,7 @@ export default function DevoteeStoriesClient() {
                     : 'bg-slate-900 border border-slate-800 text-slate-400 hover:text-white hover:bg-slate-800'
                 }`}
               >
-                {zone === 'All' ? 'All (150+)' : zone}
+                {zone === 'All' ? `All (${combinedReviews.length})` : zone}
               </button>
             ))}
           </div>
@@ -395,10 +494,17 @@ export default function DevoteeStoriesClient() {
                   <span className="text-slate-400">{rev.date}</span>
                 </div>
 
-                {/* Feedback */}
+                {/* Feedback Text */}
                 <p className="text-xs text-slate-300 leading-relaxed italic">
                   "{rev.feedback}"
                 </p>
+
+                {/* Optional Pooja Image if uploaded in Admin */}
+                {rev.poojaImage && (
+                  <div className="h-32 rounded-xl overflow-hidden border border-slate-800">
+                    <img src={rev.poojaImage} alt={rev.name} className="w-full h-full object-cover" />
+                  </div>
+                )}
               </div>
 
               {/* Priest Attribution */}
