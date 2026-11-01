@@ -148,12 +148,15 @@ export default function Navbar({ packages = [], sacredPlaces = [] }: NavbarProps
       </div>
 
       {/* Main Navigation Bar */}
-      <div className="max-w-[1400px] mx-auto px-4 sm:px-8">
-        <div className="flex justify-between items-center h-20 sm:h-24 md:h-[96px]">
+      <div className="max-w-[1500px] mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center h-20 sm:h-24 md:h-[96px] gap-4">
           
-          <Logo />
+          {/* Logo with Guaranteed Right Spacing */}
+          <div className="shrink-0 mr-4 lg:mr-6 xl:mr-8">
+            <Logo />
+          </div>
 
-          <nav className="hidden lg:flex items-center gap-3.5 xl:gap-5 2xl:gap-6 font-medium text-xs shrink-0">
+          <nav className="hidden lg:flex items-center gap-2 xl:gap-3.5 2xl:gap-5 font-medium text-xs shrink-0">
             
             {/* Pinddaan Gaya Ji Mega Menu */}
             <div 
@@ -177,7 +180,7 @@ export default function Navbar({ packages = [], sacredPlaces = [] }: NavbarProps
               </button>
             </div>
 
-            {/* Ritual Packages Mega Menu (DYNAMICALLY RENDERED FROM HOSTINGER MYSQL DB!) */}
+            {/* Ritual Packages Mega Menu */}
             <div 
               className="static group shrink-0"
               onMouseEnter={() => setActiveMegaMenu('packages')}
@@ -191,14 +194,7 @@ export default function Navbar({ packages = [], sacredPlaces = [] }: NavbarProps
               </button>
             </div>
 
-            <Link 
-              href="/blog" 
-              className="hover:text-[#F48D08] text-text-primary font-bold py-7 transition-colors whitespace-nowrap shrink-0"
-              onMouseEnter={() => setActiveMegaMenu(null)}
-            >
-              Videos & Articles
-            </Link>
-
+            {/* Tithi Calculator */}
             <Link 
               href="/shradh-calculator" 
               className="hover:text-[#F48D08] text-text-primary font-bold py-7 transition-colors whitespace-nowrap shrink-0"
@@ -207,6 +203,7 @@ export default function Navbar({ packages = [], sacredPlaces = [] }: NavbarProps
               Tithi Calculator
             </Link>
 
+            {/* NRI Seva */}
             <Link 
               href="/nri-live-seva" 
               className="hover:text-[#F48D08] text-text-primary font-bold py-7 transition-colors whitespace-nowrap shrink-0"
@@ -215,6 +212,7 @@ export default function Navbar({ packages = [], sacredPlaces = [] }: NavbarProps
               NRI Seva
             </Link>
 
+            {/* Reviews */}
             <Link 
               href="/devotee-stories" 
               className="hover:text-[#F48D08] text-text-primary font-bold py-7 transition-colors whitespace-nowrap shrink-0"
@@ -223,6 +221,7 @@ export default function Navbar({ packages = [], sacredPlaces = [] }: NavbarProps
               Reviews
             </Link>
 
+            {/* Contact Us */}
             <Link 
               href="/contact" 
               className="hover:text-[#F48D08] text-text-primary font-bold py-7 transition-colors whitespace-nowrap shrink-0"
@@ -231,23 +230,26 @@ export default function Navbar({ packages = [], sacredPlaces = [] }: NavbarProps
               Contact Us
             </Link>
 
-            <button
-              onClick={() => setIsSearchOpen(true)}
-              className="px-2.5 py-1.5 rounded-full text-text-primary hover:text-[#F48D08] hover:bg-amber-50 transition-all flex items-center gap-1 font-bold text-xs whitespace-nowrap shrink-0"
-              title="Search Packages, Sacred Places, FAQs (Cmd+K)"
-            >
-              <Search className="w-4 h-4 text-[#F48D08]" />
-              <span className="hidden xl:inline">Search</span>
-            </button>
+            {/* Right Action Buttons */}
+            <div className="flex items-center gap-1.5 xl:gap-2.5 pl-1 xl:pl-2 shrink-0">
+              <button
+                onClick={() => setIsSearchOpen(true)}
+                className="p-2 rounded-full text-text-primary hover:text-[#F48D08] hover:bg-amber-50 transition-all shrink-0"
+                title="Search Packages, Sacred Places, FAQs (Cmd+K)"
+                aria-label="Search"
+              >
+                <Search className="w-4 h-4 text-[#F48D08]" />
+              </button>
 
-            <button
-              onClick={() => setIsDiagnosticOpen(true)}
-              className="flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-950 font-extrabold text-[11px] shadow-sm hover:shadow-md transition-all hover:scale-105 whitespace-nowrap shrink-0"
-              title={isHindi ? "AI वैदिक पितृ दोष एवं पिंडदान जांच" : "AI Vedic Moksha & Pitru Dosh Assessment"}
-            >
-              <Sparkles className="w-3.5 h-3.5 fill-current text-slate-950" />
-              <span>{isHindi ? 'AI पितृ दोष जांच' : 'AI Vedic Assessment'}</span>
-            </button>
+              <button
+                onClick={() => setIsDiagnosticOpen(true)}
+                className="flex items-center gap-1.5 px-3 py-2 rounded-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-950 font-extrabold text-[11px] shadow-sm hover:shadow-md transition-all whitespace-nowrap shrink-0"
+                title={isHindi ? "AI वैदिक पितृ दोष एवं पिंडदान जांच" : "AI Vedic Moksha & Pitru Dosh Assessment"}
+              >
+                <Sparkles className="w-3.5 h-3.5 fill-current text-slate-950 shrink-0" />
+                <span className="whitespace-nowrap">{isHindi ? 'पितृ दोष जांच' : 'AI Assessment'}</span>
+              </button>
+            </div>
 
           </nav>
 
