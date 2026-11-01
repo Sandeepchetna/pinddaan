@@ -290,10 +290,10 @@ export async function getPublicBookingData() {
         packages = await db.ritualPackage.findMany();
         const getPkgRank = (pkg: any) => {
           const s = ((pkg.slug || '') + ' ' + (pkg.title || '')).toLowerCase();
-          if (s.includes('uttam')) return 1;
-          if (s.includes('madhyam')) return 2;
-          if (s.includes('kanishtha')) return 3;
-          if (s.includes('shradh') && !s.includes('tripindi')) return 4;
+          if (s.includes('shradh') && !s.includes('tripindi')) return 1;
+          if (s.includes('kanishtha')) return 2;
+          if (s.includes('madhyam')) return 3;
+          if (s.includes('uttam')) return 4;
           if (s.includes('1-day') || s.includes('1 day')) return 5;
           if (s.includes('3-day') || s.includes('3 day')) return 6;
           if (s.includes('tripindi') || s.includes('pitidosh')) return 7;
@@ -374,10 +374,10 @@ export async function getAdminERPData() {
         packages = await db.ritualPackage.findMany();
         const getPkgRank = (pkg: any) => {
           const s = ((pkg.slug || '') + ' ' + (pkg.title || '')).toLowerCase();
-          if (s.includes('uttam')) return 1;
-          if (s.includes('madhyam')) return 2;
-          if (s.includes('kanishtha')) return 3;
-          if (s.includes('shradh') && !s.includes('tripindi')) return 4;
+          if (s.includes('shradh') && !s.includes('tripindi')) return 1;
+          if (s.includes('kanishtha')) return 2;
+          if (s.includes('madhyam')) return 3;
+          if (s.includes('uttam')) return 4;
           if (s.includes('1-day') || s.includes('1 day')) return 5;
           if (s.includes('3-day') || s.includes('3 day')) return 6;
           if (s.includes('tripindi') || s.includes('pitidosh')) return 7;

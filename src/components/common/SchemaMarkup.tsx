@@ -30,7 +30,7 @@ export default function SchemaMarkup({ siteSettings }: SchemaMarkupProps) {
     'image': 'https://www.pinddaanwale.com/images/gaya_vishnupad.jpg',
     'telephone': phone,
     'email': email,
-    'priceRange': '₹9449 - ₹21449',
+    'priceRange': '₹3100 - ₹21449',
     'currenciesAccepted': 'INR, USD, GBP, EUR, CAD, AUD, SGD',
     'paymentAccepted': 'Cash, Credit Card, Debit Card, UPI, Net Banking',
     'address': {
@@ -166,7 +166,7 @@ export default function SchemaMarkup({ siteSettings }: SchemaMarkupProps) {
     'offers': {
       '@type': 'Offer',
       'url': 'https://www.pinddaanwale.com/packages',
-      'price': '9449',
+      'price': '3100',
       'priceCurrency': 'INR',
       'availability': 'https://schema.org/InStock',
       'validFrom': '2026-01-01T00:00:00+05:30'
@@ -195,10 +195,50 @@ export default function SchemaMarkup({ siteSettings }: SchemaMarkupProps) {
           '@type': 'Offer',
           'itemOffered': {
             '@type': 'Service',
-            'name': 'Gaya Ji 1-Day Essential Pind Daan',
-            'description': 'Essential single-day ancestral rites at Vishnupad Temple & Falgu River with dedicated Purohit, complete samagri, and transport.'
+            'name': 'Shradh Pind Daan',
+            'description': 'Core Vedic Pind Daan Vidhi at holy Falgu River and Vishnupad with authentic gotra sankalp.'
           },
-          'price': '9449',
+          'price': '3100',
+          'priceCurrency': 'INR'
+        },
+        {
+          '@type': 'Offer',
+          'itemOffered': {
+            '@type': 'Service',
+            'name': 'Kanishtha Pind Daan',
+            'description': 'Essential Vedic Pind Daan Vidhi with 2 Thali Daan performed under authentic Gaya Panda guidance.'
+          },
+          'price': '4500',
+          'priceCurrency': 'INR'
+        },
+        {
+          '@type': 'Offer',
+          'itemOffered': {
+            '@type': 'Service',
+            'name': 'Madhyam Pind Daan',
+            'description': 'Traditional Vedic Gaya Ji Pind Daan with Kalash Puja, complete Pind Daan Vidhi, and 3 Vastra & Patra Daan.'
+          },
+          'price': '7500',
+          'priceCurrency': 'INR'
+        },
+        {
+          '@type': 'Offer',
+          'itemOffered': {
+            '@type': 'Service',
+            'name': 'Uttam Pind Daan',
+            'description': 'The most comprehensive Vedic ritual featuring Kalash Puja, 7 Kul Ka Pind Daan, and 5 Vastra & Patra Daan.'
+          },
+          'price': '11000',
+          'priceCurrency': 'INR'
+        },
+        {
+          '@type': 'Offer',
+          'itemOffered': {
+            '@type': 'Service',
+            'name': 'Gaya Ji 1-Day Pind Daan with Stay',
+            'description': 'Single-day layover rites at Falgu River & Vishnupad with hotel room, satvik food, and station pickup.'
+          },
+          'price': '7499',
           'priceCurrency': 'INR'
         },
         {
@@ -206,7 +246,7 @@ export default function SchemaMarkup({ siteSettings }: SchemaMarkupProps) {
           'itemOffered': {
             '@type': 'Service',
             'name': 'Gaya Ji Complete 3-Day 45-Vedi Pind Daan',
-            'description': 'Complete 45-Vedi sacred trail covering Vishnupad, Falgu River, Akshayavat, Pretshila, and Ramshila with 3-night hotel stay and transport.'
+            'description': 'Complete 45-Vedi sacred trail covering Vishnupad, Falgu River, Akshayavat, Pretshila, and Ramshila with 3-night hotel stay.'
           },
           'price': '21449',
           'priceCurrency': 'INR'

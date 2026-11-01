@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Crown, Sparkles, Building2 } from 'lucide-react';
+import { Crown, Sparkles, Flame } from 'lucide-react';
 import PackageCard from '@/components/packages/PackageCard';
 
 export default function PackageTierToggle({ initialPackages }: { initialPackages: any[] }) {
@@ -16,11 +16,11 @@ export default function PackageTierToggle({ initialPackages }: { initialPackages
 
   const getRank = (pkg: any) => {
     const s = ((pkg.slug || '') + ' ' + (pkg.title || '')).toLowerCase();
-    // Only Pind Daan rank
-    if (s.includes('uttam')) return 1;
-    if (s.includes('madhyam')) return 2;
-    if (s.includes('kanishtha')) return 3;
-    if (s.includes('shradh') && !s.includes('tripindi')) return 4;
+    // Only Pind Daan rank (Reversed: Shradh -> Kanishtha -> Madhyam -> Uttam)
+    if (s.includes('shradh') && !s.includes('tripindi')) return 1;
+    if (s.includes('kanishtha')) return 2;
+    if (s.includes('madhyam')) return 3;
+    if (s.includes('uttam')) return 4;
     // With Stay / Dosha rank
     if (s.includes('1-day') || s.includes('1 day')) return 10;
     if (s.includes('3-day') || s.includes('3 day')) return 11;
@@ -68,13 +68,13 @@ export default function PackageTierToggle({ initialPackages }: { initialPackages
                 : 'text-text-secondary hover:text-text-primary hover:bg-amber-100/50'
             }`}
           >
-            <Building2 className="w-3.5 h-3.5" />
-            <span>PACKAGES WITH STAY & SPECIAL PUJAS</span>
+            <Flame className="w-3.5 h-3.5" />
+            <span>SPECIAL PUJAS & PACKAGES</span>
             <span className="text-[10px] bg-black/15 px-1.5 py-0.5 rounded-full">{stayAndSpecialPkgs.length}</span>
           </button>
         </div>
 
-        {/* Global Tier Switcher (Only relevant for Packages with Stay) */}
+        {/* Global Tier Switcher (Only relevant for Special Packages) */}
         {activeCategory === 'WITH_STAY' && (
           <div className="bg-amber-50/80 p-1 rounded-2xl border border-amber-900/10 inline-flex items-center gap-1.5 animate-fadeIn">
             <button
@@ -112,7 +112,7 @@ export default function PackageTierToggle({ initialPackages }: { initialPackages
           </p>
         ) : (
           <p className="text-xs sm:text-sm text-[#7A736A] font-medium bg-amber-50/60 inline-block px-5 py-2 rounded-full border border-amber-900/10">
-            🏨 <strong>Stay & Vehicle Inclusive Packages:</strong> Station pickup, 2-person room stay, satvik meals, and specialized ancestral dosha remedies.
+            ✨ <strong>Special Pujas & Packages:</strong> 1-Day layover rites, 3-Day complete parikrama, and specialized ancestral dosha remedies (Tripindi & Narayan Bali).
           </p>
         )}
       </div>

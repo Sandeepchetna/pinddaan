@@ -866,13 +866,13 @@ Dhanyawad! 🙏`;
                       {packagesList.filter(p => {
                         const s = ((p.slug || '') + ' ' + (p.title || '')).toLowerCase();
                         return s.includes('uttam') || s.includes('madhyam') || s.includes('kanishtha') || (s.includes('shradh') && !s.includes('tripindi'));
-                      }).map((pkg) => (
+                      }).sort((a, b) => (a.priceINR || 0) - (b.priceINR || 0)).map((pkg) => (
                         <option key={pkg.slug} value={pkg.slug}>
                           {pkg.title} — ₹{(isPlatinum && pkg.goldPriceINR ? pkg.goldPriceINR : pkg.priceINR)?.toLocaleString('en-IN')} (Pure Puja)
                         </option>
                       ))}
                     </optgroup>
-                    <optgroup label="── PACKAGES WITH STAY & SPECIAL PUJAS ──">
+                    <optgroup label="── SPECIAL PUJAS & PACKAGES ──">
                       {packagesList.filter(p => {
                         const s = ((p.slug || '') + ' ' + (p.title || '')).toLowerCase();
                         return !(s.includes('uttam') || s.includes('madhyam') || s.includes('kanishtha') || (s.includes('shradh') && !s.includes('tripindi')));
