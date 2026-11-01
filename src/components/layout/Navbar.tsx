@@ -200,11 +200,27 @@ export default function Navbar({ packages = [], sacredPlaces = [] }: NavbarProps
             </Link>
 
             <Link 
-              href="/about" 
+              href="/shradh-calculator" 
               className="hover:text-[#F48D08] text-text-primary font-bold py-7 transition-colors whitespace-nowrap shrink-0"
               onMouseEnter={() => setActiveMegaMenu(null)}
             >
-              Our Story
+              Tithi Calculator
+            </Link>
+
+            <Link 
+              href="/nri-live-seva" 
+              className="hover:text-[#F48D08] text-text-primary font-bold py-7 transition-colors whitespace-nowrap shrink-0"
+              onMouseEnter={() => setActiveMegaMenu(null)}
+            >
+              NRI Seva
+            </Link>
+
+            <Link 
+              href="/devotee-stories" 
+              className="hover:text-[#F48D08] text-text-primary font-bold py-7 transition-colors whitespace-nowrap shrink-0"
+              onMouseEnter={() => setActiveMegaMenu(null)}
+            >
+              Reviews
             </Link>
 
             <Link 
@@ -633,7 +649,40 @@ export default function Navbar({ packages = [], sacredPlaces = [] }: NavbarProps
               </Link>
             </div>
 
-            {/* 7. Contact Us */}
+            {/* 6. Tithi Calculator */}
+            <div className="py-1">
+              <Link 
+                href="/shradh-calculator" 
+                onClick={() => setMobileMenuOpen(false)} 
+                className="flex items-center justify-between p-2.5 rounded-xl hover:bg-amber-50 text-text-primary hover:text-[#F48D08] transition-colors"
+              >
+                <span className="font-bold text-sm">Vedic Tithi Calculator</span>
+              </Link>
+            </div>
+
+            {/* 7. NRI Live Seva */}
+            <div className="py-1">
+              <Link 
+                href="/nri-live-seva" 
+                onClick={() => setMobileMenuOpen(false)} 
+                className="flex items-center justify-between p-2.5 rounded-xl hover:bg-amber-50 text-text-primary hover:text-[#F48D08] transition-colors"
+              >
+                <span className="font-bold text-sm">NRI Live Online Seva</span>
+              </Link>
+            </div>
+
+            {/* 8. Devotee Reviews */}
+            <div className="py-1">
+              <Link 
+                href="/devotee-stories" 
+                onClick={() => setMobileMenuOpen(false)} 
+                className="flex items-center justify-between p-2.5 rounded-xl hover:bg-amber-50 text-text-primary hover:text-[#F48D08] transition-colors"
+              >
+                <span className="font-bold text-sm">Devotee Reviews & Videos</span>
+              </Link>
+            </div>
+
+            {/* 9. Contact Us */}
             <div className="py-1">
               <Link 
                 href="/contact" 

@@ -19,6 +19,7 @@ import {
 } from 'lucide-react';
 import prisma from '@/lib/prisma';
 import ZeroExtortionPledge from '@/components/common/ZeroExtortionPledge';
+import ShareItineraryModal from '@/components/packages/ShareItineraryModal';
 
 const db = prisma as any;
 
@@ -460,6 +461,20 @@ export default async function PackageDetailPage({ params }: { params: Promise<{ 
                 <span>Book This Package</span>
                 <ArrowRight className="w-4 h-4" />
               </Link>
+
+              <ShareItineraryModal 
+                packageData={{
+                  title: pkg.title,
+                  slug: pkg.slug,
+                  priceINR: pkg.priceINR,
+                  duration: pkg.duration,
+                  inclusions: pkg.inclusions,
+                  exclusions: pkg.exclusions,
+                  vedisCovered: pkg.vedisCovered
+                }}
+                buttonLabel="Share with Family (WhatsApp / PDF)"
+                variant="primary"
+              />
 
               <div className="pt-2 border-t border-slate-800/80 flex items-center justify-center gap-4 text-xs text-slate-400">
                 <a
